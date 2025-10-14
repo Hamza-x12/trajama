@@ -50,7 +50,11 @@ All colors MUST be HSL.
     --gradient-hero: linear-gradient(135deg, hsl(12 76% 61%) 0%, hsl(210 50% 40%) 50%, hsl(45 85% 70%) 100%);
     
     --shadow-moroccan: 0 8px 32px hsla(12, 76%, 61%, 0.15);
+    --shadow-elegant: 0 4px 20px hsla(200, 35%, 15%, 0.08);
+    --shadow-soft: 0 2px 8px hsla(200, 35%, 15%, 0.06);
+    --shadow-hover: 0 12px 40px hsla(12, 76%, 61%, 0.2);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;

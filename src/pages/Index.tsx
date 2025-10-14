@@ -141,82 +141,94 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       {/* Header */}
-      <header className="border-b border-border bg-card">
-        <div className="container mx-auto px-4 py-4">
+      <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft">
+        <div className="container mx-auto px-4 py-5">
           <div className="flex items-center gap-3">
-            <Languages className="w-6 h-6 text-primary" />
-            <h1 className="text-xl font-semibold text-foreground">Darija Translator</h1>
+            <div className="p-2 rounded-xl bg-gradient-to-br from-primary to-accent shadow-moroccan">
+              <Languages className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-foreground tracking-tight">Darija Translator</h1>
+              <p className="text-xs text-muted-foreground">Professional multilingual translation</p>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Main Content - Google Translate Layout */}
-      <main className="container mx-auto px-4 py-6 max-w-6xl">
-        <Card className="overflow-hidden border-border">
-          <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-border">
+      <main className="container mx-auto px-4 py-8 max-w-7xl">
+        <Card className="overflow-hidden border-border/50 shadow-elegant hover:shadow-hover transition-all duration-500 bg-card/50 backdrop-blur-sm">
+          <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-border/50">
             {/* Source Column */}
             <div className="flex flex-col">
               {/* Source Language Selector */}
-              <div className="border-b border-border p-4">
+              <div className="border-b border-border/50 p-5 bg-gradient-to-r from-card to-muted/10">
                 <div className="flex gap-2 flex-wrap">
                   {languages.map((lang) => (
                     <Button
                       key={lang.name}
                       variant={sourceLanguage === lang.name ? "default" : "ghost"}
                       onClick={() => setSourceLanguage(lang.name)}
-                      className="gap-2 h-9"
+                      className={`gap-2 h-10 px-4 font-medium transition-all duration-300 ${
+                        sourceLanguage === lang.name 
+                          ? 'shadow-moroccan scale-105' 
+                          : 'hover:scale-105'
+                      }`}
                       size="sm"
                     >
-                      <span>{lang.icon}</span>
-                      {lang.name}
+                      <span className="text-base">{lang.icon}</span>
+                      <span className="text-sm">{lang.name}</span>
                     </Button>
                   ))}
                 </div>
               </div>
               
               {/* Source Text Input */}
-              <div className="flex-1 p-4">
+              <div className="flex-1 p-6">
                 <Textarea
-                  placeholder="Enter text"
+                  placeholder="Enter text to translate..."
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  className="min-h-[300px] text-lg resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0"
+                  className="min-h-[320px] text-lg resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60"
                 />
               </div>
 
               {/* Translate Button */}
-              <div className="border-t border-border p-4">
+              <div className="border-t border-border/50 p-5 bg-gradient-to-r from-muted/10 to-card">
                 <Button
                   onClick={handleTranslate}
                   disabled={isTranslating || !inputText.trim()}
-                  className="w-full"
+                  className="w-full h-12 text-base font-semibold shadow-moroccan hover:shadow-hover transition-all duration-300 hover:scale-[1.02]"
                   size="lg"
                 >
                   {isTranslating ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                      <Loader2 className="w-5 h-5 animate-spin mr-2" />
                       Translating...
                     </>
                   ) : (
-                    "Translate"
+                    <>
+                      <Languages className="w-5 h-5 mr-2" />
+                      Translate
+                    </>
                   )}
                 </Button>
               </div>
             </div>
 
             {/* Target Column */}
-            <div className="flex flex-col bg-muted/20">
+            <div className="flex flex-col bg-gradient-to-br from-muted/10 to-card">
               {/* Target Languages Tabs */}
-              <div className="border-b border-border p-4">
-                <div className="text-sm font-medium text-muted-foreground">
+              <div className="border-b border-border/50 p-5 bg-gradient-to-r from-card to-muted/10">
+                <div className="text-sm font-semibold text-foreground tracking-wide uppercase">
                   Translations
                 </div>
               </div>
               
               {/* Translation Results */}
-              <div className="flex-1 p-4 overflow-y-auto">
+              <div className="flex-1 p-6 overflow-y-auto">
                 {translations ? (
                   <div className="space-y-6">
                     {languages.map((lang) => {
@@ -224,18 +236,18 @@ const Index = () => {
                       const translation = translations.translations[key];
                       
                       return (
-                        <div key={lang.name} className="space-y-2">
-                          <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                            <span>{lang.icon}</span>
-                            <span>{lang.name}</span>
+                        <div key={lang.name} className="space-y-3 p-4 rounded-xl bg-card/50 border border-border/30 hover:border-primary/30 hover:shadow-soft transition-all duration-300">
+                          <div className="flex items-center gap-2.5 text-sm font-semibold text-foreground">
+                            <span className="text-lg">{lang.icon}</span>
+                            <span className="tracking-wide">{lang.name}</span>
                           </div>
-                          <p className="text-lg text-foreground/90 leading-relaxed">
+                          <p className="text-lg text-foreground/90 leading-relaxed font-medium">
                             {translation}
                           </p>
                           {lang.name === "Darija" && translations.culturalNotes && (
-                            <div className="mt-3 p-3 bg-accent/10 rounded-lg border border-accent/20">
-                              <p className="text-sm text-muted-foreground font-medium mb-1">Cultural Notes</p>
-                              <p className="text-sm text-foreground/80 italic">{translations.culturalNotes}</p>
+                            <div className="mt-4 p-4 bg-gradient-to-br from-accent/10 to-accent/5 rounded-xl border border-accent/30 shadow-soft">
+                              <p className="text-xs text-accent-foreground font-semibold mb-2 uppercase tracking-wide">Cultural Notes</p>
+                              <p className="text-sm text-foreground/80 italic leading-relaxed">{translations.culturalNotes}</p>
                             </div>
                           )}
                         </div>
@@ -243,8 +255,9 @@ const Index = () => {
                     })}
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
-                    Translations will appear here
+                  <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
+                    <Languages className="w-16 h-16 mb-4 opacity-30" />
+                    <p className="text-sm font-medium">Translations will appear here</p>
                   </div>
                 )}
               </div>
@@ -253,19 +266,24 @@ const Index = () => {
         </Card>
 
         {/* History Section */}
-        <div className="mt-8">
-          <TranslationHistory
-            history={history}
-            onSelectItem={handleSelectHistoryItem}
-            onClearHistory={handleClearHistory}
-            onDeleteItem={handleDeleteHistoryItem}
-          />
-        </div>
+        {history.length > 0 && (
+          <div className="mt-8">
+            <TranslationHistory
+              history={history}
+              onSelectItem={handleSelectHistoryItem}
+              onClearHistory={handleClearHistory}
+              onDeleteItem={handleDeleteHistoryItem}
+            />
+          </div>
+        )}
 
         {/* Info Footer */}
-        <div className="mt-6 text-center">
-          <p className="text-sm text-muted-foreground">
-            Culturally aware translations for Moroccan Darija with French, Arabic, and English
+        <div className="mt-10 text-center pb-8">
+          <p className="text-sm text-muted-foreground font-medium">
+            Culturally aware translations for Moroccan Darija with 8 languages
+          </p>
+          <p className="text-xs text-muted-foreground/70 mt-1">
+            Powered by AI • Professional multilingual translation
           </p>
         </div>
       </main>

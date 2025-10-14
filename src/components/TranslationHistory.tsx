@@ -1,7 +1,8 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Trash2, Clock } from "lucide-react";
+import { Clock, Trash2, X } from "lucide-react";
+import { format } from "date-fns";
 
 interface HistoryItem {
   id: string;
@@ -34,66 +35,59 @@ export const TranslationHistory = ({
   onDeleteItem 
 }: TranslationHistoryProps) => {
   if (history.length === 0) {
-    return (
-      <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
-        <div className="flex items-center gap-2 mb-4">
-          <Clock className="w-5 h-5 text-muted-foreground" />
-          <h3 className="text-lg font-semibold text-foreground">Translation History</h3>
-        </div>
-        <p className="text-sm text-muted-foreground">No translation history yet</p>
-      </Card>
-    );
+    return null;
   }
 
   return (
-    <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <Clock className="w-5 h-5 text-muted-foreground" />
-          <h3 className="text-lg font-semibold text-foreground">Translation History</h3>
+    <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50 shadow-elegant">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20">
+            <Clock className="w-5 h-5 text-primary" />
+          </div>
+          <h2 className="text-xl font-bold text-foreground tracking-tight">Translation History</h2>
         </div>
         <Button
           variant="ghost"
           size="sm"
           onClick={onClearHistory}
-          className="text-destructive hover:text-destructive"
+          className="text-destructive hover:text-destructive hover:bg-destructive/10 transition-all duration-300 font-medium"
         >
           <Trash2 className="w-4 h-4 mr-2" />
           Clear All
         </Button>
       </div>
-      
-      <ScrollArea className="h-[300px] pr-4">
+
+      <ScrollArea className="h-[320px] pr-4">
         <div className="space-y-3">
           {history.map((item) => (
             <div
               key={item.id}
-              className="group p-3 rounded-lg border border-border/50 hover:border-primary/50 hover:bg-accent/5 transition-all cursor-pointer relative"
+              className="group p-5 rounded-xl border border-border/40 bg-gradient-to-br from-card to-muted/10 hover:border-primary/50 hover:shadow-moroccan hover:scale-[1.02] transition-all duration-300 cursor-pointer relative"
               onClick={() => onSelectItem(item)}
             >
               <Button
                 variant="ghost"
-                size="sm"
-                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                size="icon"
+                className="absolute top-3 right-3 w-8 h-8 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-destructive/10 hover:text-destructive rounded-lg"
                 onClick={(e) => {
                   e.stopPropagation();
                   onDeleteItem(item.id);
                 }}
               >
-                <Trash2 className="w-3 h-3" />
+                <X className="w-4 h-4" />
               </Button>
               
-              <div className="flex items-start gap-2 mb-2">
-                <span className="text-xs font-medium text-primary">
-                  {item.sourceLanguage}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  {new Date(item.timestamp).toLocaleString()}
-                </span>
+              <div className="pr-10">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+                  <span className="font-semibold text-primary px-2 py-1 bg-primary/10 rounded-md">{item.sourceLanguage}</span>
+                  <span className="opacity-50">•</span>
+                  <span className="font-medium">{format(item.timestamp, 'MMM d, yyyy • h:mm a')}</span>
+                </div>
+                <p className="text-sm text-foreground/90 line-clamp-2 leading-relaxed font-medium">
+                  {item.text}
+                </p>
               </div>
-              <p className="text-sm text-foreground/90 line-clamp-2">
-                {item.text}
-              </p>
             </div>
           ))}
         </div>
