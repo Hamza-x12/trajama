@@ -8,6 +8,7 @@ import { TranslationHistory } from "@/components/TranslationHistory";
 import { Languages, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import tarjamaLogo from "@/assets/tarjama-logo.png";
 
 interface TranslationResult {
   translations: {
@@ -155,11 +156,9 @@ const Index = () => {
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft">
         <div className="container mx-auto px-4 py-5">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-gradient-to-br from-primary to-accent shadow-moroccan">
-              <Languages className="w-6 h-6 text-white" />
-            </div>
+            <img src={tarjamaLogo} alt="Tarjama Logo" className="w-12 h-12" />
             <div>
-              <h1 className="text-2xl font-bold text-foreground tracking-tight">Darija Translator</h1>
+              <h1 className="text-2xl font-bold text-foreground tracking-tight">Tarjama</h1>
               <p className="text-xs text-muted-foreground">Professional multilingual translation</p>
             </div>
           </div>
@@ -295,7 +294,7 @@ const Index = () => {
             Professional multilingual translation
           </p>
           <p className="text-xs text-muted-foreground/70 mt-1">
-            Hamza Elkhouja
+            Tarjama
           </p>
         </div>
       </main>
