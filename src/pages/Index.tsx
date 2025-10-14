@@ -5,7 +5,8 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { TranslationCard } from "@/components/TranslationCard";
 import { TranslationHistory } from "@/components/TranslationHistory";
-import { Languages, Loader2 } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { Languages, Loader2, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
@@ -74,6 +75,7 @@ const Index = () => {
   }, [history]);
 
   const languages = [
+    { name: "Detect Language", icon: "🔍" },
     { name: "Darija", icon: "🇲🇦" },
     { name: "French", icon: "🇫🇷" },
     { name: "Arabic", icon: "🇸🇦" },
@@ -155,12 +157,15 @@ const Index = () => {
       {/* Header */}
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft">
         <div className="container mx-auto px-4 py-5">
-          <div className="flex items-center gap-3">
-            <img src={tarjamaLogo} alt="Tarjama Logo" className="w-16 h-16" />
-            <div>
-              <h1 className="text-2xl font-bold text-foreground tracking-tight">Tarjama</h1>
-              <p className="text-xs text-muted-foreground">Professional multilingual translation</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <img src={tarjamaLogo} alt="Tarjama Logo" className="w-16 h-16" />
+              <div>
+                <h1 className="text-2xl font-bold text-foreground tracking-tight">Tarjama</h1>
+                <p className="text-xs text-muted-foreground">Professional multilingual translation</p>
+              </div>
             </div>
+            <ThemeToggle />
           </div>
         </div>
       </header>
@@ -183,10 +188,14 @@ const Index = () => {
                         sourceLanguage === lang.name 
                           ? 'shadow-moroccan scale-105' 
                           : 'hover:scale-105'
-                      }`}
+                      } ${lang.name === "Detect Language" ? 'border-2 border-primary/30' : ''}`}
                       size="sm"
                     >
-                      <span className="text-base">{lang.icon}</span>
+                      {lang.name === "Detect Language" ? (
+                        <Wand2 className="w-4 h-4" />
+                      ) : (
+                        <span className="text-base">{lang.icon}</span>
+                      )}
                       <span className="text-sm">{lang.name}</span>
                     </Button>
                   ))}
