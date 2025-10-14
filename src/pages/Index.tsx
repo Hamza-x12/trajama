@@ -19,6 +19,9 @@ interface TranslationResult {
     german: string;
     italian: string;
     portuguese: string;
+    chinese: string;
+    japanese: string;
+    turkish: string;
   };
   culturalNotes?: string;
 }
@@ -37,6 +40,9 @@ interface HistoryItem {
     german: string;
     italian: string;
     portuguese: string;
+    chinese: string;
+    japanese: string;
+    turkish: string;
   };
 }
 
@@ -74,7 +80,10 @@ const Index = () => {
     { name: "Spanish", icon: "🇪🇸" },
     { name: "German", icon: "🇩🇪" },
     { name: "Italian", icon: "🇮🇹" },
-    { name: "Portuguese", icon: "🇵🇹" }
+    { name: "Portuguese", icon: "🇵🇹" },
+    { name: "Chinese", icon: "🇨🇳" },
+    { name: "Japanese", icon: "🇯🇵" },
+    { name: "Turkish", icon: "🇹🇷" }
   ];
 
   const handleTranslate = async () => {
@@ -280,7 +289,7 @@ const Index = () => {
         {/* Info Footer */}
         <div className="mt-10 text-center pb-8">
           <p className="text-sm text-muted-foreground font-medium">
-            Culturally aware translations for Moroccan Darija with 8 languages
+            Culturally aware translations for Moroccan Darija with 11 languages
           </p>
           <p className="text-xs text-muted-foreground/70 mt-2">
             Professional multilingual translation

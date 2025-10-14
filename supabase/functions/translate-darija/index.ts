@@ -46,7 +46,10 @@ Provide translations in this EXACT JSON format:
     "spanish": "Spanish translation",
     "german": "German translation",
     "italian": "Italian translation",
-    "portuguese": "Portuguese translation"
+    "portuguese": "Portuguese translation",
+    "chinese": "Chinese translation",
+    "japanese": "Japanese translation",
+    "turkish": "Turkish translation"
   },
   "culturalNotes": "Optional cultural context or explanation of idioms/slang"
 }
@@ -118,7 +121,10 @@ IMPORTANT: You must return ONLY valid JSON, no additional text before or after.`
           spanish: '',
           german: '',
           italian: '',
-          portuguese: ''
+          portuguese: '',
+          chinese: '',
+          japanese: '',
+          turkish: ''
         },
         culturalNotes: 'Translation formatting error. Please try again.'
       };
