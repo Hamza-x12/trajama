@@ -294,7 +294,7 @@ const Index = () => {
             Professional multilingual translation
           </p>
           <p className="text-xs text-muted-foreground/70 mt-1">
-            Tarjama
+            Hamza Elkhouja
           </p>
         </div>
       </main>
