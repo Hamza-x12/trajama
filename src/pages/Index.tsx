@@ -14,6 +14,10 @@ interface TranslationResult {
     french: string;
     arabic: string;
     english: string;
+    spanish: string;
+    german: string;
+    italian: string;
+    portuguese: string;
   };
   culturalNotes?: string;
 }
@@ -28,7 +32,11 @@ const Index = () => {
     { name: "Darija", icon: "🇲🇦" },
     { name: "French", icon: "🇫🇷" },
     { name: "Arabic", icon: "🇸🇦" },
-    { name: "English", icon: "🇬🇧" }
+    { name: "English", icon: "🇬🇧" },
+    { name: "Spanish", icon: "🇪🇸" },
+    { name: "German", icon: "🇩🇪" },
+    { name: "Italian", icon: "🇮🇹" },
+    { name: "Portuguese", icon: "🇵🇹" }
   ];
 
   const handleTranslate = async () => {

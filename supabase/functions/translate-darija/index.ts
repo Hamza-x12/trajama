@@ -42,7 +42,11 @@ Provide translations in this EXACT JSON format:
     "darija": "translation or original if already in Darija",
     "french": "French translation",
     "arabic": "Modern Standard Arabic translation",
-    "english": "English translation"
+    "english": "English translation",
+    "spanish": "Spanish translation",
+    "german": "German translation",
+    "italian": "Italian translation",
+    "portuguese": "Portuguese translation"
   },
   "culturalNotes": "Optional cultural context or explanation of idioms/slang"
 }
@@ -110,7 +114,11 @@ IMPORTANT: You must return ONLY valid JSON, no additional text before or after.`
           darija: sourceLanguage === 'Darija' ? text : aiResponse,
           french: '',
           arabic: '',
-          english: ''
+          english: '',
+          spanish: '',
+          german: '',
+          italian: '',
+          portuguese: ''
         },
         culturalNotes: 'Translation formatting error. Please try again.'
       };
