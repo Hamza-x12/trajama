@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { TranslationCard } from "@/components/TranslationCard";
+import { TranslationHistory } from "@/components/TranslationHistory";
 import { Languages, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -22,11 +23,48 @@ interface TranslationResult {
   culturalNotes?: string;
 }
 
+interface HistoryItem {
+  id: string;
+  text: string;
+  sourceLanguage: string;
+  timestamp: number;
+  translations: {
+    darija: string;
+    french: string;
+    arabic: string;
+    english: string;
+    spanish: string;
+    german: string;
+    italian: string;
+    portuguese: string;
+  };
+}
+
+const HISTORY_KEY = 'darija-translation-history';
+
 const Index = () => {
   const [inputText, setInputText] = useState("");
   const [sourceLanguage, setSourceLanguage] = useState("Darija");
   const [translations, setTranslations] = useState<TranslationResult | null>(null);
   const [isTranslating, setIsTranslating] = useState(false);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+
+  // Load history from localStorage on mount
+  useEffect(() => {
+    const savedHistory = localStorage.getItem(HISTORY_KEY);
+    if (savedHistory) {
+      try {
+        setHistory(JSON.parse(savedHistory));
+      } catch (error) {
+        console.error('Failed to parse history:', error);
+      }
+    }
+  }, []);
+
+  // Save history to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+  }, [history]);
 
   const languages = [
     { name: "Darija", icon: "🇲🇦" },
@@ -65,6 +103,17 @@ const Index = () => {
       }
 
       setTranslations(data);
+      
+      // Add to history
+      const historyItem: HistoryItem = {
+        id: Date.now().toString(),
+        text: inputText,
+        sourceLanguage,
+        timestamp: Date.now(),
+        translations: data.translations
+      };
+      setHistory(prev => [historyItem, ...prev].slice(0, 50)); // Keep last 50 items
+      
       toast.success("Translation complete!");
     } catch (error) {
       console.error('Translation error:', error);
@@ -72,6 +121,23 @@ const Index = () => {
     } finally {
       setIsTranslating(false);
     }
+  };
+
+  const handleSelectHistoryItem = (item: HistoryItem) => {
+    setInputText(item.text);
+    setSourceLanguage(item.sourceLanguage);
+    setTranslations({ translations: item.translations });
+    toast.info("Translation loaded from history");
+  };
+
+  const handleClearHistory = () => {
+    setHistory([]);
+    toast.success("History cleared");
+  };
+
+  const handleDeleteHistoryItem = (id: string) => {
+    setHistory(prev => prev.filter(item => item.id !== id));
+    toast.success("Item removed from history");
   };
 
   return (
@@ -185,6 +251,16 @@ const Index = () => {
             </div>
           </div>
         </Card>
+
+        {/* History Section */}
+        <div className="mt-8">
+          <TranslationHistory
+            history={history}
+            onSelectItem={handleSelectHistoryItem}
+            onClearHistory={handleClearHistory}
+            onDeleteItem={handleDeleteHistoryItem}
+          />
+        </div>
 
         {/* Info Footer */}
         <div className="mt-6 text-center">
