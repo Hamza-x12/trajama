@@ -291,10 +291,10 @@ const Index = () => {
           <p className="text-sm text-muted-foreground font-medium">
             Culturally aware translations for Moroccan Darija with 11 languages
           </p>
-          <p className="text-xs text-muted-foreground/70 mt-2">
+          <p className="text-sm text-muted-foreground/70 mt-2">
             Professional multilingual translation
           </p>
-          <p className="text-sm text-foreground font-semibold mt-3">
+          <p className="text-xl text-foreground font-signature font-semibold mt-4 tracking-wide">
             Hamza Elkhouja
           </p>
         </div>
