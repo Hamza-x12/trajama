@@ -156,7 +156,7 @@ const Index = () => {
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft">
         <div className="container mx-auto px-4 py-5">
           <div className="flex items-center gap-3">
-            <img src={tarjamaLogo} alt="Tarjama Logo" className="w-12 h-12" />
+            <img src={tarjamaLogo} alt="Tarjama Logo" className="w-16 h-16" />
             <div>
               <h1 className="text-2xl font-bold text-foreground tracking-tight">Tarjama</h1>
               <p className="text-xs text-muted-foreground">Professional multilingual translation</p>
