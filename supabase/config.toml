@@ -1,0 +1,4 @@
+project_id = "zvvvsurmgfnankspkibu"
+
+[functions.translate-darija]
+verify_jwt = false
