@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { TranslationCard } from "@/components/TranslationCard";
 import { TranslationHistory } from "@/components/TranslationHistory";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Languages, Loader2, Wand2 } from "lucide-react";
+import { Languages, Loader2, Wand2, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
@@ -57,6 +57,7 @@ const Index = () => {
   const [translations, setTranslations] = useState<TranslationResult | null>(null);
   const [isTranslating, setIsTranslating] = useState(false);
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   // Load history from localStorage on mount
   useEffect(() => {
@@ -160,8 +161,15 @@ const Index = () => {
     toast.success("Item removed from history");
   };
 
+  const handleCopyTranslation = (text: string, languageName: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(languageName);
+    toast.success(`${languageName} translation copied!`);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col">
       {/* Header */}
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft">
         <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-5">
@@ -179,7 +187,7 @@ const Index = () => {
       </header>
 
       {/* Main Content - Google Translate Layout */}
-      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 max-w-7xl">
+      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 max-w-7xl flex-1">
         <Card className="overflow-hidden border-border/50 shadow-elegant hover:shadow-hover transition-all duration-500 bg-card/50 backdrop-blur-sm">
           <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-border/50">
             {/* Source Column */}
@@ -273,9 +281,23 @@ const Index = () => {
                       
                       return (
                         <div key={lang.name} className="space-y-2 sm:space-y-3 p-3 sm:p-4 rounded-lg sm:rounded-xl bg-card/50 border border-border/30 hover:border-primary/30 hover:shadow-soft transition-all duration-300">
-                          <div className="flex items-center gap-2 sm:gap-2.5 text-xs sm:text-sm font-semibold text-foreground">
-                            <span className="text-base sm:text-lg">{lang.icon}</span>
-                            <span className="tracking-wide">{lang.name}</span>
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-2 sm:gap-2.5 text-xs sm:text-sm font-semibold text-foreground">
+                              <span className="text-base sm:text-lg">{lang.icon}</span>
+                              <span className="tracking-wide">{lang.name}</span>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleCopyTranslation(translation, lang.name)}
+                              className="h-7 w-7 p-0 hover:bg-primary/10"
+                            >
+                              {copiedId === lang.name ? (
+                                <Check className="h-4 w-4 text-green-500" />
+                              ) : (
+                                <Copy className="h-4 w-4" />
+                              )}
+                            </Button>
                           </div>
                           <p className="text-sm sm:text-base md:text-lg text-foreground/90 leading-relaxed font-medium break-words">
                             {translation}
@@ -310,7 +332,7 @@ const Index = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-muted/30 border-t border-border/50 mt-8 sm:mt-12 md:mt-16">
+      <footer className="bg-muted/30 border-t border-border/50 mt-auto">
         <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 max-w-7xl">
           {/* Copyright */}
           <div className="text-center mb-3 sm:mb-4">
