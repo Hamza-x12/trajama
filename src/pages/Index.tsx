@@ -156,13 +156,13 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       {/* Header */}
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft">
-        <div className="container mx-auto px-4 py-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <img src={tarjamaLogo} alt="Tarjama Logo" className="w-16 h-16" />
+        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-5">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <img src={tarjamaLogo} alt="Tarjama Logo" className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16" />
               <div>
-                <h1 className="text-2xl font-bold text-foreground tracking-tight">Tarjama</h1>
-                <p className="text-xs text-muted-foreground">Professional multilingual translation</p>
+                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground tracking-tight">Tarjama</h1>
+                <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">Professional multilingual translation</p>
               </div>
             </div>
             <ThemeToggle />
@@ -171,20 +171,20 @@ const Index = () => {
       </header>
 
       {/* Main Content - Google Translate Layout */}
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
+      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 max-w-7xl">
         <Card className="overflow-hidden border-border/50 shadow-elegant hover:shadow-hover transition-all duration-500 bg-card/50 backdrop-blur-sm">
           <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-border/50">
             {/* Source Column */}
             <div className="flex flex-col">
               {/* Source Language Selector */}
-              <div className="border-b border-border/50 p-5 bg-gradient-to-r from-card to-muted/10">
-                <div className="flex gap-2 flex-wrap">
+              <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card to-muted/10 overflow-x-auto">
+                <div className="flex gap-1.5 sm:gap-2 flex-nowrap sm:flex-wrap min-w-max sm:min-w-0">
                   {languages.map((lang) => (
                     <Button
                       key={lang.name}
                       variant={sourceLanguage === lang.name ? "default" : "ghost"}
                       onClick={() => setSourceLanguage(lang.name)}
-                      className={`gap-2 h-10 px-4 font-medium transition-all duration-300 ${
+                      className={`gap-1.5 sm:gap-2 h-8 sm:h-9 md:h-10 px-2.5 sm:px-3 md:px-4 font-medium transition-all duration-300 flex-shrink-0 ${
                         sourceLanguage === lang.name 
                           ? 'shadow-moroccan scale-105' 
                           : 'hover:scale-105'
@@ -192,42 +192,43 @@ const Index = () => {
                       size="sm"
                     >
                       {lang.name === "Detect Language" ? (
-                        <Wand2 className="w-4 h-4" />
+                        <Wand2 className="w-3 h-3 sm:w-4 sm:h-4" />
                       ) : (
-                        <span className="text-base">{lang.icon}</span>
+                        <span className="text-sm sm:text-base">{lang.icon}</span>
                       )}
-                      <span className="text-sm">{lang.name}</span>
+                      <span className="text-xs sm:text-sm whitespace-nowrap">{lang.name}</span>
                     </Button>
                   ))}
                 </div>
               </div>
               
               {/* Source Text Input */}
-              <div className="flex-1 p-6">
+              <div className="flex-1 p-3 sm:p-4 md:p-6">
                 <Textarea
                   placeholder="Enter text to translate..."
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  className="min-h-[320px] text-lg resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60"
+                  className="min-h-[200px] sm:min-h-[280px] md:min-h-[320px] text-base sm:text-lg resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60"
                 />
               </div>
 
               {/* Translate Button */}
-              <div className="border-t border-border/50 p-5 bg-gradient-to-r from-muted/10 to-card">
+              <div className="border-t border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-muted/10 to-card">
                 <Button
                   onClick={handleTranslate}
                   disabled={isTranslating || !inputText.trim()}
-                  className="w-full h-12 text-base font-semibold shadow-moroccan hover:shadow-hover transition-all duration-300 hover:scale-[1.02]"
+                  className="w-full h-10 sm:h-11 md:h-12 text-sm sm:text-base font-semibold shadow-moroccan hover:shadow-hover transition-all duration-300 hover:scale-[1.02]"
                   size="lg"
                 >
                   {isTranslating ? (
                     <>
-                      <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                      Translating...
+                      <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin mr-2" />
+                      <span className="hidden sm:inline">Translating...</span>
+                      <span className="sm:hidden">Translating</span>
                     </>
                   ) : (
                     <>
-                      <Languages className="w-5 h-5 mr-2" />
+                      <Languages className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                       Translate
                     </>
                   )}
@@ -238,33 +239,33 @@ const Index = () => {
             {/* Target Column */}
             <div className="flex flex-col bg-gradient-to-br from-muted/10 to-card">
               {/* Target Languages Tabs */}
-              <div className="border-b border-border/50 p-5 bg-gradient-to-r from-card to-muted/10">
-                <div className="text-sm font-semibold text-foreground tracking-wide uppercase">
+              <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card to-muted/10">
+                <div className="text-xs sm:text-sm font-semibold text-foreground tracking-wide uppercase">
                   Translations
                 </div>
               </div>
               
               {/* Translation Results */}
-              <div className="flex-1 p-6 overflow-y-auto">
+              <div className="flex-1 p-3 sm:p-4 md:p-6 overflow-y-auto max-h-[400px] sm:max-h-[500px] md:max-h-[600px]">
                 {translations ? (
-                  <div className="space-y-6">
+                  <div className="space-y-3 sm:space-y-4 md:space-y-6">
                     {languages.map((lang) => {
                       const key = lang.name.toLowerCase() as keyof typeof translations.translations;
                       const translation = translations.translations[key];
                       
                       return (
-                        <div key={lang.name} className="space-y-3 p-4 rounded-xl bg-card/50 border border-border/30 hover:border-primary/30 hover:shadow-soft transition-all duration-300">
-                          <div className="flex items-center gap-2.5 text-sm font-semibold text-foreground">
-                            <span className="text-lg">{lang.icon}</span>
+                        <div key={lang.name} className="space-y-2 sm:space-y-3 p-3 sm:p-4 rounded-lg sm:rounded-xl bg-card/50 border border-border/30 hover:border-primary/30 hover:shadow-soft transition-all duration-300">
+                          <div className="flex items-center gap-2 sm:gap-2.5 text-xs sm:text-sm font-semibold text-foreground">
+                            <span className="text-base sm:text-lg">{lang.icon}</span>
                             <span className="tracking-wide">{lang.name}</span>
                           </div>
-                          <p className="text-lg text-foreground/90 leading-relaxed font-medium">
+                          <p className="text-sm sm:text-base md:text-lg text-foreground/90 leading-relaxed font-medium break-words">
                             {translation}
                           </p>
                           {lang.name === "Darija" && translations.culturalNotes && (
-                            <div className="mt-4 p-4 bg-gradient-to-br from-accent/10 to-accent/5 rounded-xl border border-accent/30 shadow-soft">
-                              <p className="text-xs text-accent-foreground font-semibold mb-2 uppercase tracking-wide">Cultural Notes</p>
-                              <p className="text-sm text-foreground/80 italic leading-relaxed">{translations.culturalNotes}</p>
+                            <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-gradient-to-br from-accent/10 to-accent/5 rounded-lg sm:rounded-xl border border-accent/30 shadow-soft">
+                              <p className="text-[10px] sm:text-xs text-accent-foreground font-semibold mb-2 uppercase tracking-wide">Cultural Notes</p>
+                              <p className="text-xs sm:text-sm text-foreground/80 italic leading-relaxed break-words">{translations.culturalNotes}</p>
                             </div>
                           )}
                         </div>
@@ -273,8 +274,8 @@ const Index = () => {
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
-                    <Languages className="w-16 h-16 mb-4 opacity-30" />
-                    <p className="text-sm font-medium">Translations will appear here</p>
+                    <Languages className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mb-3 sm:mb-4 opacity-30" />
+                    <p className="text-xs sm:text-sm font-medium">Translations will appear here</p>
                   </div>
                 )}
               </div>
@@ -284,7 +285,7 @@ const Index = () => {
 
         {/* History Section */}
         {history.length > 0 && (
-          <div className="mt-8">
+          <div className="mt-4 sm:mt-6 md:mt-8">
             <TranslationHistory
               history={history}
               onSelectItem={handleSelectHistoryItem}
@@ -297,11 +298,11 @@ const Index = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-muted/30 border-t border-border/50 mt-16">
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <footer className="bg-muted/30 border-t border-border/50 mt-8 sm:mt-12 md:mt-16">
+        <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 max-w-7xl">
           {/* Copyright */}
-          <div className="text-center mb-4">
-            <p className="text-xs text-muted-foreground">
+          <div className="text-center mb-3 sm:mb-4">
+            <p className="text-[10px] sm:text-xs text-muted-foreground">
               Copyright © 2025 Tarjama. Tous droits réservés.
             </p>
           </div>
@@ -312,10 +313,10 @@ const Index = () => {
               href="https://www.instagram.com/_7amza_ft_/" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2 font-medium"
+              className="text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1.5 sm:gap-2 font-medium"
             >
               <span>Hamza Elkhouja</span>
-              <span className="text-base">📷</span>
+              <span className="text-sm sm:text-base">📷</span>
             </a>
           </div>
         </div>
