@@ -233,6 +233,14 @@ const Index = () => {
                     </>
                   )}
                 </Button>
+                
+                {/* Cultural Notes */}
+                {translations?.culturalNotes && (
+                  <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-gradient-to-br from-accent/10 to-accent/5 rounded-lg sm:rounded-xl border border-accent/30 shadow-soft">
+                    <p className="text-[10px] sm:text-xs text-accent-foreground font-semibold mb-2 uppercase tracking-wide">Cultural Notes</p>
+                    <p className="text-xs sm:text-sm text-foreground/80 italic leading-relaxed break-words">{translations.culturalNotes}</p>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -262,12 +270,6 @@ const Index = () => {
                           <p className="text-sm sm:text-base md:text-lg text-foreground/90 leading-relaxed font-medium break-words">
                             {translation}
                           </p>
-                          {lang.name === "Darija" && translations.culturalNotes && (
-                            <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-gradient-to-br from-accent/10 to-accent/5 rounded-lg sm:rounded-xl border border-accent/30 shadow-soft">
-                              <p className="text-[10px] sm:text-xs text-accent-foreground font-semibold mb-2 uppercase tracking-wide">Cultural Notes</p>
-                              <p className="text-xs sm:text-sm text-foreground/80 italic leading-relaxed break-words">{translations.culturalNotes}</p>
-                            </div>
-                          )}
                         </div>
                       );
                     })}
