@@ -249,7 +249,7 @@ const Index = () => {
               <div className="flex-1 p-3 sm:p-4 md:p-6 overflow-y-auto max-h-[400px] sm:max-h-[500px] md:max-h-[600px]">
                 {translations ? (
                   <div className="space-y-3 sm:space-y-4 md:space-y-6">
-                    {languages.map((lang) => {
+                    {languages.filter(lang => lang.name !== "Detect Language").map((lang) => {
                       const key = lang.name.toLowerCase() as keyof typeof translations.translations;
                       const translation = translations.translations[key];
                       
