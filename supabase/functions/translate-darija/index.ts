@@ -20,6 +20,42 @@ serve(async (req) => {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
+    // Detect language if needed
+    let detectedLanguage = null;
+    let actualSourceLanguage = sourceLanguage;
+
+    if (sourceLanguage === 'Detect Language') {
+      console.log('Detecting language...');
+      const detectResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.5-flash',
+          messages: [
+            { 
+              role: 'system', 
+              content: 'You are a language detection expert. Detect the language of the given text and respond with ONLY the language name from this list: Darija, French, Arabic, English, Spanish, German, Italian, Portuguese, Chinese, Japanese, Turkish. Respond with exactly one word.' 
+            },
+            { role: 'user', content: text }
+          ],
+          temperature: 0.3,
+        }),
+      });
+
+      if (detectResponse.ok) {
+        const detectData = await detectResponse.json();
+        detectedLanguage = detectData.choices[0].message.content.trim();
+        actualSourceLanguage = detectedLanguage;
+        console.log('Detected language:', detectedLanguage);
+      } else {
+        console.error('Language detection failed, defaulting to Darija');
+        actualSourceLanguage = 'Darija';
+      }
+    }
+
     // Construct the system prompt based on the direction of translation
     let systemPrompt = `You are a culturally aware multilingual translator specialized in Moroccan Darija. You must:
 
@@ -56,7 +92,7 @@ Provide translations in this EXACT JSON format:
 
 IMPORTANT: You must return ONLY valid JSON, no additional text before or after.`;
 
-    const userPrompt = `Translate the following text from ${sourceLanguage} into ${targetLanguages.join(', ')}:\n\n"${text}"`;
+    const userPrompt = `Translate the following text from ${actualSourceLanguage} into ${targetLanguages.join(', ')}:\n\n"${text}"`;
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -114,7 +150,7 @@ IMPORTANT: You must return ONLY valid JSON, no additional text before or after.`
       // Fallback: return the raw response
       translationResult = {
         translations: {
-          darija: sourceLanguage === 'Darija' ? text : aiResponse,
+          darija: actualSourceLanguage === 'Darija' ? text : aiResponse,
           french: '',
           arabic: '',
           english: '',
@@ -128,6 +164,11 @@ IMPORTANT: You must return ONLY valid JSON, no additional text before or after.`
         },
         culturalNotes: 'Translation formatting error. Please try again.'
       };
+    }
+
+    // Add detected language to response if language was detected
+    if (detectedLanguage) {
+      translationResult.detectedLanguage = detectedLanguage;
     }
 
     return new Response(

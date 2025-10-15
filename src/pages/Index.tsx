@@ -26,6 +26,7 @@ interface TranslationResult {
     turkish: string;
   };
   culturalNotes?: string;
+  detectedLanguage?: string;
 }
 
 interface HistoryItem {
@@ -116,17 +117,24 @@ const Index = () => {
 
       setTranslations(data);
       
+      // Show detected language if available
+      if (data.detectedLanguage) {
+        toast.success(`Detected language: ${data.detectedLanguage}`);
+      }
+      
       // Add to history
       const historyItem: HistoryItem = {
         id: Date.now().toString(),
         text: inputText,
-        sourceLanguage,
+        sourceLanguage: data.detectedLanguage || sourceLanguage,
         timestamp: Date.now(),
         translations: data.translations
       };
       setHistory(prev => [historyItem, ...prev].slice(0, 50)); // Keep last 50 items
       
-      toast.success("Translation complete!");
+      if (!data.detectedLanguage) {
+        toast.success("Translation complete!");
+      }
     } catch (error) {
       console.error('Translation error:', error);
       toast.error("Translation failed. Please try again.");
@@ -257,7 +265,9 @@ const Index = () => {
               <div className="flex-1 p-3 sm:p-4 md:p-6 overflow-y-auto max-h-[400px] sm:max-h-[500px] md:max-h-[600px]">
                 {translations ? (
                   <div className="space-y-3 sm:space-y-4 md:space-y-6">
-                    {languages.filter(lang => lang.name !== "Detect Language").map((lang) => {
+                    {languages
+                      .filter(lang => lang.name !== "Detect Language" && lang.name !== translations.detectedLanguage)
+                      .map((lang) => {
                       const key = lang.name.toLowerCase() as keyof typeof translations.translations;
                       const translation = translations.translations[key];
                       
