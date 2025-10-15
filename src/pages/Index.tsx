@@ -203,12 +203,12 @@ const Index = () => {
               </div>
               
               {/* Source Text Input */}
-              <div className="flex-1 p-3 sm:p-4 md:p-6">
+              <div className="flex-1 p-4 sm:p-5 md:p-6">
                 <Textarea
                   placeholder="Enter text to translate..."
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  className="min-h-[200px] sm:min-h-[280px] md:min-h-[320px] text-base sm:text-lg resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60"
+                  className="min-h-[180px] sm:min-h-[250px] md:min-h-[300px] text-base sm:text-lg resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60"
                 />
               </div>
 
