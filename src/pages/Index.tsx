@@ -296,82 +296,27 @@ const Index = () => {
 
       </main>
 
-      {/* Apple-style Footer */}
+      {/* Footer */}
       <footer className="bg-muted/30 border-t border-border/50 mt-16">
-        <div className="container mx-auto px-4 py-12 max-w-7xl">
-          {/* Footer Columns */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-            {/* Explorer Column */}
-            <div>
-              <h3 className="font-semibold text-sm text-foreground mb-4">Explorer</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Darija</a></li>
-                <li><a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Français</a></li>
-                <li><a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">English</a></li>
-              </ul>
-            </div>
-
-            {/* Compte Column */}
-            <div>
-              <h3 className="font-semibold text-sm text-foreground mb-4">Compte</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Gérer le compte</a></li>
-                <li><a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Historique</a></li>
-              </ul>
-            </div>
-
-            {/* Valeurs Column */}
-            <div>
-              <h3 className="font-semibold text-sm text-foreground mb-4">Valeurs de Tarjama</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Confidentialité</a></li>
-              </ul>
-            </div>
-
-            {/* À propos Column */}
-            <div>
-              <h3 className="font-semibold text-sm text-foreground mb-4">À propos de Tarjama</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">À propos</a></li>
-                <li><a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Contact</a></li>
-                <li><a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Carrières</a></li>
-              </ul>
-            </div>
+        <div className="container mx-auto px-4 py-8 max-w-7xl">
+          {/* Copyright */}
+          <div className="text-center mb-4">
+            <p className="text-xs text-muted-foreground">
+              Copyright © 2025 Tarjama. Tous droits réservés.
+            </p>
           </div>
 
-          {/* Divider */}
-          <div className="border-t border-border/50 pt-6">
-            {/* Find Reseller Link */}
-            <div className="mb-4">
-              <a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-                Trouvez un revendeur.
-              </a>
-            </div>
-
-            {/* Copyright and Legal Links */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs text-muted-foreground">
-              <div className="flex flex-wrap items-center gap-2">
-                <span>Copyright © 2025 Tarjama. Tous droits réservés.</span>
-                <span className="hidden md:inline">|</span>
-                <a href="#" className="hover:text-foreground transition-colors">Conditions d&apos;utilisation</a>
-                <span className="hidden md:inline">|</span>
-                <a href="/sitemap.xml" className="hover:text-foreground transition-colors">Plan du site</a>
-              </div>
-              <div>Maroc</div>
-            </div>
-
-            {/* Instagram Link */}
-            <div className="mt-6 pt-6 border-t border-border/50 text-center">
-              <a 
-                href="https://www.instagram.com/_7amza_ft_/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2"
-              >
-                <span>Suivez-nous sur Instagram</span>
-                <span className="text-base">📷</span>
-              </a>
-            </div>
+          {/* Instagram Link */}
+          <div className="text-center">
+            <a 
+              href="https://www.instagram.com/_7amza_ft_/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2"
+            >
+              <span>Suivez-nous sur Instagram</span>
+              <span className="text-base">📷</span>
+            </a>
           </div>
         </div>
       </footer>
