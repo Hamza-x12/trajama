@@ -306,15 +306,15 @@ const Index = () => {
             </p>
           </div>
 
-          {/* Instagram Link */}
+          {/* Name and Instagram Link */}
           <div className="text-center">
             <a 
               href="https://www.instagram.com/_7amza_ft_/" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2 font-medium"
             >
-              <span>Suivez-nous sur Instagram</span>
+              <span>Hamza Elkhouja</span>
               <span className="text-base">📷</span>
             </a>
           </div>
