@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { TranslationCard } from "@/components/TranslationCard";
 import { TranslationHistory } from "@/components/TranslationHistory";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Languages, Loader2, Wand2, Copy, Check } from "lucide-react";
+import { Languages, Loader2, Wand2, Copy, Check, Mic, Square } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
@@ -58,6 +58,9 @@ const Index = () => {
   const [isTranslating, setIsTranslating] = useState(false);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
 
   // Load history from localStorage on mount
   useEffect(() => {
@@ -168,6 +171,77 @@ const Index = () => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+      const chunks: Blob[] = [];
+
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          chunks.push(e.data);
+        }
+      };
+
+      recorder.onstop = async () => {
+        const audioBlob = new Blob(chunks, { type: 'audio/webm' });
+        await transcribeAudio(audioBlob);
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      recorder.start();
+      setMediaRecorder(recorder);
+      setAudioChunks(chunks);
+      setIsRecording(true);
+      toast.info("Recording started...");
+    } catch (error) {
+      console.error('Error starting recording:', error);
+      toast.error("Failed to access microphone");
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder && isRecording) {
+      mediaRecorder.stop();
+      setIsRecording(false);
+      toast.info("Processing audio...");
+    }
+  };
+
+  const transcribeAudio = async (audioBlob: Blob) => {
+    try {
+      const reader = new FileReader();
+      reader.readAsDataURL(audioBlob);
+      
+      reader.onloadend = async () => {
+        const base64Audio = reader.result?.toString().split(',')[1];
+        
+        if (!base64Audio) {
+          toast.error("Failed to process audio");
+          return;
+        }
+
+        const { data, error } = await supabase.functions.invoke('transcribe-audio', {
+          body: { audio: base64Audio }
+        });
+
+        if (error) {
+          console.error('Transcription error:', error);
+          toast.error("Failed to transcribe audio");
+          return;
+        }
+
+        if (data?.text) {
+          setInputText(data.text);
+          toast.success("Audio transcribed successfully!");
+        }
+      };
+    } catch (error) {
+      console.error('Error transcribing audio:', error);
+      toast.error("Failed to transcribe audio");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col">
       {/* Header */}
@@ -220,12 +294,23 @@ const Index = () => {
               
               {/* Source Text Input */}
               <div className="flex-1 p-4 sm:p-5 md:p-6">
-                <Textarea
-                  placeholder="Enter text to translate..."
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  className="min-h-[180px] sm:min-h-[250px] md:min-h-[300px] text-base sm:text-lg resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60"
-                />
+                <div className="relative">
+                  <Textarea
+                    placeholder="Enter text to translate..."
+                    value={inputText}
+                    onChange={(e) => setInputText(e.target.value)}
+                    className="min-h-[180px] sm:min-h-[250px] md:min-h-[300px] text-base sm:text-lg resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 pr-12 leading-relaxed placeholder:text-muted-foreground/60"
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={isRecording ? stopRecording : startRecording}
+                    className={`absolute right-2 top-2 ${isRecording ? 'text-red-500 animate-pulse' : ''}`}
+                    title={isRecording ? "Stop recording" : "Start recording"}
+                  >
+                    {isRecording ? <Square className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+                  </Button>
+                </div>
               </div>
 
               {/* Translate Button */}
