@@ -59,8 +59,7 @@ const Index = () => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
-  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
-  const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
+  const [recognition, setRecognition] = useState<any>(null);
 
   // Load history from localStorage on mount
   useEffect(() => {
@@ -171,74 +170,61 @@ const Index = () => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const startRecording = async () => {
+  const startRecording = () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
-      const chunks: Blob[] = [];
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      
+      if (!SpeechRecognition) {
+        toast.error("Speech recognition is not supported in your browser");
+        return;
+      }
 
-      recorder.ondataavailable = (e) => {
-        if (e.data.size > 0) {
-          chunks.push(e.data);
-        }
+      const recognitionInstance = new SpeechRecognition();
+      recognitionInstance.continuous = true;
+      recognitionInstance.interimResults = true;
+      recognitionInstance.lang = sourceLanguage === 'Darija' ? 'ar-MA' : 
+                                   sourceLanguage === 'French' ? 'fr-FR' :
+                                   sourceLanguage === 'Arabic' ? 'ar-SA' :
+                                   sourceLanguage === 'Spanish' ? 'es-ES' :
+                                   sourceLanguage === 'German' ? 'de-DE' :
+                                   sourceLanguage === 'Italian' ? 'it-IT' :
+                                   sourceLanguage === 'Portuguese' ? 'pt-PT' :
+                                   sourceLanguage === 'Chinese' ? 'zh-CN' :
+                                   sourceLanguage === 'Japanese' ? 'ja-JP' :
+                                   sourceLanguage === 'Turkish' ? 'tr-TR' : 'en-US';
+
+      recognitionInstance.onresult = (event: any) => {
+        const transcript = Array.from(event.results)
+          .map((result: any) => result[0].transcript)
+          .join(' ');
+        setInputText(transcript);
       };
 
-      recorder.onstop = async () => {
-        const audioBlob = new Blob(chunks, { type: 'audio/webm' });
-        await transcribeAudio(audioBlob);
-        stream.getTracks().forEach(track => track.stop());
+      recognitionInstance.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        setIsRecording(false);
+        toast.error("Could not recognize speech");
       };
 
-      recorder.start();
-      setMediaRecorder(recorder);
-      setAudioChunks(chunks);
+      recognitionInstance.onend = () => {
+        setIsRecording(false);
+      };
+
+      recognitionInstance.start();
+      setRecognition(recognitionInstance);
       setIsRecording(true);
-      toast.info("Recording started...");
+      toast.info("Listening...");
     } catch (error) {
       console.error('Error starting recording:', error);
-      toast.error("Failed to access microphone");
+      toast.error("Failed to start speech recognition");
     }
   };
 
   const stopRecording = () => {
-    if (mediaRecorder && isRecording) {
-      mediaRecorder.stop();
+    if (recognition) {
+      recognition.stop();
       setIsRecording(false);
-      toast.info("Processing audio...");
-    }
-  };
-
-  const transcribeAudio = async (audioBlob: Blob) => {
-    try {
-      const reader = new FileReader();
-      reader.readAsDataURL(audioBlob);
-      
-      reader.onloadend = async () => {
-        const base64Audio = reader.result?.toString().split(',')[1];
-        
-        if (!base64Audio) {
-          toast.error("Failed to process audio");
-          return;
-        }
-
-        const { data, error } = await supabase.functions.invoke('transcribe-audio', {
-          body: { audio: base64Audio }
-        });
-
-        if (error) {
-          console.error('Transcription error:', error);
-          toast.error("Failed to transcribe audio");
-          return;
-        }
-
-        if (data?.text) {
-          setInputText(data.text);
-          toast.success("Audio transcribed successfully!");
-        }
-      };
-    } catch (error) {
-      console.error('Error transcribing audio:', error);
-      toast.error("Failed to transcribe audio");
+      toast.success("Recording stopped");
     }
   };
 
