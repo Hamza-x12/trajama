@@ -170,18 +170,23 @@ const Index = () => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const startRecording = () => {
+  const startRecording = async () => {
     try {
+      // Check for microphone permission first
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(track => track.stop()); // Stop the test stream
+
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       
       if (!SpeechRecognition) {
-        toast.error("Speech recognition is not supported in your browser");
+        toast.error("Speech recognition is not supported in this browser. Please use Chrome or Edge.");
         return;
       }
 
       const recognitionInstance = new SpeechRecognition();
-      recognitionInstance.continuous = true;
-      recognitionInstance.interimResults = true;
+      recognitionInstance.continuous = false;
+      recognitionInstance.interimResults = false;
+      recognitionInstance.maxAlternatives = 1;
       recognitionInstance.lang = sourceLanguage === 'Darija' ? 'ar-MA' : 
                                    sourceLanguage === 'French' ? 'fr-FR' :
                                    sourceLanguage === 'Arabic' ? 'ar-SA' :
@@ -194,16 +199,24 @@ const Index = () => {
                                    sourceLanguage === 'Turkish' ? 'tr-TR' : 'en-US';
 
       recognitionInstance.onresult = (event: any) => {
-        const transcript = Array.from(event.results)
-          .map((result: any) => result[0].transcript)
-          .join(' ');
-        setInputText(transcript);
+        const transcript = event.results[0][0].transcript;
+        setInputText(prev => prev + (prev ? ' ' : '') + transcript);
+        toast.success("Text captured!");
       };
 
       recognitionInstance.onerror = (event: any) => {
         console.error('Speech recognition error:', event.error);
         setIsRecording(false);
-        toast.error("Could not recognize speech");
+        
+        if (event.error === 'network') {
+          toast.error("Network error. Speech recognition needs internet connection. Please check your connection.");
+        } else if (event.error === 'not-allowed') {
+          toast.error("Microphone permission denied. Please allow microphone access.");
+        } else if (event.error === 'no-speech') {
+          toast.error("No speech detected. Please try again.");
+        } else {
+          toast.error(`Speech recognition error: ${event.error}`);
+        }
       };
 
       recognitionInstance.onend = () => {
@@ -213,10 +226,11 @@ const Index = () => {
       recognitionInstance.start();
       setRecognition(recognitionInstance);
       setIsRecording(true);
-      toast.info("Listening...");
+      toast.info("Speak now...");
     } catch (error) {
       console.error('Error starting recording:', error);
-      toast.error("Failed to start speech recognition");
+      setIsRecording(false);
+      toast.error("Could not access microphone. Please grant permission.");
     }
   };
 
