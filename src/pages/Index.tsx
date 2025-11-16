@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
@@ -60,6 +60,8 @@ const Index = () => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [recognition, setRecognition] = useState<any>(null);
+
+  const retryAttemptedRef = useRef(false);
 
   // Load history from localStorage on mount
   useEffect(() => {
@@ -199,6 +201,7 @@ const Index = () => {
                                    sourceLanguage === 'Turkish' ? 'tr-TR' : 'en-US';
 
       recognitionInstance.onresult = (event: any) => {
+        retryAttemptedRef.current = false;
         const transcript = event.results[0][0].transcript;
         setInputText(prev => prev + (prev ? ' ' : '') + transcript);
         toast.success("Text captured!");
@@ -206,6 +209,31 @@ const Index = () => {
 
       recognitionInstance.onerror = (event: any) => {
         console.error('Speech recognition error:', event.error);
+
+        // Retry once on transient network errors
+        if (event.error === 'network' && !retryAttemptedRef.current) {
+          retryAttemptedRef.current = true;
+          toast.info("Network issue, retrying...");
+          try {
+            recognitionInstance.stop();
+            setTimeout(() => {
+              try {
+                recognitionInstance.start();
+                setIsRecording(true);
+              } catch (e) {
+                console.error('Retry start failed:', e);
+                setIsRecording(false);
+                toast.error("Speech service unavailable. Please try again shortly.");
+              }
+            }, 600);
+          } catch (e) {
+            console.error('Retry setup failed:', e);
+            setIsRecording(false);
+            toast.error("Speech service unavailable. Please try again shortly.");
+          }
+          return;
+        }
+
         setIsRecording(false);
         
         if (event.error === 'network') {
@@ -223,6 +251,7 @@ const Index = () => {
         setIsRecording(false);
       };
 
+      retryAttemptedRef.current = false;
       recognitionInstance.start();
       setRecognition(recognitionInstance);
       setIsRecording(true);
