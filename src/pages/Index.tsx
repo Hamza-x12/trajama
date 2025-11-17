@@ -394,28 +394,24 @@ const Index = () => {
                       const translation = translations.translations[key];
                       
                       return (
-                        <div key={lang.name} className="space-y-2 sm:space-y-3 p-3 sm:p-4 rounded-lg sm:rounded-xl bg-card/50 border border-border/30 hover:border-primary/30 hover:shadow-soft transition-all duration-300">
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-2 sm:gap-2.5 text-xs sm:text-sm font-semibold text-foreground">
-                              <span className="text-base sm:text-lg">{lang.icon}</span>
-                              <span className="tracking-wide">{lang.name}</span>
-                            </div>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleCopyTranslation(translation, lang.name)}
-                              className="h-7 w-7 p-0 hover:bg-primary/10"
-                            >
-                              {copiedId === lang.name ? (
-                                <Check className="h-4 w-4 text-green-500" />
-                              ) : (
-                                <Copy className="h-4 w-4" />
-                              )}
-                            </Button>
-                          </div>
-                          <p className="text-sm sm:text-base md:text-lg text-foreground/90 leading-relaxed font-medium break-words">
-                            {translation}
-                          </p>
+                        <div key={lang.name} className="relative">
+                          <TranslationCard
+                            language={lang.name}
+                            translation={translation}
+                            icon={lang.icon}
+                          />
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleCopyTranslation(translation, lang.name)}
+                            className="absolute top-4 right-12 h-8 w-8 p-0 hover:bg-primary/10"
+                          >
+                            {copiedId === lang.name ? (
+                              <Check className="h-4 w-4 text-green-500" />
+                            ) : (
+                              <Copy className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                            )}
+                          </Button>
                         </div>
                       );
                     })}
