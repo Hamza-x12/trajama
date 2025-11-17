@@ -413,18 +413,20 @@ const Index = () => {
                             translation={translation}
                             icon={lang.icon}
                           />
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleCopyTranslation(translation, lang.name)}
-                            className="absolute top-4 right-12 h-8 w-8 p-0 hover:bg-primary/10"
-                          >
-                            {copiedId === lang.name ? (
-                              <Check className="h-4 w-4 text-green-500" />
-                            ) : (
-                              <Copy className="h-4 w-4 text-muted-foreground hover:text-foreground" />
-                            )}
-                          </Button>
+                          <div className="absolute top-4 right-4 flex flex-col gap-1">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleCopyTranslation(translation, lang.name)}
+                              className="h-8 w-8 p-0 hover:bg-primary/10"
+                            >
+                              {copiedId === lang.name ? (
+                                <Check className="h-4 w-4 text-green-500" />
+                              ) : (
+                                <Copy className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                              )}
+                            </Button>
+                          </div>
                         </div>
                       );
                     })}

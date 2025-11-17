@@ -1,22 +1,15 @@
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Volume2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
-import { toast } from "sonner";
 
 interface TranslationCardProps {
   language: string;
   translation: string;
   culturalNotes?: string;
   icon?: string;
-  isImageIcon?: boolean;
 }
 
 export const TranslationCard = ({ language, translation, culturalNotes, icon }: TranslationCardProps) => {
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  
   // Check if icon is an image path (contains .png, .jpg, etc.) or emoji
   const isImageIcon = typeof icon === 'string' && (icon.includes('.png') || icon.includes('.jpg') || icon.includes('.svg'));
 
@@ -30,78 +23,40 @@ export const TranslationCard = ({ language, translation, culturalNotes, icon }: 
     return colors[lang] || 'text-foreground';
   };
 
-  const getLanguageCode = (lang: string): string => {
-    const codes: Record<string, string> = {
-      'Darija': 'ar-MA',
-      'French': 'fr-FR',
-      'Arabic': 'ar-SA',
-      'English': 'en-US',
-      'Spanish': 'es-ES',
-      'Turkish': 'tr-TR'
+  const getCountryTheme = (lang: string) => {
+    const themes: Record<string, string> = {
+      'Darija': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-green-50/10 dark:from-red-950/20 dark:to-green-950/20',
+      'French': 'border-l-4 border-l-blue-600 bg-gradient-to-r from-blue-50/10 via-white/5 to-red-50/10 dark:from-blue-950/20 dark:via-background/10 dark:to-red-950/20',
+      'Arabic': 'border-l-4 border-l-green-600 bg-gradient-to-r from-green-50/10 to-white/5 dark:from-green-950/20 dark:to-background/10',
+      'English': 'border-l-4 border-l-blue-700 bg-gradient-to-r from-red-50/10 via-white/5 to-blue-50/10 dark:from-red-950/20 dark:via-background/10 dark:to-blue-950/20',
+      'Spanish': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-yellow-50/10 dark:from-red-950/20 dark:to-yellow-950/20',
+      'German': 'border-l-4 border-l-yellow-500 bg-gradient-to-r from-red-50/10 via-yellow-50/10 to-zinc-100/10 dark:from-red-950/20 dark:via-yellow-950/20 dark:to-zinc-900/20',
+      'Italian': 'border-l-4 border-l-green-600 bg-gradient-to-r from-green-50/10 via-white/5 to-red-50/10 dark:from-green-950/20 dark:via-background/10 dark:to-red-950/20',
+      'Portuguese': 'border-l-4 border-l-green-700 bg-gradient-to-r from-green-50/10 to-red-50/10 dark:from-green-950/20 dark:to-red-950/20',
+      'Chinese': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-yellow-50/10 dark:from-red-950/20 dark:to-yellow-950/20',
+      'Japanese': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-white/5 dark:from-red-950/20 dark:to-background/10',
+      'Turkish': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-white/5 dark:from-red-950/20 dark:to-background/10'
     };
-    return codes[lang] || 'en-US';
-  };
-
-  const handleSpeak = () => {
-    if (!translation || translation === '') {
-      toast.error("No translation to speak");
-      return;
-    }
-
-    if (isSpeaking) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
-      return;
-    }
-
-    const utterance = new SpeechSynthesisUtterance(translation);
-    utterance.lang = getLanguageCode(language);
-    utterance.rate = 0.9;
-    
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => {
-      setIsSpeaking(false);
-      toast.error("Speech synthesis failed");
-    };
-
-    window.speechSynthesis.speak(utterance);
+    return themes[lang] || '';
   };
 
   return (
-    <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50 shadow-moroccan transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
+    <Card className={cn(
+      "p-6 backdrop-blur-sm border-border/50 shadow-moroccan transition-all duration-300 hover:shadow-lg hover:scale-[1.02]",
+      getCountryTheme(language)
+    )}>
       <div className="space-y-4">
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            {icon && (
-              isImageIcon ? (
-                <img src={icon} alt={language} className="w-6 h-6 rounded object-cover" />
-              ) : (
-                <span className="text-2xl">{icon}</span>
-              )
-            )}
-            <Label className={cn("text-lg font-semibold", getLanguageColor(language))}>
-              {language}
-            </Label>
-          </div>
-          <div className="flex items-center gap-2">
-            {translation && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleSpeak}
-                className={cn("h-8 w-8", isSpeaking && "text-primary")}
-                title="Speak translation"
-              >
-                <Volume2 className="h-4 w-4" />
-              </Button>
-            )}
-            {culturalNotes && (
-              <span className="text-xs bg-accent/20 text-accent-foreground px-2 py-1 rounded-full">
-                Cultural Note
-              </span>
-            )}
-          </div>
+        <div className="flex items-center gap-2">
+          {icon && (
+            isImageIcon ? (
+              <img src={icon} alt={language} className="w-6 h-6 rounded object-cover" />
+            ) : (
+              <span className="text-2xl">{icon}</span>
+            )
+          )}
+          <Label className={cn("text-lg font-semibold", getLanguageColor(language))}>
+            {language}
+          </Label>
         </div>
         
         <p className="text-foreground/90 text-base leading-relaxed min-h-[3rem]">
