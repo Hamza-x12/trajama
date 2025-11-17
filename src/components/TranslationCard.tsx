@@ -11,10 +11,14 @@ interface TranslationCardProps {
   translation: string;
   culturalNotes?: string;
   icon?: string;
+  isImageIcon?: boolean;
 }
 
 export const TranslationCard = ({ language, translation, culturalNotes, icon }: TranslationCardProps) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
+  
+  // Check if icon is an image path (contains .png, .jpg, etc.) or emoji
+  const isImageIcon = typeof icon === 'string' && (icon.includes('.png') || icon.includes('.jpg') || icon.includes('.svg'));
 
   const getLanguageColor = (lang: string) => {
     const colors: Record<string, string> = {
@@ -69,7 +73,13 @@ export const TranslationCard = ({ language, translation, culturalNotes, icon }: 
       <div className="space-y-4">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            {icon && <span className="text-2xl">{icon}</span>}
+            {icon && (
+              isImageIcon ? (
+                <img src={icon} alt={language} className="w-6 h-6 rounded object-cover" />
+              ) : (
+                <span className="text-2xl">{icon}</span>
+              )
+            )}
             <Label className={cn("text-lg font-semibold", getLanguageColor(language))}>
               {language}
             </Label>

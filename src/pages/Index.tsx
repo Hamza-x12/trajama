@@ -10,6 +10,17 @@ import { Languages, Loader2, Wand2, Copy, Check, Mic, Square } from "lucide-reac
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
+import moroccoFlag from "@/assets/flags/morocco.png";
+import ukFlag from "@/assets/flags/uk.png";
+import franceFlag from "@/assets/flags/france.png";
+import spainFlag from "@/assets/flags/spain.png";
+import saudiArabiaFlag from "@/assets/flags/saudi-arabia.png";
+import germanyFlag from "@/assets/flags/germany.png";
+import italyFlag from "@/assets/flags/italy.png";
+import portugalFlag from "@/assets/flags/portugal.png";
+import chinaFlag from "@/assets/flags/china.png";
+import japanFlag from "@/assets/flags/japan.png";
+import turkeyFlag from "@/assets/flags/turkey.png";
 
 interface TranslationResult {
   translations: {
@@ -82,17 +93,17 @@ const Index = () => {
 
   const languages = [
     { name: "Detect Language", icon: "🔍" },
-    { name: "Darija", icon: "🇲🇦" },
-    { name: "French", icon: "🇫🇷" },
-    { name: "Arabic", icon: "🇸🇦" },
-    { name: "English", icon: "🇬🇧" },
-    { name: "Spanish", icon: "🇪🇸" },
-    { name: "German", icon: "🇩🇪" },
-    { name: "Italian", icon: "🇮🇹" },
-    { name: "Portuguese", icon: "🇵🇹" },
-    { name: "Chinese", icon: "🇨🇳" },
-    { name: "Japanese", icon: "🇯🇵" },
-    { name: "Turkish", icon: "🇹🇷" }
+    { name: "Darija", icon: moroccoFlag },
+    { name: "French", icon: franceFlag },
+    { name: "Arabic", icon: saudiArabiaFlag },
+    { name: "English", icon: ukFlag },
+    { name: "Spanish", icon: spainFlag },
+    { name: "German", icon: germanyFlag },
+    { name: "Italian", icon: italyFlag },
+    { name: "Portuguese", icon: portugalFlag },
+    { name: "Chinese", icon: chinaFlag },
+    { name: "Japanese", icon: japanFlag },
+    { name: "Turkish", icon: turkeyFlag }
   ];
 
   const handleTranslate = async () => {
@@ -312,6 +323,8 @@ const Index = () => {
                     >
                       {lang.name === "Detect Language" ? (
                         <Wand2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                      ) : typeof lang.icon === 'string' && lang.icon.includes('.png') ? (
+                        <img src={lang.icon} alt={lang.name} className="w-4 h-4 sm:w-5 sm:h-5 rounded object-cover" />
                       ) : (
                         <span className="text-sm sm:text-base">{lang.icon}</span>
                       )}
