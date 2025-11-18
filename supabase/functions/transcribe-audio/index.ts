@@ -63,7 +63,10 @@ serve(async (req) => {
       );
     }
 
-    console.log('Processing audio transcription request');
+    console.log('Transcription request received', {
+      audioSize: approximateSize,
+      timestamp: new Date().toISOString()
+    });
 
     const binaryAudio = processBase64Chunks(audio);
     
@@ -86,9 +89,8 @@ serve(async (req) => {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('OpenAI API error:', errorText);
-      throw new Error(`OpenAI API error: ${errorText}`);
+      console.error('OpenAI API error', { status: response.status });
+      throw new Error(`OpenAI API error: ${response.status}`);
     }
 
     const result = await response.json();
@@ -100,9 +102,12 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('Transcription error:', error);
+    console.error('Transcription error', {
+      errorType: error instanceof Error ? error.constructor.name : 'Unknown',
+      timestamp: new Date().toISOString()
+    });
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
+      JSON.stringify({ error: 'Transcription failed' }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

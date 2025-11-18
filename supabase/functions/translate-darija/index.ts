@@ -44,7 +44,12 @@ serve(async (req) => {
       );
     }
     
-    console.log('Translation request validated');
+    console.log('Translation request received', {
+      sourceLanguage,
+      targetLanguageCount: targetLanguages.length,
+      textLength: text.length,
+      timestamp: new Date().toISOString()
+    });
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
@@ -56,7 +61,7 @@ serve(async (req) => {
     let actualSourceLanguage = sourceLanguage;
 
     if (sourceLanguage === 'Detect Language') {
-      console.log('Detecting language...');
+      console.log('Language detection initiated');
       const detectResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -80,9 +85,9 @@ serve(async (req) => {
         const detectData = await detectResponse.json();
         detectedLanguage = detectData.choices[0].message.content.trim();
         actualSourceLanguage = detectedLanguage;
-        console.log('Detected language:', detectedLanguage);
+        console.log('Language detected successfully');
       } else {
-        console.error('Language detection failed, defaulting to Darija');
+        console.error('Language detection failed', { status: detectResponse.status });
         actualSourceLanguage = 'Darija';
       }
     }
@@ -142,8 +147,7 @@ IMPORTANT: You must return ONLY valid JSON, no additional text before or after.`
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('AI gateway error:', response.status, errorText);
+      console.error('AI gateway error', { status: response.status });
       
       if (response.status === 429) {
         return new Response(
@@ -164,7 +168,7 @@ IMPORTANT: You must return ONLY valid JSON, no additional text before or after.`
 
     const data = await response.json();
     const aiResponse = data.choices[0].message.content;
-    console.log('AI response:', aiResponse);
+    console.log('Translation completed successfully');
 
     // Parse the JSON response
     let translationResult;
@@ -177,7 +181,7 @@ IMPORTANT: You must return ONLY valid JSON, no additional text before or after.`
         translationResult = JSON.parse(aiResponse);
       }
     } catch (parseError) {
-      console.error('Failed to parse AI response:', parseError);
+      console.error('Failed to parse AI response');
       // Fallback: return the raw response
       translationResult = {
         translations: {
@@ -208,10 +212,13 @@ IMPORTANT: You must return ONLY valid JSON, no additional text before or after.`
     );
 
   } catch (error) {
-    console.error('Translation error:', error);
+    console.error('Translation error', { 
+      errorType: error instanceof Error ? error.constructor.name : 'Unknown',
+      timestamp: new Date().toISOString()
+    });
     return new Response(
       JSON.stringify({ 
-        error: error instanceof Error ? error.message : 'Translation failed',
+        error: 'Translation failed',
         details: 'An error occurred during translation. Please try again.'
       }),
       { 
