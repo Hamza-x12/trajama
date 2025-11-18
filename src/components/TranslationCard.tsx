@@ -10,8 +10,8 @@ interface TranslationCardProps {
 }
 
 export const TranslationCard = ({ language, translation, culturalNotes, icon }: TranslationCardProps) => {
-  // Check if icon is an image path (contains .png, .jpg, etc.) or emoji
-  const isImageIcon = typeof icon === 'string' && (icon.includes('.png') || icon.includes('.jpg') || icon.includes('.svg'));
+  // Check if icon is an image path or emoji (emoji are single characters, images are URLs)
+  const isImageIcon = typeof icon === 'string' && icon.length > 2;
 
   const getLanguageColor = (lang: string) => {
     const colors: Record<string, string> = {
