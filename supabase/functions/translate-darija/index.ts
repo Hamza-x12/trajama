@@ -12,8 +12,39 @@ serve(async (req) => {
   }
 
   try {
-    const { text, sourceLanguage, targetLanguages } = await req.json();
-    console.log('Translation request:', { text, sourceLanguage, targetLanguages });
+    const body = await req.json();
+    const { text, sourceLanguage, targetLanguages } = body;
+    
+    // Input validation
+    if (!text || typeof text !== 'string') {
+      return new Response(
+        JSON.stringify({ error: 'Text is required and must be a string' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    if (text.length > 1000) {
+      return new Response(
+        JSON.stringify({ error: 'Text must be less than 1000 characters' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    if (!sourceLanguage || typeof sourceLanguage !== 'string') {
+      return new Response(
+        JSON.stringify({ error: 'Source language is required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    if (!Array.isArray(targetLanguages) || targetLanguages.length === 0 || targetLanguages.length > 11) {
+      return new Response(
+        JSON.stringify({ error: 'Target languages must be an array with 1-11 languages' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    console.log('Translation request validated');
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
