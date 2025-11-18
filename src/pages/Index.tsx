@@ -172,27 +172,27 @@ const Index = () => {
     toast.success("Item removed from history");
   };
 
-  const handleSpeakTranslation = (text: string, languageName: string) => {
+  const handleSpeakTranslation = async (text: string, languageName: string) => {
     if (!text?.trim()) {
       toast.error("No translation to speak");
       return;
     }
 
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) {
-      toast.error("Voice output is not supported in this browser");
+    if (typeof window === "undefined" || !(window as any).puter) {
+      toast.error("Voice output is not supported");
       return;
     }
 
-    const synth = window.speechSynthesis;
-    synth.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(text);
+    if (text.length > 3000) {
+      toast.error("Text must be less than 3000 characters");
+      return;
+    }
 
     const languageCodes: Record<string, string> = {
       Darija: "ar-MA",
       Arabic: "ar-SA",
       French: "fr-FR",
-      English: "en-GB",
+      English: "en-US",
       Spanish: "es-ES",
       German: "de-DE",
       Italian: "it-IT",
@@ -202,12 +202,22 @@ const Index = () => {
       Turkish: "tr-TR",
     };
 
-    utterance.lang = languageCodes[languageName] || "en-US";
-    utterance.rate = 1;
-    utterance.pitch = 1;
-
-    synth.speak(utterance);
-    toast.success(`Playing ${languageName} translation`);
+    try {
+      toast.loading(`Converting ${languageName} text to speech...`);
+      
+      const audio = await (window as any).puter.ai.txt2speech(text, {
+        voice: "Joanna",
+        engine: "neural",
+        language: languageCodes[languageName] || "en-US"
+      });
+      
+      toast.dismiss();
+      toast.success(`Playing ${languageName} translation`);
+      audio.play();
+    } catch (error: any) {
+      toast.dismiss();
+      toast.error(`Error: ${error.message || "Failed to generate speech"}`);
+    }
   };
 
   const handleCopyTranslation = (text: string, languageName: string) => {
