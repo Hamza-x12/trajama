@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { TranslationCard } from "@/components/TranslationCard";
 import { TranslationHistory } from "@/components/TranslationHistory";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Languages, Loader2, Wand2, Copy, Check, Mic, Square } from "lucide-react";
+import { Languages, Loader2, Wand2, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
@@ -69,10 +69,6 @@ const Index = () => {
   const [isTranslating, setIsTranslating] = useState(false);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [isRecording, setIsRecording] = useState(false);
-  const [recognition, setRecognition] = useState<any>(null);
-
-  const retryAttemptedRef = useRef(false);
 
   // Load history from localStorage on mount
   useEffect(() => {
@@ -183,104 +179,6 @@ const Index = () => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const startRecording = async () => {
-    try {
-      // Check for microphone permission first
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach(track => track.stop()); // Stop the test stream
-
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      
-      if (!SpeechRecognition) {
-        toast.error("Speech recognition is not supported in this browser. Please use Chrome or Edge.");
-        return;
-      }
-
-      const recognitionInstance = new SpeechRecognition();
-      recognitionInstance.continuous = false;
-      recognitionInstance.interimResults = false;
-      recognitionInstance.maxAlternatives = 1;
-      recognitionInstance.lang = sourceLanguage === 'Darija' ? 'ar-MA' : 
-                                   sourceLanguage === 'French' ? 'fr-FR' :
-                                   sourceLanguage === 'Arabic' ? 'ar-SA' :
-                                   sourceLanguage === 'Spanish' ? 'es-ES' :
-                                   sourceLanguage === 'German' ? 'de-DE' :
-                                   sourceLanguage === 'Italian' ? 'it-IT' :
-                                   sourceLanguage === 'Portuguese' ? 'pt-PT' :
-                                   sourceLanguage === 'Chinese' ? 'zh-CN' :
-                                   sourceLanguage === 'Japanese' ? 'ja-JP' :
-                                   sourceLanguage === 'Turkish' ? 'tr-TR' : 'en-US';
-
-      recognitionInstance.onresult = (event: any) => {
-        retryAttemptedRef.current = false;
-        const transcript = event.results[0][0].transcript;
-        setInputText(prev => prev + (prev ? ' ' : '') + transcript);
-        toast.success("Text captured!");
-      };
-
-      recognitionInstance.onerror = (event: any) => {
-        console.error('Speech recognition error:', event.error);
-
-        // Retry once on transient network errors
-        if (event.error === 'network' && !retryAttemptedRef.current) {
-          retryAttemptedRef.current = true;
-          toast.info("Network issue, retrying...");
-          try {
-            recognitionInstance.stop();
-            setTimeout(() => {
-              try {
-                recognitionInstance.start();
-                setIsRecording(true);
-              } catch (e) {
-                console.error('Retry start failed:', e);
-                setIsRecording(false);
-                toast.error("Speech service unavailable. Please try again shortly.");
-              }
-            }, 600);
-          } catch (e) {
-            console.error('Retry setup failed:', e);
-            setIsRecording(false);
-            toast.error("Speech service unavailable. Please try again shortly.");
-          }
-          return;
-        }
-
-        setIsRecording(false);
-        
-        if (event.error === 'network') {
-          toast.error("Network error. Speech recognition needs internet connection. Please check your connection.");
-        } else if (event.error === 'not-allowed') {
-          toast.error("Microphone permission denied. Please allow microphone access.");
-        } else if (event.error === 'no-speech') {
-          toast.error("No speech detected. Please try again.");
-        } else {
-          toast.error(`Speech recognition error: ${event.error}`);
-        }
-      };
-
-      recognitionInstance.onend = () => {
-        setIsRecording(false);
-      };
-
-      retryAttemptedRef.current = false;
-      recognitionInstance.start();
-      setRecognition(recognitionInstance);
-      setIsRecording(true);
-      toast.info("Speak now...");
-    } catch (error) {
-      console.error('Error starting recording:', error);
-      setIsRecording(false);
-      toast.error("Could not access microphone. Please grant permission.");
-    }
-  };
-
-  const stopRecording = () => {
-    if (recognition) {
-      recognition.stop();
-      setIsRecording(false);
-      toast.success("Recording stopped");
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col">
@@ -341,17 +239,8 @@ const Index = () => {
                     placeholder="Enter text to translate..."
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
-                    className="min-h-[180px] sm:min-h-[250px] md:min-h-[300px] text-base sm:text-lg resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 pr-12 leading-relaxed placeholder:text-muted-foreground/60"
+                    className="min-h-[180px] sm:min-h-[250px] md:min-h-[300px] text-base sm:text-lg resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60"
                   />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={isRecording ? stopRecording : startRecording}
-                    className={`absolute right-2 top-2 ${isRecording ? 'text-red-500 animate-pulse' : ''}`}
-                    title={isRecording ? "Stop recording" : "Start recording"}
-                  >
-                    {isRecording ? <Square className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
-                  </Button>
                 </div>
               </div>
 
