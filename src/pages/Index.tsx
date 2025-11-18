@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { TranslationCard } from "@/components/TranslationCard";
 import { TranslationHistory } from "@/components/TranslationHistory";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Languages, Loader2, Wand2, Copy, Check } from "lucide-react";
+import { Languages, Loader2, Wand2, Copy, Check, Volume2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
@@ -172,6 +172,44 @@ const Index = () => {
     toast.success("Item removed from history");
   };
 
+  const handleSpeakTranslation = (text: string, languageName: string) => {
+    if (!text?.trim()) {
+      toast.error("No translation to speak");
+      return;
+    }
+
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) {
+      toast.error("Voice output is not supported in this browser");
+      return;
+    }
+
+    const synth = window.speechSynthesis;
+    synth.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    const languageCodes: Record<string, string> = {
+      Darija: "ar-MA",
+      Arabic: "ar-SA",
+      French: "fr-FR",
+      English: "en-GB",
+      Spanish: "es-ES",
+      German: "de-DE",
+      Italian: "it-IT",
+      Portuguese: "pt-PT",
+      Chinese: "zh-CN",
+      Japanese: "ja-JP",
+      Turkish: "tr-TR",
+    };
+
+    utterance.lang = languageCodes[languageName] || "en-US";
+    utterance.rate = 1;
+    utterance.pitch = 1;
+
+    synth.speak(utterance);
+    toast.success(`Playing ${languageName} translation`);
+  };
+
   const handleCopyTranslation = (text: string, languageName: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(languageName);
@@ -179,7 +217,7 @@ const Index = () => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col">
       {/* Header */}
@@ -306,8 +344,18 @@ const Index = () => {
                             <Button
                               variant="ghost"
                               size="sm"
+                              onClick={() => handleSpeakTranslation(translation, lang.name)}
+                              className="h-8 w-8 p-0 hover:bg-primary/10"
+                              aria-label={`Play ${lang.name} translation`}
+                            >
+                              <Volume2 className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
                               onClick={() => handleCopyTranslation(translation, lang.name)}
                               className="h-8 w-8 p-0 hover:bg-primary/10"
+                              aria-label={`Copy ${lang.name} translation`}
                             >
                               {copiedId === lang.name ? (
                                 <Check className="h-4 w-4 text-green-500" />
