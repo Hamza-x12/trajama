@@ -269,10 +269,8 @@ const Index = () => {
                     >
                       {lang.name === "Detect Language" ? (
                         <Wand2 className="w-3 h-3 sm:w-4 sm:h-4" />
-                      ) : typeof lang.icon === 'string' && lang.icon.includes('.png') ? (
-                        <img src={lang.icon} alt={lang.name} className="w-4 h-4 sm:w-5 sm:h-5 rounded object-cover" />
                       ) : (
-                        <span className="text-sm sm:text-base">{lang.icon}</span>
+                        <img src={lang.icon as string} alt={lang.name} className="w-4 h-4 sm:w-5 sm:h-5 rounded object-cover" />
                       )}
                       <span className="text-xs sm:text-sm whitespace-nowrap">{lang.name}</span>
                     </Button>
