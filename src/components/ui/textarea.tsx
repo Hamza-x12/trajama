@@ -4,20 +4,27 @@ import { cn } from "@/lib/utils";
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
-const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(({ className, ...props }, ref) => {
+const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(({ className, onChange, ...props }, ref) => {
   const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
 
   const adjustHeight = React.useCallback(() => {
     const textarea = textareaRef.current;
     if (textarea) {
-      textarea.style.height = 'auto';
-      textarea.style.height = `${Math.max(textarea.scrollHeight, 300)}px`;
+      textarea.style.height = "auto";
+      textarea.style.height = `${textarea.scrollHeight}px`;
     }
   }, []);
 
   React.useEffect(() => {
     adjustHeight();
   }, [props.value, adjustHeight]);
+
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (onChange) {
+      onChange(event);
+    }
+    adjustHeight();
+  };
 
   return (
     <textarea
@@ -27,13 +34,13 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(({ classNa
       )}
       ref={(node) => {
         textareaRef.current = node;
-        if (typeof ref === 'function') {
+        if (typeof ref === "function") {
           ref(node);
         } else if (ref) {
-          ref.current = node;
+          (ref as React.MutableRefObject<HTMLTextAreaElement | null>).current = node;
         }
       }}
-      onInput={adjustHeight}
+      onChange={handleChange}
       {...props}
     />
   );

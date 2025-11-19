@@ -178,7 +178,7 @@ const Index = () => {
       return;
     }
 
-    if (!window.speechSynthesis) {
+    if (typeof window === "undefined" || !window.speechSynthesis) {
       toast.error("Speech synthesis not supported in your browser");
       return;
     }
@@ -201,22 +201,43 @@ const Index = () => {
       // Cancel any ongoing speech
       window.speechSynthesis.cancel();
 
+      const langCode = languageCodes[languageName] || "en-US";
+
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = languageCodes[languageName] || "en-US";
+      utterance.lang = langCode;
       utterance.rate = 0.9;
       utterance.pitch = 1.0;
       utterance.volume = 1.0;
+
+      const voices = window.speechSynthesis.getVoices();
+      if (voices && voices.length > 0) {
+        const exactMatch = voices.find(
+          (voice) => voice.lang.toLowerCase() === langCode.toLowerCase(),
+        );
+        const baseLang = langCode.split("-")[0].toLowerCase();
+        const baseMatch =
+          exactMatch ||
+          voices.find((voice) =>
+            voice.lang.toLowerCase().startsWith(baseLang),
+          );
+
+        if (baseMatch) {
+          utterance.voice = baseMatch;
+        }
+      }
 
       utterance.onstart = () => {
         toast.success(`Playing ${languageName} translation`);
       };
 
       utterance.onerror = (event) => {
-        toast.error(`Speech error: ${event.error}`);
+        console.error("Speech synthesis error", event);
+        toast.error(`Speech error: ${event.error || "Unknown error"}`);
       };
 
       window.speechSynthesis.speak(utterance);
     } catch (error: any) {
+      console.error("Speech synthesis failure", error);
       toast.error(`Error: ${error.message || "Failed to generate speech"}`);
     }
   };
@@ -286,7 +307,7 @@ const Index = () => {
                     placeholder="Enter text to translate..."
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
-                    className="min-h-[180px] sm:min-h-[250px] md:min-h-[300px] text-base sm:text-lg resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60"
+                    className="text-base sm:text-lg resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60"
                   />
                 </div>
               </div>
