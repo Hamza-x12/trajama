@@ -9,7 +9,11 @@
     "voice": "اختيار الصوت",
     "selectVoice": "اختار الصوت",
     "autoVoiceSelect": "اختيار الصوت الأوتوماتيكي",
-    "autoVoiceDescription": "اختار الصوت أوتوماتيكيا على حساب اللغة اللي باغي"
+    "autoVoiceDescription": "اختار الصوت أوتوماتيكيا على حساب اللغة اللي باغي",
+    "speechRate": "سرعة الكلام",
+    "slower": "بشوية",
+    "normal": "عادي",
+    "faster": "بزربة"
   },
   "translation": {
     "placeholder": "دخّل النص باش تترجمو...",

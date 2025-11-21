@@ -10,6 +10,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
 import { useTranslation } from "react-i18next";
 import { useOfflineLanguages } from "@/hooks/useOfflineLanguages";
 import { useState } from "react";
@@ -26,6 +27,8 @@ interface SettingsDialogProps {
   availableVoices: SpeechSynthesisVoice[];
   autoVoiceSelect?: boolean;
   setAutoVoiceSelect?: (auto: boolean) => void;
+  speechRate?: number;
+  setSpeechRate?: (rate: number) => void;
 }
 
 export function SettingsDialog({ 
@@ -33,7 +36,9 @@ export function SettingsDialog({
   setSelectedVoice, 
   availableVoices,
   autoVoiceSelect = true,
-  setAutoVoiceSelect 
+  setAutoVoiceSelect,
+  speechRate = 1.0,
+  setSpeechRate
 }: SettingsDialogProps) {
   const { t, i18n } = useTranslation();
   const { offlineLanguages, downloadLanguage, removeLanguage } = useOfflineLanguages();
@@ -43,6 +48,14 @@ export function SettingsDialog({
     if (setAutoVoiceSelect) {
       setAutoVoiceSelect(checked);
       localStorage.setItem('autoVoiceSelect', checked.toString());
+    }
+  };
+
+  const handleSpeechRateChange = (value: number[]) => {
+    if (setSpeechRate) {
+      const rate = value[0];
+      setSpeechRate(rate);
+      localStorage.setItem('speechRate', rate.toString());
     }
   };
 
@@ -145,6 +158,30 @@ export function SettingsDialog({
                 </SelectContent>
               </Select>
             </div>
+
+            {/* Speech Rate Control */}
+            {setSpeechRate && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="speechRate">{t('settings.speechRate')}</Label>
+                  <span className="text-sm text-muted-foreground">{speechRate.toFixed(1)}x</span>
+                </div>
+                <Slider
+                  id="speechRate"
+                  min={0.5}
+                  max={2.0}
+                  step={0.1}
+                  value={[speechRate]}
+                  onValueChange={handleSpeechRateChange}
+                  className="w-full"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>{t('settings.slower')}</span>
+                  <span>{t('settings.normal')}</span>
+                  <span>{t('settings.faster')}</span>
+                </div>
+              </div>
+            )}
             </div>
           )}
 

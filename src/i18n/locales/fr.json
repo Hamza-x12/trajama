@@ -9,7 +9,11 @@
     "voice": "Sélection de la voix",
     "selectVoice": "Sélectionner la voix",
     "autoVoiceSelect": "Sélection automatique de la voix",
-    "autoVoiceDescription": "Sélectionner automatiquement la voix selon la langue cible"
+    "autoVoiceDescription": "Sélectionner automatiquement la voix selon la langue cible",
+    "speechRate": "Vitesse de parole",
+    "slower": "Plus lent",
+    "normal": "Normal",
+    "faster": "Plus rapide"
   },
   "translation": {
     "placeholder": "Entrez le texte à traduire...",
