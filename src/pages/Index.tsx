@@ -369,18 +369,7 @@ const Index = () => {
             <div className="flex items-center gap-2 sm:gap-3">
               <img src={tarjamaLogo} alt="Tarjama Logo" className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16" />
               <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground tracking-tight">{t('app.title')}</h1>
-                  <a 
-                    href="https://www.instagram.com/your_instagram_handle" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="hover:text-primary transition-colors"
-                    aria-label="Instagram"
-                  >
-                    <Instagram className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </a>
-                </div>
+                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground tracking-tight">{t('app.title')}</h1>
                 <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">{t('app.subtitle')}</p>
               </div>
             </div>
@@ -528,7 +517,7 @@ const Index = () => {
           <div className="text-center">
             <a href="https://www.instagram.com/_7amza_ft_/" target="_blank" rel="noopener noreferrer" className="text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1.5 sm:gap-2 font-medium">
               <span>Hamza Elkhouja</span>
-              <span className="text-sm sm:text-base">📷</span>
+              <Instagram className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </a>
           </div>
         </div>
