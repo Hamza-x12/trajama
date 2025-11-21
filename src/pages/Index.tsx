@@ -487,34 +487,45 @@ const Index = () => {
             <div className="flex flex-col">
               {/* Source Language Selector */}
               <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card to-muted/10">
-                <Select value={sourceLanguage} onValueChange={setSourceLanguage}>
-                  <SelectTrigger className="w-full h-11 bg-background border-border hover:bg-accent/5 transition-colors">
-                    <SelectValue>
-                      <div className="flex items-center gap-2">
-                        <img 
-                          src={languages.find(l => l.name === sourceLanguage)?.icon as string} 
-                          alt={sourceLanguage} 
-                          className="w-5 h-5 rounded object-cover" 
-                        />
-                        <span className="font-medium">{t(`languages.${sourceLanguage.toLowerCase().replace(' ', '')}`)}</span>
-                      </div>
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent className="bg-background border-border shadow-lg z-50">
-                    {languages.filter(lang => lang.name !== "Detect Language").map(lang => (
-                      <SelectItem key={lang.name} value={lang.name} className="cursor-pointer hover:bg-accent/10">
+                <div className="flex items-center gap-2">
+                  <Select value={sourceLanguage} onValueChange={setSourceLanguage}>
+                    <SelectTrigger className="flex-1 h-11 bg-background border-border hover:bg-accent/5 transition-colors">
+                      <SelectValue>
                         <div className="flex items-center gap-2">
                           <img 
-                            src={lang.icon as string} 
-                            alt={lang.name} 
+                            src={languages.find(l => l.name === sourceLanguage)?.icon as string} 
+                            alt={sourceLanguage} 
                             className="w-5 h-5 rounded object-cover" 
                           />
-                          <span>{t(`languages.${lang.name.toLowerCase().replace(' ', '')}`)}</span>
+                          <span className="font-medium">{t(`languages.${sourceLanguage.toLowerCase().replace(' ', '')}`)}</span>
                         </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border-border shadow-lg z-50">
+                      {languages.filter(lang => lang.name !== "Detect Language").map(lang => (
+                        <SelectItem key={lang.name} value={lang.name} className="cursor-pointer hover:bg-accent/10">
+                          <div className="flex items-center gap-2">
+                            <img 
+                              src={lang.icon as string} 
+                              alt={lang.name} 
+                              className="w-5 h-5 rounded object-cover" 
+                            />
+                            <span>{t(`languages.${lang.name.toLowerCase().replace(' ', '')}`)}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  
+                  <Button
+                    variant="outline"
+                    onClick={() => setSourceLanguage("Detect Language")}
+                    className={`h-11 gap-2 border-2 ${sourceLanguage === "Detect Language" ? 'border-primary bg-primary/10' : 'border-border'}`}
+                  >
+                    <Wand2 className="w-4 h-4" />
+                    <span className="hidden sm:inline">{t('languages.detectlanguage')}</span>
+                  </Button>
+                </div>
               </div>
               
               {/* Source Text Input */}
