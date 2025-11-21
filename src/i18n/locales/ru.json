@@ -24,7 +24,9 @@
     "didYouMean": "Вы имели в виду:",
     "suggestionApplied": "Предложение применено",
     "clear": "Очистить",
-    "cleared": "Очищено"
+    "cleared": "Очищено",
+    "undo": "Отменить",
+    "undone": "Восстановлено"
   },
   "languages": {
     "detectlanguage": "Определить язык",

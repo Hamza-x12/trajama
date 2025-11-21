@@ -100,6 +100,12 @@ const Index = () => {
   const [detectedLanguage, setDetectedLanguage] = useState<string | null>(null);
   const [spellingSuggestion, setSpellingSuggestion] = useState<string | null>(null);
   const [isCheckingSpelling, setIsCheckingSpelling] = useState(false);
+  const [lastCleared, setLastCleared] = useState<{
+    inputText: string;
+    translations: TranslationResult | null;
+    spellingSuggestion: string | null;
+    detectedLanguage: string | null;
+  } | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
@@ -350,11 +356,37 @@ const Index = () => {
   };
   
   const handleClear = () => {
+    // Save current state for undo
+    setLastCleared({
+      inputText,
+      translations,
+      spellingSuggestion,
+      detectedLanguage
+    });
+    
+    // Clear everything
     setInputText('');
     setTranslations(null);
     setSpellingSuggestion(null);
     setDetectedLanguage(null);
-    toast.success(t('translation.cleared') || 'Cleared');
+    
+    toast.success(t('translation.cleared') || 'Cleared', {
+      action: {
+        label: t('translation.undo') || 'Undo',
+        onClick: handleUndo
+      }
+    });
+  };
+  
+  const handleUndo = () => {
+    if (lastCleared) {
+      setInputText(lastCleared.inputText);
+      setTranslations(lastCleared.translations);
+      setSpellingSuggestion(lastCleared.spellingSuggestion);
+      setDetectedLanguage(lastCleared.detectedLanguage);
+      setLastCleared(null);
+      toast.success(t('translation.undone') || 'Restored');
+    }
   };
   
   const handleClearHistory = () => {

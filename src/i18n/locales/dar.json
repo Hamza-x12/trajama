@@ -24,7 +24,9 @@
     "didYouMean": "واش قصدك:",
     "suggestionApplied": "تطبق الاقتراح",
     "clear": "امسح",
-    "cleared": "تمسح"
+    "cleared": "تمسح",
+    "undo": "رجّع",
+    "undone": "رجع"
   },
   "languages": {
     "detectlanguage": "اكتشف اللغة",
