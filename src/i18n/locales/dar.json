@@ -13,7 +13,9 @@
     "speechRate": "سرعة الكلام",
     "slower": "بشوية",
     "normal": "عادي",
-    "faster": "بزربة"
+    "faster": "بزربة",
+    "profanityFilter": "فيلترة الكلام الخايب",
+    "profanityFilterDescription": "امسح الكلام مامزيانش من الترجمة"
   },
   "translation": {
     "placeholder": "دخّل النص باش تترجمو...",

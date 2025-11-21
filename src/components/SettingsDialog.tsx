@@ -29,6 +29,8 @@ interface SettingsDialogProps {
   setAutoVoiceSelect?: (auto: boolean) => void;
   speechRate?: number;
   setSpeechRate?: (rate: number) => void;
+  profanityFilterEnabled?: boolean;
+  setProfanityFilterEnabled?: (enabled: boolean) => void;
 }
 
 export function SettingsDialog({ 
@@ -38,7 +40,9 @@ export function SettingsDialog({
   autoVoiceSelect = true,
   setAutoVoiceSelect,
   speechRate = 1.0,
-  setSpeechRate
+  setSpeechRate,
+  profanityFilterEnabled = true,
+  setProfanityFilterEnabled
 }: SettingsDialogProps) {
   const { t, i18n } = useTranslation();
   const { offlineLanguages, downloadLanguage, removeLanguage } = useOfflineLanguages();
@@ -56,6 +60,13 @@ export function SettingsDialog({
       const rate = value[0];
       setSpeechRate(rate);
       localStorage.setItem('speechRate', rate.toString());
+    }
+  };
+
+  const handleProfanityFilterToggle = (checked: boolean) => {
+    if (setProfanityFilterEnabled) {
+      setProfanityFilterEnabled(checked);
+      localStorage.setItem('profanityFilterEnabled', checked.toString());
     }
   };
 
@@ -184,6 +195,24 @@ export function SettingsDialog({
             )}
             </div>
           )}
+
+          <Separator />
+
+          {/* Profanity Filter */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="profanityFilter">{t('settings.profanityFilter')}</Label>
+              <Switch
+                id="profanityFilter"
+                checked={profanityFilterEnabled}
+                onCheckedChange={handleProfanityFilterToggle}
+                disabled={!setProfanityFilterEnabled}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {t('settings.profanityFilterDescription')}
+            </p>
+          </div>
 
           <Separator />
 

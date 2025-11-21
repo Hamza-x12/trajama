@@ -98,6 +98,10 @@ const Index = () => {
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [autoVoiceSelect, setAutoVoiceSelect] = useState<boolean>(true);
   const [speechRate, setSpeechRate] = useState<number>(1.0);
+  const [profanityFilterEnabled, setProfanityFilterEnabled] = useState<boolean>(() => {
+    const saved = localStorage.getItem('profanityFilterEnabled');
+    return saved !== null ? saved === 'true' : true;
+  });
   const [isSwapping, setIsSwapping] = useState(false);
   const [detectedLanguage, setDetectedLanguage] = useState<string | null>(null);
   const [spellingSuggestion, setSpellingSuggestion] = useState<string | null>(null);
@@ -355,9 +359,11 @@ const Index = () => {
         toast.success(`${t('translation.detectedLanguage')} ${data.detectedLanguage}`);
       }
 
-      // Check for profanity in input and translations
-      const hasProfanity = containsProfanity(inputText) || 
-        Object.values(data.translations).some((translation: string) => containsProfanity(translation));
+      // Check for profanity in input and translations (only if filter is enabled)
+      const hasProfanity = profanityFilterEnabled && (
+        containsProfanity(inputText) || 
+        Object.values(data.translations).some((translation: string) => containsProfanity(translation))
+      );
 
       if (hasProfanity) {
         toast.warning(t('translation.profanityDetected'));
@@ -789,15 +795,17 @@ const Index = () => {
               </SheetContent>
             </Sheet>
             
-            <SettingsDialog 
-              selectedVoice={selectedVoice} 
-              setSelectedVoice={setSelectedVoice} 
-              availableVoices={availableVoices}
-              autoVoiceSelect={autoVoiceSelect}
-              setAutoVoiceSelect={setAutoVoiceSelect}
-              speechRate={speechRate}
-              setSpeechRate={setSpeechRate}
-            />
+        <SettingsDialog 
+          selectedVoice={selectedVoice}
+          setSelectedVoice={setSelectedVoice}
+          availableVoices={availableVoices}
+          autoVoiceSelect={autoVoiceSelect}
+          setAutoVoiceSelect={setAutoVoiceSelect}
+          speechRate={speechRate}
+          setSpeechRate={setSpeechRate}
+          profanityFilterEnabled={profanityFilterEnabled}
+          setProfanityFilterEnabled={setProfanityFilterEnabled}
+        />
             <ThemeToggle />
             </div>
           </div>

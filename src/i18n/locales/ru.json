@@ -13,7 +13,9 @@
     "speechRate": "Скорость речи",
     "slower": "Медленнее",
     "normal": "Нормально",
-    "faster": "Быстрее"
+    "faster": "Быстрее",
+    "profanityFilter": "Фильтр ненормативной лексики",
+    "profanityFilterDescription": "Фильтровать неприемлемую лексику в переводах"
   },
   "translation": {
     "placeholder": "Введите текст для перевода...",

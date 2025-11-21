@@ -13,7 +13,9 @@
     "speechRate": "Speech speed",
     "slower": "Slower",
     "normal": "Normal",
-    "faster": "Faster"
+    "faster": "Faster",
+    "profanityFilter": "Profanity Filter",
+    "profanityFilterDescription": "Filter inappropriate language from translations"
   },
   "translation": {
     "placeholder": "Enter text to translate...",

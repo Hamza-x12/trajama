@@ -13,7 +13,9 @@
     "speechRate": "سرعة الكلام",
     "slower": "أبطأ",
     "normal": "عادي",
-    "faster": "أسرع"
+    "faster": "أسرع",
+    "profanityFilter": "تصفية الكلمات البذيئة",
+    "profanityFilterDescription": "تصفية اللغة غير اللائقة من الترجمات"
   },
   "translation": {
     "placeholder": "أدخل النص للترجمة...",
