@@ -12,7 +12,7 @@ import {
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsDialog } from "@/components/SettingsDialog";
-import { ContactForm } from "@/components/ContactForm";
+import { MessageCircle } from "lucide-react";
 
 const FAQ = () => {
   const { t } = useTranslation();
@@ -103,8 +103,14 @@ const FAQ = () => {
           </CardContent>
         </Card>
 
-        <div className="mt-8">
-          <ContactForm pageSource="FAQ" />
+        <div className="mt-8 text-center">
+          <p className="text-muted-foreground mb-4">Can't find what you're looking for?</p>
+          <Link to="/contact">
+            <Button variant="default" size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-all">
+              <MessageCircle className="w-5 h-5" />
+              Contact Us
+            </Button>
+          </Link>
         </div>
       </main>
     </div>
