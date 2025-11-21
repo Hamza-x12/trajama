@@ -34,7 +34,10 @@
     "portuguese": "البرتغالية",
     "chinese": "الصينية",
     "japanese": "اليابانية",
-    "turkish": "التركية"
+    "turkish": "التركية",
+    "russian": "الروسية",
+    "korean": "الكورية",
+    "hindi": "الهندية"
   },
   "audio": {
     "startRecording": "ابدا التسجيل",

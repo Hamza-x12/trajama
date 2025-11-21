@@ -34,7 +34,10 @@
     "portuguese": "Portugais",
     "chinese": "Chinois",
     "japanese": "Japonais",
-    "turkish": "Turc"
+    "turkish": "Turc",
+    "russian": "Russe",
+    "korean": "Coréen",
+    "hindi": "Hindi"
   },
   "audio": {
     "startRecording": "Commencer l'enregistrement",
