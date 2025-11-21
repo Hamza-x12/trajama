@@ -468,12 +468,26 @@ const Index = () => {
               </div>
             </div>
             
-            <Link to="/dictionary" className="hidden md:block">
-              <Button variant="outline" className="gap-2 shadow-soft hover:shadow-moroccan transition-all duration-300">
-                <BookOpen className="w-4 h-4" />
-                <span className="font-medium">{t('navigation.dictionary')}</span>
-              </Button>
-            </Link>
+            <div className="hidden md:flex items-center gap-2">
+              <Link to="/dictionary">
+                <Button variant="outline" className="gap-2 shadow-soft hover:shadow-moroccan transition-all duration-300 hover:scale-105">
+                  <BookOpen className="w-4 h-4" />
+                  <span className="font-medium">{t('navigation.dictionary')}</span>
+                </Button>
+              </Link>
+              
+              <Link to="/about">
+                <Button variant="outline" className="gap-2 shadow-soft hover:shadow-moroccan transition-all duration-300 hover:scale-105">
+                  <span className="font-medium">{t('navigation.about')}</span>
+                </Button>
+              </Link>
+              
+              <Link to="/faq">
+                <Button variant="outline" className="gap-2 shadow-soft hover:shadow-moroccan transition-all duration-300 hover:scale-105">
+                  <span className="font-medium">{t('navigation.faq')}</span>
+                </Button>
+              </Link>
+            </div>
             
             <div className="flex items-center gap-2">
               <SettingsDialog selectedVoice={selectedVoice} setSelectedVoice={setSelectedVoice} availableVoices={availableVoices} />
