@@ -56,6 +56,7 @@ interface HistoryItem {
   id: string;
   text: string;
   sourceLanguage: string;
+  targetLanguage: string;
   timestamp: number;
   translations: {
     darija: string;
@@ -249,6 +250,7 @@ const Index = () => {
         id: Date.now().toString(),
         text: inputText,
         sourceLanguage: data.detectedLanguage || sourceLanguage,
+        targetLanguage: targetLanguage,
         timestamp: Date.now(),
         translations: data.translations
       };
