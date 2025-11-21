@@ -744,13 +744,26 @@ const Index = () => {
                           
                           {/* Cultural Notes */}
                           {translations.culturalNotes && (
-                            <div className="mt-4 p-4 bg-accent/10 rounded-lg border-l-2 border-accent">
-                              <p className="text-xs font-semibold text-accent-foreground mb-2 uppercase tracking-wide">
-                                {t('translation.culturalNotes')}
-                              </p>
-                              <p className="text-sm text-foreground/80 italic leading-relaxed">
-                                {translations.culturalNotes}
-                              </p>
+                            <div className="mt-6 p-5 bg-gradient-to-br from-primary/5 via-accent/5 to-primary/10 rounded-xl border border-primary/20 shadow-moroccan animate-fade-in backdrop-blur-sm relative overflow-hidden">
+                              {/* Decorative corner accent */}
+                              <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 rounded-bl-full" />
+                              <div className="absolute bottom-0 left-0 w-16 h-16 bg-accent/10 rounded-tr-full" />
+                              
+                              <div className="relative z-10">
+                                <div className="flex items-center gap-2 mb-3">
+                                  <div className="p-2 bg-primary/10 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                    </svg>
+                                  </div>
+                                  <p className="text-sm font-bold text-primary uppercase tracking-wider">
+                                    {t('translation.culturalNotes')}
+                                  </p>
+                                </div>
+                                <p className="text-sm text-foreground leading-relaxed pl-1 font-medium">
+                                  {translations.culturalNotes}
+                                </p>
+                              </div>
                             </div>
                           )}
                         </div>
