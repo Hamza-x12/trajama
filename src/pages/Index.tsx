@@ -518,14 +518,7 @@ const Index = () => {
           <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card via-muted/5 to-card">
             <div className="flex items-center gap-3">
               {/* Source Language */}
-              <div className="flex-1 relative">
-                {detectedLanguage && (
-                  <div className="absolute -top-8 left-0 z-10 animate-fade-in">
-                    <span className="text-xs bg-primary/90 text-primary-foreground px-3 py-1.5 rounded-full border-2 border-primary shadow-moroccan font-medium">
-                      {t('translation.detectedLanguage')}: {detectedLanguage}
-                    </span>
-                  </div>
-                )}
+              <div className="flex-1">
                 <Select value={sourceLanguage} onValueChange={(value) => {
                   setSourceLanguage(value);
                   setDetectedLanguage(null);
@@ -582,6 +575,15 @@ const Index = () => {
                 </SelectContent>
                 </Select>
               </div>
+
+              {/* Detected Language Badge */}
+              {detectedLanguage && (
+                <div className="animate-fade-in">
+                  <span className="text-xs bg-primary/90 text-primary-foreground px-3 py-1.5 rounded-full border-2 border-primary shadow-moroccan font-medium whitespace-nowrap">
+                    {t('translation.detectedLanguage')}: {detectedLanguage}
+                  </span>
+                </div>
+              )}
               
               {/* Swap Button */}
               <Button
