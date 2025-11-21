@@ -460,7 +460,8 @@ const Index = () => {
       {/* Header */}
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft touch-none relative">
         <div className="container mx-auto px-4 sm:px-4 py-4 sm:py-5">
-          <div className="flex items-center justify-between gap-3">
+          <div className="grid grid-cols-3 items-center gap-4">
+            {/* Logo and Title - Left */}
             <div className="flex items-center gap-3 sm:gap-3">
               <img src={tarjamaLogo} alt="Tarjama Logo" className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16" />
               <div>
@@ -469,8 +470,8 @@ const Index = () => {
               </div>
             </div>
             
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-3">
+            {/* Desktop Navigation - Center */}
+            <div className="hidden md:flex items-center justify-center gap-3">
               <Link to="/dictionary">
                 <Button 
                   variant="outline" 
@@ -507,8 +508,10 @@ const Index = () => {
               </Link>
             </div>
 
-            {/* Mobile Navigation Menu */}
-            <Sheet>
+            {/* Right Side - Settings & Theme Toggle */}
+            <div className="flex items-center justify-end gap-2">
+              {/* Mobile Navigation Menu */}
+              <Sheet>
               <SheetTrigger asChild>
                 <Button 
                   variant="outline" 
@@ -589,9 +592,8 @@ const Index = () => {
               </SheetContent>
             </Sheet>
             
-            <div className="flex items-center gap-2">
-              <SettingsDialog selectedVoice={selectedVoice} setSelectedVoice={setSelectedVoice} availableVoices={availableVoices} />
-              <ThemeToggle />
+            <SettingsDialog selectedVoice={selectedVoice} setSelectedVoice={setSelectedVoice} availableVoices={availableVoices} />
+            <ThemeToggle />
             </div>
           </div>
         </div>
