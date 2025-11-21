@@ -96,6 +96,16 @@ const Index = () => {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
+  // Dynamic font size based on text length
+  const getTextSize = (text: string) => {
+    const length = text.length;
+    if (length < 50) return 'text-3xl';
+    if (length < 150) return 'text-2xl';
+    if (length < 300) return 'text-xl';
+    if (length < 500) return 'text-lg';
+    return 'text-base';
+  };
+
   // Show offline screen if not online
   if (!isOnline) {
     return <OfflineScreen />;
@@ -624,7 +634,7 @@ const Index = () => {
                   };
                   return themes[sourceLanguage] || '';
                 })()}`}>
-                  <Textarea placeholder={t('translation.placeholder')} value={inputText} onChange={e => setInputText(e.target.value)} className="text-base sm:text-lg resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60 bg-transparent min-h-[200px]" />
+                  <Textarea placeholder={t('translation.placeholder')} value={inputText} onChange={e => setInputText(e.target.value)} className={`${getTextSize(inputText)} resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60 bg-transparent min-h-[200px] transition-all duration-200`} />
                   <Button
                     variant="ghost"
                     size="sm"
@@ -691,8 +701,8 @@ const Index = () => {
                     return (
                       <div className={`p-5 sm:p-6 backdrop-blur-sm border border-border/50 rounded-lg shadow-moroccan transition-all duration-300 ${getCountryTheme(targetLanguage)}`}>
                         <div className="space-y-4">
-                          <div className="min-h-[200px] text-base sm:text-lg leading-relaxed text-foreground/90">
-                            {translation || <span className="text-muted-foreground italic">{t('translation.willAppear')}</span>}
+                          <div className={`min-h-[200px] ${getTextSize(translation || '')} leading-relaxed text-foreground/90 transition-all duration-200`}>
+                            {translation || <span className="text-muted-foreground italic text-base">{t('translation.willAppear')}</span>}
                           </div>
                           
                           {/* Action Buttons */}
