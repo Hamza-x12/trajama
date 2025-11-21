@@ -68,7 +68,13 @@
     "downloaded": "Langue téléchargée avec succès",
     "downloadFailed": "Échec du téléchargement",
     "remove": "Supprimer",
-    "removed": "Langue supprimée"
+    "removed": "Langue supprimée",
+    "noConnection": "Pas de connexion Internet",
+    "offlineMessage": "Vous êtes actuellement hors ligne. Vous pouvez utiliser les langues que vous avez téléchargées.",
+    "downloadedLanguages": "Langues téléchargées",
+    "noDownloadedLanguages": "Aucune langue téléchargée",
+    "downloadLanguagesWhenOnline": "Téléchargez des langues en ligne pour les utiliser hors ligne",
+    "reconnectMessage": "Vous serez automatiquement reconnecté lorsque Internet sera disponible"
   },
   "install": {
     "title": "Installer Tarjama",

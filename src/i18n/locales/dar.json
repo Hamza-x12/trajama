@@ -68,7 +68,13 @@
     "downloaded": "تنزلت اللغة مزيان",
     "downloadFailed": "ما تنزلتش اللغة",
     "remove": "احذف",
-    "removed": "تحذفت اللغة"
+    "removed": "تحذفت اللغة",
+    "noConnection": "ماكاينش كونيكسيون",
+    "offlineMessage": "راك بلا كونيكسيون دابا. تقدر تخدم باللوغات اللي تيليشارجيتي.",
+    "downloadedLanguages": "اللوغات المتيليشارجين",
+    "noDownloadedLanguages": "ماكاين حتى لوغة متيليشارجية",
+    "downloadLanguagesWhenOnline": "تيليشارجي اللوغات ملي تكون متصل باش تخدم بيهوم بلا إنترنت",
+    "reconnectMessage": "غادي تولي متصل أوتوماتيكيا ملي يرجع الإنترنت"
   },
   "install": {
     "title": "نصّب ترجمة",
