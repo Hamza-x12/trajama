@@ -17,13 +17,18 @@ const FAQ = () => {
   const { t } = useTranslation();
 
   const faqs = [
-    { q: t('faq.q1'), a: t('faq.a1') },
-    { q: t('faq.q2'), a: t('faq.a2') },
-    { q: t('faq.q3'), a: t('faq.a3') },
-    { q: t('faq.q4'), a: t('faq.a4') },
-    { q: t('faq.q5'), a: t('faq.a5') },
-    { q: t('faq.q6'), a: t('faq.a6') },
-    { q: t('faq.q7'), a: t('faq.a7') },
+    { q: t('faq.q1'), a: t('faq.a1'), icon: "🇲🇦", category: "About Darija" },
+    { q: t('faq.q2'), a: t('faq.a2'), icon: "🔄", category: "Using Tarjama" },
+    { q: t('faq.q3'), a: t('faq.a3'), icon: "💰", category: "Pricing" },
+    { q: t('faq.q4'), a: t('faq.a4'), icon: "🌍", category: "Features" },
+    { q: t('faq.q5'), a: t('faq.a5'), icon: "✅", category: "Features" },
+    { q: t('faq.q6'), a: t('faq.a6'), icon: "📱", category: "Features" },
+    { q: t('faq.q7'), a: t('faq.a7'), icon: "🎤", category: "Using Tarjama" },
+    { q: t('faq.q8'), a: t('faq.a8'), icon: "📱", category: "Features" },
+    { q: t('faq.q9'), a: t('faq.a9'), icon: "💾", category: "Features" },
+    { q: t('faq.q10'), a: t('faq.a10'), icon: "🔍", category: "Features" },
+    { q: t('faq.q11'), a: t('faq.a11'), icon: "🗑️", category: "Using Tarjama" },
+    { q: t('faq.q12'), a: t('faq.a12'), icon: "📚", category: "Features" },
   ];
 
   return (
@@ -58,18 +63,37 @@ const FAQ = () => {
           </Link>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-3xl">{t('faq.pageTitle')}</CardTitle>
+        <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-b border-border/50">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-primary/20 rounded-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                  <path d="M12 17h.01"/>
+                </svg>
+              </div>
+              <CardTitle className="text-2xl sm:text-3xl">{t('faq.pageTitle')}</CardTitle>
+            </div>
           </CardHeader>
-          <CardContent>
-            <Accordion type="single" collapsible className="w-full">
+          <CardContent className="p-6">
+            <Accordion type="single" collapsible className="w-full space-y-3">
               {faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className="text-left">
-                    {faq.q}
+                <AccordionItem 
+                  key={index} 
+                  value={`item-${index}`}
+                  className="border border-border/50 rounded-xl px-5 py-1 bg-gradient-to-br from-card to-muted/20 hover:border-primary/50 hover:shadow-moroccan transition-all duration-300"
+                >
+                  <AccordionTrigger className="text-left hover:no-underline group">
+                    <div className="flex items-start gap-3">
+                      <span className="text-2xl mt-1 group-hover:scale-110 transition-transform">{faq.icon}</span>
+                      <div className="flex-1">
+                        <span className="text-xs font-semibold text-primary/70 uppercase tracking-wider mb-1 block">{faq.category}</span>
+                        <span className="font-semibold text-base group-hover:text-primary transition-colors">{faq.q}</span>
+                      </div>
+                    </div>
                   </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">
+                  <AccordionContent className="text-muted-foreground pt-4 pb-2 pl-11 leading-relaxed">
                     {faq.a}
                   </AccordionContent>
                 </AccordionItem>

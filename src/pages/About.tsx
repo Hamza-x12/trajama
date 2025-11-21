@@ -42,16 +42,23 @@ const About = () => {
           </Link>
         </div>
 
-        <Card className="mb-8 border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm">
-          <div className="p-4 sm:p-6 md:p-8">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-3 sm:mb-4">
-              {t('about.mainTitle')}
-            </h2>
-            <div className="space-y-3 sm:space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed">
-              <p>
-                <strong className="text-foreground">Tarjama</strong> {t('about.mainDescription1')}
+        <Card className="mb-8 border-border/50 shadow-elegant bg-gradient-to-br from-card/50 to-muted/30 backdrop-blur-sm overflow-hidden animate-fade-in">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-10" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent/5 rounded-full blur-3xl -z-10" />
+          <div className="p-6 sm:p-8 md:p-10 relative">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-4 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl shadow-moroccan">
+                <Globe className="w-10 h-10 text-primary" />
+              </div>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
+                {t('about.mainTitle')}
+              </h2>
+            </div>
+            <div className="space-y-4 sm:space-y-5 text-sm sm:text-base text-muted-foreground leading-relaxed">
+              <p className="text-lg">
+                <strong className="text-foreground bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Tarjama</strong> {t('about.mainDescription1')}
               </p>
-              <p>
+              <p className="pl-4 border-l-4 border-primary/30">
                 {t('about.mainDescription2')}
               </p>
             </div>
@@ -59,73 +66,78 @@ const About = () => {
         </Card>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
-          <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm hover:shadow-hover transition-all duration-300">
+          <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm hover:shadow-moroccan hover:scale-105 hover:-translate-y-1 transition-all duration-300 animate-fade-in group">
             <CardContent className="p-4 sm:p-6">
               <div className="flex flex-col items-center text-center gap-3">
-                <div className="p-3 rounded-lg bg-primary/10">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 group-hover:from-primary/30 group-hover:to-primary/20 transition-all duration-300 group-hover:scale-110">
                   <Globe className="w-8 h-8 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">{t('about.feature1Title')}</h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground">{t('about.feature1Description')}</p>
+                  <h3 className="text-base sm:text-lg font-bold mb-2 text-foreground group-hover:text-primary transition-colors">{t('about.feature1Title')}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{t('about.feature1Description')}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm hover:shadow-hover transition-all duration-300">
+          <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm hover:shadow-moroccan hover:scale-105 hover:-translate-y-1 transition-all duration-300 animate-fade-in [animation-delay:100ms] group">
             <CardContent className="p-4 sm:p-6">
               <div className="flex flex-col items-center text-center gap-3">
-                <div className="p-3 rounded-lg bg-primary/10">
-                  <Mic className="w-8 h-8 text-primary" />
+                <div className="p-3 rounded-xl bg-gradient-to-br from-accent/20 to-accent/10 group-hover:from-accent/30 group-hover:to-accent/20 transition-all duration-300 group-hover:scale-110">
+                  <Mic className="w-8 h-8 text-accent-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">{t('about.feature2Title')}</h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground">{t('about.feature2Description')}</p>
+                  <h3 className="text-base sm:text-lg font-bold mb-2 text-foreground group-hover:text-accent-foreground transition-colors">{t('about.feature2Title')}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{t('about.feature2Description')}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm hover:shadow-hover transition-all duration-300">
+          <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm hover:shadow-moroccan hover:scale-105 hover:-translate-y-1 transition-all duration-300 animate-fade-in [animation-delay:200ms] group">
             <CardContent className="p-4 sm:p-6">
               <div className="flex flex-col items-center text-center gap-3">
-                <div className="p-3 rounded-lg bg-primary/10">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-accent/10 group-hover:from-primary/30 group-hover:to-accent/20 transition-all duration-300 group-hover:scale-110">
                   <Volume2 className="w-8 h-8 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">{t('about.feature3Title')}</h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground">{t('about.feature3Description')}</p>
+                  <h3 className="text-base sm:text-lg font-bold mb-2 text-foreground group-hover:text-primary transition-colors">{t('about.feature3Title')}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{t('about.feature3Description')}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm hover:shadow-hover transition-all duration-300">
+          <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm hover:shadow-moroccan hover:scale-105 hover:-translate-y-1 transition-all duration-300 animate-fade-in [animation-delay:300ms] group">
             <CardContent className="p-4 sm:p-6">
               <div className="flex flex-col items-center text-center gap-3">
-                <div className="p-3 rounded-lg bg-primary/10">
-                  <History className="w-8 h-8 text-primary" />
+                <div className="p-3 rounded-xl bg-gradient-to-br from-accent/20 to-primary/10 group-hover:from-accent/30 group-hover:to-primary/20 transition-all duration-300 group-hover:scale-110">
+                  <History className="w-8 h-8 text-accent-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">{t('about.feature4Title')}</h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground">{t('about.feature4Description')}</p>
+                  <h3 className="text-base sm:text-lg font-bold mb-2 text-foreground group-hover:text-accent-foreground transition-colors">{t('about.feature4Title')}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{t('about.feature4Description')}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm">
-          <div className="p-4 sm:p-6 md:p-8">
-            <div className="space-y-3 sm:space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed">
-              <p>
+        <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm overflow-hidden animate-fade-in">
+          <div className="p-6 sm:p-8 md:p-10 relative">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-accent/5 rounded-full blur-3xl" />
+            <div className="space-y-4 sm:space-y-5 text-sm sm:text-base text-muted-foreground leading-relaxed relative z-10">
+              <p className="text-lg leading-relaxed">
                 {t('about.targetAudience')}
               </p>
-              <div className="bg-gradient-to-r from-primary/10 to-accent/10 p-3 sm:p-4 rounded-lg border border-primary/20">
-                <p className="text-foreground font-semibold">
-                  {t('about.freeFeature')}
-                </p>
+              <div className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 p-5 sm:p-6 rounded-2xl border-2 border-primary/30 shadow-moroccan backdrop-blur-sm relative overflow-hidden group hover:scale-[1.02] transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="flex items-center gap-3 relative z-10">
+                  <span className="text-3xl animate-bounce">🎉</span>
+                  <p className="text-foreground font-bold text-lg">
+                    {t('about.freeFeature')}
+                  </p>
+                </div>
               </div>
             </div>
           </div>

@@ -131,12 +131,22 @@
     "q3": "Is Tarjama translator free?",
     "a3": "Yes! Tarjama is completely free to use with no limitations. You can translate as many texts as you want, use voice input, access text-to-speech, download offline language packs, and save your translation history—all at no cost.",
     "q4": "What languages does Tarjama support?",
-    "a4": "Tarjama supports Moroccan Darija and 11 additional languages: French, English, Modern Standard Arabic, Spanish, German, Italian, Portuguese, Chinese, Japanese, Turkish, and Russian. You can translate from any of these languages to Darija or from Darija to any of them.",
+    "a4": "Tarjama supports Moroccan Darija and 13 additional languages: French, English, Modern Standard Arabic, Spanish, German, Italian, Portuguese, Chinese, Japanese, Turkish, Russian, Korean, and Hindi. You can translate from any of these languages to Darija or from Darija to any of them.",
     "q5": "How accurate is Darija translation?",
     "a5": "Tarjama uses advanced AI models specifically trained on Moroccan Darija to provide highly accurate translations. Our system understands cultural context, regional variations, and colloquial expressions. While no automated translation is perfect, Tarjama is designed to preserve the meaning, tone, and cultural nuances of Darija better than generic translation tools.",
     "q6": "Can I use Tarjama offline?",
     "a6": "Yes! Tarjama supports offline translation. You can download language packs while connected to the internet, and then use them without any connection. This feature is perfect for travelers in Morocco or situations where internet access is limited.",
     "q7": "How do I use voice input for Darija translation?",
-    "a7": "Click the microphone button at the bottom right of the text input area. Speak your Darija text clearly, and Tarjama will automatically transcribe your speech and convert it to text. Then simply click translate to get translations in all supported languages. This feature makes it easy to translate spoken conversations in real-time."
+    "a7": "Click the microphone button at the bottom right of the text input area. Speak your Darija text clearly, and Tarjama will automatically transcribe your speech and convert it to text. Then simply click translate to get translations in all supported languages. This feature makes it easy to translate spoken conversations in real-time.",
+    "q8": "Does Tarjama work on mobile devices?",
+    "a8": "Yes! Tarjama is fully responsive and works seamlessly on all devices including smartphones, tablets, and desktops. You can even install it as a Progressive Web App (PWA) on your mobile device for a native app experience. Just tap the install prompt when it appears.",
+    "q9": "Can I save my translation history?",
+    "a9": "Absolutely! Tarjama automatically saves your translation history locally on your device. You can access past translations anytime by clicking on them in the history section below the translator. History items show the source language, target language, timestamp, and the original text.",
+    "q10": "What is the 'Detect Language' feature?",
+    "a10": "The 'Detect Language' feature automatically identifies which language you're typing in. This is useful when you're not sure which language to select, or when switching between languages frequently. Tarjama will detect the language and show you which one it identified with a small badge next to the language selector.",
+    "q11": "How do I clear my translation history?",
+    "a11": "To clear your entire translation history, click the 'Clear All' button at the top right of the history section. You can also delete individual translation items by hovering over them and clicking the X button that appears in the top right corner of each history card.",
+    "q12": "What are the cultural notes shown after translation?",
+    "a12": "Cultural notes provide additional context about words, phrases, or expressions that have special cultural significance in Moroccan or Arabic culture. These notes help you understand not just the literal translation, but also the cultural meaning and appropriate usage of certain terms."
   }
 }
