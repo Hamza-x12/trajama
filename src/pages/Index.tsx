@@ -92,6 +92,7 @@ const Index = () => {
   const [selectedVoice, setSelectedVoice] = useState<string>("");
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [isSwapping, setIsSwapping] = useState(false);
+  const [detectedLanguage, setDetectedLanguage] = useState<string | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
@@ -207,6 +208,7 @@ const Index = () => {
     }
     setIsTranslating(true);
     setTranslations(null);
+    setDetectedLanguage(null);
     try {
       const {
         data,
@@ -228,6 +230,7 @@ const Index = () => {
 
       // Show detected language if available
       if (data.detectedLanguage) {
+        setDetectedLanguage(data.detectedLanguage);
         toast.success(`${t('translation.detectedLanguage')} ${data.detectedLanguage}`);
       }
 
@@ -254,6 +257,7 @@ const Index = () => {
   const handleSelectHistoryItem = (item: HistoryItem) => {
     setInputText(item.text);
     setSourceLanguage(item.sourceLanguage);
+    setDetectedLanguage(null);
     setTranslations({
       translations: item.translations
     });
@@ -502,7 +506,10 @@ const Index = () => {
           <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card to-muted/10">
             <div className="flex items-center gap-3">
               {/* Source Language */}
-              <Select value={sourceLanguage} onValueChange={setSourceLanguage}>
+              <Select value={sourceLanguage} onValueChange={(value) => {
+                setSourceLanguage(value);
+                setDetectedLanguage(null);
+              }}>
                 <SelectTrigger className={`flex-1 h-12 bg-background border-border hover:bg-accent/5 transition-all duration-300 rounded-xl ${isSwapping ? 'scale-95 opacity-70' : 'scale-100 opacity-100'}`}>
                   <SelectValue>
                     <div className="flex items-center gap-3">
@@ -516,6 +523,11 @@ const Index = () => {
                         />
                       )}
                       <span className="font-medium text-base">{t(`languages.${sourceLanguage.toLowerCase().replace(' ', '')}`)}</span>
+                      {detectedLanguage && sourceLanguage === "Detect Language" && (
+                        <span className="ml-2 px-2 py-0.5 text-xs bg-primary/20 text-primary rounded-full border border-primary/30 animate-fade-in">
+                          {detectedLanguage}
+                        </span>
+                      )}
                     </div>
                   </SelectValue>
                 </SelectTrigger>
