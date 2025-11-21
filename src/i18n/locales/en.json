@@ -59,5 +59,21 @@
   },
   "footer": {
     "copyright": "Copyright © 2025 Tarjama. All rights reserved."
+  },
+  "offline": {
+    "title": "Offline Languages",
+    "description": "Download languages for offline use",
+    "download": "Download",
+    "downloading": "Downloading...",
+    "downloaded": "Language downloaded successfully",
+    "downloadFailed": "Failed to download language",
+    "remove": "Remove",
+    "removed": "Language removed"
+  },
+  "install": {
+    "title": "Install Tarjama",
+    "description": "Install the app on your device for offline access and a better experience",
+    "install": "Install",
+    "later": "Later"
   }
 }
