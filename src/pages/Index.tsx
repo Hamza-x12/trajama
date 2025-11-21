@@ -488,9 +488,9 @@ const Index = () => {
         <Card className="overflow-hidden border-border/50 shadow-elegant hover:shadow-hover transition-all duration-500 bg-card/50 backdrop-blur-sm">
           {/* Language Selectors with Swap Button */}
           <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card via-muted/5 to-card px-[5px]">
-            <div className="flex items-center gap-3">
-              {/* Source Language */}
-              <div className="flex-1">
+            <div className="flex items-center gap-3 justify-center">
+              {/* Source Language - Slightly Reduced */}
+              <div className="flex-[0.85]">
                 <Select value={sourceLanguage} onValueChange={value => {
                 setSourceLanguage(value);
                 setDetectedLanguage(null);
