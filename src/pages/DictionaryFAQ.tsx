@@ -12,6 +12,7 @@ import {
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsDialog } from "@/components/SettingsDialog";
+import { ContactForm } from "@/components/ContactForm";
 
 const DictionaryFAQ = () => {
   const { t } = useTranslation();
@@ -125,6 +126,10 @@ const DictionaryFAQ = () => {
             </Accordion>
           </CardContent>
         </Card>
+
+        <div className="mt-8">
+          <ContactForm pageSource="Dictionary FAQ" />
+        </div>
       </main>
     </div>
   );
