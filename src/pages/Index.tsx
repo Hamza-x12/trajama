@@ -6,8 +6,10 @@ import { Label } from "@/components/ui/label";
 import { TranslationCard } from "@/components/TranslationCard";
 import { TranslationHistory } from "@/components/TranslationHistory";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { SettingsDialog } from "@/components/SettingsDialog";
 import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
@@ -60,6 +62,7 @@ interface HistoryItem {
 }
 const HISTORY_KEY = 'darija-translation-history';
 const Index = () => {
+  const { t, i18n } = useTranslation();
   const [inputText, setInputText] = useState("");
   const [sourceLanguage, setSourceLanguage] = useState("Darija");
   const [translations, setTranslations] = useState<TranslationResult | null>(null);
@@ -103,6 +106,10 @@ const Index = () => {
     if (window.speechSynthesis.onvoiceschanged !== undefined) {
       window.speechSynthesis.onvoiceschanged = loadVoices;
     }
+
+    // Set document direction based on language
+    const currentLang = i18n.language;
+    document.documentElement.dir = currentLang === 'ar' || currentLang === 'dar' ? 'rtl' : 'ltr';
   }, []);
 
   // Save history to localStorage whenever it changes
@@ -148,7 +155,7 @@ const Index = () => {
   }];
   const handleTranslate = async () => {
     if (!inputText.trim()) {
-      toast.error("Please enter some text to translate");
+      toast.error(t('translation.enterText'));
       return;
     }
     setIsTranslating(true);
@@ -173,7 +180,7 @@ const Index = () => {
 
       // Show detected language if available
       if (data.detectedLanguage) {
-        toast.success(`Detected language: ${data.detectedLanguage}`);
+        toast.success(`${t('translation.detectedLanguage')} ${data.detectedLanguage}`);
       }
 
       // Add to history
@@ -187,11 +194,11 @@ const Index = () => {
       setHistory(prev => [historyItem, ...prev].slice(0, 50)); // Keep last 50 items
 
       if (!data.detectedLanguage) {
-        toast.success("Translation complete!");
+        toast.success(t('translation.complete'));
       }
     } catch (error) {
       console.error('Translation error:', error);
-      toast.error("Translation failed. Please try again.");
+      toast.error(t('translation.failed'));
     } finally {
       setIsTranslating(false);
     }
@@ -202,19 +209,19 @@ const Index = () => {
     setTranslations({
       translations: item.translations
     });
-    toast.info("Translation loaded from history");
+    toast.info(t('history.loaded'));
   };
   const handleClearHistory = () => {
     setHistory([]);
-    toast.success("History cleared");
+    toast.success(t('history.cleared'));
   };
   const handleDeleteHistoryItem = (id: string) => {
     setHistory(prev => prev.filter(item => item.id !== id));
-    toast.success("Item removed from history");
+    toast.success(t('history.removed'));
   };
   const handleSpeakTranslation = (text: string, languageName: string) => {
     if (!text?.trim()) {
-      toast.error("No translation to speak");
+      toast.error(t('audio.play'));
       return;
     }
     if (typeof window === "undefined" || !window.speechSynthesis) {
@@ -259,7 +266,7 @@ const Index = () => {
 
       utterance.onstart = () => {
         setIsSpeaking(true);
-        toast.success(`Playing ${languageName} translation`);
+        toast.success(t('audio.playing'));
       };
       utterance.onend = () => {
         setIsSpeaking(false);
@@ -280,12 +287,12 @@ const Index = () => {
   const handleStopSpeaking = () => {
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
-    toast.info("Stopped speaking");
+    toast.info(t('audio.stopped'));
   };
   const handleCopyTranslation = (text: string, languageName: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(languageName);
-    toast.success(`${languageName} translation copied!`);
+    toast.success(`${languageName} ${t('translation.copied')}`);
     setTimeout(() => setCopiedId(null), 2000);
   };
 
@@ -310,10 +317,10 @@ const Index = () => {
 
       mediaRecorder.start();
       setIsRecording(true);
-      toast.success("Recording started");
+      toast.success(t('audio.recording'));
     } catch (error) {
       console.error('Error starting recording:', error);
-      toast.error("Failed to start recording. Please check microphone permissions.");
+      toast.error(t('audio.recordingFailed'));
     }
   }, []);
 
@@ -321,7 +328,7 @@ const Index = () => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
-      toast.info("Processing audio...");
+      toast.info(t('audio.processing'));
     }
   }, [isRecording]);
 
@@ -345,11 +352,11 @@ const Index = () => {
         }
 
         setInputText(data.text);
-        toast.success("Transcription complete!");
+        toast.success(t('audio.transcriptionComplete'));
       };
     } catch (error) {
       console.error('Transcription error:', error);
-      toast.error("Failed to transcribe audio. Please try again.");
+      toast.error(t('audio.transcriptionFailed'));
     } finally {
       setIsTranscribing(false);
     }
@@ -362,11 +369,18 @@ const Index = () => {
             <div className="flex items-center gap-2 sm:gap-3">
               <img src={tarjamaLogo} alt="Tarjama Logo" className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16" />
               <div>
-                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground tracking-tight">Tarjama</h1>
-                <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">Professional multilingual translation</p>
+                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground tracking-tight">{t('app.title')}</h1>
+                <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">{t('app.subtitle')}</p>
               </div>
             </div>
-            <ThemeToggle />
+            <div className="flex items-center gap-2">
+              <SettingsDialog 
+                selectedVoice={selectedVoice}
+                setSelectedVoice={setSelectedVoice}
+                availableVoices={availableVoices}
+              />
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       </header>
@@ -382,7 +396,7 @@ const Index = () => {
                 <div className="flex gap-1.5 sm:gap-2 flex-nowrap sm:flex-wrap min-w-max sm:min-w-0">
                   {languages.map(lang => <Button key={lang.name} variant={sourceLanguage === lang.name ? "default" : "ghost"} onClick={() => setSourceLanguage(lang.name)} className={`gap-1.5 sm:gap-2 h-8 sm:h-9 md:h-10 px-2.5 sm:px-3 md:px-4 font-medium transition-all duration-300 flex-shrink-0 ${sourceLanguage === lang.name ? 'shadow-moroccan scale-105' : 'hover:scale-105'} ${lang.name === "Detect Language" ? 'border-2 border-primary/30' : ''}`} size="sm">
                       {lang.name === "Detect Language" ? <Wand2 className="w-3 h-3 sm:w-4 sm:h-4" /> : <img src={lang.icon as string} alt={lang.name} className="w-4 h-4 sm:w-5 sm:h-5 rounded object-cover" />}
-                      <span className="text-xs sm:text-sm whitespace-nowrap">{lang.name}</span>
+                      <span className="text-xs sm:text-sm whitespace-nowrap">{t(`languages.${lang.name.toLowerCase().replace(' ', '')}`)}</span>
                     </Button>)}
                 </div>
               </div>
@@ -390,14 +404,14 @@ const Index = () => {
               {/* Source Text Input */}
               <div className="flex-1 p-4 sm:p-5 md:p-6">
                 <div className="relative">
-                  <Textarea placeholder="Enter text to translate..." value={inputText} onChange={e => setInputText(e.target.value)} className="text-base sm:text-lg resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60 mx-0 my-0 px-[10px] py-[10px]" />
+                  <Textarea placeholder={t('translation.placeholder')} value={inputText} onChange={e => setInputText(e.target.value)} className="text-base sm:text-lg resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60 mx-0 my-0 px-[10px] py-[10px]" />
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={isRecording ? stopRecording : startRecording}
                     disabled={isTranscribing}
                     className={`absolute bottom-2 right-2 h-10 w-10 p-0 rounded-full ${isRecording ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' : 'hover:bg-primary/10'}`}
-                    aria-label={isRecording ? "Stop recording" : "Start recording"}
+                    aria-label={isRecording ? t('audio.stopRecording') : t('audio.startRecording')}
                   >
                     {isTranscribing ? (
                       <Loader2 className="h-5 w-5 animate-spin" />
@@ -415,17 +429,17 @@ const Index = () => {
                 <Button onClick={handleTranslate} disabled={isTranslating || !inputText.trim()} className="w-full h-10 sm:h-11 md:h-12 text-sm sm:text-base font-semibold shadow-moroccan hover:shadow-hover transition-all duration-300 hover:scale-[1.02]" size="lg">
                   {isTranslating ? <>
                       <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin mr-2" />
-                      <span className="hidden sm:inline">Translating...</span>
-                      <span className="sm:hidden">Translating</span>
+                      <span className="hidden sm:inline">{t('translation.translating')}</span>
+                      <span className="sm:hidden">{t('translation.translate')}</span>
                     </> : <>
                       <Languages className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                      Translate
+                      {t('translation.translate')}
                     </>}
                 </Button>
                 
                 {/* Cultural Notes */}
                 {translations?.culturalNotes && <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-gradient-to-br from-accent/10 to-accent/5 rounded-lg sm:rounded-xl border border-accent/30 shadow-soft">
-                    <p className="text-[10px] sm:text-xs text-accent-foreground font-semibold mb-2 uppercase tracking-wide">Cultural Notes</p>
+                    <p className="text-[10px] sm:text-xs text-accent-foreground font-semibold mb-2 uppercase tracking-wide">{t('translation.culturalNotes')}</p>
                     <p className="text-xs sm:text-sm text-foreground/80 italic leading-relaxed break-words">{translations.culturalNotes}</p>
                   </div>}
               </div>
@@ -437,35 +451,21 @@ const Index = () => {
               <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card to-muted/10">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <div className="text-xs sm:text-sm font-semibold text-foreground tracking-wide uppercase">
-                    Translations
+                    {t('translation.translations')}
                   </div>
-                  <div className="flex items-center gap-2">
-                    {availableVoices.length > 0 && (
-                      <Select value={selectedVoice} onValueChange={setSelectedVoice}>
-                        <SelectTrigger className="w-[180px] h-8 text-xs">
-                          <SelectValue placeholder="Select voice" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {availableVoices.map(voice => (
-                            <SelectItem key={voice.name} value={voice.name} className="text-xs">
-                              {voice.name.split(' ').slice(0, 2).join(' ')} ({voice.lang})
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                    {isSpeaking && (
-                      <Button
-                        onClick={handleStopSpeaking}
-                        variant="destructive"
-                        size="sm"
-                        className="h-8 gap-1"
-                      >
-                        <VolumeX className="h-3 w-3" />
-                        <span className="text-xs">Stop</span>
-                      </Button>
-                    )}
+                  {isSpeaking && (
+                    <div className="flex items-center gap-2">
+                    <Button
+                      onClick={handleStopSpeaking}
+                      variant="destructive"
+                      size="sm"
+                      className="h-8 gap-1"
+                    >
+                      <VolumeX className="h-3 w-3" />
+                      <span className="text-xs">{t('audio.stop')}</span>
+                    </Button>
                   </div>
+                  )}
                 </div>
               </div>
               
@@ -485,11 +485,11 @@ const Index = () => {
                               {copiedId === lang.name ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4 text-muted-foreground hover:text-foreground" />}
                             </Button>
                           </div>
-                        </div>;
+                    </div>;
                 })}
                   </div> : <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
                     <Languages className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mb-3 sm:mb-4 opacity-30" />
-                    <p className="text-xs sm:text-sm font-medium">Translations will appear here</p>
+                    <p className="text-xs sm:text-sm font-medium">{t('translation.willAppear')}</p>
                   </div>}
               </div>
             </div>
@@ -509,7 +509,7 @@ const Index = () => {
           {/* Copyright */}
           <div className="text-center mb-3 sm:mb-4">
             <p className="text-[10px] sm:text-xs text-muted-foreground">
-              Copyright © 2025 Tarjama. Tous droits réservés.
+              {t('footer.copyright')}
             </p>
           </div>
 

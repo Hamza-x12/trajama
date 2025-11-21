@@ -1,0 +1,63 @@
+{
+  "app": {
+    "title": "ترجمة",
+    "subtitle": "ترجمة احترافية متعددة اللغات"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "language": "اللغة",
+    "voice": "اختيار الصوت",
+    "selectVoice": "اختر الصوت"
+  },
+  "translation": {
+    "placeholder": "أدخل النص للترجمة...",
+    "translate": "ترجم",
+    "translating": "جاري الترجمة...",
+    "translations": "الترجمات",
+    "willAppear": "ستظهر الترجمات هنا",
+    "complete": "اكتملت الترجمة!",
+    "failed": "فشلت الترجمة. يرجى المحاولة مرة أخرى.",
+    "enterText": "يرجى إدخال بعض النص للترجمة",
+    "copied": "تم نسخ الترجمة!",
+    "culturalNotes": "ملاحظات ثقافية",
+    "detectedLanguage": "اللغة المكتشفة:"
+  },
+  "languages": {
+    "detectLanguage": "كشف اللغة",
+    "darija": "الدارجة",
+    "french": "الفرنسية",
+    "arabic": "العربية",
+    "english": "الإنجليزية",
+    "spanish": "الإسبانية",
+    "german": "الألمانية",
+    "italian": "الإيطالية",
+    "portuguese": "البرتغالية",
+    "chinese": "الصينية",
+    "japanese": "اليابانية",
+    "turkish": "التركية"
+  },
+  "audio": {
+    "startRecording": "ابدأ التسجيل",
+    "stopRecording": "إيقاف التسجيل",
+    "recording": "بدأ التسجيل",
+    "processing": "معالجة الصوت...",
+    "transcriptionComplete": "اكتملت النسخ!",
+    "transcriptionFailed": "فشل النسخ. يرجى المحاولة مرة أخرى.",
+    "recordingFailed": "فشل بدء التسجيل. يرجى التحقق من أذونات الميكروفون.",
+    "play": "تشغيل الترجمة",
+    "copy": "نسخ الترجمة",
+    "playing": "تشغيل الترجمة",
+    "stopped": "توقف التحدث",
+    "stop": "إيقاف"
+  },
+  "history": {
+    "title": "سجل الترجمة",
+    "clear": "مسح السجل",
+    "cleared": "تم مسح السجل",
+    "removed": "تمت إزالة العنصر من السجل",
+    "loaded": "تم تحميل الترجمة من السجل"
+  },
+  "footer": {
+    "copyright": "حقوق النشر © 2025 ترجمة. جميع الحقوق محفوظة."
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "app": {
+    "title": "ترجمة",
+    "subtitle": "ترجمة محترفة بزاف ديال اللغات"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "language": "اللغة",
+    "voice": "اختيار الصوت",
+    "selectVoice": "اختار الصوت"
+  },
+  "translation": {
+    "placeholder": "دخّل النص باش تترجمو...",
+    "translate": "ترجم",
+    "translating": "كنترجمو...",
+    "translations": "الترجمات",
+    "willAppear": "الترجمات غادي يبانو هنا",
+    "complete": "كملات الترجمة!",
+    "failed": "ماخدماتش الترجمة. عاود جرّب.",
+    "enterText": "عافاك دخّل شي نص باش تترجمو",
+    "copied": "تنسخات الترجمة!",
+    "culturalNotes": "ملاحظات ثقافية",
+    "detectedLanguage": "اللغة اللي تلقات:"
+  },
+  "languages": {
+    "detectLanguage": "اكتشف اللغة",
+    "darija": "الدارجة",
+    "french": "الفرانساوية",
+    "arabic": "العربية",
+    "english": "الإنجليزية",
+    "spanish": "الإسبانية",
+    "german": "الألمانية",
+    "italian": "الطاليانية",
+    "portuguese": "البرتغالية",
+    "chinese": "الصينية",
+    "japanese": "اليابانية",
+    "turkish": "التركية"
+  },
+  "audio": {
+    "startRecording": "ابدا التسجيل",
+    "stopRecording": "وقّف التسجيل",
+    "recording": "بدا التسجيل",
+    "processing": "كنعالجو الصوت...",
+    "transcriptionComplete": "كملات الكتابة!",
+    "transcriptionFailed": "ماخدماتش الكتابة. عاود جرّب.",
+    "recordingFailed": "ماخدماش التسجيل. شوف الأذونات ديال الميكرو.",
+    "play": "شغّل الترجمة",
+    "copy": "نسخ الترجمة",
+    "playing": "كنشغلو الترجمة",
+    "stopped": "وقف الكلام",
+    "stop": "وقّف"
+  },
+  "history": {
+    "title": "تاريخ الترجمات",
+    "clear": "مسح التاريخ",
+    "cleared": "تمسح التاريخ",
+    "removed": "تحذف العنصر من التاريخ",
+    "loaded": "تحملات الترجمة من التاريخ"
+  },
+  "footer": {
+    "copyright": "حقوق النشر © 2025 ترجمة. جميع الحقوق محفوظة."
+  }
+}

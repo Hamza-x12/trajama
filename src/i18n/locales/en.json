@@ -1,0 +1,63 @@
+{
+  "app": {
+    "title": "Tarjama",
+    "subtitle": "Professional multilingual translation"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "voice": "Voice Selection",
+    "selectVoice": "Select voice"
+  },
+  "translation": {
+    "placeholder": "Enter text to translate...",
+    "translate": "Translate",
+    "translating": "Translating...",
+    "translations": "Translations",
+    "willAppear": "Translations will appear here",
+    "complete": "Translation complete!",
+    "failed": "Translation failed. Please try again.",
+    "enterText": "Please enter some text to translate",
+    "copied": "translation copied!",
+    "culturalNotes": "Cultural Notes",
+    "detectedLanguage": "Detected language:"
+  },
+  "languages": {
+    "detectLanguage": "Detect Language",
+    "darija": "Darija",
+    "french": "French",
+    "arabic": "Arabic",
+    "english": "English",
+    "spanish": "Spanish",
+    "german": "German",
+    "italian": "Italian",
+    "portuguese": "Portuguese",
+    "chinese": "Chinese",
+    "japanese": "Japanese",
+    "turkish": "Turkish"
+  },
+  "audio": {
+    "startRecording": "Start recording",
+    "stopRecording": "Stop recording",
+    "recording": "Recording started",
+    "processing": "Processing audio...",
+    "transcriptionComplete": "Transcription complete!",
+    "transcriptionFailed": "Failed to transcribe audio. Please try again.",
+    "recordingFailed": "Failed to start recording. Please check microphone permissions.",
+    "play": "Play translation",
+    "copy": "Copy translation",
+    "playing": "Playing translation",
+    "stopped": "Stopped speaking",
+    "stop": "Stop"
+  },
+  "history": {
+    "title": "Translation History",
+    "clear": "Clear History",
+    "cleared": "History cleared",
+    "removed": "Item removed from history",
+    "loaded": "Translation loaded from history"
+  },
+  "footer": {
+    "copyright": "Copyright © 2025 Tarjama. All rights reserved."
+  }
+}
