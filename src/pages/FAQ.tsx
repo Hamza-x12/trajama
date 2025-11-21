@@ -17,34 +17,13 @@ const FAQ = () => {
   const { t } = useTranslation();
 
   const faqs = [
-    { 
-      q: "What is Darija?", 
-      a: "Darija (الدارجة) is the colloquial Arabic dialect spoken in Morocco. It's distinct from Modern Standard Arabic and incorporates vocabulary and grammar from Berber (Amazigh), French, Spanish, and Arabic. Darija is the everyday language used by Moroccans in daily conversations, different from the formal Arabic used in official documents and media." 
-    },
-    { 
-      q: "How do I translate Darija to French?", 
-      a: "Simply enter your Darija text in the input field, select \"Darija\" as your source language (or use \"Detect Language\"), and click the translate button. Tarjama will automatically provide translations in French along with 10 other languages. You can also use voice input to speak in Darija and get instant translations." 
-    },
-    { 
-      q: "Is Tarjama translator free?", 
-      a: "Yes! Tarjama is completely free to use with no limitations. You can translate as many texts as you want, use voice input, access text-to-speech, download offline language packs, and save your translation history—all at no cost." 
-    },
-    { 
-      q: "What languages does Tarjama support?", 
-      a: "Tarjama supports Moroccan Darija and 10 additional languages: French, English, Modern Standard Arabic, Spanish, German, Italian, Portuguese, Chinese, Japanese, and Turkish. You can translate from any of these languages to Darija or from Darija to any of them." 
-    },
-    { 
-      q: "How accurate is Darija translation?", 
-      a: "Tarjama uses advanced AI models specifically trained on Moroccan Darija to provide highly accurate translations. Our system understands cultural context, regional variations, and colloquial expressions. While no automated translation is perfect, Tarjama is designed to preserve the meaning, tone, and cultural nuances of Darija better than generic translation tools." 
-    },
-    { 
-      q: "Can I use Tarjama offline?", 
-      a: "Yes! Tarjama supports offline translation. You can download language packs while connected to the internet, and then use them without any connection. This feature is perfect for travelers in Morocco or situations where internet access is limited." 
-    },
-    { 
-      q: "How do I use voice input for Darija translation?", 
-      a: "Click the microphone button at the bottom right of the text input area. Speak your Darija text clearly, and Tarjama will automatically transcribe your speech and convert it to text. Then simply click translate to get translations in all supported languages. This feature makes it easy to translate spoken conversations in real-time." 
-    },
+    { q: t('faq.q1'), a: t('faq.a1') },
+    { q: t('faq.q2'), a: t('faq.a2') },
+    { q: t('faq.q3'), a: t('faq.a3') },
+    { q: t('faq.q4'), a: t('faq.a4') },
+    { q: t('faq.q5'), a: t('faq.a5') },
+    { q: t('faq.q6'), a: t('faq.a6') },
+    { q: t('faq.q7'), a: t('faq.a7') },
   ];
 
   return (
