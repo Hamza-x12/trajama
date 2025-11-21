@@ -32,7 +32,8 @@
     "clear": "مسح",
     "cleared": "تم المسح",
     "undo": "تراجع",
-    "undone": "تمت الاستعادة"
+    "undone": "تمت الاستعادة",
+    "profanityDetected": "تحتوي الترجمة على لغة غير لائقة ولم يتم حفظها في السجل"
   },
   "languages": {
     "detectlanguage": "كشف اللغة",

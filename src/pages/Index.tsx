@@ -235,6 +235,32 @@ const Index = () => {
       console.log(`Auto-selected voice: ${matchingVoice.name} for ${targetLanguage}`);
     }
   }, [targetLanguage, availableVoices, autoVoiceSelect]);
+  // Profanity filter
+  const containsProfanity = (text: string): boolean => {
+    const profanityPatterns = [
+      // English
+      /\b(fuck|shit|bitch|ass|damn|bastard|cunt|dick|piss|whore|slut)\b/i,
+      // French
+      /\b(merde|putain|connard|salope|con|bite|chier|enculé|bordel)\b/i,
+      // Arabic & Darija
+      /\b(كلب|حمار|قحبة|زبي|خرا|كحبة|زمال|نيك|عير|كس|شرموطة)\b/i,
+      // Spanish
+      /\b(mierda|puta|coño|joder|cabrón|pendejo|culo)\b/i,
+      // German
+      /\b(scheiße|arsch|fotze|fick|hure|verdammt)\b/i,
+      // Italian
+      /\b(merda|cazzo|puttana|stronzo|culo|figa)\b/i,
+      // Portuguese
+      /\b(merda|puta|caralho|foda|cu|buceta)\b/i,
+      // Russian
+      /\b(блядь|хуй|пизда|ебать|сука|дерьмо)\b/i,
+      // Turkish
+      /\b(siktir|orospu|göt|am|piç|bok)\b/i
+    ];
+
+    return profanityPatterns.some(pattern => pattern.test(text));
+  };
+
   const languages = [{
     name: "Detect Language",
     code: "auto",
@@ -329,19 +355,27 @@ const Index = () => {
         toast.success(`${t('translation.detectedLanguage')} ${data.detectedLanguage}`);
       }
 
-      // Add to history
-      const historyItem: HistoryItem = {
-        id: Date.now().toString(),
-        text: inputText,
-        sourceLanguage: data.detectedLanguage || sourceLanguage,
-        targetLanguage: targetLanguage,
-        timestamp: Date.now(),
-        translations: data.translations
-      };
-      setHistory(prev => [historyItem, ...prev].slice(0, 50)); // Keep last 50 items
+      // Check for profanity in input and translations
+      const hasProfanity = containsProfanity(inputText) || 
+        Object.values(data.translations).some((translation: string) => containsProfanity(translation));
 
-      if (!data.detectedLanguage) {
-        toast.success(t('translation.complete'));
+      if (hasProfanity) {
+        toast.warning(t('translation.profanityDetected'));
+      } else {
+        // Add to history only if no profanity detected
+        const historyItem: HistoryItem = {
+          id: Date.now().toString(),
+          text: inputText,
+          sourceLanguage: data.detectedLanguage || sourceLanguage,
+          targetLanguage: targetLanguage,
+          timestamp: Date.now(),
+          translations: data.translations
+        };
+        setHistory(prev => [historyItem, ...prev].slice(0, 50)); // Keep last 50 items
+
+        if (!data.detectedLanguage) {
+          toast.success(t('translation.complete'));
+        }
       }
     } catch (error) {
       console.error('Translation error:', error);

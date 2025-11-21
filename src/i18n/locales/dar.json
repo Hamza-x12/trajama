@@ -32,7 +32,8 @@
     "clear": "امسح",
     "cleared": "تمسح",
     "undo": "رجّع",
-    "undone": "رجع"
+    "undone": "رجع",
+    "profanityDetected": "الترجمة فيها كلام مامزيانش وماتسجلتش فالتاريخ"
   },
   "languages": {
     "detectlanguage": "اكتشف اللغة",
