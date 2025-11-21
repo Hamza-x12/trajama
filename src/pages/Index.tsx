@@ -14,6 +14,7 @@ import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, 
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import moroccoFlag from "@/assets/flags/morocco.png";
@@ -679,6 +680,19 @@ const Index = () => {
       {/* Footer */}
       <footer className="bg-muted/30 border-t border-border/50 mt-auto">
         <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 max-w-7xl">
+          {/* Navigation Links */}
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-4">
+            <Link to="/dictionary" className="text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors font-medium">
+              {t('navigation.dictionary')}
+            </Link>
+            <Link to="/about" className="text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors font-medium">
+              {t('navigation.about')}
+            </Link>
+            <Link to="/faq" className="text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors font-medium">
+              {t('navigation.faq')}
+            </Link>
+          </div>
+
           {/* Copyright */}
           <div className="text-center mb-3 sm:mb-4">
             <p className="text-[10px] sm:text-xs text-muted-foreground">

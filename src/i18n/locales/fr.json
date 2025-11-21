@@ -81,5 +81,56 @@
     "description": "Installez l'application sur votre appareil pour un accès hors ligne",
     "install": "Installer",
     "later": "Plus tard"
+  },
+  "navigation": {
+    "dictionary": "Dictionnaire",
+    "about": "À propos",
+    "faq": "FAQ",
+    "backToTranslator": "Retour"
+  },
+  "dictionary": {
+    "title": "Dictionnaire Darija",
+    "subtitle": "Phrases courantes",
+    "searchTitle": "Rechercher",
+    "searchDescription": "Rechercher des mots",
+    "searchPlaceholder": "Rechercher...",
+    "noResults": "Aucun résultat"
+  },
+  "about": {
+    "title": "À propos",
+    "subtitle": "Notre mission",
+    "welcomeTitle": "Bienvenue",
+    "welcomeText": "Tarjama est un traducteur Darija gratuit.",
+    "feature1Title": "Multilingue",
+    "feature1Description": "11+ langues",
+    "feature2Title": "Voix",
+    "feature2Description": "Parlez et traduisez",
+    "feature3Title": "Intelligence culturelle",
+    "feature3Description": "Contexte culturel",
+    "feature4Title": "Confidentialité",
+    "feature4Description": "Sécurisé et privé",
+    "missionTitle": "Notre Mission",
+    "missionText": "Rendre Darija accessible."
+  },
+  "faq": {
+    "title": "FAQ",
+    "subtitle": "Questions",
+    "pageTitle": "Questions fréquentes",
+    "q1": "Qu'est-ce que le Darija?",
+    "a1": "Dialecte arabe marocain",
+    "q2": "Comment traduire?",
+    "a2": "Entrez le texte",
+    "q3": "Gratuit?",
+    "a3": "Oui, gratuit",
+    "q4": "Quelles langues?",
+    "a4": "11+ langues",
+    "q5": "Précision?",
+    "a5": "Très précis",
+    "q6": "Hors ligne?",
+    "a6": "Oui",
+    "q7": "Voix?",
+    "a7": "Cliquez microphone",
+    "q8": "Pourquoi Tarjama?",
+    "a8": "Spécialisé Darija"
   }
 }
