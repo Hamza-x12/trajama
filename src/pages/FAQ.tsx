@@ -12,6 +12,7 @@ import {
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsDialog } from "@/components/SettingsDialog";
+import { ContactForm } from "@/components/ContactForm";
 
 const FAQ = () => {
   const { t } = useTranslation();
@@ -101,6 +102,10 @@ const FAQ = () => {
             </Accordion>
           </CardContent>
         </Card>
+
+        <div className="mt-8">
+          <ContactForm pageSource="FAQ" />
+        </div>
       </main>
     </div>
   );
