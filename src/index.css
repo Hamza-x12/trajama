@@ -119,5 +119,100 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    /* Improve touch responsiveness on mobile/tablet */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
   }
+  
+  /* Allow text selection in specific areas */
+  p, span, div[class*="translation"], textarea, input {
+    user-select: text;
+  }
+  
+  /* Improve scroll behavior on mobile */
+  html {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+  
+  /* Better touch targets for mobile/tablet */
+  @media (max-width: 1024px) {
+    button:not(.no-touch-expand), 
+    a:not(.no-touch-expand), 
+    [role="button"]:not(.no-touch-expand) {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    
+    input, 
+    textarea, 
+    select {
+      font-size: 16px; /* Prevents zoom on iOS */
+      min-height: 48px;
+    }
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.shadow-elegant {
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-glow {
+  box-shadow: 0 0 40px rgba(220, 38, 38, 0.15);
+}
+
+.shadow-moroccan {
+  box-shadow: 0 4px 20px rgba(220, 38, 38, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-soft {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(346.8, 77.2%, 60%));
+}
+
+/* Better touch feedback for mobile/tablet */
+@media (hover: none) and (pointer: coarse) {
+  button:active,
+  a:active,
+  [role="button"]:active {
+    opacity: 0.7;
+    transform: scale(0.98);
+    transition: opacity 0.1s, transform 0.1s;
+  }
+  
+  /* Larger tap areas for cards on mobile */
+  .touch-card {
+    padding: 1.5rem !important;
+  }
+}
+
+/* Prevent double-tap zoom on specific interactive elements */
+button, a, input, textarea, select {
+  touch-action: manipulation;
+}
+
+/* Smooth animations for touch interactions */
+.touch-manipulation {
+  transition: transform 0.1s ease-out;
+}
+
+.touch-manipulation:active {
+  transform: scale(0.95);
 }

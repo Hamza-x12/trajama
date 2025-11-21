@@ -73,6 +73,7 @@ const Index = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speakingLanguage, setSpeakingLanguage] = useState<string | null>(null);
   const [selectedVoice, setSelectedVoice] = useState<string>("");
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -119,39 +120,51 @@ const Index = () => {
   }, [history]);
   const languages = [{
     name: "Detect Language",
+    code: "auto",
     icon: "🔍"
   }, {
     name: "Darija",
+    code: "dar",
     icon: moroccoFlag
   }, {
     name: "French",
+    code: "fr",
     icon: franceFlag
   }, {
     name: "Arabic",
+    code: "ar",
     icon: saudiArabiaFlag
   }, {
     name: "English",
+    code: "en",
     icon: ukFlag
   }, {
     name: "Spanish",
+    code: "es",
     icon: spainFlag
   }, {
     name: "German",
+    code: "de",
     icon: germanyFlag
   }, {
     name: "Italian",
+    code: "it",
     icon: italyFlag
   }, {
     name: "Portuguese",
+    code: "pt",
     icon: portugalFlag
   }, {
     name: "Chinese",
+    code: "zh",
     icon: chinaFlag
   }, {
     name: "Japanese",
+    code: "ja",
     icon: japanFlag
   }, {
     name: "Turkish",
+    code: "tr",
     icon: turkeyFlag
   }];
   const handleTranslate = async () => {
@@ -229,6 +242,10 @@ const Index = () => {
       toast.error("Speech synthesis not supported in your browser");
       return;
     }
+    
+    setIsSpeaking(true);
+    setSpeakingLanguage(languageName);
+    
     const languageCodes: Record<string, string> = {
       Darija: "ar-MA",
       Arabic: "ar-SA",
@@ -288,6 +305,7 @@ const Index = () => {
   const handleStopSpeaking = () => {
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
+    setSpeakingLanguage(null);
     toast.info(t('audio.stopped'));
   };
   const handleCopyTranslation = (text: string, languageName: string) => {
@@ -364,16 +382,16 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col touch-pan-y">
       {/* Header */}
-      <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft">
-        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-5">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <img src={tarjamaLogo} alt="Tarjama Logo" className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16" />
+      <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft touch-none">
+        <div className="container mx-auto px-4 sm:px-4 py-4 sm:py-5">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 sm:gap-3">
+              <img src={tarjamaLogo} alt="Tarjama Logo" className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16" />
               <div>
-                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground tracking-tight">{t('app.title')}</h1>
-                <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">{t('app.subtitle')}</p>
+                <h1 className="text-xl sm:text-xl md:text-2xl font-bold text-foreground tracking-tight">{t('app.title')}</h1>
+                <p className="text-xs sm:text-xs text-muted-foreground hidden sm:block">{t('app.subtitle')}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -478,17 +496,17 @@ const Index = () => {
                     {languages.filter(lang => lang.name !== "Detect Language" && lang.name !== translations.detectedLanguage).map(lang => {
                   const key = lang.name.toLowerCase() as keyof typeof translations.translations;
                   const translation = translations.translations[key];
-                  return <div key={lang.name} className="relative">
-                          <TranslationCard language={lang.name} translation={translation} icon={lang.icon} />
-                          <div className="absolute top-4 right-4 flex flex-col gap-1">
-                            <Button variant="ghost" size="sm" onClick={() => handleSpeakTranslation(translation, lang.name)} className="h-8 w-8 p-0 hover:bg-primary/10" aria-label={`Play ${lang.name} translation`}>
-                              <Volume2 className="h-4 w-4 text-muted-foreground hover:text-foreground" />
-                            </Button>
-                            <Button variant="ghost" size="sm" onClick={() => handleCopyTranslation(translation, lang.name)} className="h-8 w-8 p-0 hover:bg-primary/10" aria-label={`Copy ${lang.name} translation`}>
-                              {copiedId === lang.name ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4 text-muted-foreground hover:text-foreground" />}
-                            </Button>
-                          </div>
-                    </div>;
+                  return <TranslationCard 
+                    key={lang.name}
+                    language={lang.name}
+                    languageCode={lang.code}
+                    translation={translation}
+                    flag={lang.icon}
+                    onSpeak={(text: string) => handleSpeakTranslation(text, lang.name)}
+                    onCopy={(text: string) => handleCopyTranslation(text, lang.name)}
+                    isSpeaking={isSpeaking && speakingLanguage === lang.name}
+                    onStopSpeaking={handleStopSpeaking}
+                  />;
                 })}
                   </div> : <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
                     <Languages className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mb-3 sm:mb-4 opacity-30" />

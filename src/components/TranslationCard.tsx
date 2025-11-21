@@ -1,17 +1,37 @@
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Volume2, Copy, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface TranslationCardProps {
   language: string;
+  languageCode: string;
   translation: string;
   culturalNotes?: string;
+  flag?: string;
   icon?: string;
+  onSpeak: (text: string, language: string) => void;
+  onCopy: (text: string) => void;
+  isSpeaking: boolean;
+  onStopSpeaking: () => void;
 }
 
-export const TranslationCard = ({ language, translation, culturalNotes, icon }: TranslationCardProps) => {
-  // Check if icon is an image path or emoji (emoji are single characters, images are URLs)
-  const isImageIcon = typeof icon === 'string' && icon.length > 2;
+export const TranslationCard = ({ 
+  language, 
+  languageCode,
+  translation, 
+  culturalNotes, 
+  icon,
+  flag, 
+  onSpeak,
+  onCopy,
+  isSpeaking,
+  onStopSpeaking
+}: TranslationCardProps) => {
+  // Use flag if provided, otherwise icon
+  const displayIcon = flag || icon;
+  const isImageIcon = typeof displayIcon === 'string' && displayIcon.length > 2;
 
   const getLanguageColor = (lang: string) => {
     const colors: Record<string, string> = {
@@ -42,30 +62,58 @@ export const TranslationCard = ({ language, translation, culturalNotes, icon }: 
 
   return (
     <Card className={cn(
-      "p-6 backdrop-blur-sm border-border/50 shadow-moroccan transition-all duration-300 hover:shadow-lg hover:scale-[1.02]",
+      "p-5 sm:p-6 backdrop-blur-sm border-border/50 shadow-moroccan transition-all duration-300 hover:shadow-lg active:scale-[0.98] touch-pan-y",
       getCountryTheme(language)
     )}>
       <div className="space-y-4">
-        <div className="flex items-center gap-2">
-          {icon && (
-            isImageIcon ? (
-              <img src={icon} alt={language} className="w-6 h-6 rounded object-cover" />
-            ) : (
-              <span className="text-2xl">{icon}</span>
-            )
-          )}
-          <Label className={cn("text-lg font-semibold", getLanguageColor(language))}>
-            {language}
-          </Label>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 sm:gap-2 flex-1 min-w-0">
+            {displayIcon && (
+              isImageIcon ? (
+                <img src={displayIcon} alt={language} className="w-7 h-7 sm:w-6 sm:h-6 rounded object-cover flex-shrink-0" />
+              ) : (
+                <span className="text-2xl flex-shrink-0">{displayIcon}</span>
+              )
+            )}
+            <Label className={cn("text-base sm:text-lg font-semibold truncate", getLanguageColor(language))}>
+              {language}
+            </Label>
+          </div>
+          
+          {/* Touch-friendly action buttons */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => onCopy(translation)}
+              disabled={!translation}
+              className="h-11 w-11 sm:h-9 sm:w-9 touch-manipulation active:scale-90 transition-transform"
+            >
+              <Copy className="h-5 w-5 sm:h-4 sm:w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => isSpeaking ? onStopSpeaking() : onSpeak(translation, languageCode)}
+              disabled={!translation}
+              className="h-11 w-11 sm:h-9 sm:w-9 touch-manipulation active:scale-90 transition-transform"
+            >
+              {isSpeaking ? (
+                <VolumeX className="h-5 w-5 sm:h-4 sm:w-4 animate-pulse" />
+              ) : (
+                <Volume2 className="h-5 w-5 sm:h-4 sm:w-4" />
+              )}
+            </Button>
+          </div>
         </div>
         
-        <p className="text-foreground/90 text-base leading-relaxed min-h-[3rem]">
+        <p className="text-foreground/90 text-base sm:text-base leading-relaxed min-h-[4rem] select-text">
           {translation || <span className="text-muted-foreground italic">Translation will appear here...</span>}
         </p>
         
         {culturalNotes && (
-          <div className="mt-3 p-3 bg-accent/10 rounded-lg border-l-2 border-accent">
-            <p className="text-sm text-foreground/80 italic">{culturalNotes}</p>
+          <div className="mt-3 p-4 sm:p-3 bg-accent/10 rounded-lg border-l-2 border-accent">
+            <p className="text-sm sm:text-sm text-foreground/80 italic leading-relaxed">{culturalNotes}</p>
           </div>
         )}
       </div>
