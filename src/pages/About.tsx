@@ -1,6 +1,6 @@
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Globe, Mic, Volume2, History } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
@@ -32,7 +32,7 @@ const About = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="mb-6">
           <Link to="/">
             <Button variant="ghost" className="gap-2">
@@ -42,7 +42,7 @@ const About = () => {
           </Link>
         </div>
 
-        <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm">
+        <Card className="mb-8 border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm">
           <div className="p-4 sm:p-6 md:p-8">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-3 sm:mb-4">
               About Tarjama
@@ -54,21 +54,79 @@ const About = () => {
               <p>
                 Spoken by over 30 million people, Darija incorporates influences from Berber (Amazigh), French, Spanish, and Modern Standard Arabic, making it distinct from other Arabic dialects. Our AI-powered translation service preserves these cultural and linguistic subtleties to deliver accurate, context-aware translations.
               </p>
-              <div className="bg-gradient-to-r from-primary/10 to-accent/10 p-3 sm:p-4 rounded-lg border border-primary/20">
-                <h3 className="font-semibold text-foreground mb-2">Key Features:</h3>
-                <ul className="space-y-1.5 text-xs sm:text-sm">
-                  <li>✓ Support for 11+ languages including French, English, Arabic, Spanish, German, Italian, Portuguese, Chinese, Japanese, and Turkish</li>
-                  <li>✓ Cultural intelligence that preserves tone, idioms, and regional dialects</li>
-                  <li>✓ Voice input for spoken Darija translation</li>
-                  <li>✓ Text-to-speech pronunciation in all languages</li>
-                  <li>✓ Offline mode with downloadable language packs</li>
-                  <li>✓ Translation history to save and review past translations</li>
-                  <li>✓ 100% free with no limits</li>
-                </ul>
+            </div>
+          </div>
+        </Card>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+          <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm hover:shadow-hover transition-all duration-300">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex flex-col items-center text-center gap-3">
+                <div className="p-3 rounded-lg bg-primary/10">
+                  <Globe className="w-8 h-8 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">Multi-Language Support</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Support for 11+ languages including French, English, Arabic, Spanish, German, Italian, Portuguese, Chinese, Japanese, and Turkish</p>
+                </div>
               </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm hover:shadow-hover transition-all duration-300">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex flex-col items-center text-center gap-3">
+                <div className="p-3 rounded-lg bg-primary/10">
+                  <Mic className="w-8 h-8 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">Voice Recognition</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Voice input for spoken Darija translation with real-time transcription</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm hover:shadow-hover transition-all duration-300">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex flex-col items-center text-center gap-3">
+                <div className="p-3 rounded-lg bg-primary/10">
+                  <Volume2 className="w-8 h-8 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">Text-to-Speech</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Text-to-speech pronunciation in all supported languages</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm hover:shadow-hover transition-all duration-300">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex flex-col items-center text-center gap-3">
+                <div className="p-3 rounded-lg bg-primary/10">
+                  <History className="w-8 h-8 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">Translation History</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Save and review past translations with offline mode support</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm">
+          <div className="p-4 sm:p-6 md:p-8">
+            <div className="space-y-3 sm:space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed">
               <p>
                 Perfect for Moroccan expatriates staying connected with home, language learners exploring Darija, travelers visiting Morocco, business professionals working with Moroccan partners, and anyone interested in Moroccan culture and language.
               </p>
+              <div className="bg-gradient-to-r from-primary/10 to-accent/10 p-3 sm:p-4 rounded-lg border border-primary/20">
+                <p className="text-foreground font-semibold">
+                  🎉 100% free with no limits
+                </p>
+              </div>
             </div>
           </div>
         </Card>
