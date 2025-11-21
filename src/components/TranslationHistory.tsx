@@ -8,6 +8,7 @@ interface HistoryItem {
   id: string;
   text: string;
   sourceLanguage: string;
+  targetLanguage: string;
   timestamp: number;
   translations: {
     darija: string;
@@ -18,6 +19,12 @@ interface HistoryItem {
     german: string;
     italian: string;
     portuguese: string;
+    chinese: string;
+    japanese: string;
+    turkish: string;
+    russian: string;
+    korean: string;
+    hindi: string;
   };
 }
 
@@ -79,8 +86,17 @@ export const TranslationHistory = ({
               </Button>
               
               <div className="pr-10">
-                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
-                  <span className="font-semibold text-primary px-2 py-1 bg-primary/10 rounded-md">{item.sourceLanguage}</span>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3 flex-wrap">
+                  <div className="flex items-center gap-1.5 font-semibold bg-gradient-to-r from-primary/20 to-primary/10 text-primary px-3 py-1 rounded-lg border border-primary/30">
+                    <span>{item.sourceLanguage}</span>
+                  </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground/50">
+                    <path d="M5 12h14"/>
+                    <path d="m12 5 7 7-7 7"/>
+                  </svg>
+                  <div className="flex items-center gap-1.5 font-semibold bg-gradient-to-r from-accent/20 to-accent/10 text-accent-foreground px-3 py-1 rounded-lg border border-accent/30">
+                    <span>{item.targetLanguage}</span>
+                  </div>
                   <span className="opacity-50">•</span>
                   <span className="font-medium">{format(item.timestamp, 'MMM d, yyyy • h:mm a')}</span>
                 </div>
