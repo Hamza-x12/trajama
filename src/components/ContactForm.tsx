@@ -172,19 +172,31 @@ export const ContactForm = ({ pageSource }: ContactFormProps) => {
             <FormField
               control={form.control}
               name="message"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Message</FormLabel>
-                  <FormControl>
-                    <Textarea 
-                      placeholder="Ask your question or share your feedback..." 
-                      className="min-h-[120px] resize-none"
-                      {...field} 
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const currentLength = field.value?.length || 0;
+                const maxLength = 1000;
+                const remaining = maxLength - currentLength;
+                
+                return (
+                  <FormItem>
+                    <FormLabel>Message</FormLabel>
+                    <FormControl>
+                      <Textarea 
+                        placeholder="Ask your question or share your feedback..." 
+                        className="min-h-[120px] resize-none"
+                        maxLength={maxLength}
+                        {...field} 
+                      />
+                    </FormControl>
+                    <div className="flex items-center justify-between">
+                      <FormMessage />
+                      <p className={`text-xs ${remaining < 100 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                        {remaining} / {maxLength} characters remaining
+                      </p>
+                    </div>
+                  </FormItem>
+                );
+              }}
             />
             <Button 
               type="submit" 
