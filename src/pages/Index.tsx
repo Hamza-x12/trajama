@@ -7,6 +7,7 @@ import { TranslationCard } from "@/components/TranslationCard";
 import { TranslationHistory } from "@/components/TranslationHistory";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsDialog } from "@/components/SettingsDialog";
+import { InstallPrompt } from "@/components/InstallPrompt";
 import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -361,7 +362,9 @@ const Index = () => {
       setIsTranscribing(false);
     }
   };
-  return <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col">
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col">
       {/* Header */}
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft">
         <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-5">
@@ -522,6 +525,9 @@ const Index = () => {
           </div>
         </div>
       </footer>
-    </div>;
+
+      <InstallPrompt />
+    </div>
+  );
 };
 export default Index;

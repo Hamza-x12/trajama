@@ -59,5 +59,21 @@
   },
   "footer": {
     "copyright": "Copyright © 2025 Tarjama. Tous droits réservés."
+  },
+  "offline": {
+    "title": "Langues hors ligne",
+    "description": "Télécharger les langues pour une utilisation hors ligne",
+    "download": "Télécharger",
+    "downloading": "Téléchargement...",
+    "downloaded": "Langue téléchargée avec succès",
+    "downloadFailed": "Échec du téléchargement",
+    "remove": "Supprimer",
+    "removed": "Langue supprimée"
+  },
+  "install": {
+    "title": "Installer Tarjama",
+    "description": "Installez l'application sur votre appareil pour un accès hors ligne",
+    "install": "Installer",
+    "later": "Plus tard"
   }
 }
