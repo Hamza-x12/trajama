@@ -618,11 +618,71 @@ const Index = () => {
 
               {/* Source Language - Slightly Reduced */}
               <div className="flex-[0.85]">
-                <Select value={sourceLanguage} onValueChange={value => {
-                setSourceLanguage(value);
-                setDetectedLanguage(null);
-              }}>
-...
+                <Select
+                  value={sourceLanguage}
+                  onValueChange={value => {
+                    setSourceLanguage(value);
+                    setDetectedLanguage(null);
+                  }}
+                >
+                  <SelectTrigger
+                    className={`w-full h-14 bg-gradient-to-br from-background to-muted/30 border-2 border-border/70 hover:border-accent/50 hover:bg-gradient-to-br hover:from-accent/5 hover:to-primary/5 transition-all duration-300 rounded-2xl shadow-soft hover:shadow-moroccan group ${isSwapping ? 'scale-95 opacity-70' : 'scale-100 opacity-100'}`}
+                  >
+                    <SelectValue>
+                      <div className="flex items-center gap-3">
+                        <div className="relative">
+                          {sourceLanguage === "Detect Language" ? (
+                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center shadow-sm ring-2 ring-border/30">
+                              <Wand2 className="w-5 h-5 text-primary" />
+                            </div>
+                          ) : (
+                            <>
+                              <img
+                                src={languages.find(l => l.name === sourceLanguage)?.icon as string}
+                                alt={sourceLanguage}
+                                className="w-8 h-8 rounded-lg object-cover shadow-sm ring-2 ring-border/30"
+                              />
+                              <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
+                            </>
+                          )}
+                        </div>
+                        <span className="font-semibold text-base">
+                          {t(`languages.${sourceLanguage.toLowerCase().replace(' ', '')}`)}
+                        </span>
+                      </div>
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent className="bg-background/95 backdrop-blur-xl border-2 border-border shadow-2xl z-[100] rounded-xl">
+                    {languages.map(lang => (
+                      <SelectItem
+                        key={lang.name}
+                        value={lang.name}
+                        className="cursor-pointer hover:bg-accent/10 focus:bg-accent/10 rounded-lg my-1 transition-all duration-200 hover:scale-[1.02]"
+                      >
+                        <div className="flex items-center gap-3 py-1">
+                          <div className="relative">
+                            {lang.name === "Detect Language" ? (
+                              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center shadow-sm ring-2 ring-border/20">
+                                <Wand2 className="w-4 h-4 text-primary" />
+                              </div>
+                            ) : (
+                              <>
+                                <img
+                                  src={lang.icon as string}
+                                  alt={lang.name}
+                                  className="w-7 h-7 rounded-lg object-cover shadow-sm ring-2 ring-border/20"
+                                />
+                                <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
+                              </>
+                            )}
+                          </div>
+                          <span className="font-medium">
+                            {t(`languages.${lang.name.toLowerCase().replace(' ', '')}`)}
+                          </span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
                 </Select>
               </div>
 
