@@ -91,6 +91,7 @@ const Index = () => {
   const [speakingLanguage, setSpeakingLanguage] = useState<string | null>(null);
   const [selectedVoice, setSelectedVoice] = useState<string>("");
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [isSwapping, setIsSwapping] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
@@ -264,9 +265,13 @@ const Index = () => {
       toast.error("Cannot swap with detect language");
       return;
     }
-    const temp = sourceLanguage;
-    setSourceLanguage(targetLanguage);
-    setTargetLanguage(temp);
+    setIsSwapping(true);
+    setTimeout(() => {
+      const temp = sourceLanguage;
+      setSourceLanguage(targetLanguage);
+      setTargetLanguage(temp);
+      setTimeout(() => setIsSwapping(false), 300);
+    }, 150);
   };
   const handleClearHistory = () => {
     setHistory([]);
@@ -498,7 +503,7 @@ const Index = () => {
             <div className="flex items-center gap-3">
               {/* Source Language */}
               <Select value={sourceLanguage} onValueChange={setSourceLanguage}>
-                <SelectTrigger className="flex-1 h-12 bg-background border-border hover:bg-accent/5 transition-colors rounded-xl">
+                <SelectTrigger className={`flex-1 h-12 bg-background border-border hover:bg-accent/5 transition-all duration-300 rounded-xl ${isSwapping ? 'scale-95 opacity-70' : 'scale-100 opacity-100'}`}>
                   <SelectValue>
                     <div className="flex items-center gap-3">
                       {sourceLanguage === "Detect Language" ? (
@@ -539,11 +544,11 @@ const Index = () => {
                 variant="ghost"
                 size="sm"
                 onClick={handleSwapLanguages}
-                disabled={sourceLanguage === "Detect Language"}
-                className="h-10 w-10 p-0 rounded-full hover:bg-primary/10 transition-all duration-300"
+                disabled={sourceLanguage === "Detect Language" || isSwapping}
+                className={`h-10 w-10 p-0 rounded-full hover:bg-primary/10 transition-all duration-300 ${isSwapping ? 'animate-spin' : ''}`}
                 aria-label="Swap languages"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300">
                   <path d="M7 16V4M7 4L3 8M7 4L11 8" />
                   <path d="M17 8V20M17 20L21 16M17 20L13 16" />
                 </svg>
@@ -551,7 +556,7 @@ const Index = () => {
               
               {/* Target Language */}
               <Select value={targetLanguage} onValueChange={setTargetLanguage}>
-                <SelectTrigger className="flex-1 h-12 bg-background border-border hover:bg-accent/5 transition-colors rounded-xl">
+                <SelectTrigger className={`flex-1 h-12 bg-background border-border hover:bg-accent/5 transition-all duration-300 rounded-xl ${isSwapping ? 'scale-95 opacity-70' : 'scale-100 opacity-100'}`}>
                   <SelectValue>
                     <div className="flex items-center gap-3">
                       <img 
