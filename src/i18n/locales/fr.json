@@ -24,7 +24,9 @@
     "didYouMean": "Vouliez-vous dire:",
     "suggestionApplied": "Suggestion appliquée",
     "clear": "Effacer",
-    "cleared": "Effacé"
+    "cleared": "Effacé",
+    "undo": "Annuler",
+    "undone": "Restauré"
   },
   "languages": {
     "detectlanguage": "Détecter la langue",
