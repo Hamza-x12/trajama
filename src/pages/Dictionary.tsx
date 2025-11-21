@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
-import { Search, ArrowLeft } from "lucide-react";
+import { Search, ArrowLeft, MessageCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
@@ -48,7 +48,7 @@ const Dictionary = () => {
   }, []);
 
   const dictionaryEntries = [
-    // Greetings & Politeness - Enhanced entries with full details
+    // Pronouns - Complete Set with Full Details
     { 
       darija: "ana", 
       french: "Je/Moi", 
@@ -56,7 +56,7 @@ const Dictionary = () => {
       category: "Pronouns",
       type: "pronoun",
       pronunciation: "ah-nah",
-      definition: "First person singular pronoun used to refer to oneself. Also means 'I' as in 'ana (I)'",
+      definition: "First person singular pronoun used to refer to oneself. Most basic and essential pronoun in Darija.",
       examples: [
         {
           darija: "ana mshit l lmadrasa",
@@ -69,9 +69,799 @@ const Dictionary = () => {
           arabic: "أنا بحال هاكا",
           french: "Je suis comme ça",
           english: "I am like this"
+        },
+        {
+          darija: "ana kankhdem f restaurant",
+          arabic: "أنا كنخدم في رستورونت",
+          french: "Je travaille dans un restaurant",
+          english: "I work in a restaurant"
         }
       ],
-      relatedWords: ["nta (you-m)", "nti (you-f)", "howa (he)", "hiya (she)", "7na (we)"]
+      relatedWords: ["nta", "nti", "howa", "hiya", "7na", "ntuma", "huma"]
+    },
+    { 
+      darija: "nta", 
+      french: "Tu/Toi (masculin)", 
+      english: "You (masculine)", 
+      category: "Pronouns",
+      type: "pronoun",
+      pronunciation: "n-tah",
+      definition: "Second person singular masculine pronoun. Used when addressing a male.",
+      examples: [
+        {
+          darija: "nta fine ghadi?",
+          arabic: "نتا فين غادي؟",
+          french: "Où vas-tu?",
+          english: "Where are you going?"
+        },
+        {
+          darija: "nta khddam bzaf",
+          arabic: "نتا خدام بزاف",
+          french: "Tu travailles beaucoup",
+          english: "You work a lot"
+        },
+        {
+          darija: "wash nta jiti lbareh?",
+          arabic: "واش نتا جيتي لبارح؟",
+          french: "Es-tu venu hier?",
+          english: "Did you come yesterday?"
+        }
+      ],
+      relatedWords: ["ana", "nti", "ntuma", "howa"]
+    },
+    { 
+      darija: "nti", 
+      french: "Tu/Toi (féminin)", 
+      english: "You (feminine)", 
+      category: "Pronouns",
+      type: "pronoun",
+      pronunciation: "n-tee",
+      definition: "Second person singular feminine pronoun. Used when addressing a female.",
+      examples: [
+        {
+          darija: "nti fine katkhdem?",
+          arabic: "نتي فين كتخدمي؟",
+          french: "Où travailles-tu?",
+          english: "Where do you work?"
+        },
+        {
+          darija: "nti zwina bzaf",
+          arabic: "نتي زوينة بزاف",
+          french: "Tu es très belle",
+          english: "You are very beautiful"
+        },
+        {
+          darija: "ash katbghi nti?",
+          arabic: "أش كتبغي نتي؟",
+          french: "Qu'est-ce que tu veux?",
+          english: "What do you want?"
+        }
+      ],
+      relatedWords: ["ana", "nta", "ntuma", "hiya"]
+    },
+    { 
+      darija: "howa", 
+      french: "Il/Lui", 
+      english: "He/Him", 
+      category: "Pronouns",
+      type: "pronoun",
+      pronunciation: "hoo-wah",
+      definition: "Third person singular masculine pronoun. Used to refer to a male person or masculine object.",
+      examples: [
+        {
+          darija: "howa msha l lkhdma",
+          arabic: "هو مشا للخدمة",
+          french: "Il est allé au travail",
+          english: "He went to work"
+        },
+        {
+          darija: "howa ma jash",
+          arabic: "هو ما جاش",
+          french: "Il n'est pas venu",
+          english: "He didn't come"
+        },
+        {
+          darija: "howa khddam f bank",
+          arabic: "هو خدام في البانك",
+          french: "Il travaille dans une banque",
+          english: "He works in a bank"
+        }
+      ],
+      relatedWords: ["hiya", "huma", "nta", "ana"]
+    },
+    { 
+      darija: "hiya", 
+      french: "Elle", 
+      english: "She/Her", 
+      category: "Pronouns",
+      type: "pronoun",
+      pronunciation: "hee-yah",
+      definition: "Third person singular feminine pronoun. Used to refer to a female person or feminine object.",
+      examples: [
+        {
+          darija: "hiya ghalsa f dar",
+          arabic: "هي جالسة في الدار",
+          french: "Elle est assise à la maison",
+          english: "She is sitting at home"
+        },
+        {
+          darija: "hiya katsayeb daba",
+          arabic: "هي كتسايب دابا",
+          french: "Elle cuisine maintenant",
+          english: "She is cooking now"
+        },
+        {
+          darija: "hiya bent zwina",
+          arabic: "هي بنت زوينة",
+          french: "C'est une belle fille",
+          english: "She is a beautiful girl"
+        }
+      ],
+      relatedWords: ["howa", "huma", "nti", "ana"]
+    },
+    { 
+      darija: "7na", 
+      french: "Nous", 
+      english: "We/Us", 
+      category: "Pronouns",
+      type: "pronoun",
+      pronunciation: "h-nah",
+      definition: "First person plural pronoun. Used to refer to a group including the speaker.",
+      examples: [
+        {
+          darija: "7na ghadin l cinema",
+          arabic: "حنا غاديين للسينما",
+          french: "Nous allons au cinéma",
+          english: "We are going to the cinema"
+        },
+        {
+          darija: "7na kankoulou lhaqq",
+          arabic: "حنا كنقولو الحق",
+          french: "Nous disons la vérité",
+          english: "We tell the truth"
+        },
+        {
+          darija: "7na marokanyin",
+          arabic: "حنا مروكانيين",
+          french: "Nous sommes marocains",
+          english: "We are Moroccans"
+        }
+      ],
+      relatedWords: ["ana", "ntuma", "huma"]
+    },
+    { 
+      darija: "ntuma", 
+      french: "Vous", 
+      english: "You (plural)", 
+      category: "Pronouns",
+      type: "pronoun",
+      pronunciation: "n-too-mah",
+      definition: "Second person plural pronoun. Used when addressing multiple people.",
+      examples: [
+        {
+          darija: "ntuma fine katseknou?",
+          arabic: "نتوما فين كتسكنو؟",
+          french: "Où habitez-vous?",
+          english: "Where do you live?"
+        },
+        {
+          darija: "ntuma jaya m3ana?",
+          arabic: "نتوما جايا معانا؟",
+          french: "Venez-vous avec nous?",
+          english: "Are you coming with us?"
+        },
+        {
+          darija: "wash ntuma fhemtou?",
+          arabic: "واش نتوما فهمتو؟",
+          french: "Avez-vous compris?",
+          english: "Did you understand?"
+        }
+      ],
+      relatedWords: ["nta", "nti", "7na", "huma"]
+    },
+    { 
+      darija: "huma", 
+      french: "Ils/Elles", 
+      english: "They/Them", 
+      category: "Pronouns",
+      type: "pronoun",
+      pronunciation: "hoo-mah",
+      definition: "Third person plural pronoun. Used to refer to multiple people or things.",
+      examples: [
+        {
+          darija: "huma mshaw l souq",
+          arabic: "هوما مشاو للسوق",
+          french: "Ils sont allés au marché",
+          english: "They went to the market"
+        },
+        {
+          darija: "huma drari mzyanin",
+          arabic: "هوما دراري مزيانين",
+          french: "Ce sont de bons enfants",
+          english: "They are good children"
+        },
+        {
+          darija: "huma ma kayjiwsh lyoum",
+          arabic: "هوما ما كيجيوش اليوم",
+          french: "Ils ne viennent pas aujourd'hui",
+          english: "They are not coming today"
+        }
+      ],
+      relatedWords: ["howa", "hiya", "ntuma", "7na"]
+    },
+
+    // Common Verbs - Comprehensive with Full Conjugation Examples
+    { 
+      darija: "msha", 
+      french: "Aller", 
+      english: "To go", 
+      category: "Verbs",
+      type: "verb",
+      pronunciation: "m-shah",
+      definition: "To go, to walk, to leave. One of the most frequently used verbs in Darija for movement.",
+      examples: [
+        {
+          darija: "ana mshit l souq",
+          arabic: "أنا مشيت للسوق",
+          french: "Je suis allé au marché",
+          english: "I went to the market"
+        },
+        {
+          darija: "howa ghadi ymshi ghedda",
+          arabic: "هو غادي يمشي غدا",
+          french: "Il va partir demain",
+          english: "He will go tomorrow"
+        },
+        {
+          darija: "sir mshi!",
+          arabic: "سير مشي!",
+          french: "Va-t'en!",
+          english: "Go away!"
+        }
+      ],
+      relatedWords: ["ja", "tla3", "nzel", "rje3"]
+    },
+    { 
+      darija: "ja", 
+      french: "Venir", 
+      english: "To come", 
+      category: "Verbs",
+      type: "verb",
+      pronunciation: "jah",
+      definition: "To come, to arrive. Essential verb for indicating movement towards the speaker.",
+      examples: [
+        {
+          darija: "aji hna!",
+          arabic: "أجي هنا!",
+          french: "Viens ici!",
+          english: "Come here!"
+        },
+        {
+          darija: "ghadi nji m3ak",
+          arabic: "غادي نجي معاك",
+          french: "Je viendrai avec toi",
+          english: "I will come with you"
+        },
+        {
+          darija: "hiya jat lbareh",
+          arabic: "هي جات لبارح",
+          french: "Elle est venue hier",
+          english: "She came yesterday"
+        }
+      ],
+      relatedWords: ["msha", "wsel", "dkhal"]
+    },
+    { 
+      darija: "kla", 
+      french: "Manger", 
+      english: "To eat", 
+      category: "Verbs",
+      type: "verb",
+      pronunciation: "klah",
+      definition: "To eat, to consume food. Essential daily activity verb.",
+      examples: [
+        {
+          darija: "bghit nakol couscous",
+          arabic: "بغيت ناكل الكسكس",
+          french: "Je veux manger du couscous",
+          english: "I want to eat couscous"
+        },
+        {
+          darija: "klit mezyan lyoum",
+          arabic: "كليت مزيان اليوم",
+          french: "J'ai bien mangé aujourd'hui",
+          english: "I ate well today"
+        },
+        {
+          darija: "huma kaykulou daba",
+          arabic: "هوما كيكلو دابا",
+          french: "Ils mangent maintenant",
+          english: "They are eating now"
+        }
+      ],
+      relatedWords: ["shreb", "tayeb", "t3asha"]
+    },
+    { 
+      darija: "shreb", 
+      french: "Boire", 
+      english: "To drink", 
+      category: "Verbs",
+      type: "verb",
+      pronunciation: "shreb",
+      definition: "To drink, to consume liquids. Basic necessity verb used daily.",
+      examples: [
+        {
+          darija: "shreb atay m3aya",
+          arabic: "شرب الأتاي معايا",
+          french: "Bois du thé avec moi",
+          english: "Drink tea with me"
+        },
+        {
+          darija: "kanshreb lma bzaf",
+          arabic: "كنشرب الماء بزاف",
+          french: "Je bois beaucoup d'eau",
+          english: "I drink a lot of water"
+        },
+        {
+          darija: "ma shrebsh qahwa",
+          arabic: "ما شربش قهوة",
+          french: "Il n'a pas bu de café",
+          english: "He didn't drink coffee"
+        }
+      ],
+      relatedWords: ["kla", "sker", "t3asha"]
+    },
+    { 
+      darija: "khdem", 
+      french: "Travailler", 
+      english: "To work", 
+      category: "Verbs",
+      type: "verb",
+      pronunciation: "khdem",
+      definition: "To work, to be employed, to do a job. Fundamental verb for professional life.",
+      examples: [
+        {
+          darija: "kankhdem f sherka",
+          arabic: "كنخدم في شركة",
+          french: "Je travaille dans une entreprise",
+          english: "I work in a company"
+        },
+        {
+          darija: "howa khddem bzaf",
+          arabic: "هو خدم بزاف",
+          french: "Il a beaucoup travaillé",
+          english: "He worked a lot"
+        },
+        {
+          darija: "fine katkhdem?",
+          arabic: "فين كتخدم؟",
+          french: "Où travailles-tu?",
+          english: "Where do you work?"
+        }
+      ],
+      relatedWords: ["dar", "qra", "sebbet"]
+    },
+    { 
+      darija: "qra", 
+      french: "Lire/Étudier", 
+      english: "To read/study", 
+      category: "Verbs",
+      type: "verb",
+      pronunciation: "qrah",
+      definition: "To read or to study. Common verb for both reading text and academic study.",
+      examples: [
+        {
+          darija: "kanqra l3arbiya",
+          arabic: "كنقرا العربية",
+          french: "J'étudie l'arabe",
+          english: "I study Arabic"
+        },
+        {
+          darija: "qra had lktab",
+          arabic: "قرا هاد الكتاب",
+          french: "Lis ce livre",
+          english: "Read this book"
+        },
+        {
+          darija: "hiya qrat f jam3a",
+          arabic: "هي قرات في جامعة",
+          french: "Elle a étudié à l'université",
+          english: "She studied at university"
+        }
+      ],
+      relatedWords: ["khdem", "kteb", "fhem", "3ref"]
+    },
+    { 
+      darija: "kteb", 
+      french: "Écrire", 
+      english: "To write", 
+      category: "Verbs",
+      type: "verb",
+      pronunciation: "kteb",
+      definition: "To write, to compose text. Essential communication verb.",
+      examples: [
+        {
+          darija: "kteb liya risala",
+          arabic: "كتب ليا رسالة",
+          french: "Écris-moi une lettre",
+          english: "Write me a letter"
+        },
+        {
+          darija: "kankteb b darija",
+          arabic: "كنكتب بالداريجة",
+          french: "J'écris en darija",
+          english: "I write in Darija"
+        },
+        {
+          darija: "ktebti lwajibet?",
+          arabic: "كتبتي الواجبات؟",
+          french: "As-tu écrit les devoirs?",
+          english: "Did you write the homework?"
+        }
+      ],
+      relatedWords: ["qra", "hdar", "fhem"]
+    },
+    { 
+      darija: "hdar", 
+      french: "Parler", 
+      english: "To speak", 
+      category: "Verbs",
+      type: "verb",
+      pronunciation: "hdar",
+      definition: "To speak, to talk, to communicate verbally. Core communication verb.",
+      examples: [
+        {
+          darija: "kayhder darija?",
+          arabic: "كيهدر الداريجة؟",
+          french: "Parle-t-il darija?",
+          english: "Does he speak Darija?"
+        },
+        {
+          darija: "hder b chwiya",
+          arabic: "هدر بشوية",
+          french: "Parle doucement",
+          english: "Speak quietly"
+        },
+        {
+          darija: "ma kanhedresh bezaf",
+          arabic: "ما كنهدرش بزاف",
+          french: "Je ne parle pas beaucoup",
+          english: "I don't speak much"
+        }
+      ],
+      relatedWords: ["sma3", "fhem", "qal", "gal"]
+    },
+    { 
+      darija: "sma3", 
+      french: "Écouter/Entendre", 
+      english: "To listen/hear", 
+      category: "Verbs",
+      type: "verb",
+      pronunciation: "sma",
+      definition: "To listen, to hear sounds or speech. Important perception verb.",
+      examples: [
+        {
+          darija: "sma3ni mezyan",
+          arabic: "سماعني مزيان",
+          french: "Écoute-moi bien",
+          english: "Listen to me well"
+        },
+        {
+          darija: "sma3t chi haja?",
+          arabic: "سماعت شي حاجة؟",
+          french: "As-tu entendu quelque chose?",
+          english: "Did you hear something?"
+        },
+        {
+          darija: "kansma3 music",
+          arabic: "كنسماع الموسيقى",
+          french: "J'écoute de la musique",
+          english: "I listen to music"
+        }
+      ],
+      relatedWords: ["hdar", "shaf", "fhem"]
+    },
+    { 
+      darija: "shaf", 
+      french: "Voir", 
+      english: "To see", 
+      category: "Verbs",
+      type: "verb",
+      pronunciation: "shahf",
+      definition: "To see, to look at, to watch. Essential perception verb.",
+      examples: [
+        {
+          darija: "sheft lfilm lbareh",
+          arabic: "شفت الفيلم لبارح",
+          french: "J'ai vu le film hier",
+          english: "I saw the movie yesterday"
+        },
+        {
+          darija: "shof hadshi!",
+          arabic: "شوف هادشي!",
+          french: "Regarde ça!",
+          english: "Look at this!"
+        },
+        {
+          darija: "ma sheftksh",
+          arabic: "ما شفتكش",
+          french: "Je ne t'ai pas vu",
+          english: "I didn't see you"
+        }
+      ],
+      relatedWords: ["sma3", "fhem", "3ref"]
+    },
+    { 
+      darija: "dar", 
+      french: "Faire", 
+      english: "To do/make", 
+      category: "Verbs",
+      type: "verb",
+      pronunciation: "dar",
+      definition: "To do, to make, to perform an action. Very versatile and commonly used verb.",
+      examples: [
+        {
+          darija: "ash kadir?",
+          arabic: "أش كدير؟",
+          french: "Que fais-tu?",
+          english: "What are you doing?"
+        },
+        {
+          darija: "dert lkhedma dyali",
+          arabic: "درت الخدمة ديالي",
+          french: "J'ai fait mon travail",
+          english: "I did my work"
+        },
+        {
+          darija: "dir lkhir",
+          arabic: "دير الخير",
+          french: "Fais le bien",
+          english: "Do good"
+        }
+      ],
+      relatedWords: ["khdem", "3mel", "sna3"]
+    },
+
+    // Common Nouns - Complete with Details
+    { 
+      darija: "dar", 
+      french: "Maison", 
+      english: "House/Home", 
+      category: "Nouns",
+      type: "noun",
+      pronunciation: "dar",
+      definition: "A house, home, or dwelling place. Most basic living space noun.",
+      examples: [
+        {
+          darija: "dari kbira",
+          arabic: "داري كبيرة",
+          french: "Ma maison est grande",
+          english: "My house is big"
+        },
+        {
+          darija: "ghadi l dar",
+          arabic: "غادي للدار",
+          french: "Je rentre à la maison",
+          english: "I'm going home"
+        },
+        {
+          darija: "f dar dyalna",
+          arabic: "في دار ديالنا",
+          french: "Dans notre maison",
+          english: "In our house"
+        }
+      ],
+      relatedWords: ["bit", "manzil", "skina"]
+    },
+    { 
+      darija: "weld", 
+      french: "Fils/Garçon", 
+      english: "Son/Boy", 
+      category: "Nouns",
+      type: "noun",
+      pronunciation: "weld",
+      definition: "A boy, son, or male child. Common family and social noun.",
+      examples: [
+        {
+          darija: "weldi sghir",
+          arabic: "ولدي صغير",
+          french: "Mon fils est petit",
+          english: "My son is small"
+        },
+        {
+          darija: "weld nas",
+          arabic: "ولد الناس",
+          french: "Fils de bonne famille",
+          english: "Well-bred boy"
+        },
+        {
+          darija: "had lweld zwinn",
+          arabic: "هاد الولد زوين",
+          french: "Ce garçon est beau",
+          english: "This boy is handsome"
+        }
+      ],
+      relatedWords: ["bent", "drari", "khouya"]
+    },
+    { 
+      darija: "bent", 
+      french: "Fille", 
+      english: "Daughter/Girl", 
+      category: "Nouns",
+      type: "noun",
+      pronunciation: "bent",
+      definition: "A girl, daughter, or female child. Essential family noun.",
+      examples: [
+        {
+          darija: "benti zwina",
+          arabic: "بنتي زوينة",
+          french: "Ma fille est belle",
+          english: "My daughter is beautiful"
+        },
+        {
+          darija: "bent khali",
+          arabic: "بنت خالي",
+          french: "Ma cousine (côté maternel)",
+          english: "My cousin (maternal)"
+        },
+        {
+          darija: "bent mzyana",
+          arabic: "بنت مزيانة",
+          french: "Une bonne fille",
+          english: "A good girl"
+        }
+      ],
+      relatedWords: ["weld", "drari", "khti"]
+    },
+    { 
+      darija: "tomobil", 
+      french: "Voiture", 
+      english: "Car", 
+      category: "Nouns",
+      type: "noun",
+      pronunciation: "to-mo-beel",
+      definition: "An automobile, car, vehicle. Modern transportation noun.",
+      examples: [
+        {
+          darija: "tomobili jdida",
+          arabic: "طوموبيلي جديدة",
+          french: "Ma voiture est neuve",
+          english: "My car is new"
+        },
+        {
+          darija: "shrit tomobil",
+          arabic: "شريت طوموبيل",
+          french: "J'ai acheté une voiture",
+          english: "I bought a car"
+        },
+        {
+          darija: "tomobil ghalia",
+          arabic: "طوموبيل غالية",
+          french: "Voiture chère",
+          english: "Expensive car"
+        }
+      ],
+      relatedWords: ["taxi", "tobis", "karossa"]
+    },
+    { 
+      darija: "flous", 
+      french: "Argent", 
+      english: "Money", 
+      category: "Nouns",
+      type: "noun",
+      pronunciation: "floo-ss",
+      definition: "Money, currency, cash. Essential financial noun.",
+      examples: [
+        {
+          darija: "ma3ndish flous",
+          arabic: "ماعنديش الفلوس",
+          french: "Je n'ai pas d'argent",
+          english: "I don't have money"
+        },
+        {
+          darija: "flous bzaf",
+          arabic: "فلوس بزاف",
+          french: "Beaucoup d'argent",
+          english: "A lot of money"
+        },
+        {
+          darija: "3tini flous",
+          arabic: "عطيني الفلوس",
+          french: "Donne-moi l'argent",
+          english: "Give me the money"
+        }
+      ],
+      relatedWords: ["derham", "euro", "dollar"]
+    },
+    { 
+      darija: "khdma", 
+      french: "Travail", 
+      english: "Work/Job", 
+      category: "Nouns",
+      type: "noun",
+      pronunciation: "khd-mah",
+      definition: "Work, job, employment, task. Professional life noun.",
+      examples: [
+        {
+          darija: "khdma mzyana",
+          arabic: "خدمة مزيانة",
+          french: "Un bon travail",
+          english: "A good job"
+        },
+        {
+          darija: "f lkhdma",
+          arabic: "في الخدمة",
+          french: "Au travail",
+          english: "At work"
+        },
+        {
+          darija: "qleb 3la khdma",
+          arabic: "قلب على خدمة",
+          french: "Chercher du travail",
+          english: "Looking for work"
+        }
+      ],
+      relatedWords: ["khaddem", "sherka", "makteb"]
+    },
+    { 
+      darija: "ktab", 
+      french: "Livre", 
+      english: "Book", 
+      category: "Nouns",
+      type: "noun",
+      pronunciation: "k-tab",
+      definition: "A book, written work. Educational and cultural noun.",
+      examples: [
+        {
+          darija: "qra had lktab",
+          arabic: "قرا هاد الكتاب",
+          french: "Lis ce livre",
+          english: "Read this book"
+        },
+        {
+          darija: "ktab mzyan",
+          arabic: "كتاب مزيان",
+          french: "Un bon livre",
+          english: "A good book"
+        },
+        {
+          darija: "ktabi f bit",
+          arabic: "كتابي في البيت",
+          french: "Mon livre est à la maison",
+          english: "My book is at home"
+        }
+      ],
+      relatedWords: ["jrida", "majalla", "daftar"]
+    },
+    { 
+      darija: "telephone", 
+      french: "Téléphone", 
+      english: "Phone", 
+      category: "Nouns",
+      type: "noun",
+      pronunciation: "te-le-fon",
+      definition: "Telephone, mobile phone. Essential modern communication device.",
+      examples: [
+        {
+          darija: "fine telephone dyalk?",
+          arabic: "فين تيليفون ديالك؟",
+          french: "Où est ton téléphone?",
+          english: "Where is your phone?"
+        },
+        {
+          darija: "telephone jdid",
+          arabic: "تيليفون جديد",
+          french: "Nouveau téléphone",
+          english: "New phone"
+        },
+        {
+          darija: "swel b telephone",
+          arabic: "صول بالتيليفون",
+          french: "Appelle par téléphone",
+          english: "Call by phone"
+        }
+      ],
+      relatedWords: ["portable", "simana", "risala"]
     },
     { 
       darija: "salam", 
@@ -486,11 +1276,17 @@ const Dictionary = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8 max-w-6xl">
-        <div className="mb-6">
+        <div className="flex items-center gap-3 mb-8">
           <Link to="/">
-            <Button variant="ghost" className="gap-2">
-              <ArrowLeft className="w-4 h-4" />
+            <Button variant="default" size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-all">
+              <ArrowLeft className="w-5 h-5" />
               {t('navigation.backToTranslator')}
+            </Button>
+          </Link>
+          <Link to="/faq">
+            <Button variant="outline" size="lg" className="gap-2 shadow-md hover:shadow-lg transition-all">
+              <MessageCircle className="w-5 h-5" />
+              FAQ
             </Button>
           </Link>
         </div>
