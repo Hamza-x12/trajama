@@ -534,9 +534,8 @@ const Index = () => {
                 </div>}
 
               {/* Detect Language Button */}
-              {sourceLanguage !== "Detect Language" && <Button variant="outline" size="sm" onClick={() => setSourceLanguage("Detect Language")} className="h-12 px-4 bg-gradient-to-br from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-2 border-primary/30 hover:border-primary/50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-moroccan font-medium gap-2">
-                  <Wand2 className="h-4 w-4" />
-                  {t('languages.detectlanguage')}
+              {sourceLanguage !== "Detect Language" && <Button variant="outline" size="sm" onClick={() => setSourceLanguage("Detect Language")} className="h-12 w-12 p-0 bg-gradient-to-br from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-2 border-primary/30 hover:border-primary/50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-moroccan" aria-label={t('languages.detectlanguage')}>
+                  <Wand2 className="h-5 w-5" />
                 </Button>}
               
               {/* Swap Button */}
