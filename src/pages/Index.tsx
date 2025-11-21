@@ -492,11 +492,15 @@ const Index = () => {
                     <SelectTrigger className="flex-1 h-11 bg-background border-border hover:bg-accent/5 transition-colors">
                       <SelectValue>
                         <div className="flex items-center gap-2">
-                          <img 
-                            src={languages.find(l => l.name === sourceLanguage)?.icon as string} 
-                            alt={sourceLanguage} 
-                            className="w-5 h-5 rounded object-cover" 
-                          />
+                          {sourceLanguage === "Detect Language" ? (
+                            <Wand2 className="w-4 h-4" />
+                          ) : (
+                            <img 
+                              src={languages.find(l => l.name === sourceLanguage)?.icon as string} 
+                              alt={sourceLanguage} 
+                              className="w-5 h-5 rounded object-cover" 
+                            />
+                          )}
                           <span className="font-medium">{t(`languages.${sourceLanguage.toLowerCase().replace(' ', '')}`)}</span>
                         </div>
                       </SelectValue>
