@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { useTranslation } from "react-i18next";
 import { useOfflineLanguages } from "@/hooks/useOfflineLanguages";
 import { useState } from "react";
@@ -23,12 +24,27 @@ interface SettingsDialogProps {
   selectedVoice: string;
   setSelectedVoice: (voice: string) => void;
   availableVoices: SpeechSynthesisVoice[];
+  autoVoiceSelect?: boolean;
+  setAutoVoiceSelect?: (auto: boolean) => void;
 }
 
-export function SettingsDialog({ selectedVoice, setSelectedVoice, availableVoices }: SettingsDialogProps) {
+export function SettingsDialog({ 
+  selectedVoice, 
+  setSelectedVoice, 
+  availableVoices,
+  autoVoiceSelect = true,
+  setAutoVoiceSelect 
+}: SettingsDialogProps) {
   const { t, i18n } = useTranslation();
   const { offlineLanguages, downloadLanguage, removeLanguage } = useOfflineLanguages();
   const [downloading, setDownloading] = useState<string | null>(null);
+
+  const handleAutoVoiceToggle = (checked: boolean) => {
+    if (setAutoVoiceSelect) {
+      setAutoVoiceSelect(checked);
+      localStorage.setItem('autoVoiceSelect', checked.toString());
+    }
+  };
 
   const languages = [
     { code: 'en', name: 'English', flag: ukFlag },
@@ -96,13 +112,31 @@ export function SettingsDialog({ selectedVoice, setSelectedVoice, availableVoice
 
           {/* Voice Selection */}
           {availableVoices.length > 0 && (
-            <div className="space-y-2">
-              <Label htmlFor="voice">{t('settings.voice')}</Label>
-              <Select value={selectedVoice} onValueChange={setSelectedVoice}>
-                <SelectTrigger id="voice">
-                  <SelectValue placeholder={t('settings.selectVoice')} />
-                </SelectTrigger>
-                <SelectContent className="max-h-[300px]">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="autoVoice">{t('settings.autoVoiceSelect')}</Label>
+                <Switch
+                  id="autoVoice"
+                  checked={autoVoiceSelect}
+                  onCheckedChange={handleAutoVoiceToggle}
+                  disabled={!setAutoVoiceSelect}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {t('settings.autoVoiceDescription')}
+              </p>
+              
+              <div className="space-y-2">
+                <Label htmlFor="voice">{t('settings.voice')}</Label>
+                <Select 
+                  value={selectedVoice} 
+                  onValueChange={setSelectedVoice}
+                  disabled={autoVoiceSelect}
+                >
+                  <SelectTrigger id="voice">
+                    <SelectValue placeholder={t('settings.selectVoice')} />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-[300px]">
                   {availableVoices.map((voice) => (
                     <SelectItem key={voice.name} value={voice.name}>
                       {voice.name.split(' ').slice(0, 2).join(' ')} ({voice.lang})
@@ -110,6 +144,7 @@ export function SettingsDialog({ selectedVoice, setSelectedVoice, availableVoice
                   ))}
                 </SelectContent>
               </Select>
+            </div>
             </div>
           )}
 

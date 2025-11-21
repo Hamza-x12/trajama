@@ -7,7 +7,9 @@
     "title": "Paramètres",
     "language": "Langue",
     "voice": "Sélection de la voix",
-    "selectVoice": "Sélectionner la voix"
+    "selectVoice": "Sélectionner la voix",
+    "autoVoiceSelect": "Sélection automatique de la voix",
+    "autoVoiceDescription": "Sélectionner automatiquement la voix selon la langue cible"
   },
   "translation": {
     "placeholder": "Entrez le texte à traduire...",

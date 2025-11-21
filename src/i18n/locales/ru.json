@@ -7,7 +7,9 @@
     "title": "Настройки",
     "language": "Язык",
     "voice": "Выбор голоса",
-    "selectVoice": "Выберите голос"
+    "selectVoice": "Выберите голос",
+    "autoVoiceSelect": "Автоматический выбор голоса",
+    "autoVoiceDescription": "Автоматически выбирать голос в зависимости от целевого языка"
   },
   "translation": {
     "placeholder": "Введите текст для перевода...",
