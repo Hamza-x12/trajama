@@ -10,11 +10,12 @@ import { SettingsDialog } from "@/components/SettingsDialog";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineScreen } from "@/components/OfflineScreen";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
-import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle } from "lucide-react";
+import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "react-router-dom";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import moroccoFlag from "@/assets/flags/morocco.png";
@@ -468,6 +469,7 @@ const Index = () => {
               </div>
             </div>
             
+            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-3">
               <Link to="/dictionary">
                 <Button 
@@ -504,6 +506,70 @@ const Index = () => {
                 </Button>
               </Link>
             </div>
+
+            {/* Mobile Navigation Menu */}
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  className="md:hidden rounded-xl border-2 border-border/50 bg-background/50 backdrop-blur-sm shadow-soft hover:shadow-moroccan hover:border-primary/50 transition-all duration-300"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[280px] sm:w-[320px]">
+                <SheetHeader>
+                  <SheetTitle className="text-xl font-bold bg-gradient-to-r from-moroccan-red via-moroccan-gold to-moroccan-green bg-clip-text text-transparent">
+                    {t('navigation.menu')}
+                  </SheetTitle>
+                </SheetHeader>
+                <nav className="flex flex-col gap-4 mt-8">
+                  <Link to="/dictionary" className="w-full">
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start gap-3 px-4 py-6 rounded-xl border-2 border-border/50 bg-background/50 backdrop-blur-sm hover:bg-primary/5 hover:border-primary/50 transition-all duration-300 animate-fade-in"
+                    >
+                      <BookOpen className="w-5 h-5 text-primary" />
+                      <span className="font-semibold text-base">{t('navigation.dictionary')}</span>
+                    </Button>
+                  </Link>
+                  
+                  <Link to="/about" className="w-full">
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start gap-3 px-4 py-6 rounded-xl border-2 border-border/50 bg-background/50 backdrop-blur-sm hover:bg-primary/5 hover:border-primary/50 transition-all duration-300 animate-fade-in"
+                      style={{ animationDelay: '0.1s' }}
+                    >
+                      <Info className="w-5 h-5 text-primary" />
+                      <span className="font-semibold text-base">{t('navigation.about')}</span>
+                    </Button>
+                  </Link>
+                  
+                  <Link to="/faq" className="w-full">
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start gap-3 px-4 py-6 rounded-xl border-2 border-border/50 bg-background/50 backdrop-blur-sm hover:bg-primary/5 hover:border-primary/50 transition-all duration-300 animate-fade-in"
+                      style={{ animationDelay: '0.2s' }}
+                    >
+                      <HelpCircle className="w-5 h-5 text-primary" />
+                      <span className="font-semibold text-base">{t('navigation.faq')}</span>
+                    </Button>
+                  </Link>
+                  
+                  <Link to="/contact" className="w-full">
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start gap-3 px-4 py-6 rounded-xl border-2 border-border/50 bg-background/50 backdrop-blur-sm hover:bg-primary/5 hover:border-primary/50 transition-all duration-300 animate-fade-in"
+                      style={{ animationDelay: '0.3s' }}
+                    >
+                      <Instagram className="w-5 h-5 text-primary" />
+                      <span className="font-semibold text-base">{t('navigation.contact')}</span>
+                    </Button>
+                  </Link>
+                </nav>
+              </SheetContent>
+            </Sheet>
             
             <div className="flex items-center gap-2">
               <SettingsDialog selectedVoice={selectedVoice} setSelectedVoice={setSelectedVoice} availableVoices={availableVoices} />
