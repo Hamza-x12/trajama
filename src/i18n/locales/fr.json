@@ -1,0 +1,63 @@
+{
+  "app": {
+    "title": "Tarjama",
+    "subtitle": "Traduction professionnelle multilingue"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "language": "Langue",
+    "voice": "Sélection de la voix",
+    "selectVoice": "Sélectionner la voix"
+  },
+  "translation": {
+    "placeholder": "Entrez le texte à traduire...",
+    "translate": "Traduire",
+    "translating": "Traduction en cours...",
+    "translations": "Traductions",
+    "willAppear": "Les traductions apparaîtront ici",
+    "complete": "Traduction terminée!",
+    "failed": "La traduction a échoué. Veuillez réessayer.",
+    "enterText": "Veuillez entrer du texte à traduire",
+    "copied": "traduction copiée!",
+    "culturalNotes": "Notes culturelles",
+    "detectedLanguage": "Langue détectée:"
+  },
+  "languages": {
+    "detectLanguage": "Détecter la langue",
+    "darija": "Darija",
+    "french": "Français",
+    "arabic": "Arabe",
+    "english": "Anglais",
+    "spanish": "Espagnol",
+    "german": "Allemand",
+    "italian": "Italien",
+    "portuguese": "Portugais",
+    "chinese": "Chinois",
+    "japanese": "Japonais",
+    "turkish": "Turc"
+  },
+  "audio": {
+    "startRecording": "Commencer l'enregistrement",
+    "stopRecording": "Arrêter l'enregistrement",
+    "recording": "Enregistrement commencé",
+    "processing": "Traitement de l'audio...",
+    "transcriptionComplete": "Transcription terminée!",
+    "transcriptionFailed": "Échec de la transcription. Veuillez réessayer.",
+    "recordingFailed": "Échec du démarrage de l'enregistrement. Veuillez vérifier les autorisations du microphone.",
+    "play": "Lire la traduction",
+    "copy": "Copier la traduction",
+    "playing": "Lecture de la traduction",
+    "stopped": "Arrêt de la lecture",
+    "stop": "Arrêter"
+  },
+  "history": {
+    "title": "Historique des traductions",
+    "clear": "Effacer l'historique",
+    "cleared": "Historique effacé",
+    "removed": "Élément supprimé de l'historique",
+    "loaded": "Traduction chargée depuis l'historique"
+  },
+  "footer": {
+    "copyright": "Copyright © 2025 Tarjama. Tous droits réservés."
+  }
+}
