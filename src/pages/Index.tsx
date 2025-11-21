@@ -727,7 +727,7 @@ const Index = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-muted/30 border-t border-border/50 mt-auto">
+      <footer className="bg-card/80 backdrop-blur-xl border-t border-border/50 mt-auto relative z-10">
         <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 max-w-7xl">
           {/* Navigation Links */}
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-4">
