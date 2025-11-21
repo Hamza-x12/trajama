@@ -1,13 +1,15 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, ArrowLeft } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsDialog } from "@/components/SettingsDialog";
+import { WordDetailDialog } from "@/components/WordDetailDialog";
+import { toast } from "sonner";
 
 interface DictionaryEntry {
   darija: string;
@@ -15,15 +17,118 @@ interface DictionaryEntry {
   english: string;
   category: string;
   example?: string;
+  type?: string;
+  definition?: string;
+  examples?: Array<{
+    darija: string;
+    arabic: string;
+    french: string;
+    english: string;
+  }>;
+  relatedWords?: string[];
+  pronunciation?: string;
 }
 
 const Dictionary = () => {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedWord, setSelectedWord] = useState<DictionaryEntry | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+
+  useEffect(() => {
+    const loadVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      setAvailableVoices(voices);
+    };
+    loadVoices();
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+  }, []);
 
   const dictionaryEntries = [
-    // Greetings & Politeness
-    { darija: "salam", french: "Bonjour/Salut", english: "Hello", category: "Greetings", example: "Salam, kif dayr? (Hi, how are you?)" },
+    // Greetings & Politeness - Enhanced entries with full details
+    { 
+      darija: "ana", 
+      french: "Je/Moi", 
+      english: "I/Me", 
+      category: "Pronouns",
+      type: "pronoun",
+      pronunciation: "ah-nah",
+      definition: "First person singular pronoun used to refer to oneself. Also means 'I' as in 'ana (I)'",
+      examples: [
+        {
+          darija: "ana mshit l lmadrasa",
+          arabic: "أنا مشيت للمدرسة",
+          french: "Je suis allé à l'école",
+          english: "I went to school"
+        },
+        {
+          darija: "ana b'hal haka",
+          arabic: "أنا بحال هاكا",
+          french: "Je suis comme ça",
+          english: "I am like this"
+        }
+      ],
+      relatedWords: ["nta (you-m)", "nti (you-f)", "howa (he)", "hiya (she)", "7na (we)"]
+    },
+    { 
+      darija: "salam", 
+      french: "Bonjour/Salut", 
+      english: "Hello", 
+      category: "Greetings",
+      type: "greeting",
+      pronunciation: "sa-lam",
+      definition: "Common greeting derived from Arabic 'As-salamu alaykum' (peace be upon you). Used at any time of day.",
+      example: "Salam, kif dayr? (Hi, how are you?)",
+      examples: [
+        {
+          darija: "salam, kif dayr?",
+          arabic: "سلام، كيف دايْر؟",
+          french: "Salut, comment vas-tu?",
+          english: "Hi, how are you?"
+        },
+        {
+          darija: "salam 3likom",
+          arabic: "سلام عليكم",
+          french: "Que la paix soit sur vous",
+          english: "Peace be upon you"
+        }
+      ],
+      relatedWords: ["sbah lkhir (good morning)", "msa lkhir (good evening)", "bslama (goodbye)"]
+    },
+    { 
+      darija: "bghit", 
+      french: "Je veux", 
+      english: "I want", 
+      category: "Verbs",
+      type: "verb",
+      pronunciation: "bghee-t",
+      definition: "First person singular present tense of the verb 'bga' (to want). One of the most commonly used verbs in daily conversation.",
+      example: "Bghit nmshi (I want to go)",
+      examples: [
+        {
+          darija: "bghit nmshi l souq",
+          arabic: "بغيت نمشي لسوق",
+          french: "Je veux aller au marché",
+          english: "I want to go to the market"
+        },
+        {
+          darija: "bghit nashreb atay",
+          arabic: "بغيت نشرب أتاي",
+          french: "Je veux boire du thé",
+          english: "I want to drink tea"
+        },
+        {
+          darija: "ma bghitsh",
+          arabic: "ما بغيتش",
+          french: "Je ne veux pas",
+          english: "I don't want"
+        }
+      ],
+      relatedWords: ["bga (to want)", "kaybghi (he wants)", "tabghi (she wants)", "bghina (we want)"]
+    },
     { darija: "sbah lkhir", french: "Bonjour (matin)", english: "Good morning", category: "Greetings", example: "Sbah lkhir, nmti mezyan? (Good morning, did you sleep well?)" },
     { darija: "msa lkhir", french: "Bonsoir", english: "Good evening", category: "Greetings", example: "Msa lkhir, labas 3lik? (Good evening, how are you?)" },
     { darija: "bslama", french: "Au revoir", english: "Goodbye", category: "Greetings", example: "Bslama, nchoufek ghedda (Goodbye, see you tomorrow)" },
@@ -252,7 +357,7 @@ const Dictionary = () => {
     { darija: "tilifoun", french: "Téléphone", english: "Phone", category: "Objects", example: "Tilifoun diali (My phone)" },
     { darija: "ordinatir", french: "Ordinateur", english: "Computer", category: "Objects", example: "Khdemt f ordinatir (I worked on computer)" },
     { darija: "khatem", french: "Bague", english: "Ring", category: "Objects", example: "Khatem mezyan (Nice ring)" },
-    { darija: "mirat", french: "Miroir", engine: "Mirror", category: "Objects", example: "Shef f mirat (Look in the mirror)" },
+    { darija: "mirat", french: "Miroir", english: "Mirror", category: "Objects", example: "Shef f mirat (Look in the mirror)" },
     
     // Actions & Activities
     { darija: "lbsa", french: "S'habiller", english: "To dress/wear", category: "Actions", example: "Lbes qamija (Wear a shirt)" },
@@ -315,6 +420,48 @@ const Dictionary = () => {
   }, {} as Record<string, typeof dictionaryEntries>);
 
   const categories = Object.keys(groupedEntries).sort();
+
+  const handlePlayAudio = (text: string, languageName: string) => {
+    if (!text?.trim()) {
+      toast.error("No text to speak");
+      return;
+    }
+    
+    const languageCodes: Record<string, string> = {
+      Darija: "ar-MA",
+      Arabic: "ar-SA",
+      French: "fr-FR",
+      English: "en-US",
+    };
+
+    try {
+      window.speechSynthesis.cancel();
+      const langCode = languageCodes[languageName] || "en-US";
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = langCode;
+      utterance.rate = 0.9;
+      utterance.pitch = 1.0;
+      utterance.volume = 1.0;
+
+      const baseLang = langCode.split("-")[0].toLowerCase();
+      const voice = availableVoices.find(v => v.lang.toLowerCase().startsWith(baseLang));
+      if (voice) {
+        utterance.voice = voice;
+      }
+
+      utterance.onstart = () => toast.success("Playing audio");
+      utterance.onerror = () => toast.error("Speech error");
+      
+      window.speechSynthesis.speak(utterance);
+    } catch (error) {
+      toast.error("Failed to play audio");
+    }
+  };
+
+  const handleWordClick = (entry: DictionaryEntry) => {
+    setSelectedWord(entry);
+    setDialogOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
@@ -397,7 +544,11 @@ const Dictionary = () => {
               </h2>
               <div className="grid gap-4">
                 {groupedEntries[category].map((entry, index) => (
-                  <Card key={`${category}-${index}`} className="hover:shadow-elegant transition-all duration-300 border-l-4 border-l-primary/50">
+                  <Card 
+                    key={`${category}-${index}`} 
+                    className="hover:shadow-elegant transition-all duration-300 border-l-4 border-l-primary/50 cursor-pointer hover:scale-[1.02]"
+                    onClick={() => handleWordClick(entry)}
+                  >
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 space-y-3">
@@ -406,6 +557,11 @@ const Dictionary = () => {
                             <span className="px-3 py-1 text-xs rounded-full bg-primary/10 text-primary font-medium">
                               {entry.category}
                             </span>
+                            {entry.type && (
+                              <span className="px-2 py-0.5 text-xs rounded bg-secondary/20 text-secondary-foreground">
+                                {entry.type}
+                              </span>
+                            )}
                           </div>
                           <div className="space-y-2 text-muted-foreground">
                             <p className="flex items-center gap-2">
@@ -443,6 +599,13 @@ const Dictionary = () => {
           </Card>
         )}
       </main>
+
+      <WordDetailDialog 
+        word={selectedWord}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onPlayAudio={handlePlayAudio}
+      />
     </div>
   );
 };
