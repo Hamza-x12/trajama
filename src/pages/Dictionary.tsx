@@ -1283,12 +1283,12 @@ const Dictionary = () => {
               {t('navigation.backToTranslator')}
             </Button>
           </Link>
-          <Link to="/faq">
-            <Button variant="outline" size="lg" className="gap-2 shadow-md hover:shadow-lg transition-all">
-              <MessageCircle className="w-5 h-5" />
-              FAQ
-            </Button>
-          </Link>
+            <Link to="/dictionary/faq">
+              <Button variant="outline" size="lg" className="gap-2 shadow-md hover:shadow-lg transition-all">
+                <MessageCircle className="w-5 h-5" />
+                FAQ
+              </Button>
+            </Link>
         </div>
 
         {/* Stats Section */}
