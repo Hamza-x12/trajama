@@ -37,9 +37,9 @@ serve(async (req) => {
       );
     }
     
-    if (!Array.isArray(targetLanguages) || targetLanguages.length === 0 || targetLanguages.length > 12) {
+    if (!Array.isArray(targetLanguages) || targetLanguages.length === 0 || targetLanguages.length > 14) {
       return new Response(
-        JSON.stringify({ error: 'Target languages must be an array with 1-12 languages' }),
+        JSON.stringify({ error: 'Target languages must be an array with 1-14 languages' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -73,7 +73,7 @@ serve(async (req) => {
           messages: [
             { 
               role: 'system', 
-              content: 'You are a language detection expert. Detect the language of the given text and respond with ONLY the language name from this list: Darija, French, Arabic, English, Spanish, German, Italian, Portuguese, Chinese, Japanese, Turkish, Russian. Respond with exactly one word.' 
+              content: 'You are a language detection expert. Detect the language of the given text and respond with ONLY the language name from this list: Darija, French, Arabic, English, Spanish, German, Italian, Portuguese, Chinese, Japanese, Turkish, Russian, Korean, Hindi. Respond with exactly one word.' 
             },
             { role: 'user', content: text }
           ],
@@ -98,7 +98,9 @@ serve(async (req) => {
       'ar': 'Arabic',
       'fr': 'French',
       'dar': 'Darija',
-      'ru': 'Russian'
+      'ru': 'Russian',
+      'ko': 'Korean',
+      'hi': 'Hindi'
     };
     
     const culturalNotesLanguage = uiLanguageMap[uiLanguage] || 'English';
@@ -133,7 +135,9 @@ Provide translations in this EXACT JSON format:
     "chinese": "Chinese translation",
     "japanese": "Japanese translation",
     "turkish": "Turkish translation",
-    "russian": "Russian translation"
+    "russian": "Russian translation",
+    "korean": "Korean translation",
+    "hindi": "Hindi translation"
   },
   "culturalNotes": "Optional cultural context or explanation of idioms/slang IN ${culturalNotesLanguage}"
 }
@@ -210,7 +214,9 @@ IMPORTANT:
           chinese: '',
           japanese: '',
           turkish: '',
-          russian: ''
+          russian: '',
+          korean: '',
+          hindi: ''
         },
         culturalNotes: 'Translation formatting error. Please try again.'
       };

@@ -35,7 +35,9 @@
     "chinese": "Китайский",
     "japanese": "Японский",
     "turkish": "Турецкий",
-    "russian": "Русский"
+    "russian": "Русский",
+    "korean": "Корейский",
+    "hindi": "Хинди"
   },
   "audio": {
     "startRecording": "Начать запись",
