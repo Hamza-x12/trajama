@@ -526,6 +526,12 @@ const Index = () => {
                 </Select>
               </div>
 
+              {/* Detect Language Button */}
+              {sourceLanguage !== "Detect Language" && <Button variant="outline" size="sm" onClick={() => setSourceLanguage("Detect Language")} className="h-12 px-4 bg-gradient-to-br from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-2 border-primary/30 hover:border-primary/50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-moroccan font-medium gap-2">
+                  <Wand2 className="h-4 w-4" />
+                  {t('languages.detectlanguage')}
+                </Button>}
+
               {/* Detected Language Badge */}
               {detectedLanguage && <div className="animate-fade-in">
                   <span className="text-xs bg-primary/90 text-primary-foreground px-3 py-1.5 rounded-full border-2 border-primary shadow-moroccan font-medium whitespace-nowrap">
@@ -597,18 +603,12 @@ const Index = () => {
                 };
                 return themes[sourceLanguage] || '';
               })()}`}>
-                  {/* Detect Language Button */}
-                  {sourceLanguage !== "Detect Language" && inputText.trim() && <Button variant="outline" size="sm" onClick={() => setSourceLanguage("Detect Language")} className="absolute top-2 left-2 h-8 px-3 text-xs font-medium bg-background/80 backdrop-blur-sm hover:bg-primary/10 border-primary/30 z-10 gap-1.5">
-                      <Wand2 className="h-3.5 w-3.5" />
-                      {t('languages.detectlanguage')}
-                    </Button>}
-                  
                   <Textarea placeholder={t('translation.placeholder')} value={inputText} onChange={e => setInputText(e.target.value)} onKeyDown={e => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
                       handleTranslate();
                     }
-                  }} className={`${getTextSize(inputText)} resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60 bg-transparent min-h-[200px] transition-all duration-200 ${sourceLanguage !== "Detect Language" && inputText.trim() ? 'pt-10' : ''}`} />
+                  }} className={`${getTextSize(inputText)} resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60 bg-transparent min-h-[200px] transition-all duration-200`} />
                   <Button variant="ghost" size="sm" onClick={isRecording ? stopRecording : startRecording} disabled={isTranscribing} className={`absolute bottom-2 right-2 h-10 w-10 p-0 rounded-full ${isRecording ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' : 'hover:bg-primary/10'}`} aria-label={isRecording ? t('audio.stopRecording') : t('audio.startRecording')}>
                     {isTranscribing ? <Loader2 className="h-5 w-5 animate-spin" /> : isRecording ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
                   </Button>
