@@ -611,13 +611,8 @@ const Index = () => {
           {/* Language Selectors with Swap Button */}
           <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card via-muted/5 to-card px-[5px]">
             <div className="flex items-center gap-3 justify-center">
-              {/* Detect Language Button */}
-              {sourceLanguage !== "Detect Language" && <Button variant="outline" size="sm" onClick={() => setSourceLanguage("Detect Language")} className="h-12 w-12 p-0 bg-gradient-to-br from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-2 border-primary/30 hover:border-primary/50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-moroccan" aria-label={t('languages.detectlanguage')}>
-                  <Wand2 className="h-5 w-5" />
-                </Button>}
-
-              {/* Source Language - Slightly Reduced */}
-              <div className="flex-[0.85]">
+              {/* Source Language */}
+              <div className="flex-1">
                 <Select
                   value={sourceLanguage}
                   onValueChange={value => {
