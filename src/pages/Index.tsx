@@ -611,8 +611,13 @@ const Index = () => {
           {/* Language Selectors with Swap Button */}
           <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card via-muted/5 to-card px-[5px]">
             <div className="flex items-center gap-3 justify-center">
-              {/* Source Language */}
-              <div className="flex-1">
+              {/* Detect Language Button */}
+              {sourceLanguage !== "Detect Language" && <Button variant="outline" size="sm" onClick={() => setSourceLanguage("Detect Language")} className="h-12 w-12 p-0 bg-gradient-to-br from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-2 border-primary/30 hover:border-primary/50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-moroccan" aria-label={t('languages.detectlanguage')}>
+                  <Wand2 className="h-5 w-5" />
+                </Button>}
+
+              {/* Source Language - Slightly Reduced */}
+              <div className="flex-[0.85]">
                 <Select
                   value={sourceLanguage}
                   onValueChange={value => {
@@ -626,20 +631,12 @@ const Index = () => {
                     <SelectValue>
                       <div className="flex items-center gap-3">
                         <div className="relative">
-                          {sourceLanguage === "Detect Language" ? (
-                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center shadow-sm ring-2 ring-border/30">
-                              <Wand2 className="w-5 h-5 text-primary" />
-                            </div>
-                          ) : (
-                            <>
-                              <img
-                                src={languages.find(l => l.name === sourceLanguage)?.icon as string}
-                                alt={sourceLanguage}
-                                className="w-8 h-8 rounded-lg object-cover shadow-sm ring-2 ring-border/30"
-                              />
-                              <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
-                            </>
-                          )}
+                          <img
+                            src={languages.find(l => l.name === sourceLanguage)?.icon as string}
+                            alt={sourceLanguage}
+                            className="w-8 h-8 rounded-lg object-cover shadow-sm ring-2 ring-border/30"
+                          />
+                          <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
                         </div>
                         <span className="font-semibold text-base">
                           {t(`languages.${sourceLanguage.toLowerCase().replace(' ', '')}`)}
@@ -648,7 +645,7 @@ const Index = () => {
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="bg-background/95 backdrop-blur-xl border-2 border-border shadow-2xl z-[100] rounded-xl">
-                    {languages.map(lang => (
+                    {languages.filter(lang => lang.name !== "Detect Language").map(lang => (
                       <SelectItem
                         key={lang.name}
                         value={lang.name}
@@ -656,20 +653,12 @@ const Index = () => {
                       >
                         <div className="flex items-center gap-3 py-1">
                           <div className="relative">
-                            {lang.name === "Detect Language" ? (
-                              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center shadow-sm ring-2 ring-border/20">
-                                <Wand2 className="w-4 h-4 text-primary" />
-                              </div>
-                            ) : (
-                              <>
-                                <img
-                                  src={lang.icon as string}
-                                  alt={lang.name}
-                                  className="w-7 h-7 rounded-lg object-cover shadow-sm ring-2 ring-border/20"
-                                />
-                                <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
-                              </>
-                            )}
+                            <img
+                              src={lang.icon as string}
+                              alt={lang.name}
+                              className="w-7 h-7 rounded-lg object-cover shadow-sm ring-2 ring-border/20"
+                            />
+                            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
                           </div>
                           <span className="font-medium">
                             {t(`languages.${lang.name.toLowerCase().replace(' ', '')}`)}
