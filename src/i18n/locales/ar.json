@@ -79,10 +79,21 @@
     "downloadLanguagesWhenOnline": "قم بتنزيل اللغات عندما تكون متصلاً لاستخدامها دون اتصال",
     "reconnectMessage": "سيتم إعادة الاتصال تلقائياً عند توفر الإنترنت"
   },
-  "install": {
-    "title": "تثبيت ترجمة",
-    "description": "ثبت التطبيق على جهازك للوصول دون اتصال",
-    "install": "تثبيت",
-    "later": "لاحقاً"
+  "navigation": {
+    "dictionary": "القاموس",
+    "about": "عنّا",
+    "faq": "أسئلة",
+    "backToTranslator": "رجوع للمترجم"
+  },
+  "dictionary": {
+    "title": "قاموس الدارجة",
+    "subtitle": "عبارات شائعة",
+    "searchTitle": "بحث في القاموس",
+    "searchDescription": "ابحث عن كلمات",
+    "searchPlaceholder": "ابحث...",
+    "noResults": "لا توجد نتائج",
+    "totalWords": "مجموع الكلمات",
+    "categories": "الفئات",
+    "accuracy": "الدقة"
   }
 }

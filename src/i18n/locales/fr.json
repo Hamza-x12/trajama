@@ -97,7 +97,10 @@
     "searchTitle": "Rechercher",
     "searchDescription": "Rechercher des mots",
     "searchPlaceholder": "Rechercher...",
-    "noResults": "Aucun résultat"
+    "noResults": "Aucun résultat",
+    "totalWords": "Total de mots",
+    "categories": "Catégories",
+    "accuracy": "Précision"
   },
   "about": {
     "title": "À propos",

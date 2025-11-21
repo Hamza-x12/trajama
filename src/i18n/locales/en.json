@@ -97,7 +97,10 @@
     "searchTitle": "Search Dictionary",
     "searchDescription": "Search for words",
     "searchPlaceholder": "Search...",
-    "noResults": "No results found"
+    "noResults": "No results found",
+    "totalWords": "Total Words",
+    "categories": "Categories",
+    "accuracy": "Accuracy"
   },
   "about": {
     "title": "About Tarjama",
