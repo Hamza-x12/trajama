@@ -670,7 +670,20 @@ const Index = () => {
                   };
                   return themes[sourceLanguage] || '';
                 })()}`}>
-                  <Textarea placeholder={t('translation.placeholder')} value={inputText} onChange={e => setInputText(e.target.value)} className={`${getTextSize(inputText)} resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60 bg-transparent min-h-[200px] transition-all duration-200`} />
+                  {/* Detect Language Button */}
+                  {sourceLanguage !== "Detect Language" && inputText.trim() && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSourceLanguage("Detect Language")}
+                      className="absolute top-2 left-2 h-8 px-3 text-xs font-medium bg-background/80 backdrop-blur-sm hover:bg-primary/10 border-primary/30 z-10 gap-1.5"
+                    >
+                      <Wand2 className="h-3.5 w-3.5" />
+                      {t('languages.detectlanguage')}
+                    </Button>
+                  )}
+                  
+                  <Textarea placeholder={t('translation.placeholder')} value={inputText} onChange={e => setInputText(e.target.value)} className={`${getTextSize(inputText)} resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60 bg-transparent min-h-[200px] transition-all duration-200 ${sourceLanguage !== "Detect Language" && inputText.trim() ? 'pt-10' : ''}`} />
                   <Button
                     variant="ghost"
                     size="sm"
