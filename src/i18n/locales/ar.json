@@ -9,7 +9,11 @@
     "voice": "اختيار الصوت",
     "selectVoice": "اختر الصوت",
     "autoVoiceSelect": "اختيار الصوت التلقائي",
-    "autoVoiceDescription": "اختيار الصوت تلقائيًا حسب اللغة الهدف"
+    "autoVoiceDescription": "اختيار الصوت تلقائيًا حسب اللغة الهدف",
+    "speechRate": "سرعة الكلام",
+    "slower": "أبطأ",
+    "normal": "عادي",
+    "faster": "أسرع"
   },
   "translation": {
     "placeholder": "أدخل النص للترجمة...",

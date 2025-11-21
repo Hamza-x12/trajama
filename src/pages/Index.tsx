@@ -97,6 +97,7 @@ const Index = () => {
   const [selectedVoice, setSelectedVoice] = useState<string>("");
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [autoVoiceSelect, setAutoVoiceSelect] = useState<boolean>(true);
+  const [speechRate, setSpeechRate] = useState<number>(1.0);
   const [isSwapping, setIsSwapping] = useState(false);
   const [detectedLanguage, setDetectedLanguage] = useState<string | null>(null);
   const [spellingSuggestion, setSpellingSuggestion] = useState<string | null>(null);
@@ -140,6 +141,12 @@ const Index = () => {
     const savedAutoVoice = localStorage.getItem('autoVoiceSelect');
     if (savedAutoVoice !== null) {
       setAutoVoiceSelect(savedAutoVoice === 'true');
+    }
+
+    // Load speech rate preference
+    const savedSpeechRate = localStorage.getItem('speechRate');
+    if (savedSpeechRate !== null) {
+      setSpeechRate(parseFloat(savedSpeechRate));
     }
 
     // Load available voices
@@ -482,7 +489,7 @@ const Index = () => {
       const langCode = languageCodes[languageName] || "en-US";
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = langCode;
-      utterance.rate = 0.9;
+      utterance.rate = speechRate;
       utterance.pitch = 1.0;
       utterance.volume = 1.0;
 
@@ -754,6 +761,8 @@ const Index = () => {
               availableVoices={availableVoices}
               autoVoiceSelect={autoVoiceSelect}
               setAutoVoiceSelect={setAutoVoiceSelect}
+              speechRate={speechRate}
+              setSpeechRate={setSpeechRate}
             />
             <ThemeToggle />
             </div>
