@@ -10,7 +10,7 @@ import { SettingsDialog } from "@/components/SettingsDialog";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineScreen } from "@/components/OfflineScreen";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
-import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram } from "lucide-react";
+import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -435,6 +435,14 @@ const Index = () => {
                 <p className="text-xs sm:text-xs text-muted-foreground hidden sm:block">{t('app.subtitle')}</p>
               </div>
             </div>
+            
+            <Link to="/dictionary" className="hidden md:block">
+              <Button variant="outline" className="gap-2 shadow-soft hover:shadow-moroccan transition-all duration-300">
+                <BookOpen className="w-4 h-4" />
+                <span className="font-medium">{t('navigation.dictionary')}</span>
+              </Button>
+            </Link>
+            
             <div className="flex items-center gap-2">
               <SettingsDialog 
                 selectedVoice={selectedVoice}
