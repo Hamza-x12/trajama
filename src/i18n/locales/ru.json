@@ -22,7 +22,9 @@
     "culturalNotes": "Культурные заметки",
     "detectedLanguage": "Обнаруженный язык:",
     "didYouMean": "Вы имели в виду:",
-    "suggestionApplied": "Предложение применено"
+    "suggestionApplied": "Предложение применено",
+    "clear": "Очистить",
+    "cleared": "Очищено"
   },
   "languages": {
     "detectlanguage": "Определить язык",

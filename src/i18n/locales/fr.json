@@ -22,7 +22,9 @@
     "culturalNotes": "Notes culturelles",
     "detectedLanguage": "Langue détectée:",
     "didYouMean": "Vouliez-vous dire:",
-    "suggestionApplied": "Suggestion appliquée"
+    "suggestionApplied": "Suggestion appliquée",
+    "clear": "Effacer",
+    "cleared": "Effacé"
   },
   "languages": {
     "detectlanguage": "Détecter la langue",
