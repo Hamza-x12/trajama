@@ -486,13 +486,43 @@ const Index = () => {
             {/* Source Column */}
             <div className="flex flex-col">
               {/* Source Language Selector */}
-              <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card to-muted/10 overflow-x-auto">
-                <div className="flex gap-1.5 sm:gap-2 flex-nowrap sm:flex-wrap min-w-max sm:min-w-0">
-                  {languages.map(lang => <Button key={lang.name} variant={sourceLanguage === lang.name ? "default" : "ghost"} onClick={() => setSourceLanguage(lang.name)} className={`gap-1.5 sm:gap-2 h-8 sm:h-9 md:h-10 px-2.5 sm:px-3 md:px-4 font-medium transition-all duration-300 flex-shrink-0 ${sourceLanguage === lang.name ? 'shadow-moroccan scale-105' : 'hover:scale-105'} ${lang.name === "Detect Language" ? 'border-2 border-primary/30' : ''}`} size="sm">
-                      {lang.name === "Detect Language" ? <Wand2 className="w-3 h-3 sm:w-4 sm:h-4" /> : <img src={lang.icon as string} alt={lang.name} className="w-4 h-4 sm:w-5 sm:h-5 rounded object-cover" />}
-                      <span className="text-xs sm:text-sm whitespace-nowrap">{t(`languages.${lang.name.toLowerCase().replace(' ', '')}`)}</span>
-                    </Button>)}
-                </div>
+              <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card to-muted/10">
+                <Select value={sourceLanguage} onValueChange={setSourceLanguage}>
+                  <SelectTrigger className="w-full h-11 bg-background border-border hover:bg-accent/5 transition-colors">
+                    <SelectValue>
+                      <div className="flex items-center gap-2">
+                        {sourceLanguage === "Detect Language" ? (
+                          <Wand2 className="w-4 h-4" />
+                        ) : (
+                          <img 
+                            src={languages.find(l => l.name === sourceLanguage)?.icon as string} 
+                            alt={sourceLanguage} 
+                            className="w-5 h-5 rounded object-cover" 
+                          />
+                        )}
+                        <span className="font-medium">{t(`languages.${sourceLanguage.toLowerCase().replace(' ', '')}`)}</span>
+                      </div>
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border-border shadow-lg z-50">
+                    {languages.map(lang => (
+                      <SelectItem key={lang.name} value={lang.name} className="cursor-pointer hover:bg-accent/10">
+                        <div className="flex items-center gap-2">
+                          {lang.name === "Detect Language" ? (
+                            <Wand2 className="w-4 h-4" />
+                          ) : (
+                            <img 
+                              src={lang.icon as string} 
+                              alt={lang.name} 
+                              className="w-5 h-5 rounded object-cover" 
+                            />
+                          )}
+                          <span>{t(`languages.${lang.name.toLowerCase().replace(' ', '')}`)}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               
               {/* Source Text Input */}
