@@ -96,6 +96,7 @@ const Index = () => {
   const [speakingLanguage, setSpeakingLanguage] = useState<string | null>(null);
   const [selectedVoice, setSelectedVoice] = useState<string>("");
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [autoVoiceSelect, setAutoVoiceSelect] = useState<boolean>(true);
   const [isSwapping, setIsSwapping] = useState(false);
   const [detectedLanguage, setDetectedLanguage] = useState<string | null>(null);
   const [spellingSuggestion, setSpellingSuggestion] = useState<string | null>(null);
@@ -133,6 +134,12 @@ const Index = () => {
       } catch (error) {
         console.error('Failed to parse history:', error);
       }
+    }
+
+    // Load auto voice preference
+    const savedAutoVoice = localStorage.getItem('autoVoiceSelect');
+    if (savedAutoVoice !== null) {
+      setAutoVoiceSelect(savedAutoVoice === 'true');
     }
 
     // Load available voices
@@ -176,6 +183,51 @@ const Index = () => {
     
     return () => clearTimeout(timeoutId);
   }, [inputText, sourceLanguage]);
+
+  // Auto-select voice based on target language
+  useEffect(() => {
+    if (!autoVoiceSelect || availableVoices.length === 0) return;
+
+    const languageCodes: Record<string, string> = {
+      Darija: "ar-MA",
+      Arabic: "ar-SA",
+      French: "fr-FR",
+      English: "en-US",
+      Spanish: "es-ES",
+      German: "de-DE",
+      Italian: "it-IT",
+      Portuguese: "pt-PT",
+      Chinese: "zh-CN",
+      Japanese: "ja-JP",
+      Turkish: "tr-TR",
+      Russian: "ru-RU",
+      Korean: "ko-KR",
+      Hindi: "hi-IN"
+    };
+
+    const targetLangCode = languageCodes[targetLanguage];
+    if (!targetLangCode) return;
+
+    // Find best matching voice
+    const baseLang = targetLangCode.split("-")[0];
+    
+    // Try exact match first
+    let matchingVoice = availableVoices.find(v => 
+      v.lang.toLowerCase() === targetLangCode.toLowerCase()
+    );
+    
+    // If no exact match, try base language
+    if (!matchingVoice) {
+      matchingVoice = availableVoices.find(v => 
+        v.lang.toLowerCase().startsWith(baseLang.toLowerCase())
+      );
+    }
+
+    if (matchingVoice && matchingVoice.name !== selectedVoice) {
+      setSelectedVoice(matchingVoice.name);
+      console.log(`Auto-selected voice: ${matchingVoice.name} for ${targetLanguage}`);
+    }
+  }, [targetLanguage, availableVoices, autoVoiceSelect]);
   const languages = [{
     name: "Detect Language",
     code: "auto",
@@ -696,7 +748,13 @@ const Index = () => {
               </SheetContent>
             </Sheet>
             
-            <SettingsDialog selectedVoice={selectedVoice} setSelectedVoice={setSelectedVoice} availableVoices={availableVoices} />
+            <SettingsDialog 
+              selectedVoice={selectedVoice} 
+              setSelectedVoice={setSelectedVoice} 
+              availableVoices={availableVoices}
+              autoVoiceSelect={autoVoiceSelect}
+              setAutoVoiceSelect={setAutoVoiceSelect}
+            />
             <ThemeToggle />
             </div>
           </div>

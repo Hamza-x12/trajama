@@ -7,7 +7,9 @@
     "title": "الإعدادات",
     "language": "اللغة",
     "voice": "اختيار الصوت",
-    "selectVoice": "اختر الصوت"
+    "selectVoice": "اختر الصوت",
+    "autoVoiceSelect": "اختيار الصوت التلقائي",
+    "autoVoiceDescription": "اختيار الصوت تلقائيًا حسب اللغة الهدف"
   },
   "translation": {
     "placeholder": "أدخل النص للترجمة...",
