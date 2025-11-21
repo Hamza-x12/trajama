@@ -467,7 +467,7 @@ const Index = () => {
                 <img 
                   src={tarjamaLogo} 
                   alt="Tarjama Logo" 
-                  className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:drop-shadow-[0_0_15px_rgba(var(--primary),0.5)] cursor-pointer" 
+                  className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:drop-shadow-[0_0_15px_rgba(var(--primary),0.5)] cursor-pointer" 
                 />
               </Link>
               <div>
