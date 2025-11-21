@@ -611,40 +611,18 @@ const Index = () => {
           {/* Language Selectors with Swap Button */}
           <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card via-muted/5 to-card px-[5px]">
             <div className="flex items-center gap-3 justify-center">
+              {/* Detect Language Button */}
+              {sourceLanguage !== "Detect Language" && <Button variant="outline" size="sm" onClick={() => setSourceLanguage("Detect Language")} className="h-12 w-12 p-0 bg-gradient-to-br from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-2 border-primary/30 hover:border-primary/50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-moroccan" aria-label={t('languages.detectlanguage')}>
+                  <Wand2 className="h-5 w-5" />
+                </Button>}
+
               {/* Source Language - Slightly Reduced */}
               <div className="flex-[0.85]">
                 <Select value={sourceLanguage} onValueChange={value => {
                 setSourceLanguage(value);
                 setDetectedLanguage(null);
               }}>
-                  <SelectTrigger className={`w-full h-14 bg-gradient-to-br from-background to-muted/30 border-2 border-border/70 hover:border-primary/50 hover:bg-gradient-to-br hover:from-primary/5 hover:to-accent/5 transition-all duration-300 rounded-2xl shadow-soft hover:shadow-moroccan group ${isSwapping ? 'scale-95 opacity-70' : 'scale-100 opacity-100'}`}>
-                    <SelectValue>
-                      <div className="flex items-center gap-3">
-                        {sourceLanguage === "Detect Language" ? <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
-                            <Wand2 className="w-5 h-5 text-primary" />
-                          </div> : <div className="relative">
-                            <img src={languages.find(l => l.name === sourceLanguage)?.icon as string} alt={sourceLanguage} className="w-8 h-8 rounded-lg object-cover shadow-sm ring-2 ring-border/30 group-hover:ring-primary/50 transition-all" />
-                            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
-                          </div>}
-                        <div className="flex-1 text-left">
-                          <span className="font-semibold text-base block">{t(`languages.${sourceLanguage.toLowerCase().replace(' ', '')}`)}</span>
-                        </div>
-                      </div>
-                    </SelectValue>
-                  </SelectTrigger>
-                <SelectContent className="bg-background/95 backdrop-blur-xl border-2 border-border shadow-2xl z-[100] rounded-xl">
-                  {languages.map(lang => <SelectItem key={lang.name} value={lang.name} className="cursor-pointer hover:bg-primary/10 focus:bg-primary/10 rounded-lg my-1 transition-all duration-200 hover:scale-[1.02]">
-                      <div className="flex items-center gap-3 py-1">
-                        {lang.name === "Detect Language" ? <div className="p-2 bg-primary/10 rounded-lg">
-                            <Wand2 className="w-5 h-5 text-primary" />
-                          </div> : <div className="relative">
-                            <img src={lang.icon as string} alt={lang.name} className="w-7 h-7 rounded-lg object-cover shadow-sm ring-2 ring-border/20" />
-                            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
-                          </div>}
-                        <span className="font-medium">{t(`languages.${lang.name.toLowerCase().replace(' ', '')}`)}</span>
-                      </div>
-                    </SelectItem>)}
-                </SelectContent>
+...
                 </Select>
               </div>
 
@@ -654,11 +632,6 @@ const Index = () => {
                     {t('translation.detectedLanguage')}: {detectedLanguage}
                   </span>
                 </div>}
-
-              {/* Detect Language Button */}
-              {sourceLanguage !== "Detect Language" && <Button variant="outline" size="sm" onClick={() => setSourceLanguage("Detect Language")} className="h-12 w-12 p-0 bg-gradient-to-br from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-2 border-primary/30 hover:border-primary/50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-moroccan" aria-label={t('languages.detectlanguage')}>
-                  <Wand2 className="h-5 w-5" />
-                </Button>}
               
               {/* Swap Button */}
               <Button variant="ghost" size="sm" onClick={handleSwapLanguages} disabled={sourceLanguage === "Detect Language" || isSwapping} className={`h-12 w-12 p-0 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-2 border-primary/20 hover:border-primary/40 transition-all duration-300 hover:scale-110 hover:shadow-moroccan disabled:opacity-50 disabled:cursor-not-allowed ${isSwapping ? 'animate-spin' : ''}`} aria-label="Swap languages">
