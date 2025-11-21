@@ -463,7 +463,13 @@ const Index = () => {
           <div className="grid grid-cols-3 items-center gap-4">
             {/* Logo and Title - Left */}
             <div className="flex items-center gap-3 sm:gap-3">
-              <img src={tarjamaLogo} alt="Tarjama Logo" className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16" />
+              <Link to="/" className="group">
+                <img 
+                  src={tarjamaLogo} 
+                  alt="Tarjama Logo" 
+                  className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:drop-shadow-[0_0_15px_rgba(var(--primary),0.5)] cursor-pointer" 
+                />
+              </Link>
               <div>
                 <h1 className="text-xl sm:text-xl md:text-2xl font-bold text-foreground tracking-tight">{t('app.title')}</h1>
                 <p className="text-xs sm:text-xs text-muted-foreground hidden sm:block">{t('app.subtitle')}</p>
