@@ -182,7 +182,8 @@ const Index = () => {
         body: {
           text: inputText,
           sourceLanguage,
-          targetLanguages: languages.filter(l => l.name !== sourceLanguage).map(l => l.name)
+          targetLanguages: languages.filter(l => l.name !== sourceLanguage).map(l => l.name),
+          uiLanguage: i18n.language
         }
       });
       if (error) throw error;
