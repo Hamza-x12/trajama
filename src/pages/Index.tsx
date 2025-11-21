@@ -25,6 +25,7 @@ import portugalFlag from "@/assets/flags/portugal.png";
 import chinaFlag from "@/assets/flags/china.png";
 import japanFlag from "@/assets/flags/japan.png";
 import turkeyFlag from "@/assets/flags/turkey.png";
+import zelligeCorner from "@/assets/zellige-corner.png";
 interface TranslationResult {
   translations: {
     darija: string;
@@ -383,9 +384,31 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col touch-pan-y">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col touch-pan-y relative">
+      {/* Zellige corner decorations */}
+      <img 
+        src={zelligeCorner} 
+        alt="" 
+        className="fixed top-0 left-0 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 pointer-events-none opacity-80 z-0"
+      />
+      <img 
+        src={zelligeCorner} 
+        alt="" 
+        className="fixed top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 pointer-events-none opacity-80 z-0 scale-x-[-1]"
+      />
+      <img 
+        src={zelligeCorner} 
+        alt="" 
+        className="fixed bottom-0 left-0 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 pointer-events-none opacity-80 z-0 scale-y-[-1]"
+      />
+      <img 
+        src={zelligeCorner} 
+        alt="" 
+        className="fixed bottom-0 right-0 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 pointer-events-none opacity-80 z-0 scale-[-1]"
+      />
+      
       {/* Header */}
-      <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft touch-none">
+      <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft touch-none relative">
         <div className="container mx-auto px-4 sm:px-4 py-4 sm:py-5">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 sm:gap-3">
