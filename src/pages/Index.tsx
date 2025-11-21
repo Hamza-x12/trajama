@@ -6,8 +6,9 @@ import { Label } from "@/components/ui/label";
 import { TranslationCard } from "@/components/TranslationCard";
 import { TranslationHistory } from "@/components/TranslationHistory";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Languages, Loader2, Wand2, Copy, Check, Volume2, Mic, MicOff } from "lucide-react";
+import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff } from "lucide-react";
 import { toast } from "sonner";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import moroccoFlag from "@/assets/flags/morocco.png";
@@ -67,6 +68,9 @@ const Index = () => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [selectedVoice, setSelectedVoice] = useState<string>("");
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
@@ -79,6 +83,25 @@ const Index = () => {
       } catch (error) {
         console.error('Failed to parse history:', error);
       }
+    }
+
+    // Load available voices
+    const loadVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      setAvailableVoices(voices);
+      
+      // Auto-select first English voice if none selected
+      if (voices.length > 0 && !selectedVoice) {
+        const englishVoice = voices.find(v => v.lang.startsWith('en'));
+        if (englishVoice) {
+          setSelectedVoice(englishVoice.name);
+        }
+      }
+    };
+
+    loadVoices();
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
     }
   }, []);
 
@@ -220,27 +243,44 @@ const Index = () => {
       utterance.rate = 0.9;
       utterance.pitch = 1.0;
       utterance.volume = 1.0;
-      const voices = window.speechSynthesis.getVoices();
-      if (voices && voices.length > 0) {
-        const exactMatch = voices.find(voice => voice.lang.toLowerCase() === langCode.toLowerCase());
+
+      // Use selected voice if it matches the language, otherwise find best match
+      let voice = availableVoices.find(v => v.name === selectedVoice && v.lang.startsWith(langCode.split('-')[0]));
+      
+      if (!voice) {
+        const exactMatch = availableVoices.find(v => v.lang.toLowerCase() === langCode.toLowerCase());
         const baseLang = langCode.split("-")[0].toLowerCase();
-        const baseMatch = exactMatch || voices.find(voice => voice.lang.toLowerCase().startsWith(baseLang));
-        if (baseMatch) {
-          utterance.voice = baseMatch;
-        }
+        voice = exactMatch || availableVoices.find(v => v.lang.toLowerCase().startsWith(baseLang));
       }
+      
+      if (voice) {
+        utterance.voice = voice;
+      }
+
       utterance.onstart = () => {
+        setIsSpeaking(true);
         toast.success(`Playing ${languageName} translation`);
+      };
+      utterance.onend = () => {
+        setIsSpeaking(false);
       };
       utterance.onerror = event => {
         console.error("Speech synthesis error", event);
+        setIsSpeaking(false);
         toast.error(`Speech error: ${event.error || "Unknown error"}`);
       };
       window.speechSynthesis.speak(utterance);
     } catch (error: any) {
       console.error("Speech synthesis failure", error);
+      setIsSpeaking(false);
       toast.error(`Error: ${error.message || "Failed to generate speech"}`);
     }
+  };
+
+  const handleStopSpeaking = () => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+    toast.info("Stopped speaking");
   };
   const handleCopyTranslation = (text: string, languageName: string) => {
     navigator.clipboard.writeText(text);
@@ -395,8 +435,37 @@ const Index = () => {
             <div className="flex flex-col bg-gradient-to-br from-muted/10 to-card">
               {/* Target Languages Tabs */}
               <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card to-muted/10">
-                <div className="text-xs sm:text-sm font-semibold text-foreground tracking-wide uppercase">
-                  Translations
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <div className="text-xs sm:text-sm font-semibold text-foreground tracking-wide uppercase">
+                    Translations
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {availableVoices.length > 0 && (
+                      <Select value={selectedVoice} onValueChange={setSelectedVoice}>
+                        <SelectTrigger className="w-[180px] h-8 text-xs">
+                          <SelectValue placeholder="Select voice" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {availableVoices.map(voice => (
+                            <SelectItem key={voice.name} value={voice.name} className="text-xs">
+                              {voice.name.split(' ').slice(0, 2).join(' ')} ({voice.lang})
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                    {isSpeaking && (
+                      <Button
+                        onClick={handleStopSpeaking}
+                        variant="destructive"
+                        size="sm"
+                        className="h-8 gap-1"
+                      >
+                        <VolumeX className="h-3 w-3" />
+                        <span className="text-xs">Stop</span>
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
               
