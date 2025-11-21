@@ -476,10 +476,9 @@ const Index = () => {
                   variant="outline" 
                   className="group relative overflow-hidden gap-2.5 px-5 py-2.5 rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-background via-background/95 to-primary/5 backdrop-blur-md shadow-lg hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/40 transition-all duration-500 hover:scale-105 hover:-translate-y-1 animate-fade-in"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-moroccan-red/10 via-moroccan-gold/10 to-moroccan-green/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <BookOpen className="w-4 h-4 relative z-10 transition-all duration-500 group-hover:rotate-12 group-hover:scale-110 group-hover:text-primary" />
-                  <span className="font-bold text-sm tracking-wide relative z-10 group-hover:text-primary transition-colors duration-300">{t('navigation.dictionary')}</span>
-                  <div className="absolute -inset-1 bg-gradient-to-r from-primary/0 via-primary/30 to-primary/0 blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+                  <BookOpen className="w-4 h-4 relative z-10 transition-all duration-500 group-hover:rotate-12 group-hover:scale-110 text-foreground group-hover:text-primary" />
+                  <span className="font-bold text-sm tracking-wide relative z-10 text-foreground group-hover:text-primary transition-colors duration-300">{t('navigation.dictionary')}</span>
                 </Button>
               </Link>
               
@@ -489,10 +488,9 @@ const Index = () => {
                   className="group relative overflow-hidden gap-2.5 px-5 py-2.5 rounded-2xl border-2 border-moroccan-gold/20 bg-gradient-to-br from-background via-background/95 to-moroccan-gold/5 backdrop-blur-md shadow-lg hover:shadow-2xl hover:shadow-moroccan-gold/20 hover:border-moroccan-gold/40 transition-all duration-500 hover:scale-105 hover:-translate-y-1 animate-fade-in"
                   style={{ animationDelay: '0.1s' }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-moroccan-gold/10 via-primary/10 to-moroccan-green/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <Info className="w-4 h-4 relative z-10 transition-all duration-500 group-hover:scale-125 group-hover:text-moroccan-gold" />
-                  <span className="font-bold text-sm tracking-wide relative z-10 group-hover:text-moroccan-gold transition-colors duration-300">{t('navigation.about')}</span>
-                  <div className="absolute -inset-1 bg-gradient-to-r from-moroccan-gold/0 via-moroccan-gold/30 to-moroccan-gold/0 blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-moroccan-gold/5 via-moroccan-gold/10 to-moroccan-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+                  <Info className="w-4 h-4 relative z-10 transition-all duration-500 group-hover:scale-125 text-foreground group-hover:text-moroccan-gold" />
+                  <span className="font-bold text-sm tracking-wide relative z-10 text-foreground group-hover:text-moroccan-gold transition-colors duration-300">{t('navigation.about')}</span>
                 </Button>
               </Link>
               
@@ -502,10 +500,9 @@ const Index = () => {
                   className="group relative overflow-hidden gap-2.5 px-5 py-2.5 rounded-2xl border-2 border-moroccan-green/20 bg-gradient-to-br from-background via-background/95 to-moroccan-green/5 backdrop-blur-md shadow-lg hover:shadow-2xl hover:shadow-moroccan-green/20 hover:border-moroccan-green/40 transition-all duration-500 hover:scale-105 hover:-translate-y-1 animate-fade-in"
                   style={{ animationDelay: '0.2s' }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-moroccan-green/10 via-primary/10 to-moroccan-red/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <HelpCircle className="w-4 h-4 relative z-10 transition-all duration-500 group-hover:rotate-180 group-hover:scale-110 group-hover:text-moroccan-green" />
-                  <span className="font-bold text-sm tracking-wide relative z-10 group-hover:text-moroccan-green transition-colors duration-300">{t('navigation.faq')}</span>
-                  <div className="absolute -inset-1 bg-gradient-to-r from-moroccan-green/0 via-moroccan-green/30 to-moroccan-green/0 blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-moroccan-green/5 via-moroccan-green/10 to-moroccan-green/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+                  <HelpCircle className="w-4 h-4 relative z-10 transition-all duration-500 group-hover:rotate-180 group-hover:scale-110 text-foreground group-hover:text-moroccan-green" />
+                  <span className="font-bold text-sm tracking-wide relative z-10 text-foreground group-hover:text-moroccan-green transition-colors duration-300">{t('navigation.faq')}</span>
                 </Button>
               </Link>
             </div>
