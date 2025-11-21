@@ -557,6 +557,118 @@ const Index = () => {
           </div>
         </Card>
 
+        {/* About Tarjama Section */}
+        <Card className="mt-4 sm:mt-6 md:mt-8 border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm">
+          <div className="p-4 sm:p-6 md:p-8">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-3 sm:mb-4">
+              About Tarjama
+            </h2>
+            <div className="space-y-3 sm:space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed">
+              <p>
+                <strong className="text-foreground">Tarjama</strong> is a specialized translation tool designed specifically for Moroccan Darija (الدارجة المغربية). Unlike generic translators, Tarjama understands the unique linguistic nuances of Moroccan Arabic dialect, including regional variations, cultural idioms, and colloquial expressions.
+              </p>
+              <p>
+                Spoken by over 30 million people, Darija incorporates influences from Berber (Amazigh), French, Spanish, and Modern Standard Arabic, making it distinct from other Arabic dialects. Our AI-powered translation service preserves these cultural and linguistic subtleties to deliver accurate, context-aware translations.
+              </p>
+              <div className="bg-gradient-to-r from-primary/10 to-accent/10 p-3 sm:p-4 rounded-lg border border-primary/20">
+                <h3 className="font-semibold text-foreground mb-2">Key Features:</h3>
+                <ul className="space-y-1.5 text-xs sm:text-sm">
+                  <li>✓ Support for 11+ languages including French, English, Arabic, Spanish, German, Italian, Portuguese, Chinese, Japanese, and Turkish</li>
+                  <li>✓ Cultural intelligence that preserves tone, idioms, and regional dialects</li>
+                  <li>✓ Voice input for spoken Darija translation</li>
+                  <li>✓ Text-to-speech pronunciation in all languages</li>
+                  <li>✓ Offline mode with downloadable language packs</li>
+                  <li>✓ Translation history to save and review past translations</li>
+                  <li>✓ 100% free with no limits</li>
+                </ul>
+              </div>
+              <p>
+                Perfect for Moroccan expatriates staying connected with home, language learners exploring Darija, travelers visiting Morocco, business professionals working with Moroccan partners, and anyone interested in Moroccan culture and language.
+              </p>
+            </div>
+          </div>
+        </Card>
+
+        {/* FAQ Section */}
+        <Card className="mt-4 sm:mt-6 md:mt-8 border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm">
+          <div className="p-4 sm:p-6 md:p-8">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4 sm:mb-6">
+              Frequently Asked Questions
+            </h2>
+            <div className="space-y-4 sm:space-y-6">
+              {/* FAQ 1 */}
+              <div className="border-b border-border/30 pb-4">
+                <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">
+                  What is Darija?
+                </h3>
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                  Darija (الدارجة) is the colloquial Arabic dialect spoken in Morocco. It's distinct from Modern Standard Arabic and incorporates vocabulary and grammar from Berber (Amazigh), French, Spanish, and Arabic. Darija is the everyday language used by Moroccans in daily conversations, different from the formal Arabic used in official documents and media.
+                </p>
+              </div>
+
+              {/* FAQ 2 */}
+              <div className="border-b border-border/30 pb-4">
+                <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">
+                  How do I translate Darija to French?
+                </h3>
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                  Simply enter your Darija text in the input field, select "Darija" as your source language (or use "Detect Language"), and click the translate button. Tarjama will automatically provide translations in French along with 10 other languages. You can also use voice input to speak in Darija and get instant translations.
+                </p>
+              </div>
+
+              {/* FAQ 3 */}
+              <div className="border-b border-border/30 pb-4">
+                <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">
+                  Is Tarjama translator free?
+                </h3>
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                  Yes! Tarjama is completely free to use with no limitations. You can translate as many texts as you want, use voice input, access text-to-speech, download offline language packs, and save your translation history—all at no cost.
+                </p>
+              </div>
+
+              {/* FAQ 4 */}
+              <div className="border-b border-border/30 pb-4">
+                <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">
+                  What languages does Tarjama support?
+                </h3>
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                  Tarjama supports Moroccan Darija and 10 additional languages: French, English, Modern Standard Arabic, Spanish, German, Italian, Portuguese, Chinese, Japanese, and Turkish. You can translate from any of these languages to Darija or from Darija to any of them.
+                </p>
+              </div>
+
+              {/* FAQ 5 */}
+              <div className="border-b border-border/30 pb-4">
+                <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">
+                  How accurate is Darija translation?
+                </h3>
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                  Tarjama uses advanced AI models specifically trained on Moroccan Darija to provide highly accurate translations. Our system understands cultural context, regional variations, and colloquial expressions. While no automated translation is perfect, Tarjama is designed to preserve the meaning, tone, and cultural nuances of Darija better than generic translation tools.
+                </p>
+              </div>
+
+              {/* FAQ 6 */}
+              <div className="border-b border-border/30 pb-4">
+                <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">
+                  Can I use Tarjama offline?
+                </h3>
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                  Yes! Tarjama supports offline translation. You can download language packs while connected to the internet, and then use them without any connection. This feature is perfect for travelers in Morocco or situations where internet access is limited.
+                </p>
+              </div>
+
+              {/* FAQ 7 */}
+              <div className="pb-4">
+                <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">
+                  How do I use voice input for Darija translation?
+                </h3>
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                  Click the microphone button at the bottom right of the text input area. Speak your Darija text clearly, and Tarjama will automatically transcribe your speech and convert it to text. Then simply click translate to get translations in all supported languages. This feature makes it easy to translate spoken conversations in real-time.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Card>
+
         {/* History Section */}
         {history.length > 0 && <div className="mt-4 sm:mt-6 md:mt-8">
             <TranslationHistory history={history} onSelectItem={handleSelectHistoryItem} onClearHistory={handleClearHistory} onDeleteItem={handleDeleteHistoryItem} />
