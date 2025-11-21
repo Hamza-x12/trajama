@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Form,
   FormControl,
@@ -16,9 +17,12 @@ import {
 } from "@/components/ui/form";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Send } from "lucide-react";
+import { Send, HelpCircle, Lightbulb, AlertCircle } from "lucide-react";
 
 const contactSchema = z.object({
+  inquiryType: z.enum(["question", "suggestion", "problem"], {
+    required_error: "Please select an inquiry type",
+  }),
   name: z.string().trim().min(1, { message: "Name is required" }).max(100, { message: "Name must be less than 100 characters" }),
   email: z.string().trim().email({ message: "Invalid email address" }).max(255, { message: "Email must be less than 255 characters" }),
   message: z.string().trim().min(1, { message: "Message is required" }).max(1000, { message: "Message must be less than 1000 characters" }),
@@ -37,6 +41,7 @@ export const ContactForm = ({ pageSource }: ContactFormProps) => {
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
+      inquiryType: "question",
       name: "",
       email: "",
       message: "",
@@ -48,6 +53,7 @@ export const ContactForm = ({ pageSource }: ContactFormProps) => {
     
     try {
       const { error } = await supabase.from("contact_submissions").insert({
+        inquiry_type: data.inquiryType,
         name: data.name,
         email: data.email,
         message: data.message,
@@ -92,6 +98,51 @@ export const ContactForm = ({ pageSource }: ContactFormProps) => {
       <CardContent className="p-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="inquiryType"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>What would you like to do?</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-2"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="question" />
+                        </FormControl>
+                        <FormLabel className="flex items-center gap-2 font-normal cursor-pointer">
+                          <HelpCircle className="w-4 h-4 text-primary" />
+                          I have a question
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="suggestion" />
+                        </FormControl>
+                        <FormLabel className="flex items-center gap-2 font-normal cursor-pointer">
+                          <Lightbulb className="w-4 h-4 text-primary" />
+                          I want to make a suggestion
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="problem" />
+                        </FormControl>
+                        <FormLabel className="flex items-center gap-2 font-normal cursor-pointer">
+                          <AlertCircle className="w-4 h-4 text-primary" />
+                          I'm facing a problem
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="name"
