@@ -386,26 +386,34 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col touch-pan-y relative">
       {/* Zellige corner decorations */}
-      <img 
-        src={zelligeCorner} 
-        alt="" 
-        className="fixed top-0 left-0 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 pointer-events-none opacity-80 z-0"
-      />
-      <img 
-        src={zelligeCorner} 
-        alt="" 
-        className="fixed top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 pointer-events-none opacity-80 z-0 scale-x-[-1]"
-      />
-      <img 
-        src={zelligeCorner} 
-        alt="" 
-        className="fixed bottom-0 left-0 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 pointer-events-none opacity-80 z-0 scale-y-[-1]"
-      />
-      <img 
-        src={zelligeCorner} 
-        alt="" 
-        className="fixed bottom-0 right-0 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 pointer-events-none opacity-80 z-0 scale-[-1]"
-      />
+      <div className="fixed top-0 left-0 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 pointer-events-none z-0 overflow-hidden">
+        <img 
+          src={zelligeCorner} 
+          alt="" 
+          className="w-full h-full object-cover opacity-90"
+        />
+      </div>
+      <div className="fixed top-0 right-0 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 pointer-events-none z-0 overflow-hidden">
+        <img 
+          src={zelligeCorner} 
+          alt="" 
+          className="w-full h-full object-cover opacity-90 scale-x-[-1]"
+        />
+      </div>
+      <div className="fixed bottom-0 left-0 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 pointer-events-none z-0 overflow-hidden">
+        <img 
+          src={zelligeCorner} 
+          alt="" 
+          className="w-full h-full object-cover opacity-90 scale-y-[-1]"
+        />
+      </div>
+      <div className="fixed bottom-0 right-0 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 pointer-events-none z-0 overflow-hidden">
+        <img 
+          src={zelligeCorner} 
+          alt="" 
+          className="w-full h-full object-cover opacity-90 scale-[-1]"
+        />
+      </div>
       
       {/* Header */}
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft touch-none relative">
