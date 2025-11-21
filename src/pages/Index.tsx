@@ -77,7 +77,10 @@ interface HistoryItem {
 }
 const HISTORY_KEY = 'darija-translation-history';
 const Index = () => {
-  const { t, i18n } = useTranslation();
+  const {
+    t,
+    i18n
+  } = useTranslation();
   const isOnline = useOnlineStatus();
   const [inputText, setInputText] = useState("");
   const [sourceLanguage, setSourceLanguage] = useState("Darija");
@@ -127,7 +130,7 @@ const Index = () => {
     const loadVoices = () => {
       const voices = window.speechSynthesis.getVoices();
       setAvailableVoices(voices);
-      
+
       // Auto-select first English voice if none selected
       if (voices.length > 0 && !selectedVoice) {
         const englishVoice = voices.find(v => v.lang.startsWith('en'));
@@ -136,7 +139,6 @@ const Index = () => {
         }
       }
     };
-
     loadVoices();
     if (window.speechSynthesis.onvoiceschanged !== undefined) {
       window.speechSynthesis.onvoiceschanged = loadVoices;
@@ -275,7 +277,6 @@ const Index = () => {
     });
     toast.info(t('history.loaded'));
   };
-
   const handleSwapLanguages = () => {
     if (sourceLanguage === "Detect Language") {
       toast.error("Cannot swap with detect language");
@@ -306,10 +307,8 @@ const Index = () => {
       toast.error("Speech synthesis not supported in your browser");
       return;
     }
-    
     setIsSpeaking(true);
     setSpeakingLanguage(languageName);
-    
     const languageCodes: Record<string, string> = {
       Darija: "ar-MA",
       Arabic: "ar-SA",
@@ -338,17 +337,14 @@ const Index = () => {
 
       // Use selected voice if it matches the language, otherwise find best match
       let voice = availableVoices.find(v => v.name === selectedVoice && v.lang.startsWith(langCode.split('-')[0]));
-      
       if (!voice) {
         const exactMatch = availableVoices.find(v => v.lang.toLowerCase() === langCode.toLowerCase());
         const baseLang = langCode.split("-")[0].toLowerCase();
         voice = exactMatch || availableVoices.find(v => v.lang.toLowerCase().startsWith(baseLang));
       }
-      
       if (voice) {
         utterance.voice = voice;
       }
-
       utterance.onstart = () => {
         setIsSpeaking(true);
         toast.success(t('audio.playing'));
@@ -368,7 +364,6 @@ const Index = () => {
       toast.error(`Error: ${error.message || "Failed to generate speech"}`);
     }
   };
-
   const handleStopSpeaking = () => {
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
@@ -381,26 +376,26 @@ const Index = () => {
     toast.success(`${languageName} ${t('translation.copied')}`);
     setTimeout(() => setCopiedId(null), 2000);
   };
-
   const startRecording = useCallback(async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true
+      });
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
-
-      mediaRecorder.ondataavailable = (event) => {
+      mediaRecorder.ondataavailable = event => {
         if (event.data.size > 0) {
           audioChunksRef.current.push(event.data);
         }
       };
-
       mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: 'audio/webm'
+        });
         stream.getTracks().forEach(track => track.stop());
         await transcribeAudio(audioBlob);
       };
-
       mediaRecorder.start();
       setIsRecording(true);
       toast.success(t('audio.recording'));
@@ -409,7 +404,6 @@ const Index = () => {
       toast.error(t('audio.recordingFailed'));
     }
   }, []);
-
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
@@ -417,26 +411,26 @@ const Index = () => {
       toast.info(t('audio.processing'));
     }
   }, [isRecording]);
-
   const transcribeAudio = async (audioBlob: Blob) => {
     setIsTranscribing(true);
     try {
       const reader = new FileReader();
       reader.readAsDataURL(audioBlob);
-      
       reader.onloadend = async () => {
         const base64Audio = (reader.result as string).split(',')[1];
-        
-        const { data, error } = await supabase.functions.invoke('transcribe-audio', {
-          body: { audio: base64Audio }
+        const {
+          data,
+          error
+        } = await supabase.functions.invoke('transcribe-audio', {
+          body: {
+            audio: base64Audio
+          }
         });
-
         if (error) throw error;
         if (data.error) {
           toast.error(data.error);
           return;
         }
-
         setInputText(data.text);
         toast.success(t('audio.transcriptionComplete'));
       };
@@ -447,37 +441,19 @@ const Index = () => {
       setIsTranscribing(false);
     }
   };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col touch-pan-y relative">
+  return <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col touch-pan-y relative">
       {/* Zellige corner decorations */}
       <div className="fixed top-0 left-0 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 pointer-events-none z-0 overflow-hidden">
-        <img 
-          src={zelligeCorner} 
-          alt="" 
-          className="w-full h-full object-cover opacity-90"
-        />
+        <img src={zelligeCorner} alt="" className="w-full h-full object-cover opacity-90" />
       </div>
       <div className="fixed top-0 right-0 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 pointer-events-none z-0 overflow-hidden">
-        <img 
-          src={zelligeCorner} 
-          alt="" 
-          className="w-full h-full object-cover opacity-90 scale-x-[-1]"
-        />
+        <img src={zelligeCorner} alt="" className="w-full h-full object-cover opacity-90 scale-x-[-1]" />
       </div>
       <div className="fixed bottom-0 left-0 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 pointer-events-none z-0 overflow-hidden">
-        <img 
-          src={zelligeCorner} 
-          alt="" 
-          className="w-full h-full object-cover opacity-90 scale-y-[-1]"
-        />
+        <img src={zelligeCorner} alt="" className="w-full h-full object-cover opacity-90 scale-y-[-1]" />
       </div>
       <div className="fixed bottom-0 right-0 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 pointer-events-none z-0 overflow-hidden">
-        <img 
-          src={zelligeCorner} 
-          alt="" 
-          className="w-full h-full object-cover opacity-90 scale-[-1]"
-        />
+        <img src={zelligeCorner} alt="" className="w-full h-full object-cover opacity-90 scale-[-1]" />
       </div>
       
       {/* Header */}
@@ -500,11 +476,7 @@ const Index = () => {
             </Link>
             
             <div className="flex items-center gap-2">
-              <SettingsDialog 
-                selectedVoice={selectedVoice}
-                setSelectedVoice={setSelectedVoice}
-                availableVoices={availableVoices}
-              />
+              <SettingsDialog selectedVoice={selectedVoice} setSelectedVoice={setSelectedVoice} availableVoices={availableVoices} />
               <ThemeToggle />
             </div>
           </div>
@@ -515,31 +487,23 @@ const Index = () => {
       <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 max-w-7xl flex-1">
         <Card className="overflow-hidden border-border/50 shadow-elegant hover:shadow-hover transition-all duration-500 bg-card/50 backdrop-blur-sm">
           {/* Language Selectors with Swap Button */}
-          <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card via-muted/5 to-card">
+          <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card via-muted/5 to-card px-[5px]">
             <div className="flex items-center gap-3">
               {/* Source Language */}
               <div className="flex-1">
-                <Select value={sourceLanguage} onValueChange={(value) => {
-                  setSourceLanguage(value);
-                  setDetectedLanguage(null);
-                }}>
+                <Select value={sourceLanguage} onValueChange={value => {
+                setSourceLanguage(value);
+                setDetectedLanguage(null);
+              }}>
                   <SelectTrigger className={`w-full h-14 bg-gradient-to-br from-background to-muted/30 border-2 border-border/70 hover:border-primary/50 hover:bg-gradient-to-br hover:from-primary/5 hover:to-accent/5 transition-all duration-300 rounded-2xl shadow-soft hover:shadow-moroccan group ${isSwapping ? 'scale-95 opacity-70' : 'scale-100 opacity-100'}`}>
                     <SelectValue>
                       <div className="flex items-center gap-3">
-                        {sourceLanguage === "Detect Language" ? (
-                          <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
+                        {sourceLanguage === "Detect Language" ? <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
                             <Wand2 className="w-5 h-5 text-primary" />
-                          </div>
-                        ) : (
-                          <div className="relative">
-                            <img 
-                              src={languages.find(l => l.name === sourceLanguage)?.icon as string} 
-                              alt={sourceLanguage} 
-                              className="w-8 h-8 rounded-lg object-cover shadow-sm ring-2 ring-border/30 group-hover:ring-primary/50 transition-all" 
-                            />
+                          </div> : <div className="relative">
+                            <img src={languages.find(l => l.name === sourceLanguage)?.icon as string} alt={sourceLanguage} className="w-8 h-8 rounded-lg object-cover shadow-sm ring-2 ring-border/30 group-hover:ring-primary/50 transition-all" />
                             <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
-                          </div>
-                        )}
+                          </div>}
                         <div className="flex-1 text-left">
                           <span className="font-semibold text-base block">{t(`languages.${sourceLanguage.toLowerCase().replace(' ', '')}`)}</span>
                         </div>
@@ -547,53 +511,30 @@ const Index = () => {
                     </SelectValue>
                   </SelectTrigger>
                 <SelectContent className="bg-background/95 backdrop-blur-xl border-2 border-border shadow-2xl z-[100] rounded-xl">
-                  {languages.map(lang => (
-                    <SelectItem 
-                      key={lang.name} 
-                      value={lang.name} 
-                      className="cursor-pointer hover:bg-primary/10 focus:bg-primary/10 rounded-lg my-1 transition-all duration-200 hover:scale-[1.02]"
-                    >
+                  {languages.map(lang => <SelectItem key={lang.name} value={lang.name} className="cursor-pointer hover:bg-primary/10 focus:bg-primary/10 rounded-lg my-1 transition-all duration-200 hover:scale-[1.02]">
                       <div className="flex items-center gap-3 py-1">
-                        {lang.name === "Detect Language" ? (
-                          <div className="p-2 bg-primary/10 rounded-lg">
+                        {lang.name === "Detect Language" ? <div className="p-2 bg-primary/10 rounded-lg">
                             <Wand2 className="w-5 h-5 text-primary" />
-                          </div>
-                        ) : (
-                          <div className="relative">
-                            <img 
-                              src={lang.icon as string} 
-                              alt={lang.name} 
-                              className="w-7 h-7 rounded-lg object-cover shadow-sm ring-2 ring-border/20" 
-                            />
+                          </div> : <div className="relative">
+                            <img src={lang.icon as string} alt={lang.name} className="w-7 h-7 rounded-lg object-cover shadow-sm ring-2 ring-border/20" />
                             <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
-                          </div>
-                        )}
+                          </div>}
                         <span className="font-medium">{t(`languages.${lang.name.toLowerCase().replace(' ', '')}`)}</span>
                       </div>
-                    </SelectItem>
-                  ))}
+                    </SelectItem>)}
                 </SelectContent>
                 </Select>
               </div>
 
               {/* Detected Language Badge */}
-              {detectedLanguage && (
-                <div className="animate-fade-in">
+              {detectedLanguage && <div className="animate-fade-in">
                   <span className="text-xs bg-primary/90 text-primary-foreground px-3 py-1.5 rounded-full border-2 border-primary shadow-moroccan font-medium whitespace-nowrap">
                     {t('translation.detectedLanguage')}: {detectedLanguage}
                   </span>
-                </div>
-              )}
+                </div>}
               
               {/* Swap Button */}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleSwapLanguages}
-                disabled={sourceLanguage === "Detect Language" || isSwapping}
-                className={`h-12 w-12 p-0 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-2 border-primary/20 hover:border-primary/40 transition-all duration-300 hover:scale-110 hover:shadow-moroccan disabled:opacity-50 disabled:cursor-not-allowed ${isSwapping ? 'animate-spin' : ''}`}
-                aria-label="Swap languages"
-              >
+              <Button variant="ghost" size="sm" onClick={handleSwapLanguages} disabled={sourceLanguage === "Detect Language" || isSwapping} className={`h-12 w-12 p-0 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-2 border-primary/20 hover:border-primary/40 transition-all duration-300 hover:scale-110 hover:shadow-moroccan disabled:opacity-50 disabled:cursor-not-allowed ${isSwapping ? 'animate-spin' : ''}`} aria-label="Swap languages">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 text-primary">
                   <path d="M7 16V4M7 4L3 8M7 4L11 8" />
                   <path d="M17 8V20M17 20L21 16M17 20L13 16" />
@@ -607,11 +548,7 @@ const Index = () => {
                   <SelectValue>
                     <div className="flex items-center gap-3">
                       <div className="relative">
-                        <img 
-                          src={languages.find(l => l.name === targetLanguage)?.icon as string} 
-                          alt={targetLanguage} 
-                          className="w-8 h-8 rounded-lg object-cover shadow-sm ring-2 ring-border/30 group-hover:ring-accent/50 transition-all" 
-                        />
+                        <img src={languages.find(l => l.name === targetLanguage)?.icon as string} alt={targetLanguage} className="w-8 h-8 rounded-lg object-cover shadow-sm ring-2 ring-border/30 group-hover:ring-accent/50 transition-all" />
                         <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
                       </div>
                       <span className="font-semibold text-base">{t(`languages.${targetLanguage.toLowerCase().replace(' ', '')}`)}</span>
@@ -619,25 +556,15 @@ const Index = () => {
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent className="bg-background/95 backdrop-blur-xl border-2 border-border shadow-2xl z-[100] rounded-xl">
-                  {languages.filter(lang => lang.name !== "Detect Language").map(lang => (
-                    <SelectItem 
-                      key={lang.name} 
-                      value={lang.name} 
-                      className="cursor-pointer hover:bg-accent/10 focus:bg-accent/10 rounded-lg my-1 transition-all duration-200 hover:scale-[1.02]"
-                    >
+                  {languages.filter(lang => lang.name !== "Detect Language").map(lang => <SelectItem key={lang.name} value={lang.name} className="cursor-pointer hover:bg-accent/10 focus:bg-accent/10 rounded-lg my-1 transition-all duration-200 hover:scale-[1.02]">
                       <div className="flex items-center gap-3 py-1">
                         <div className="relative">
-                          <img 
-                            src={lang.icon as string} 
-                            alt={lang.name} 
-                            className="w-7 h-7 rounded-lg object-cover shadow-sm ring-2 ring-border/20" 
-                          />
+                          <img src={lang.icon as string} alt={lang.name} className="w-7 h-7 rounded-lg object-cover shadow-sm ring-2 ring-border/20" />
                           <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
                         </div>
                         <span className="font-medium">{t(`languages.${lang.name.toLowerCase().replace(' ', '')}`)}</span>
                       </div>
-                    </SelectItem>
-                  ))}
+                    </SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
@@ -651,54 +578,34 @@ const Index = () => {
               {/* Source Text Input */}
               <div className="flex-1 p-4 sm:p-5 md:p-6">
                 <div className={`relative p-5 sm:p-6 backdrop-blur-sm border border-border/50 rounded-lg shadow-moroccan transition-all duration-300 ${(() => {
-                  const themes: Record<string, string> = {
-                    'Darija': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-green-50/10 dark:from-red-950/20 dark:to-green-950/20',
-                    'French': 'border-l-4 border-l-blue-600 bg-gradient-to-r from-blue-50/10 via-white/5 to-red-50/10 dark:from-blue-950/20 dark:via-background/10 dark:to-red-950/20',
-                    'Arabic': 'border-l-4 border-l-green-600 bg-gradient-to-r from-green-50/10 to-white/5 dark:from-green-950/20 dark:to-background/10',
-                    'English': 'border-l-4 border-l-blue-700 bg-gradient-to-r from-red-50/10 via-white/5 to-blue-50/10 dark:from-red-950/20 dark:via-background/10 dark:to-blue-950/20',
-                    'Spanish': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-yellow-50/10 dark:from-red-950/20 dark:to-yellow-950/20',
-                    'German': 'border-l-4 border-l-yellow-500 bg-gradient-to-r from-red-50/10 via-yellow-50/10 to-zinc-100/10 dark:from-red-950/20 dark:via-yellow-950/20 dark:to-zinc-900/20',
-                    'Italian': 'border-l-4 border-l-green-600 bg-gradient-to-r from-green-50/10 via-white/5 to-red-50/10 dark:from-green-950/20 dark:via-background/10 dark:to-red-950/20',
-                    'Portuguese': 'border-l-4 border-l-green-700 bg-gradient-to-r from-green-50/10 to-red-50/10 dark:from-green-950/20 dark:to-red-950/20',
-                    'Chinese': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-yellow-50/10 dark:from-red-950/20 dark:to-yellow-950/20',
-                    'Japanese': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-white/5 dark:from-red-950/20 dark:to-background/10',
-                    'Turkish': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-white/5 dark:from-red-950/20 dark:to-background/10',
-                    'Russian': 'border-l-4 border-l-blue-600 bg-gradient-to-r from-blue-50/10 via-white/5 to-red-50/10 dark:from-blue-950/20 dark:via-background/10 dark:to-red-950/20',
-                    'Korean': 'border-l-4 border-l-blue-700 bg-gradient-to-r from-blue-50/10 via-red-50/10 to-white/5 dark:from-blue-950/20 dark:via-red-950/20 dark:to-background/10',
-                    'Hindi': 'border-l-4 border-l-orange-600 bg-gradient-to-r from-orange-50/10 via-white/5 to-green-50/10 dark:from-orange-950/20 dark:via-background/10 dark:to-green-950/20',
-                    'Detect Language': 'border-l-4 border-l-primary bg-gradient-to-r from-primary/10 to-accent/10 dark:from-primary/20 dark:to-accent/20'
-                  };
-                  return themes[sourceLanguage] || '';
-                })()}`}>
+                const themes: Record<string, string> = {
+                  'Darija': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-green-50/10 dark:from-red-950/20 dark:to-green-950/20',
+                  'French': 'border-l-4 border-l-blue-600 bg-gradient-to-r from-blue-50/10 via-white/5 to-red-50/10 dark:from-blue-950/20 dark:via-background/10 dark:to-red-950/20',
+                  'Arabic': 'border-l-4 border-l-green-600 bg-gradient-to-r from-green-50/10 to-white/5 dark:from-green-950/20 dark:to-background/10',
+                  'English': 'border-l-4 border-l-blue-700 bg-gradient-to-r from-red-50/10 via-white/5 to-blue-50/10 dark:from-red-950/20 dark:via-background/10 dark:to-blue-950/20',
+                  'Spanish': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-yellow-50/10 dark:from-red-950/20 dark:to-yellow-950/20',
+                  'German': 'border-l-4 border-l-yellow-500 bg-gradient-to-r from-red-50/10 via-yellow-50/10 to-zinc-100/10 dark:from-red-950/20 dark:via-yellow-950/20 dark:to-zinc-900/20',
+                  'Italian': 'border-l-4 border-l-green-600 bg-gradient-to-r from-green-50/10 via-white/5 to-red-50/10 dark:from-green-950/20 dark:via-background/10 dark:to-red-950/20',
+                  'Portuguese': 'border-l-4 border-l-green-700 bg-gradient-to-r from-green-50/10 to-red-50/10 dark:from-green-950/20 dark:to-red-950/20',
+                  'Chinese': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-yellow-50/10 dark:from-red-950/20 dark:to-yellow-950/20',
+                  'Japanese': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-white/5 dark:from-red-950/20 dark:to-background/10',
+                  'Turkish': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-white/5 dark:from-red-950/20 dark:to-background/10',
+                  'Russian': 'border-l-4 border-l-blue-600 bg-gradient-to-r from-blue-50/10 via-white/5 to-red-50/10 dark:from-blue-950/20 dark:via-background/10 dark:to-red-950/20',
+                  'Korean': 'border-l-4 border-l-blue-700 bg-gradient-to-r from-blue-50/10 via-red-50/10 to-white/5 dark:from-blue-950/20 dark:via-red-950/20 dark:to-background/10',
+                  'Hindi': 'border-l-4 border-l-orange-600 bg-gradient-to-r from-orange-50/10 via-white/5 to-green-50/10 dark:from-orange-950/20 dark:via-background/10 dark:to-green-950/20',
+                  'Detect Language': 'border-l-4 border-l-primary bg-gradient-to-r from-primary/10 to-accent/10 dark:from-primary/20 dark:to-accent/20'
+                };
+                return themes[sourceLanguage] || '';
+              })()}`}>
                   {/* Detect Language Button */}
-                  {sourceLanguage !== "Detect Language" && inputText.trim() && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setSourceLanguage("Detect Language")}
-                      className="absolute top-2 left-2 h-8 px-3 text-xs font-medium bg-background/80 backdrop-blur-sm hover:bg-primary/10 border-primary/30 z-10 gap-1.5"
-                    >
+                  {sourceLanguage !== "Detect Language" && inputText.trim() && <Button variant="outline" size="sm" onClick={() => setSourceLanguage("Detect Language")} className="absolute top-2 left-2 h-8 px-3 text-xs font-medium bg-background/80 backdrop-blur-sm hover:bg-primary/10 border-primary/30 z-10 gap-1.5">
                       <Wand2 className="h-3.5 w-3.5" />
                       {t('languages.detectlanguage')}
-                    </Button>
-                  )}
+                    </Button>}
                   
                   <Textarea placeholder={t('translation.placeholder')} value={inputText} onChange={e => setInputText(e.target.value)} className={`${getTextSize(inputText)} resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60 bg-transparent min-h-[200px] transition-all duration-200 ${sourceLanguage !== "Detect Language" && inputText.trim() ? 'pt-10' : ''}`} />
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={isRecording ? stopRecording : startRecording}
-                    disabled={isTranscribing}
-                    className={`absolute bottom-2 right-2 h-10 w-10 p-0 rounded-full ${isRecording ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' : 'hover:bg-primary/10'}`}
-                    aria-label={isRecording ? t('audio.stopRecording') : t('audio.startRecording')}
-                  >
-                    {isTranscribing ? (
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                    ) : isRecording ? (
-                      <MicOff className="h-5 w-5" />
-                    ) : (
-                      <Mic className="h-5 w-5" />
-                    )}
+                  <Button variant="ghost" size="sm" onClick={isRecording ? stopRecording : startRecording} disabled={isTranscribing} className={`absolute bottom-2 right-2 h-10 w-10 p-0 rounded-full ${isRecording ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' : 'hover:bg-primary/10'}`} aria-label={isRecording ? t('audio.stopRecording') : t('audio.startRecording')}>
+                    {isTranscribing ? <Loader2 className="h-5 w-5 animate-spin" /> : isRecording ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
                   </Button>
                 </div>
               </div>
@@ -722,33 +629,29 @@ const Index = () => {
             <div className="flex flex-col bg-gradient-to-br from-muted/10 to-card">
               {/* Translation Result */}
             <div className="flex-1 p-4 sm:p-5 md:p-6">
-                {translations ? (
-                  (() => {
-                    const getCountryTheme = (lang: string) => {
-                      const themes: Record<string, string> = {
-                        'Darija': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-green-50/10 dark:from-red-950/20 dark:to-green-950/20',
-                        'French': 'border-l-4 border-l-blue-600 bg-gradient-to-r from-blue-50/10 via-white/5 to-red-50/10 dark:from-blue-950/20 dark:via-background/10 dark:to-red-950/20',
-                        'Arabic': 'border-l-4 border-l-green-600 bg-gradient-to-r from-green-50/10 to-white/5 dark:from-green-950/20 dark:to-background/10',
-                        'English': 'border-l-4 border-l-blue-700 bg-gradient-to-r from-red-50/10 via-white/5 to-blue-50/10 dark:from-red-950/20 dark:via-background/10 dark:to-blue-950/20',
-                        'Spanish': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-yellow-50/10 dark:from-red-950/20 dark:to-yellow-950/20',
-                        'German': 'border-l-4 border-l-yellow-500 bg-gradient-to-r from-red-50/10 via-yellow-50/10 to-zinc-100/10 dark:from-red-950/20 dark:via-yellow-950/20 dark:to-zinc-900/20',
-                        'Italian': 'border-l-4 border-l-green-600 bg-gradient-to-r from-green-50/10 via-white/5 to-red-50/10 dark:from-green-950/20 dark:via-background/10 dark:to-red-950/20',
-                        'Portuguese': 'border-l-4 border-l-green-700 bg-gradient-to-r from-green-50/10 to-red-50/10 dark:from-green-950/20 dark:to-red-950/20',
-                        'Chinese': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-yellow-50/10 dark:from-red-950/20 dark:to-yellow-950/20',
-                        'Japanese': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-white/5 dark:from-red-950/20 dark:to-background/10',
-                        'Turkish': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-white/5 dark:from-red-950/20 dark:to-background/10',
-                        'Russian': 'border-l-4 border-l-blue-600 bg-gradient-to-r from-blue-50/10 via-white/5 to-red-50/10 dark:from-blue-950/20 dark:via-background/10 dark:to-red-950/20',
-                        'Korean': 'border-l-4 border-l-blue-700 bg-gradient-to-r from-blue-50/10 via-red-50/10 to-white/5 dark:from-blue-950/20 dark:via-red-950/20 dark:to-background/10',
-                        'Hindi': 'border-l-4 border-l-orange-600 bg-gradient-to-r from-orange-50/10 via-white/5 to-green-50/10 dark:from-orange-950/20 dark:via-background/10 dark:to-green-950/20'
-                      };
-                      return themes[lang] || '';
-                    };
-                    
-                    const key = targetLanguage.toLowerCase() as keyof typeof translations.translations;
-                    const translation = translations.translations[key];
-                    
-                    return (
-                      <div className={`p-5 sm:p-6 backdrop-blur-sm border border-border/50 rounded-lg shadow-moroccan transition-all duration-300 ${getCountryTheme(targetLanguage)}`}>
+                {translations ? (() => {
+                const getCountryTheme = (lang: string) => {
+                  const themes: Record<string, string> = {
+                    'Darija': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-green-50/10 dark:from-red-950/20 dark:to-green-950/20',
+                    'French': 'border-l-4 border-l-blue-600 bg-gradient-to-r from-blue-50/10 via-white/5 to-red-50/10 dark:from-blue-950/20 dark:via-background/10 dark:to-red-950/20',
+                    'Arabic': 'border-l-4 border-l-green-600 bg-gradient-to-r from-green-50/10 to-white/5 dark:from-green-950/20 dark:to-background/10',
+                    'English': 'border-l-4 border-l-blue-700 bg-gradient-to-r from-red-50/10 via-white/5 to-blue-50/10 dark:from-red-950/20 dark:via-background/10 dark:to-blue-950/20',
+                    'Spanish': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-yellow-50/10 dark:from-red-950/20 dark:to-yellow-950/20',
+                    'German': 'border-l-4 border-l-yellow-500 bg-gradient-to-r from-red-50/10 via-yellow-50/10 to-zinc-100/10 dark:from-red-950/20 dark:via-yellow-950/20 dark:to-zinc-900/20',
+                    'Italian': 'border-l-4 border-l-green-600 bg-gradient-to-r from-green-50/10 via-white/5 to-red-50/10 dark:from-green-950/20 dark:via-background/10 dark:to-red-950/20',
+                    'Portuguese': 'border-l-4 border-l-green-700 bg-gradient-to-r from-green-50/10 to-red-50/10 dark:from-green-950/20 dark:to-red-950/20',
+                    'Chinese': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-yellow-50/10 dark:from-red-950/20 dark:to-yellow-950/20',
+                    'Japanese': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-white/5 dark:from-red-950/20 dark:to-background/10',
+                    'Turkish': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-white/5 dark:from-red-950/20 dark:to-background/10',
+                    'Russian': 'border-l-4 border-l-blue-600 bg-gradient-to-r from-blue-50/10 via-white/5 to-red-50/10 dark:from-blue-950/20 dark:via-background/10 dark:to-red-950/20',
+                    'Korean': 'border-l-4 border-l-blue-700 bg-gradient-to-r from-blue-50/10 via-red-50/10 to-white/5 dark:from-blue-950/20 dark:via-red-950/20 dark:to-background/10',
+                    'Hindi': 'border-l-4 border-l-orange-600 bg-gradient-to-r from-orange-50/10 via-white/5 to-green-50/10 dark:from-orange-950/20 dark:via-background/10 dark:to-green-950/20'
+                  };
+                  return themes[lang] || '';
+                };
+                const key = targetLanguage.toLowerCase() as keyof typeof translations.translations;
+                const translation = translations.translations[key];
+                return <div className={`p-5 sm:p-6 backdrop-blur-sm border border-border/50 rounded-lg shadow-moroccan transition-all duration-300 ${getCountryTheme(targetLanguage)}`}>
                         <div className="space-y-4">
                           <div className={`min-h-[200px] ${getTextSize(translation || '')} leading-relaxed text-foreground/90 transition-all duration-200`}>
                             {translation || <span className="text-muted-foreground italic text-base">{t('translation.willAppear')}</span>}
@@ -756,44 +659,29 @@ const Index = () => {
                           
                           {/* Action Buttons */}
                           <div className="flex items-center gap-2 pt-4 border-t border-border/50">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleCopyTranslation(translation, targetLanguage)}
-                              className="gap-2"
-                            >
+                            <Button variant="ghost" size="sm" onClick={() => handleCopyTranslation(translation, targetLanguage)} className="gap-2">
                               <Copy className="h-4 w-4" />
                               <span className="text-sm">{t('audio.copy')}</span>
                             </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => {
-                                if (isSpeaking) {
-                                  handleStopSpeaking();
-                                } else {
-                                  handleSpeakTranslation(translation, targetLanguage);
-                                }
-                              }}
-                              className="gap-2"
-                            >
-                              {isSpeaking ? (
-                                <>
+                            <Button variant="ghost" size="sm" onClick={() => {
+                        if (isSpeaking) {
+                          handleStopSpeaking();
+                        } else {
+                          handleSpeakTranslation(translation, targetLanguage);
+                        }
+                      }} className="gap-2">
+                              {isSpeaking ? <>
                                   <VolumeX className="h-4 w-4 animate-pulse" />
                                   <span className="text-sm">{t('audio.stop')}</span>
-                                </>
-                              ) : (
-                                <>
+                                </> : <>
                                   <Volume2 className="h-4 w-4" />
                                   <span className="text-sm">{t('audio.play')}</span>
-                                </>
-                              )}
+                                </>}
                             </Button>
                           </div>
                           
                           {/* Cultural Notes */}
-                          {translations.culturalNotes && (
-                            <div className="mt-6 p-5 bg-gradient-to-br from-primary/5 via-accent/5 to-primary/10 rounded-xl border border-primary/20 shadow-moroccan animate-fade-in backdrop-blur-sm relative overflow-hidden">
+                          {translations.culturalNotes && <div className="mt-6 p-5 bg-gradient-to-br from-primary/5 via-accent/5 to-primary/10 rounded-xl border border-primary/20 shadow-moroccan animate-fade-in backdrop-blur-sm relative overflow-hidden">
                               {/* Decorative corner accent */}
                               <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 rounded-bl-full" />
                               <div className="absolute bottom-0 left-0 w-16 h-16 bg-accent/10 rounded-tr-full" />
@@ -802,7 +690,7 @@ const Index = () => {
                                 <div className="flex items-center gap-2 mb-3">
                                   <div className="p-2 bg-primary/10 rounded-lg">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-                                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                                     </svg>
                                   </div>
                                   <p className="text-sm font-bold text-primary uppercase tracking-wider">
@@ -813,18 +701,13 @@ const Index = () => {
                                   {translations.culturalNotes}
                                 </p>
                               </div>
-                            </div>
-                          )}
+                            </div>}
                         </div>
-                      </div>
-                    );
-                  })()
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-full text-muted-foreground min-h-[300px]">
+                      </div>;
+              })() : <div className="flex flex-col items-center justify-center h-full text-muted-foreground min-h-[300px]">
                     <Languages className="w-16 h-16 mb-4 opacity-30" />
                     <p className="text-sm font-medium">{t('translation.willAppear')}</p>
-                  </div>
-                )}
+                  </div>}
               </div>
             </div>
           </div>
@@ -873,7 +756,6 @@ const Index = () => {
       </footer>
 
       <InstallPrompt />
-    </div>
-  );
+    </div>;
 };
 export default Index;
