@@ -10,7 +10,7 @@ import { SettingsDialog } from "@/components/SettingsDialog";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineScreen } from "@/components/OfflineScreen";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
-import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu } from "lucide-react";
+import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -348,6 +348,15 @@ const Index = () => {
       toast.success(t('translation.suggestionApplied') || 'Suggestion applied');
     }
   };
+  
+  const handleClear = () => {
+    setInputText('');
+    setTranslations(null);
+    setSpellingSuggestion(null);
+    setDetectedLanguage(null);
+    toast.success(t('translation.cleared') || 'Cleared');
+  };
+  
   const handleClearHistory = () => {
     setHistory([]);
     toast.success(t('history.cleared'));
@@ -835,16 +844,28 @@ const Index = () => {
 
               {/* Translate Button */}
               <div className="border-t border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-muted/10 to-card">
-                <Button onClick={handleTranslate} disabled={isTranslating || !inputText.trim()} className="w-full h-10 sm:h-11 md:h-12 text-sm sm:text-base font-semibold shadow-moroccan hover:shadow-hover transition-all duration-300 hover:scale-[1.02]" size="lg">
-                  {isTranslating ? <>
-                      <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin mr-2" />
-                      <span className="hidden sm:inline">{t('translation.translating')}</span>
-                      <span className="sm:hidden">{t('translation.translate')}</span>
-                    </> : <>
-                      <Languages className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                      {t('translation.translate')}
-                    </>}
-                </Button>
+                <div className="flex gap-2">
+                  <Button 
+                    onClick={handleClear} 
+                    disabled={!inputText.trim() && !translations}
+                    variant="outline"
+                    className="h-10 sm:h-11 md:h-12 px-4 sm:px-6 text-sm sm:text-base font-semibold shadow-soft hover:shadow-moroccan transition-all duration-300 hover:scale-[1.02]" 
+                    size="lg"
+                  >
+                    <X className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
+                    <span className="hidden sm:inline">{t('translation.clear') || 'Clear'}</span>
+                  </Button>
+                  <Button onClick={handleTranslate} disabled={isTranslating || !inputText.trim()} className="flex-1 h-10 sm:h-11 md:h-12 text-sm sm:text-base font-semibold shadow-moroccan hover:shadow-hover transition-all duration-300 hover:scale-[1.02]" size="lg">
+                    {isTranslating ? <>
+                        <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin mr-2" />
+                        <span className="hidden sm:inline">{t('translation.translating')}</span>
+                        <span className="sm:hidden">{t('translation.translate')}</span>
+                      </> : <>
+                        <Languages className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                        {t('translation.translate')}
+                      </>}
+                  </Button>
+                </div>
               </div>
             </div>
 

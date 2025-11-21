@@ -22,7 +22,9 @@
     "culturalNotes": "ملاحظات ثقافية",
     "detectedLanguage": "اللغة المكتشفة:",
     "didYouMean": "هل تقصد:",
-    "suggestionApplied": "تم تطبيق الاقتراح"
+    "suggestionApplied": "تم تطبيق الاقتراح",
+    "clear": "مسح",
+    "cleared": "تم المسح"
   },
   "languages": {
     "detectlanguage": "كشف اللغة",
