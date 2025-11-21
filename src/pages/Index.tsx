@@ -474,35 +474,38 @@ const Index = () => {
               <Link to="/dictionary">
                 <Button 
                   variant="outline" 
-                  className="group relative gap-2 px-4 py-2 rounded-xl border-2 border-border/50 bg-background/50 backdrop-blur-sm shadow-soft hover:shadow-moroccan hover:border-primary/50 transition-all duration-500 hover:scale-110 hover:-translate-y-0.5 animate-fade-in"
+                  className="group relative overflow-hidden gap-2.5 px-5 py-2.5 rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-background via-background/95 to-primary/5 backdrop-blur-md shadow-lg hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/40 transition-all duration-500 hover:scale-105 hover:-translate-y-1 animate-fade-in"
                 >
-                  <BookOpen className="w-4 h-4 transition-transform duration-300 group-hover:rotate-12" />
-                  <span className="font-semibold text-sm tracking-wide">{t('navigation.dictionary')}</span>
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-moroccan-red/10 via-moroccan-gold/10 to-moroccan-green/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <BookOpen className="w-4 h-4 relative z-10 transition-all duration-500 group-hover:rotate-12 group-hover:scale-110 group-hover:text-primary" />
+                  <span className="font-bold text-sm tracking-wide relative z-10 group-hover:text-primary transition-colors duration-300">{t('navigation.dictionary')}</span>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-primary/0 via-primary/30 to-primary/0 blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-700" />
                 </Button>
               </Link>
               
               <Link to="/about">
                 <Button 
                   variant="outline" 
-                  className="group relative gap-2 px-4 py-2 rounded-xl border-2 border-border/50 bg-background/50 backdrop-blur-sm shadow-soft hover:shadow-moroccan hover:border-primary/50 transition-all duration-500 hover:scale-110 hover:-translate-y-0.5 animate-fade-in"
+                  className="group relative overflow-hidden gap-2.5 px-5 py-2.5 rounded-2xl border-2 border-moroccan-gold/20 bg-gradient-to-br from-background via-background/95 to-moroccan-gold/5 backdrop-blur-md shadow-lg hover:shadow-2xl hover:shadow-moroccan-gold/20 hover:border-moroccan-gold/40 transition-all duration-500 hover:scale-105 hover:-translate-y-1 animate-fade-in"
                   style={{ animationDelay: '0.1s' }}
                 >
-                  <Info className="w-4 h-4 transition-transform duration-300 group-hover:scale-125" />
-                  <span className="font-semibold text-sm tracking-wide">{t('navigation.about')}</span>
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-moroccan-gold/10 via-primary/10 to-moroccan-green/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <Info className="w-4 h-4 relative z-10 transition-all duration-500 group-hover:scale-125 group-hover:text-moroccan-gold" />
+                  <span className="font-bold text-sm tracking-wide relative z-10 group-hover:text-moroccan-gold transition-colors duration-300">{t('navigation.about')}</span>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-moroccan-gold/0 via-moroccan-gold/30 to-moroccan-gold/0 blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-700" />
                 </Button>
               </Link>
               
               <Link to="/faq">
                 <Button 
                   variant="outline" 
-                  className="group relative gap-2 px-4 py-2 rounded-xl border-2 border-border/50 bg-background/50 backdrop-blur-sm shadow-soft hover:shadow-moroccan hover:border-primary/50 transition-all duration-500 hover:scale-110 hover:-translate-y-0.5 animate-fade-in"
+                  className="group relative overflow-hidden gap-2.5 px-5 py-2.5 rounded-2xl border-2 border-moroccan-green/20 bg-gradient-to-br from-background via-background/95 to-moroccan-green/5 backdrop-blur-md shadow-lg hover:shadow-2xl hover:shadow-moroccan-green/20 hover:border-moroccan-green/40 transition-all duration-500 hover:scale-105 hover:-translate-y-1 animate-fade-in"
                   style={{ animationDelay: '0.2s' }}
                 >
-                  <HelpCircle className="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" />
-                  <span className="font-semibold text-sm tracking-wide">{t('navigation.faq')}</span>
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-moroccan-green/10 via-primary/10 to-moroccan-red/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <HelpCircle className="w-4 h-4 relative z-10 transition-all duration-500 group-hover:rotate-180 group-hover:scale-110 group-hover:text-moroccan-green" />
+                  <span className="font-bold text-sm tracking-wide relative z-10 group-hover:text-moroccan-green transition-colors duration-300">{t('navigation.faq')}</span>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-moroccan-green/0 via-moroccan-green/30 to-moroccan-green/0 blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-700" />
                 </Button>
               </Link>
             </div>
@@ -513,9 +516,11 @@ const Index = () => {
                 <Button 
                   variant="outline" 
                   size="icon"
-                  className="md:hidden rounded-xl border-2 border-border/50 bg-background/50 backdrop-blur-sm shadow-soft hover:shadow-moroccan hover:border-primary/50 transition-all duration-300"
+                  className="md:hidden group relative overflow-hidden rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-background via-background/95 to-primary/5 backdrop-blur-md shadow-lg hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/40 transition-all duration-500 hover:scale-105"
                 >
-                  <Menu className="h-5 w-5" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-moroccan-red/10 via-moroccan-gold/10 to-moroccan-green/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <Menu className="h-5 w-5 relative z-10 transition-all duration-300 group-hover:scale-110 group-hover:text-primary" />
+                  <div className="absolute -inset-1 bg-gradient-to-r from-primary/0 via-primary/30 to-primary/0 blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-700" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[280px] sm:w-[320px]">
@@ -528,43 +533,59 @@ const Index = () => {
                   <Link to="/dictionary" className="w-full">
                     <Button 
                       variant="outline" 
-                      className="w-full justify-start gap-3 px-4 py-6 rounded-xl border-2 border-border/50 bg-background/50 backdrop-blur-sm hover:bg-primary/5 hover:border-primary/50 transition-all duration-300 animate-fade-in"
+                      className="group relative overflow-hidden w-full justify-start gap-4 px-5 py-6 rounded-2xl border-2 border-primary/20 bg-gradient-to-r from-background to-primary/5 backdrop-blur-md shadow-lg hover:shadow-xl hover:shadow-primary/20 hover:border-primary/40 hover:translate-x-1 transition-all duration-500 animate-fade-in"
                     >
-                      <BookOpen className="w-5 h-5 text-primary" />
-                      <span className="font-semibold text-base">{t('navigation.dictionary')}</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-moroccan-red/5 via-moroccan-gold/5 to-moroccan-green/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <BookOpen className="w-5 h-5 text-primary relative z-10 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
+                      <span className="font-bold text-base relative z-10 group-hover:text-primary transition-colors duration-300">{t('navigation.dictionary')}</span>
+                      <div className="absolute right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                      </div>
                     </Button>
                   </Link>
                   
                   <Link to="/about" className="w-full">
                     <Button 
                       variant="outline" 
-                      className="w-full justify-start gap-3 px-4 py-6 rounded-xl border-2 border-border/50 bg-background/50 backdrop-blur-sm hover:bg-primary/5 hover:border-primary/50 transition-all duration-300 animate-fade-in"
+                      className="group relative overflow-hidden w-full justify-start gap-4 px-5 py-6 rounded-2xl border-2 border-moroccan-gold/20 bg-gradient-to-r from-background to-moroccan-gold/5 backdrop-blur-md shadow-lg hover:shadow-xl hover:shadow-moroccan-gold/20 hover:border-moroccan-gold/40 hover:translate-x-1 transition-all duration-500 animate-fade-in"
                       style={{ animationDelay: '0.1s' }}
                     >
-                      <Info className="w-5 h-5 text-primary" />
-                      <span className="font-semibold text-base">{t('navigation.about')}</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-moroccan-gold/5 via-primary/5 to-moroccan-green/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <Info className="w-5 h-5 text-moroccan-gold relative z-10 transition-transform duration-300 group-hover:scale-125" />
+                      <span className="font-bold text-base relative z-10 group-hover:text-moroccan-gold transition-colors duration-300">{t('navigation.about')}</span>
+                      <div className="absolute right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="w-2 h-2 rounded-full bg-moroccan-gold animate-pulse" />
+                      </div>
                     </Button>
                   </Link>
                   
                   <Link to="/faq" className="w-full">
                     <Button 
                       variant="outline" 
-                      className="w-full justify-start gap-3 px-4 py-6 rounded-xl border-2 border-border/50 bg-background/50 backdrop-blur-sm hover:bg-primary/5 hover:border-primary/50 transition-all duration-300 animate-fade-in"
+                      className="group relative overflow-hidden w-full justify-start gap-4 px-5 py-6 rounded-2xl border-2 border-moroccan-green/20 bg-gradient-to-r from-background to-moroccan-green/5 backdrop-blur-md shadow-lg hover:shadow-xl hover:shadow-moroccan-green/20 hover:border-moroccan-green/40 hover:translate-x-1 transition-all duration-500 animate-fade-in"
                       style={{ animationDelay: '0.2s' }}
                     >
-                      <HelpCircle className="w-5 h-5 text-primary" />
-                      <span className="font-semibold text-base">{t('navigation.faq')}</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-moroccan-green/5 via-primary/5 to-moroccan-red/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <HelpCircle className="w-5 h-5 text-moroccan-green relative z-10 transition-transform duration-300 group-hover:rotate-180 group-hover:scale-110" />
+                      <span className="font-bold text-base relative z-10 group-hover:text-moroccan-green transition-colors duration-300">{t('navigation.faq')}</span>
+                      <div className="absolute right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="w-2 h-2 rounded-full bg-moroccan-green animate-pulse" />
+                      </div>
                     </Button>
                   </Link>
                   
                   <Link to="/contact" className="w-full">
                     <Button 
                       variant="outline" 
-                      className="w-full justify-start gap-3 px-4 py-6 rounded-xl border-2 border-border/50 bg-background/50 backdrop-blur-sm hover:bg-primary/5 hover:border-primary/50 transition-all duration-300 animate-fade-in"
+                      className="group relative overflow-hidden w-full justify-start gap-4 px-5 py-6 rounded-2xl border-2 border-moroccan-red/20 bg-gradient-to-r from-background to-moroccan-red/5 backdrop-blur-md shadow-lg hover:shadow-xl hover:shadow-moroccan-red/20 hover:border-moroccan-red/40 hover:translate-x-1 transition-all duration-500 animate-fade-in"
                       style={{ animationDelay: '0.3s' }}
                     >
-                      <Instagram className="w-5 h-5 text-primary" />
-                      <span className="font-semibold text-base">{t('navigation.contact')}</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-moroccan-red/5 via-moroccan-gold/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <Instagram className="w-5 h-5 text-moroccan-red relative z-10 transition-transform duration-300 group-hover:scale-110" />
+                      <span className="font-bold text-base relative z-10 group-hover:text-moroccan-red transition-colors duration-300">{t('navigation.contact')}</span>
+                      <div className="absolute right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="w-2 h-2 rounded-full bg-moroccan-red animate-pulse" />
+                      </div>
                     </Button>
                   </Link>
                 </nav>
