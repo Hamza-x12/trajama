@@ -513,48 +513,64 @@ const Index = () => {
       <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 max-w-7xl flex-1">
         <Card className="overflow-hidden border-border/50 shadow-elegant hover:shadow-hover transition-all duration-500 bg-card/50 backdrop-blur-sm">
           {/* Language Selectors with Swap Button */}
-          <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card to-muted/10">
+          <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card via-muted/5 to-card">
             <div className="flex items-center gap-3">
               {/* Source Language */}
               <Select value={sourceLanguage} onValueChange={(value) => {
                 setSourceLanguage(value);
                 setDetectedLanguage(null);
               }}>
-                <SelectTrigger className={`flex-1 h-12 bg-background border-border hover:bg-accent/5 transition-all duration-300 rounded-xl ${isSwapping ? 'scale-95 opacity-70' : 'scale-100 opacity-100'}`}>
+                <SelectTrigger className={`flex-1 h-14 bg-gradient-to-br from-background to-muted/30 border-2 border-border/70 hover:border-primary/50 hover:bg-gradient-to-br hover:from-primary/5 hover:to-accent/5 transition-all duration-300 rounded-2xl shadow-soft hover:shadow-moroccan group ${isSwapping ? 'scale-95 opacity-70' : 'scale-100 opacity-100'}`}>
                   <SelectValue>
                     <div className="flex items-center gap-3">
                       {sourceLanguage === "Detect Language" ? (
-                        <Wand2 className="w-5 h-5" />
+                        <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
+                          <Wand2 className="w-5 h-5 text-primary" />
+                        </div>
                       ) : (
-                        <img 
-                          src={languages.find(l => l.name === sourceLanguage)?.icon as string} 
-                          alt={sourceLanguage} 
-                          className="w-6 h-6 rounded-full object-cover" 
-                        />
+                        <div className="relative">
+                          <img 
+                            src={languages.find(l => l.name === sourceLanguage)?.icon as string} 
+                            alt={sourceLanguage} 
+                            className="w-8 h-8 rounded-lg object-cover shadow-sm ring-2 ring-border/30 group-hover:ring-primary/50 transition-all" 
+                          />
+                          <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
+                        </div>
                       )}
-                      <span className="font-medium text-base">{t(`languages.${sourceLanguage.toLowerCase().replace(' ', '')}`)}</span>
-                      {detectedLanguage && sourceLanguage === "Detect Language" && (
-                        <span className="ml-2 px-2 py-0.5 text-xs bg-primary/20 text-primary rounded-full border border-primary/30 animate-fade-in">
-                          {detectedLanguage}
-                        </span>
-                      )}
+                      <div className="flex-1 text-left">
+                        <span className="font-semibold text-base block">{t(`languages.${sourceLanguage.toLowerCase().replace(' ', '')}`)}</span>
+                        {detectedLanguage && sourceLanguage === "Detect Language" && (
+                          <span className="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded-full border border-primary/40 animate-fade-in inline-block mt-1">
+                            {detectedLanguage}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </SelectValue>
                 </SelectTrigger>
-                <SelectContent className="bg-background border-border shadow-lg z-50">
+                <SelectContent className="bg-background/95 backdrop-blur-xl border-2 border-border shadow-2xl z-[100] rounded-xl">
                   {languages.map(lang => (
-                    <SelectItem key={lang.name} value={lang.name} className="cursor-pointer hover:bg-accent/10">
-                      <div className="flex items-center gap-3">
+                    <SelectItem 
+                      key={lang.name} 
+                      value={lang.name} 
+                      className="cursor-pointer hover:bg-primary/10 focus:bg-primary/10 rounded-lg my-1 transition-all duration-200 hover:scale-[1.02]"
+                    >
+                      <div className="flex items-center gap-3 py-1">
                         {lang.name === "Detect Language" ? (
-                          <Wand2 className="w-5 h-5" />
+                          <div className="p-2 bg-primary/10 rounded-lg">
+                            <Wand2 className="w-5 h-5 text-primary" />
+                          </div>
                         ) : (
-                          <img 
-                            src={lang.icon as string} 
-                            alt={lang.name} 
-                            className="w-6 h-6 rounded-full object-cover" 
-                          />
+                          <div className="relative">
+                            <img 
+                              src={lang.icon as string} 
+                              alt={lang.name} 
+                              className="w-7 h-7 rounded-lg object-cover shadow-sm ring-2 ring-border/20" 
+                            />
+                            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
+                          </div>
                         )}
-                        <span>{t(`languages.${lang.name.toLowerCase().replace(' ', '')}`)}</span>
+                        <span className="font-medium">{t(`languages.${lang.name.toLowerCase().replace(' ', '')}`)}</span>
                       </div>
                     </SelectItem>
                   ))}
@@ -567,10 +583,10 @@ const Index = () => {
                 size="sm"
                 onClick={handleSwapLanguages}
                 disabled={sourceLanguage === "Detect Language" || isSwapping}
-                className={`h-10 w-10 p-0 rounded-full hover:bg-primary/10 transition-all duration-300 ${isSwapping ? 'animate-spin' : ''}`}
+                className={`h-12 w-12 p-0 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-2 border-primary/20 hover:border-primary/40 transition-all duration-300 hover:scale-110 hover:shadow-moroccan disabled:opacity-50 disabled:cursor-not-allowed ${isSwapping ? 'animate-spin' : ''}`}
                 aria-label="Swap languages"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 text-primary">
                   <path d="M7 16V4M7 4L3 8M7 4L11 8" />
                   <path d="M17 8V20M17 20L21 16M17 20L13 16" />
                 </svg>
@@ -578,28 +594,38 @@ const Index = () => {
               
               {/* Target Language */}
               <Select value={targetLanguage} onValueChange={setTargetLanguage}>
-                <SelectTrigger className={`flex-1 h-12 bg-background border-border hover:bg-accent/5 transition-all duration-300 rounded-xl ${isSwapping ? 'scale-95 opacity-70' : 'scale-100 opacity-100'}`}>
+                <SelectTrigger className={`flex-1 h-14 bg-gradient-to-br from-background to-muted/30 border-2 border-border/70 hover:border-accent/50 hover:bg-gradient-to-br hover:from-accent/5 hover:to-primary/5 transition-all duration-300 rounded-2xl shadow-soft hover:shadow-moroccan group ${isSwapping ? 'scale-95 opacity-70' : 'scale-100 opacity-100'}`}>
                   <SelectValue>
                     <div className="flex items-center gap-3">
-                      <img 
-                        src={languages.find(l => l.name === targetLanguage)?.icon as string} 
-                        alt={targetLanguage} 
-                        className="w-6 h-6 rounded-full object-cover" 
-                      />
-                      <span className="font-medium text-base">{t(`languages.${targetLanguage.toLowerCase().replace(' ', '')}`)}</span>
+                      <div className="relative">
+                        <img 
+                          src={languages.find(l => l.name === targetLanguage)?.icon as string} 
+                          alt={targetLanguage} 
+                          className="w-8 h-8 rounded-lg object-cover shadow-sm ring-2 ring-border/30 group-hover:ring-accent/50 transition-all" 
+                        />
+                        <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
+                      </div>
+                      <span className="font-semibold text-base">{t(`languages.${targetLanguage.toLowerCase().replace(' ', '')}`)}</span>
                     </div>
                   </SelectValue>
                 </SelectTrigger>
-                <SelectContent className="bg-background border-border shadow-lg z-50">
+                <SelectContent className="bg-background/95 backdrop-blur-xl border-2 border-border shadow-2xl z-[100] rounded-xl">
                   {languages.filter(lang => lang.name !== "Detect Language").map(lang => (
-                    <SelectItem key={lang.name} value={lang.name} className="cursor-pointer hover:bg-accent/10">
-                      <div className="flex items-center gap-3">
-                        <img 
-                          src={lang.icon as string} 
-                          alt={lang.name} 
-                          className="w-6 h-6 rounded-full object-cover" 
-                        />
-                        <span>{t(`languages.${lang.name.toLowerCase().replace(' ', '')}`)}</span>
+                    <SelectItem 
+                      key={lang.name} 
+                      value={lang.name} 
+                      className="cursor-pointer hover:bg-accent/10 focus:bg-accent/10 rounded-lg my-1 transition-all duration-200 hover:scale-[1.02]"
+                    >
+                      <div className="flex items-center gap-3 py-1">
+                        <div className="relative">
+                          <img 
+                            src={lang.icon as string} 
+                            alt={lang.name} 
+                            className="w-7 h-7 rounded-lg object-cover shadow-sm ring-2 ring-border/20" 
+                          />
+                          <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
+                        </div>
+                        <span className="font-medium">{t(`languages.${lang.name.toLowerCase().replace(' ', '')}`)}</span>
                       </div>
                     </SelectItem>
                   ))}
