@@ -20,7 +20,9 @@
     "enterText": "عافاك دخّل شي نص باش تترجمو",
     "copied": "تنسخات الترجمة!",
     "culturalNotes": "ملاحظات ثقافية",
-    "detectedLanguage": "اللغة اللي تلقات:"
+    "detectedLanguage": "اللغة اللي تلقات:",
+    "didYouMean": "واش قصدك:",
+    "suggestionApplied": "تطبق الاقتراح"
   },
   "languages": {
     "detectlanguage": "اكتشف اللغة",

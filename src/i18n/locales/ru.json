@@ -20,7 +20,9 @@
     "enterText": "Пожалуйста, введите текст для перевода",
     "copied": "перевод скопирован!",
     "culturalNotes": "Культурные заметки",
-    "detectedLanguage": "Обнаруженный язык:"
+    "detectedLanguage": "Обнаруженный язык:",
+    "didYouMean": "Вы имели в виду:",
+    "suggestionApplied": "Предложение применено"
   },
   "languages": {
     "detectlanguage": "Определить язык",

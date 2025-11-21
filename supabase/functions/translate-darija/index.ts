@@ -13,7 +13,7 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { text, sourceLanguage, targetLanguages, uiLanguage = 'en' } = body;
+    const { text, sourceLanguage, targetLanguages, uiLanguage = 'en', checkSpelling = false } = body;
     
     // Input validation
     if (!text || typeof text !== 'string') {
@@ -34,6 +34,54 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ error: 'Source language is required' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    // Spelling check mode - separate handling
+    if (checkSpelling && targetLanguages.length === 0) {
+      console.log('Spelling check request received', {
+        sourceLanguage,
+        textLength: text.length,
+        timestamp: new Date().toISOString()
+      });
+      
+      const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+      if (!LOVABLE_API_KEY) {
+        throw new Error('LOVABLE_API_KEY is not configured');
+      }
+      
+      const spellCheckResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.5-flash',
+          messages: [
+            { 
+              role: 'system', 
+              content: `You are a spelling and grammar expert for ${sourceLanguage === 'auto' ? 'multiple languages' : sourceLanguage}. Check the text for spelling and grammar errors. If you find errors, provide ONLY the corrected version. If the text is correct, respond with EXACTLY the same text. Do not add any explanations or formatting.` 
+            },
+            { role: 'user', content: text }
+          ],
+          temperature: 0.3,
+        }),
+      });
+      
+      if (spellCheckResponse.ok) {
+        const spellData = await spellCheckResponse.json();
+        const suggestion = spellData.choices[0].message.content.trim();
+        
+        return new Response(
+          JSON.stringify({ spellingSuggestion: suggestion !== text ? suggestion : null }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      
+      return new Response(
+        JSON.stringify({ spellingSuggestion: null }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
     

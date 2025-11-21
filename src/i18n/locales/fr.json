@@ -20,7 +20,9 @@
     "enterText": "Veuillez entrer du texte à traduire",
     "copied": "traduction copiée!",
     "culturalNotes": "Notes culturelles",
-    "detectedLanguage": "Langue détectée:"
+    "detectedLanguage": "Langue détectée:",
+    "didYouMean": "Vouliez-vous dire:",
+    "suggestionApplied": "Suggestion appliquée"
   },
   "languages": {
     "detectlanguage": "Détecter la langue",

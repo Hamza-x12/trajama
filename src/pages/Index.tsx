@@ -98,6 +98,8 @@ const Index = () => {
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [isSwapping, setIsSwapping] = useState(false);
   const [detectedLanguage, setDetectedLanguage] = useState<string | null>(null);
+  const [spellingSuggestion, setSpellingSuggestion] = useState<string | null>(null);
+  const [isCheckingSpelling, setIsCheckingSpelling] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
@@ -154,6 +156,20 @@ const Index = () => {
   useEffect(() => {
     localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
   }, [history]);
+  
+  // Check spelling when user stops typing
+  useEffect(() => {
+    if (!inputText.trim() || inputText.length < 3) {
+      setSpellingSuggestion(null);
+      return;
+    }
+    
+    const timeoutId = setTimeout(() => {
+      checkSpelling(inputText);
+    }, 1500); // Check after 1.5 seconds of inactivity
+    
+    return () => clearTimeout(timeoutId);
+  }, [inputText, sourceLanguage]);
   const languages = [{
     name: "Detect Language",
     code: "auto",
@@ -288,8 +304,49 @@ const Index = () => {
       const temp = sourceLanguage;
       setSourceLanguage(targetLanguage);
       setTargetLanguage(temp);
-      setTimeout(() => setIsSwapping(false), 300);
-    }, 150);
+      setTimeout(() => setIsSwapping(false), 600);
+    }, 300);
+  };
+  
+  const checkSpelling = async (text: string) => {
+    if (!text.trim() || text.length < 3) {
+      setSpellingSuggestion(null);
+      return;
+    }
+    
+    setIsCheckingSpelling(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('translate-darija', {
+        body: {
+          text: text,
+          sourceLanguage: sourceLanguage === "Detect Language" ? "auto" : sourceLanguage,
+          targetLanguages: [],
+          checkSpelling: true,
+          uiLanguage: i18n.language
+        }
+      });
+      
+      if (error) throw error;
+      
+      if (data.spellingSuggestion && data.spellingSuggestion !== text) {
+        setSpellingSuggestion(data.spellingSuggestion);
+      } else {
+        setSpellingSuggestion(null);
+      }
+    } catch (error) {
+      console.error('Spelling check error:', error);
+      setSpellingSuggestion(null);
+    } finally {
+      setIsCheckingSpelling(false);
+    }
+  };
+  
+  const applySuggestion = () => {
+    if (spellingSuggestion) {
+      setInputText(spellingSuggestion);
+      setSpellingSuggestion(null);
+      toast.success(t('translation.suggestionApplied') || 'Suggestion applied');
+    }
   };
   const handleClearHistory = () => {
     setHistory([]);
@@ -677,9 +734,9 @@ const Index = () => {
                   </span>
                 </div>}
               
-              {/* Swap Button */}
-              <Button variant="ghost" size="sm" onClick={handleSwapLanguages} disabled={sourceLanguage === "Detect Language" || isSwapping} className={`h-12 w-12 p-0 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-2 border-primary/20 hover:border-primary/40 transition-all duration-300 hover:scale-110 hover:shadow-moroccan disabled:opacity-50 disabled:cursor-not-allowed ${isSwapping ? 'animate-spin' : ''}`} aria-label="Swap languages">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 text-primary">
+              {/* Swap Button with Enhanced Animation */}
+              <Button variant="ghost" size="sm" onClick={handleSwapLanguages} disabled={sourceLanguage === "Detect Language" || isSwapping} className={`h-12 w-12 p-0 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-2 border-primary/20 hover:border-primary/40 transition-all duration-500 hover:scale-110 hover:shadow-moroccan disabled:opacity-50 disabled:cursor-not-allowed ${isSwapping ? 'animate-swap-rotate' : ''}`} aria-label="Swap languages">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
                   <path d="M7 16V4M7 4L3 8M7 4L11 8" />
                   <path d="M17 8V20M17 20L21 16M17 20L13 16" />
                 </svg>
@@ -757,6 +814,24 @@ const Index = () => {
                   </Button>
                 </div>
               </div>
+
+              {/* Spelling Suggestion */}
+              {spellingSuggestion && (
+                <div className="px-4 sm:px-5 md:px-6 pb-2 animate-fade-in">
+                  <div className="flex items-center gap-2 text-sm bg-muted/50 border border-border/50 rounded-lg p-3 hover:bg-muted/70 transition-all duration-200">
+                    <HelpCircle className="w-4 h-4 text-primary flex-shrink-0" />
+                    <span className="text-muted-foreground">
+                      {t('translation.didYouMean') || 'Did you mean:'}
+                    </span>
+                    <button 
+                      onClick={applySuggestion}
+                      className="text-primary font-semibold hover:underline cursor-pointer"
+                    >
+                      {spellingSuggestion}
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* Translate Button */}
               <div className="border-t border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-muted/10 to-card">

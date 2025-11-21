@@ -20,7 +20,9 @@
     "enterText": "يرجى إدخال بعض النص للترجمة",
     "copied": "تم نسخ الترجمة!",
     "culturalNotes": "ملاحظات ثقافية",
-    "detectedLanguage": "اللغة المكتشفة:"
+    "detectedLanguage": "اللغة المكتشفة:",
+    "didYouMean": "هل تقصد:",
+    "suggestionApplied": "تم تطبيق الاقتراح"
   },
   "languages": {
     "detectlanguage": "كشف اللغة",
