@@ -97,7 +97,10 @@
     "searchTitle": "Поиск в словаре",
     "searchDescription": "Поиск слов",
     "searchPlaceholder": "Поиск...",
-    "noResults": "Результаты не найдены"
+    "noResults": "Результаты не найдены",
+    "totalWords": "Всего слов",
+    "categories": "Категории",
+    "accuracy": "Точность"
   },
   "about": {
     "title": "О Тарджаме",

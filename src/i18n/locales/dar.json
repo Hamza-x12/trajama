@@ -79,10 +79,21 @@
     "downloadLanguagesWhenOnline": "تيليشارجي اللوغات ملي تكون متصل باش تخدم بيهوم بلا إنترنت",
     "reconnectMessage": "غادي تولي متصل أوتوماتيكيا ملي يرجع الإنترنت"
   },
-  "install": {
-    "title": "نصّب ترجمة",
-    "description": "نصّب التطبيق على جهازك باش تستعملو بلا نت",
-    "install": "نصّب",
-    "later": "من بعد"
+  "navigation": {
+    "dictionary": "القاموس",
+    "about": "علينا",
+    "faq": "أسئلة",
+    "backToTranslator": "رجع للمترجم"
+  },
+  "dictionary": {
+    "title": "قاموس الدارجة",
+    "subtitle": "جمل كثيرة الاستعمال",
+    "searchTitle": "قلّب في القاموس",
+    "searchDescription": "قلّب على الكلمات",
+    "searchPlaceholder": "قلّب...",
+    "noResults": "ماكاين حتى نتيجة",
+    "totalWords": "مجموع الكلمات",
+    "categories": "الأقسام",
+    "accuracy": "الدقة"
   }
 }
