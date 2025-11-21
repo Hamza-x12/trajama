@@ -28,6 +28,7 @@ import portugalFlag from "@/assets/flags/portugal.png";
 import chinaFlag from "@/assets/flags/china.png";
 import japanFlag from "@/assets/flags/japan.png";
 import turkeyFlag from "@/assets/flags/turkey.png";
+import russiaFlag from "@/assets/flags/russia.png";
 import zelligeCorner from "@/assets/zellige-corner.png";
 interface TranslationResult {
   translations: {
@@ -42,6 +43,7 @@ interface TranslationResult {
     chinese: string;
     japanese: string;
     turkish: string;
+    russian: string;
   };
   culturalNotes?: string;
   detectedLanguage?: string;
@@ -63,6 +65,7 @@ interface HistoryItem {
     chinese: string;
     japanese: string;
     turkish: string;
+    russian: string;
   };
 }
 const HISTORY_KEY = 'darija-translation-history';
@@ -176,6 +179,10 @@ const Index = () => {
     name: "Turkish",
     code: "tr",
     icon: turkeyFlag
+  }, {
+    name: "Russian",
+    code: "ru",
+    icon: russiaFlag
   }];
   const handleTranslate = async () => {
     if (!inputText.trim()) {
@@ -268,7 +275,8 @@ const Index = () => {
       Portuguese: "pt-PT",
       Chinese: "zh-CN",
       Japanese: "ja-JP",
-      Turkish: "tr-TR"
+      Turkish: "tr-TR",
+      Russian: "ru-RU"
     };
     try {
       // Cancel any ongoing speech

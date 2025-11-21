@@ -45,14 +45,14 @@ const About = () => {
         <Card className="mb-8 border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm">
           <div className="p-4 sm:p-6 md:p-8">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-3 sm:mb-4">
-              About Tarjama
+              {t('about.mainTitle')}
             </h2>
             <div className="space-y-3 sm:space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed">
               <p>
-                <strong className="text-foreground">Tarjama</strong> is a specialized translation tool designed specifically for Moroccan Darija (الدارجة المغربية). Unlike generic translators, Tarjama understands the unique linguistic nuances of Moroccan Arabic dialect, including regional variations, cultural idioms, and colloquial expressions.
+                <strong className="text-foreground">Tarjama</strong> {t('about.mainDescription1')}
               </p>
               <p>
-                Spoken by over 30 million people, Darija incorporates influences from Berber (Amazigh), French, Spanish, and Modern Standard Arabic, making it distinct from other Arabic dialects. Our AI-powered translation service preserves these cultural and linguistic subtleties to deliver accurate, context-aware translations.
+                {t('about.mainDescription2')}
               </p>
             </div>
           </div>
@@ -66,8 +66,8 @@ const About = () => {
                   <Globe className="w-8 h-8 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">Multi-Language Support</h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground">Support for 11+ languages including French, English, Arabic, Spanish, German, Italian, Portuguese, Chinese, Japanese, and Turkish</p>
+                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">{t('about.feature1Title')}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{t('about.feature1Description')}</p>
                 </div>
               </div>
             </CardContent>
@@ -80,8 +80,8 @@ const About = () => {
                   <Mic className="w-8 h-8 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">Voice Recognition</h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground">Voice input for spoken Darija translation with real-time transcription</p>
+                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">{t('about.feature2Title')}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{t('about.feature2Description')}</p>
                 </div>
               </div>
             </CardContent>
@@ -94,8 +94,8 @@ const About = () => {
                   <Volume2 className="w-8 h-8 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">Text-to-Speech</h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground">Text-to-speech pronunciation in all supported languages</p>
+                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">{t('about.feature3Title')}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{t('about.feature3Description')}</p>
                 </div>
               </div>
             </CardContent>
@@ -108,8 +108,8 @@ const About = () => {
                   <History className="w-8 h-8 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">Translation History</h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground">Save and review past translations with offline mode support</p>
+                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground">{t('about.feature4Title')}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{t('about.feature4Description')}</p>
                 </div>
               </div>
             </CardContent>
@@ -120,11 +120,11 @@ const About = () => {
           <div className="p-4 sm:p-6 md:p-8">
             <div className="space-y-3 sm:space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed">
               <p>
-                Perfect for Moroccan expatriates staying connected with home, language learners exploring Darija, travelers visiting Morocco, business professionals working with Moroccan partners, and anyone interested in Moroccan culture and language.
+                {t('about.targetAudience')}
               </p>
               <div className="bg-gradient-to-r from-primary/10 to-accent/10 p-3 sm:p-4 rounded-lg border border-primary/20">
                 <p className="text-foreground font-semibold">
-                  🎉 100% free with no limits
+                  {t('about.freeFeature')}
                 </p>
               </div>
             </div>
