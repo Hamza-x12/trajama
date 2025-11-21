@@ -518,38 +518,41 @@ const Index = () => {
           <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card via-muted/5 to-card">
             <div className="flex items-center gap-3">
               {/* Source Language */}
-              <Select value={sourceLanguage} onValueChange={(value) => {
-                setSourceLanguage(value);
-                setDetectedLanguage(null);
-              }}>
-                <SelectTrigger className={`flex-1 h-14 bg-gradient-to-br from-background to-muted/30 border-2 border-border/70 hover:border-primary/50 hover:bg-gradient-to-br hover:from-primary/5 hover:to-accent/5 transition-all duration-300 rounded-2xl shadow-soft hover:shadow-moroccan group ${isSwapping ? 'scale-95 opacity-70' : 'scale-100 opacity-100'}`}>
-                  <SelectValue>
-                    <div className="flex items-center gap-3">
-                      {sourceLanguage === "Detect Language" ? (
-                        <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
-                          <Wand2 className="w-5 h-5 text-primary" />
-                        </div>
-                      ) : (
-                        <div className="relative">
-                          <img 
-                            src={languages.find(l => l.name === sourceLanguage)?.icon as string} 
-                            alt={sourceLanguage} 
-                            className="w-8 h-8 rounded-lg object-cover shadow-sm ring-2 ring-border/30 group-hover:ring-primary/50 transition-all" 
-                          />
-                          <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
-                        </div>
-                      )}
-                      <div className="flex-1 text-left">
-                        <span className="font-semibold text-base block">{t(`languages.${sourceLanguage.toLowerCase().replace(' ', '')}`)}</span>
-                        {detectedLanguage && sourceLanguage === "Detect Language" && (
-                          <span className="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded-full border border-primary/40 animate-fade-in inline-block mt-1">
-                            {detectedLanguage}
-                          </span>
+              <div className="flex-1 relative">
+                {detectedLanguage && (
+                  <div className="absolute -top-8 left-0 z-10 animate-fade-in">
+                    <span className="text-xs bg-primary/90 text-primary-foreground px-3 py-1.5 rounded-full border-2 border-primary shadow-moroccan font-medium">
+                      {t('translation.detectedLanguage')}: {detectedLanguage}
+                    </span>
+                  </div>
+                )}
+                <Select value={sourceLanguage} onValueChange={(value) => {
+                  setSourceLanguage(value);
+                  setDetectedLanguage(null);
+                }}>
+                  <SelectTrigger className={`w-full h-14 bg-gradient-to-br from-background to-muted/30 border-2 border-border/70 hover:border-primary/50 hover:bg-gradient-to-br hover:from-primary/5 hover:to-accent/5 transition-all duration-300 rounded-2xl shadow-soft hover:shadow-moroccan group ${isSwapping ? 'scale-95 opacity-70' : 'scale-100 opacity-100'}`}>
+                    <SelectValue>
+                      <div className="flex items-center gap-3">
+                        {sourceLanguage === "Detect Language" ? (
+                          <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
+                            <Wand2 className="w-5 h-5 text-primary" />
+                          </div>
+                        ) : (
+                          <div className="relative">
+                            <img 
+                              src={languages.find(l => l.name === sourceLanguage)?.icon as string} 
+                              alt={sourceLanguage} 
+                              className="w-8 h-8 rounded-lg object-cover shadow-sm ring-2 ring-border/30 group-hover:ring-primary/50 transition-all" 
+                            />
+                            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/0 to-white/10 pointer-events-none" />
+                          </div>
                         )}
+                        <div className="flex-1 text-left">
+                          <span className="font-semibold text-base block">{t(`languages.${sourceLanguage.toLowerCase().replace(' ', '')}`)}</span>
+                        </div>
                       </div>
-                    </div>
-                  </SelectValue>
-                </SelectTrigger>
+                    </SelectValue>
+                  </SelectTrigger>
                 <SelectContent className="bg-background/95 backdrop-blur-xl border-2 border-border shadow-2xl z-[100] rounded-xl">
                   {languages.map(lang => (
                     <SelectItem 
@@ -577,7 +580,8 @@ const Index = () => {
                     </SelectItem>
                   ))}
                 </SelectContent>
-              </Select>
+                </Select>
+              </div>
               
               {/* Swap Button */}
               <Button
@@ -595,7 +599,8 @@ const Index = () => {
               </Button>
               
               {/* Target Language */}
-              <Select value={targetLanguage} onValueChange={setTargetLanguage}>
+              <div className="flex-1">
+                <Select value={targetLanguage} onValueChange={setTargetLanguage}>
                 <SelectTrigger className={`flex-1 h-14 bg-gradient-to-br from-background to-muted/30 border-2 border-border/70 hover:border-accent/50 hover:bg-gradient-to-br hover:from-accent/5 hover:to-primary/5 transition-all duration-300 rounded-2xl shadow-soft hover:shadow-moroccan group ${isSwapping ? 'scale-95 opacity-70' : 'scale-100 opacity-100'}`}>
                   <SelectValue>
                     <div className="flex items-center gap-3">
@@ -631,8 +636,9 @@ const Index = () => {
                       </div>
                     </SelectItem>
                   ))}
-                </SelectContent>
-              </Select>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
           
