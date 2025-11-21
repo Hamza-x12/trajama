@@ -7,7 +7,7 @@ import { TranslationCard } from "@/components/TranslationCard";
 import { TranslationHistory } from "@/components/TranslationHistory";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsDialog } from "@/components/SettingsDialog";
-import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff } from "lucide-react";
+import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -369,7 +369,18 @@ const Index = () => {
             <div className="flex items-center gap-2 sm:gap-3">
               <img src={tarjamaLogo} alt="Tarjama Logo" className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16" />
               <div>
-                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground tracking-tight">{t('app.title')}</h1>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground tracking-tight">{t('app.title')}</h1>
+                  <a 
+                    href="https://www.instagram.com/your_instagram_handle" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:text-primary transition-colors"
+                    aria-label="Instagram"
+                  >
+                    <Instagram className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </a>
+                </div>
                 <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">{t('app.subtitle')}</p>
               </div>
             </div>
