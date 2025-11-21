@@ -627,11 +627,28 @@ const Index = () => {
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
-              </div>
-              
-              {/* Translation Result */}
-              <div className="flex-1 p-4 sm:p-5 md:p-6">
+              </Select>
+            </div>
+            
+            {/* Swap Button */}
+            <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card to-muted/10 flex justify-center">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleSwapLanguages}
+                disabled={sourceLanguage === "Detect Language"}
+                className="h-10 w-10 p-0 rounded-full hover:bg-primary/10 transition-all duration-300"
+                aria-label="Swap languages"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M7 16V4M7 4L3 8M7 4L11 8" />
+                  <path d="M17 8V20M17 20L21 16M17 20L13 16" />
+                </svg>
+              </Button>
+            </div>
+            
+            {/* Translation Result */}
+            <div className="flex-1 p-4 sm:p-5 md:p-6">
                 {translations ? (
                   (() => {
                     const getCountryTheme = (lang: string) => {
