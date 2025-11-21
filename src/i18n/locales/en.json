@@ -81,5 +81,56 @@
     "description": "Install the app on your device for offline access and a better experience",
     "install": "Install",
     "later": "Later"
+  },
+  "navigation": {
+    "dictionary": "Dictionary",
+    "about": "About",
+    "faq": "FAQ",
+    "backToTranslator": "Back to Translator"
+  },
+  "dictionary": {
+    "title": "Darija Dictionary",
+    "subtitle": "Common Darija phrases",
+    "searchTitle": "Search Dictionary",
+    "searchDescription": "Search for words",
+    "searchPlaceholder": "Search...",
+    "noResults": "No results found"
+  },
+  "about": {
+    "title": "About Tarjama",
+    "subtitle": "Our mission",
+    "welcomeTitle": "Welcome",
+    "welcomeText": "Tarjama is a free Moroccan Darija translator.",
+    "feature1Title": "Multi-Language",
+    "feature1Description": "11+ languages supported",
+    "feature2Title": "Voice Recognition",
+    "feature2Description": "Speak and translate instantly",
+    "feature3Title": "Cultural Intelligence",
+    "feature3Description": "Preserves cultural context",
+    "feature4Title": "Privacy First",
+    "feature4Description": "Secure and private",
+    "missionTitle": "Our Mission",
+    "missionText": "Making Darija accessible to everyone."
+  },
+  "faq": {
+    "title": "FAQ",
+    "subtitle": "Common questions",
+    "pageTitle": "Frequently Asked Questions",
+    "q1": "What is Darija?",
+    "a1": "Moroccan Arabic dialect",
+    "q2": "How to translate?",
+    "a2": "Enter text and click translate",
+    "q3": "Is it free?",
+    "a3": "Yes, completely free",
+    "q4": "What languages?",
+    "a4": "11+ languages supported",
+    "q5": "How accurate?",
+    "a5": "Very accurate with AI",
+    "q6": "Offline mode?",
+    "a6": "Yes, download language packs",
+    "q7": "Voice input?",
+    "a7": "Click microphone button",
+    "q8": "Why choose Tarjama?",
+    "a8": "Specialized for Darija"
   }
 }
