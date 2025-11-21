@@ -80,6 +80,7 @@ const Index = () => {
   const isOnline = useOnlineStatus();
   const [inputText, setInputText] = useState("");
   const [sourceLanguage, setSourceLanguage] = useState("Darija");
+  const [targetLanguage, setTargetLanguage] = useState("English");
   const [translations, setTranslations] = useState<TranslationResult | null>(null);
   const [isTranslating, setIsTranslating] = useState(false);
   const [history, setHistory] = useState<HistoryItem[]>([]);
@@ -256,6 +257,16 @@ const Index = () => {
       translations: item.translations
     });
     toast.info(t('history.loaded'));
+  };
+
+  const handleSwapLanguages = () => {
+    if (sourceLanguage === "Detect Language") {
+      toast.error("Cannot swap with detect language");
+      return;
+    }
+    const temp = sourceLanguage;
+    setSourceLanguage(targetLanguage);
+    setTargetLanguage(temp);
   };
   const handleClearHistory = () => {
     setHistory([]);
@@ -485,35 +496,40 @@ const Index = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-border/50">
             {/* Source Column */}
             <div className="flex flex-col">
-              {/* Source Language Selector */}
+              {/* Language Selectors with Swap */}
               <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card to-muted/10">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
+                  {/* Source Language */}
                   <Select value={sourceLanguage} onValueChange={setSourceLanguage}>
-                    <SelectTrigger className="flex-1 h-11 bg-background border-border hover:bg-accent/5 transition-colors">
+                    <SelectTrigger className="flex-1 h-12 bg-background border-border hover:bg-accent/5 transition-colors rounded-xl">
                       <SelectValue>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-3">
                           {sourceLanguage === "Detect Language" ? (
-                            <Wand2 className="w-4 h-4" />
+                            <Wand2 className="w-5 h-5" />
                           ) : (
                             <img 
                               src={languages.find(l => l.name === sourceLanguage)?.icon as string} 
                               alt={sourceLanguage} 
-                              className="w-5 h-5 rounded object-cover" 
+                              className="w-6 h-6 rounded-full object-cover" 
                             />
                           )}
-                          <span className="font-medium">{t(`languages.${sourceLanguage.toLowerCase().replace(' ', '')}`)}</span>
+                          <span className="font-medium text-base">{t(`languages.${sourceLanguage.toLowerCase().replace(' ', '')}`)}</span>
                         </div>
                       </SelectValue>
                     </SelectTrigger>
                     <SelectContent className="bg-background border-border shadow-lg z-50">
-                      {languages.filter(lang => lang.name !== "Detect Language").map(lang => (
+                      {languages.map(lang => (
                         <SelectItem key={lang.name} value={lang.name} className="cursor-pointer hover:bg-accent/10">
-                          <div className="flex items-center gap-2">
-                            <img 
-                              src={lang.icon as string} 
-                              alt={lang.name} 
-                              className="w-5 h-5 rounded object-cover" 
-                            />
+                          <div className="flex items-center gap-3">
+                            {lang.name === "Detect Language" ? (
+                              <Wand2 className="w-5 h-5" />
+                            ) : (
+                              <img 
+                                src={lang.icon as string} 
+                                alt={lang.name} 
+                                className="w-6 h-6 rounded-full object-cover" 
+                              />
+                            )}
                             <span>{t(`languages.${lang.name.toLowerCase().replace(' ', '')}`)}</span>
                           </div>
                         </SelectItem>
@@ -521,14 +537,47 @@ const Index = () => {
                     </SelectContent>
                   </Select>
                   
+                  {/* Swap Button */}
                   <Button
-                    variant="outline"
-                    onClick={() => setSourceLanguage("Detect Language")}
-                    className={`h-11 gap-2 border-2 ${sourceLanguage === "Detect Language" ? 'border-primary bg-primary/10' : 'border-border'}`}
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleSwapLanguages}
+                    className="h-12 w-12 rounded-xl hover:bg-accent/10 flex-shrink-0"
                   >
-                    <Wand2 className="w-4 h-4" />
-                    <span className="hidden sm:inline">{t('languages.detectlanguage')}</span>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                    </svg>
                   </Button>
+
+                  {/* Target Language */}
+                  <Select value={targetLanguage} onValueChange={setTargetLanguage}>
+                    <SelectTrigger className="flex-1 h-12 bg-background border-border hover:bg-accent/5 transition-colors rounded-xl">
+                      <SelectValue>
+                        <div className="flex items-center gap-3">
+                          <img 
+                            src={languages.find(l => l.name === targetLanguage)?.icon as string} 
+                            alt={targetLanguage} 
+                            className="w-6 h-6 rounded-full object-cover" 
+                          />
+                          <span className="font-medium text-base">{t(`languages.${targetLanguage.toLowerCase().replace(' ', '')}`)}</span>
+                        </div>
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border-border shadow-lg z-50">
+                      {languages.filter(lang => lang.name !== "Detect Language").map(lang => (
+                        <SelectItem key={lang.name} value={lang.name} className="cursor-pointer hover:bg-accent/10">
+                          <div className="flex items-center gap-3">
+                            <img 
+                              src={lang.icon as string} 
+                              alt={lang.name} 
+                              className="w-6 h-6 rounded-full object-cover" 
+                            />
+                            <span>{t(`languages.${lang.name.toLowerCase().replace(' ', '')}`)}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
               
@@ -567,61 +616,84 @@ const Index = () => {
                       {t('translation.translate')}
                     </>}
                 </Button>
-                
-                {/* Cultural Notes */}
-                {translations?.culturalNotes && <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-gradient-to-br from-accent/10 to-accent/5 rounded-lg sm:rounded-xl border border-accent/30 shadow-soft">
-                    <p className="text-[10px] sm:text-xs text-accent-foreground font-semibold mb-2 uppercase tracking-wide">{t('translation.culturalNotes')}</p>
-                    <p className="text-xs sm:text-sm text-foreground/80 italic leading-relaxed break-words">{translations.culturalNotes}</p>
-                  </div>}
               </div>
             </div>
 
             {/* Target Column */}
             <div className="flex flex-col bg-gradient-to-br from-muted/10 to-card">
-              {/* Target Languages Tabs */}
-              <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card to-muted/10">
-                <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <div className="text-xs sm:text-sm font-semibold text-foreground tracking-wide uppercase">
-                    {t('translation.translations')}
+              {/* Translation Result */}
+              <div className="flex-1 p-4 sm:p-5 md:p-6">
+                {translations ? (
+                  <div className="space-y-4">
+                    <div className="min-h-[200px] text-base sm:text-lg leading-relaxed">
+                      {(() => {
+                        const key = targetLanguage.toLowerCase() as keyof typeof translations.translations;
+                        const translation = translations.translations[key];
+                        return translation || <span className="text-muted-foreground italic">{t('translation.willAppear')}</span>;
+                      })()}
+                    </div>
+                    
+                    {/* Action Buttons */}
+                    <div className="flex items-center gap-2 pt-4 border-t border-border/50">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          const key = targetLanguage.toLowerCase() as keyof typeof translations.translations;
+                          const translation = translations.translations[key];
+                          handleCopyTranslation(translation, targetLanguage);
+                        }}
+                        className="gap-2"
+                      >
+                        <Copy className="h-4 w-4" />
+                        <span className="text-sm">{t('audio.copy')}</span>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          const key = targetLanguage.toLowerCase() as keyof typeof translations.translations;
+                          const translation = translations.translations[key];
+                          if (isSpeaking) {
+                            handleStopSpeaking();
+                          } else {
+                            handleSpeakTranslation(translation, targetLanguage);
+                          }
+                        }}
+                        className="gap-2"
+                      >
+                        {isSpeaking ? (
+                          <>
+                            <VolumeX className="h-4 w-4 animate-pulse" />
+                            <span className="text-sm">{t('audio.stop')}</span>
+                          </>
+                        ) : (
+                          <>
+                            <Volume2 className="h-4 w-4" />
+                            <span className="text-sm">{t('audio.play')}</span>
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                    
+                    {/* Cultural Notes */}
+                    {translations.culturalNotes && (
+                      <div className="mt-4 p-4 bg-accent/10 rounded-lg border-l-2 border-accent">
+                        <p className="text-xs font-semibold text-accent-foreground mb-2 uppercase tracking-wide">
+                          {t('translation.culturalNotes')}
+                        </p>
+                        <p className="text-sm text-foreground/80 italic leading-relaxed">
+                          {translations.culturalNotes}
+                        </p>
+                      </div>
+                    )}
                   </div>
-                  {isSpeaking && (
-                    <div className="flex items-center gap-2">
-                    <Button
-                      onClick={handleStopSpeaking}
-                      variant="destructive"
-                      size="sm"
-                      className="h-8 gap-1"
-                    >
-                      <VolumeX className="h-3 w-3" />
-                      <span className="text-xs">{t('audio.stop')}</span>
-                    </Button>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full text-muted-foreground min-h-[300px]">
+                    <Languages className="w-16 h-16 mb-4 opacity-30" />
+                    <p className="text-sm font-medium">{t('translation.willAppear')}</p>
                   </div>
-                  )}
-                </div>
-              </div>
-              
-              {/* Translation Results */}
-              <div className="flex-1 p-3 sm:p-4 md:p-6 overflow-y-auto max-h-[400px] sm:max-h-[500px] md:max-h-[600px]">
-                {translations ? <div className="space-y-3 sm:space-y-4 md:space-y-6">
-                    {languages.filter(lang => lang.name !== "Detect Language" && lang.name !== translations.detectedLanguage).map(lang => {
-                  const key = lang.name.toLowerCase() as keyof typeof translations.translations;
-                  const translation = translations.translations[key];
-                  return <TranslationCard 
-                    key={lang.name}
-                    language={lang.name}
-                    languageCode={lang.code}
-                    translation={translation}
-                    flag={lang.icon}
-                    onSpeak={(text: string) => handleSpeakTranslation(text, lang.name)}
-                    onCopy={(text: string) => handleCopyTranslation(text, lang.name)}
-                    isSpeaking={isSpeaking && speakingLanguage === lang.name}
-                    onStopSpeaking={handleStopSpeaking}
-                  />;
-                })}
-                  </div> : <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
-                    <Languages className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mb-3 sm:mb-4 opacity-30" />
-                    <p className="text-xs sm:text-sm font-medium">{t('translation.willAppear')}</p>
-                  </div>}
+                )}
               </div>
             </div>
           </div>
