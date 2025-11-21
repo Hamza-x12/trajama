@@ -68,7 +68,13 @@
     "downloaded": "تم تحميل اللغة بنجاح",
     "downloadFailed": "فشل تحميل اللغة",
     "remove": "إزالة",
-    "removed": "تم إزالة اللغة"
+    "removed": "تم إزالة اللغة",
+    "noConnection": "لا يوجد اتصال بالإنترنت",
+    "offlineMessage": "أنت غير متصل حالياً. يمكنك استخدام اللغات التي قمت بتنزيلها.",
+    "downloadedLanguages": "اللغات المحملة",
+    "noDownloadedLanguages": "لم يتم تنزيل أي لغات بعد",
+    "downloadLanguagesWhenOnline": "قم بتنزيل اللغات عندما تكون متصلاً لاستخدامها دون اتصال",
+    "reconnectMessage": "سيتم إعادة الاتصال تلقائياً عند توفر الإنترنت"
   },
   "install": {
     "title": "تثبيت ترجمة",

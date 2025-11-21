@@ -8,6 +8,8 @@ import { TranslationHistory } from "@/components/TranslationHistory";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsDialog } from "@/components/SettingsDialog";
 import { InstallPrompt } from "@/components/InstallPrompt";
+import { OfflineScreen } from "@/components/OfflineScreen";
+import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -65,6 +67,7 @@ interface HistoryItem {
 const HISTORY_KEY = 'darija-translation-history';
 const Index = () => {
   const { t, i18n } = useTranslation();
+  const isOnline = useOnlineStatus();
   const [inputText, setInputText] = useState("");
   const [sourceLanguage, setSourceLanguage] = useState("Darija");
   const [translations, setTranslations] = useState<TranslationResult | null>(null);
@@ -79,6 +82,11 @@ const Index = () => {
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+
+  // Show offline screen if not online
+  if (!isOnline) {
+    return <OfflineScreen />;
+  }
 
   // Load history from localStorage on mount
   useEffect(() => {
