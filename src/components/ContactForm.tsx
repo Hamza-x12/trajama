@@ -18,6 +18,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Send, HelpCircle, Lightbulb, AlertCircle } from "lucide-react";
+import confetti from "canvas-confetti";
 
 const contactSchema = z.object({
   inquiryType: z.enum(["question", "suggestion", "problem"], {
@@ -61,6 +62,14 @@ export const ContactForm = ({ pageSource }: ContactFormProps) => {
       });
 
       if (error) throw error;
+
+      // Trigger confetti effect
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#8B5CF6', '#EC4899', '#F59E0B', '#10B981'],
+      });
 
       toast({
         title: "Message sent!",
