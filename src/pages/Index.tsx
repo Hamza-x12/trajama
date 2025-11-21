@@ -10,7 +10,7 @@ import { SettingsDialog } from "@/components/SettingsDialog";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineScreen } from "@/components/OfflineScreen";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
-import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen } from "lucide-react";
+import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -468,23 +468,39 @@ const Index = () => {
               </div>
             </div>
             
-            <div className="hidden md:flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-3">
               <Link to="/dictionary">
-                <Button variant="outline" className="gap-2 shadow-soft hover:shadow-moroccan transition-all duration-300 hover:scale-105">
-                  <BookOpen className="w-4 h-4" />
-                  <span className="font-medium">{t('navigation.dictionary')}</span>
+                <Button 
+                  variant="outline" 
+                  className="group relative gap-2 px-4 py-2 rounded-xl border-2 border-border/50 bg-background/50 backdrop-blur-sm shadow-soft hover:shadow-moroccan hover:border-primary/50 transition-all duration-500 hover:scale-110 hover:-translate-y-0.5 animate-fade-in"
+                >
+                  <BookOpen className="w-4 h-4 transition-transform duration-300 group-hover:rotate-12" />
+                  <span className="font-semibold text-sm tracking-wide">{t('navigation.dictionary')}</span>
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </Button>
               </Link>
               
               <Link to="/about">
-                <Button variant="outline" className="gap-2 shadow-soft hover:shadow-moroccan transition-all duration-300 hover:scale-105">
-                  <span className="font-medium">{t('navigation.about')}</span>
+                <Button 
+                  variant="outline" 
+                  className="group relative gap-2 px-4 py-2 rounded-xl border-2 border-border/50 bg-background/50 backdrop-blur-sm shadow-soft hover:shadow-moroccan hover:border-primary/50 transition-all duration-500 hover:scale-110 hover:-translate-y-0.5 animate-fade-in"
+                  style={{ animationDelay: '0.1s' }}
+                >
+                  <Info className="w-4 h-4 transition-transform duration-300 group-hover:scale-125" />
+                  <span className="font-semibold text-sm tracking-wide">{t('navigation.about')}</span>
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </Button>
               </Link>
               
               <Link to="/faq">
-                <Button variant="outline" className="gap-2 shadow-soft hover:shadow-moroccan transition-all duration-300 hover:scale-105">
-                  <span className="font-medium">{t('navigation.faq')}</span>
+                <Button 
+                  variant="outline" 
+                  className="group relative gap-2 px-4 py-2 rounded-xl border-2 border-border/50 bg-background/50 backdrop-blur-sm shadow-soft hover:shadow-moroccan hover:border-primary/50 transition-all duration-500 hover:scale-110 hover:-translate-y-0.5 animate-fade-in"
+                  style={{ animationDelay: '0.2s' }}
+                >
+                  <HelpCircle className="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" />
+                  <span className="font-semibold text-sm tracking-wide">{t('navigation.faq')}</span>
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </Button>
               </Link>
             </div>
