@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Dictionary from "./pages/Dictionary";
 import About from "./pages/About";
 import FAQ from "./pages/FAQ";
+import DictionaryFAQ from "./pages/DictionaryFAQ";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/dictionary" element={<Dictionary />} />
           <Route path="/about" element={<About />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/dictionary/faq" element={<DictionaryFAQ />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

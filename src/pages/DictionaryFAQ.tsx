@@ -1,0 +1,133 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import tarjamaLogo from "@/assets/tarjama-logo.png";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { SettingsDialog } from "@/components/SettingsDialog";
+
+const DictionaryFAQ = () => {
+  const { t } = useTranslation();
+
+  const dictionaryFaqs = [
+    { 
+      q: "How do I use the dictionary?", 
+      a: "Simply browse through the entries or use the search feature to find specific Darija words. Click on any word card to see detailed information including pronunciation, examples, and related words.",
+      icon: "📖", 
+      category: "Using Dictionary" 
+    },
+    { 
+      q: "What information is shown for each word?", 
+      a: "Each word entry includes the Darija word, Arabic script, type (noun/verb/pronoun), pronunciation guide, definition, multiple examples with translations in Darija, Arabic, French and English, plus related words.",
+      icon: "ℹ️", 
+      category: "Word Details" 
+    },
+    { 
+      q: "Can I hear how words are pronounced?", 
+      a: "Yes! Click on any word card to open the detail view, then use the play button next to the word or examples to hear the pronunciation.",
+      icon: "🔊", 
+      category: "Pronunciation" 
+    },
+    { 
+      q: "What types of words are in the dictionary?", 
+      a: "The dictionary includes common Darija verbs, nouns, pronouns, adjectives, and phrases with their translations and usage examples.",
+      icon: "📚", 
+      category: "Content" 
+    },
+    { 
+      q: "How are the examples helpful?", 
+      a: "Each word comes with real-world usage examples showing the word in context, with translations in multiple languages to help you understand how to use it naturally.",
+      icon: "💡", 
+      category: "Learning" 
+    },
+    { 
+      q: "What are related words?", 
+      a: "Related words are other Darija words that are connected in meaning or usage, helping you expand your vocabulary and understand word relationships.",
+      icon: "🔗", 
+      category: "Features" 
+    },
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <Link to="/">
+                <img src={tarjamaLogo} alt="Tarjama Logo" className="w-12 h-12 sm:w-14 sm:h-14" />
+              </Link>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-foreground">Dictionary FAQ</h1>
+                <p className="text-xs text-muted-foreground hidden sm:block">Dictionary help and guidance</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <SettingsDialog selectedVoice="" setSelectedVoice={() => {}} availableVoices={[]} />
+              <ThemeToggle />
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="mb-6">
+          <Link to="/dictionary">
+            <Button variant="ghost" className="gap-2">
+              <ArrowLeft className="w-4 h-4" />
+              Back to Dictionary
+            </Button>
+          </Link>
+        </div>
+
+        <Card className="border-border/50 shadow-elegant bg-card/50 backdrop-blur-sm overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-b border-border/50">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-primary/20 rounded-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                  <path d="M12 17h.01"/>
+                </svg>
+              </div>
+              <CardTitle className="text-2xl sm:text-3xl">Dictionary Help</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent className="p-6">
+            <Accordion type="single" collapsible className="w-full space-y-3">
+              {dictionaryFaqs.map((faq, index) => (
+                <AccordionItem 
+                  key={index} 
+                  value={`item-${index}`}
+                  className="border border-border/50 rounded-xl px-5 py-1 bg-gradient-to-br from-card to-muted/20 hover:border-primary/50 hover:shadow-moroccan transition-all duration-300"
+                >
+                  <AccordionTrigger className="text-left hover:no-underline group">
+                    <div className="flex items-start gap-3">
+                      <span className="text-2xl mt-1 group-hover:scale-110 transition-transform">{faq.icon}</span>
+                      <div className="flex-1">
+                        <span className="text-xs font-semibold text-primary/70 uppercase tracking-wider mb-1 block">{faq.category}</span>
+                        <span className="font-semibold text-base group-hover:text-primary transition-colors">{faq.q}</span>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground pt-4 pb-2 pl-11 leading-relaxed">
+                    {faq.a}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </CardContent>
+        </Card>
+      </main>
+    </div>
+  );
+};
+
+export default DictionaryFAQ;
