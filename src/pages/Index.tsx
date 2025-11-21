@@ -526,18 +526,18 @@ const Index = () => {
                 </Select>
               </div>
 
-              {/* Detect Language Button */}
-              {sourceLanguage !== "Detect Language" && <Button variant="outline" size="sm" onClick={() => setSourceLanguage("Detect Language")} className="h-12 px-4 bg-gradient-to-br from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-2 border-primary/30 hover:border-primary/50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-moroccan font-medium gap-2">
-                  <Wand2 className="h-4 w-4" />
-                  {t('languages.detectlanguage')}
-                </Button>}
-
               {/* Detected Language Badge */}
               {detectedLanguage && <div className="animate-fade-in">
                   <span className="text-xs bg-primary/90 text-primary-foreground px-3 py-1.5 rounded-full border-2 border-primary shadow-moroccan font-medium whitespace-nowrap">
                     {t('translation.detectedLanguage')}: {detectedLanguage}
                   </span>
                 </div>}
+
+              {/* Detect Language Button */}
+              {sourceLanguage !== "Detect Language" && <Button variant="outline" size="sm" onClick={() => setSourceLanguage("Detect Language")} className="h-12 px-4 bg-gradient-to-br from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-2 border-primary/30 hover:border-primary/50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-moroccan font-medium gap-2">
+                  <Wand2 className="h-4 w-4" />
+                  {t('languages.detectlanguage')}
+                </Button>}
               
               {/* Swap Button */}
               <Button variant="ghost" size="sm" onClick={handleSwapLanguages} disabled={sourceLanguage === "Detect Language" || isSwapping} className={`h-12 w-12 p-0 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-2 border-primary/20 hover:border-primary/40 transition-all duration-300 hover:scale-110 hover:shadow-moroccan disabled:opacity-50 disabled:cursor-not-allowed ${isSwapping ? 'animate-spin' : ''}`} aria-label="Swap languages">
