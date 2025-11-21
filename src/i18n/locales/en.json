@@ -32,7 +32,8 @@
     "clear": "Clear",
     "cleared": "Cleared",
     "undo": "Undo",
-    "undone": "Restored"
+    "undone": "Restored",
+    "profanityDetected": "Translation contains inappropriate language and was not saved to history"
   },
   "languages": {
     "detectlanguage": "Detect Language",
