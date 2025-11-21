@@ -13,7 +13,7 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { text, sourceLanguage, targetLanguages } = body;
+    const { text, sourceLanguage, targetLanguages, uiLanguage = 'en' } = body;
     
     // Input validation
     if (!text || typeof text !== 'string') {
@@ -92,6 +92,16 @@ serve(async (req) => {
       }
     }
 
+    // Map UI language codes to full language names
+    const uiLanguageMap: Record<string, string> = {
+      'en': 'English',
+      'ar': 'Arabic',
+      'fr': 'French',
+      'dar': 'Darija'
+    };
+    
+    const culturalNotesLanguage = uiLanguageMap[uiLanguage] || 'English';
+
     // Construct the system prompt based on the direction of translation
     let systemPrompt = `You are a culturally aware multilingual translator specialized in Moroccan Darija. You must:
 
@@ -123,10 +133,12 @@ Provide translations in this EXACT JSON format:
     "japanese": "Japanese translation",
     "turkish": "Turkish translation"
   },
-  "culturalNotes": "Optional cultural context or explanation of idioms/slang"
+  "culturalNotes": "Optional cultural context or explanation of idioms/slang IN ${culturalNotesLanguage}"
 }
 
-IMPORTANT: You must return ONLY valid JSON, no additional text before or after.`;
+IMPORTANT: 
+- You must return ONLY valid JSON, no additional text before or after.
+- The culturalNotes field MUST be written in ${culturalNotesLanguage}, not English or any other language.`;
 
     const userPrompt = `Translate the following text from ${actualSourceLanguage} into ${targetLanguages.join(', ')}:\n\n"${text}"`;
 
