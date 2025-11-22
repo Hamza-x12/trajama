@@ -133,11 +133,6 @@ const Index = () => {
     return 'text-base';
   };
 
-  // Show offline screen if not online
-  if (!isOnline) {
-    return <OfflineScreen />;
-  }
-
   // Load history from localStorage on mount
   useEffect(() => {
     const savedHistory = localStorage.getItem(HISTORY_KEY);
@@ -247,6 +242,12 @@ const Index = () => {
       console.log(`Auto-selected voice: ${matchingVoice.name} for ${targetLanguage}`);
     }
   }, [targetLanguage, availableVoices, autoVoiceSelect]);
+  
+  // Show offline screen if not online (after all hooks)
+  if (!isOnline) {
+    return <OfflineScreen />;
+  }
+
   // Profanity filter
   const containsProfanity = (text: string): boolean => {
     const profanityPatterns = [
