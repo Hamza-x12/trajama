@@ -120,6 +120,8 @@ const Index = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isTranslatingImage, setIsTranslatingImage] = useState(false);
   const [ocrImageData, setOcrImageData] = useState<string>('');
+  const [ocrTextRegions, setOcrTextRegions] = useState<any[]>([]);
+  const [ocrTranslation, setOcrTranslation] = useState<string>('');
   const [isDragging, setIsDragging] = useState(false);
 
   // Dynamic font size based on text length
@@ -613,11 +615,14 @@ const Index = () => {
 
           toast.info(t('translation.extractingText'));
 
-          // Call the translate-image edge function
+          // Get the first selected target language
+          const selectedTargetLang = languages.find(l => l.name !== sourceLanguage)?.name || 'English';
+
+          // Call the translate-image edge function with only ONE target language
           const { data, error } = await supabase.functions.invoke('translate-image', {
             body: {
               imageData,
-              targetLanguages: languages.filter(l => l.name !== sourceLanguage).map(l => l.name),
+              targetLanguages: [selectedTargetLang],
               uiLanguage: i18n.language
             }
           });
@@ -648,15 +653,18 @@ const Index = () => {
             return;
           }
 
-          // If we have text regions, just show a toast (no overlay viewer)
+          // Store text regions and translation for overlay display
           if (data.textRegions && data.textRegions.length > 0) {
-            toast.success(t('translation.regionsDetected') || `${data.textRegions.length} text regions detected`);
+            setOcrTextRegions(data.textRegions);
+            // Get the translation for the selected language
+            const translatedText = data.translations[selectedTargetLang] || data.extractedText;
+            setOcrTranslation(translatedText);
+            toast.success(t('translation.imageTranslated'));
           }
 
           // Set the extracted text as input
           setInputText(data.extractedText);
           setTranslations(data);
-          toast.success(t('translation.imageTranslated'));
 
           // Add to history
           const historyItem: HistoryItem = {
@@ -1164,17 +1172,41 @@ const Index = () => {
                     </span>
                   )}
 
-                  {ocrImageData && (
+                  {ocrImageData && ocrTextRegions.length > 0 && (
                     <div className="mt-4 rounded-lg border border-border/40 bg-muted/30 p-2">
-                      <Label className="text-xs text-muted-foreground mb-1 block">
-                        {t('translation.originalImage') || 'Original image'}
+                      <Label className="text-xs text-muted-foreground mb-2 block">
+                        {t('translation.translatedImage') || 'Translated image'}
                       </Label>
-                      <img
-                        src={ocrImageData}
-                        alt={t('translation.originalImageAlt') || 'Uploaded image used for OCR'}
-                        className="w-full max-h-64 object-contain rounded-md border border-border/30"
-                        loading="lazy"
-                      />
+                      <div className="relative w-full">
+                        <img
+                          src={ocrImageData}
+                          alt={t('translation.originalImageAlt') || 'Uploaded image with translations'}
+                          className="w-full max-h-96 object-contain rounded-md"
+                          loading="lazy"
+                        />
+                        {/* Overlay translated text on regions */}
+                        {ocrTextRegions.map((region: any, index: number) => {
+                          // Split the full translation by lines and use corresponding line
+                          const translationLines = ocrTranslation.split('\n');
+                          const regionTranslation = translationLines[index] || region.text;
+                          
+                          return (
+                            <div
+                              key={index}
+                              className="absolute bg-background/95 text-foreground px-2 py-1 rounded text-xs border border-primary/30 shadow-lg"
+                              style={{
+                                top: `${region.position.top}%`,
+                                left: `${region.position.left}%`,
+                                maxWidth: `${region.position.width}%`,
+                                fontSize: 'clamp(0.65rem, 1.2vw, 0.85rem)',
+                                lineHeight: '1.2'
+                              }}
+                            >
+                              {regionTranslation}
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   )}
 
