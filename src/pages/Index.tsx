@@ -122,6 +122,7 @@ const Index = () => {
   const [showOCRViewer, setShowOCRViewer] = useState(false);
   const [ocrImageData, setOcrImageData] = useState<string>('');
   const [ocrTextRegions, setOcrTextRegions] = useState<any[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
 
   // Dynamic font size based on text length
   const getTextSize = (text: string) => {
@@ -596,6 +597,10 @@ const Index = () => {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    processImageFile(file);
+  };
+
+  const processImageFile = async (file: File) => {
     // Check file size (5MB limit)
     if (file.size > 5 * 1024 * 1024) {
       toast.error(t('translation.imageTooBig'));
@@ -702,6 +707,46 @@ const Index = () => {
       toast.error(t('translation.failed'));
       setIsTranslatingImage(false);
     }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Only set dragging to false if leaving the container entirely
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX;
+    const y = e.clientY;
+    
+    if (x < rect.left || x >= rect.right || y < rect.top || y >= rect.bottom) {
+      setIsDragging(false);
+    }
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    const imageFile = files.find(file => file.type.startsWith('image/'));
+
+    if (!imageFile) {
+      toast.error('Please drop an image file');
+      return;
+    }
+
+    if (files.length > 1) {
+      toast.info('Only processing the first image');
+    }
+
+    processImageFile(imageFile);
   };
 
   const handleCopyTranslation = (text: string, languageName: string) => {
@@ -1068,34 +1113,63 @@ const Index = () => {
             {/* Source Column */}
             <div className="flex flex-col">
               
-              {/* Source Text Input */}
+              {/* Source Text Input with Drag & Drop */}
               <div className="flex-1 p-4 sm:p-5 md:p-6">
-                <div className={`relative p-5 sm:p-6 backdrop-blur-sm border border-border/50 rounded-lg shadow-moroccan transition-all duration-300 ${(() => {
-                const themes: Record<string, string> = {
-                  'Darija': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-green-50/10 dark:from-red-950/20 dark:to-green-950/20',
-                  'French': 'border-l-4 border-l-blue-600 bg-gradient-to-r from-blue-50/10 via-white/5 to-red-50/10 dark:from-blue-950/20 dark:via-background/10 dark:to-red-950/20',
-                  'Arabic': 'border-l-4 border-l-green-600 bg-gradient-to-r from-green-50/10 to-white/5 dark:from-green-950/20 dark:to-background/10',
-                  'English': 'border-l-4 border-l-blue-700 bg-gradient-to-r from-red-50/10 via-white/5 to-blue-50/10 dark:from-red-950/20 dark:via-background/10 dark:to-blue-950/20',
-                  'Spanish': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-yellow-50/10 dark:from-red-950/20 dark:to-yellow-950/20',
-                  'German': 'border-l-4 border-l-yellow-500 bg-gradient-to-r from-red-50/10 via-yellow-50/10 to-zinc-100/10 dark:from-red-950/20 dark:via-yellow-950/20 dark:to-zinc-900/20',
-                  'Italian': 'border-l-4 border-l-green-600 bg-gradient-to-r from-green-50/10 via-white/5 to-red-50/10 dark:from-green-950/20 dark:via-background/10 dark:to-red-950/20',
-                  'Portuguese': 'border-l-4 border-l-green-700 bg-gradient-to-r from-green-50/10 to-red-50/10 dark:from-green-950/20 dark:to-red-950/20',
-                  'Chinese': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-yellow-50/10 dark:from-red-950/20 dark:to-yellow-950/20',
-                  'Japanese': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-white/5 dark:from-red-950/20 dark:to-background/10',
-                  'Turkish': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-white/5 dark:from-red-950/20 dark:to-background/10',
-                  'Russian': 'border-l-4 border-l-blue-600 bg-gradient-to-r from-blue-50/10 via-white/5 to-red-50/10 dark:from-blue-950/20 dark:via-background/10 dark:to-red-950/20',
-                  'Korean': 'border-l-4 border-l-blue-700 bg-gradient-to-r from-blue-50/10 via-red-50/10 to-white/5 dark:from-blue-950/20 dark:via-red-950/20 dark:to-background/10',
-                  'Hindi': 'border-l-4 border-l-orange-600 bg-gradient-to-r from-orange-50/10 via-white/5 to-green-50/10 dark:from-orange-950/20 dark:via-background/10 dark:to-green-950/20',
-                  'Detect Language': 'border-l-4 border-l-primary bg-gradient-to-r from-primary/10 to-accent/10 dark:from-primary/20 dark:to-accent/20'
-                };
-                return themes[sourceLanguage] || '';
-              })()}`}>
-                  <Textarea placeholder={t('translation.placeholder')} value={inputText} onChange={e => setInputText(e.target.value)} onKeyDown={e => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      handleTranslate();
-                    }
-                  }} className={`${getTextSize(inputText)} resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60 bg-transparent min-h-[200px] transition-all duration-200`} />
+                <div 
+                  className={`relative p-5 sm:p-6 backdrop-blur-sm border-2 rounded-lg shadow-moroccan transition-all duration-300 ${
+                    isDragging 
+                      ? 'border-primary bg-primary/10 scale-[1.02]' 
+                      : 'border-border/50'
+                  } ${(() => {
+                  const themes: Record<string, string> = {
+                    'Darija': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-green-50/10 dark:from-red-950/20 dark:to-green-950/20',
+                    'French': 'border-l-4 border-l-blue-600 bg-gradient-to-r from-blue-50/10 via-white/5 to-red-50/10 dark:from-blue-950/20 dark:via-background/10 dark:to-red-950/20',
+                    'Arabic': 'border-l-4 border-l-green-600 bg-gradient-to-r from-green-50/10 to-white/5 dark:from-green-950/20 dark:to-background/10',
+                    'English': 'border-l-4 border-l-blue-700 bg-gradient-to-r from-red-50/10 via-white/5 to-blue-50/10 dark:from-red-950/20 dark:via-background/10 dark:to-blue-950/20',
+                    'Spanish': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-yellow-50/10 dark:from-red-950/20 dark:to-yellow-950/20',
+                    'German': 'border-l-4 border-l-yellow-500 bg-gradient-to-r from-red-50/10 via-yellow-50/10 to-zinc-100/10 dark:from-red-950/20 dark:via-yellow-950/20 dark:to-zinc-900/20',
+                    'Italian': 'border-l-4 border-l-green-600 bg-gradient-to-r from-green-50/10 via-white/5 to-red-50/10 dark:from-green-950/20 dark:via-background/10 dark:to-red-950/20',
+                    'Portuguese': 'border-l-4 border-l-green-700 bg-gradient-to-r from-green-50/10 to-red-50/10 dark:from-green-950/20 dark:to-red-950/20',
+                    'Chinese': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-yellow-50/10 dark:from-red-950/20 dark:to-yellow-950/20',
+                    'Japanese': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-white/5 dark:from-red-950/20 dark:to-background/10',
+                    'Turkish': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-white/5 dark:from-red-950/20 dark:to-background/10',
+                    'Russian': 'border-l-4 border-l-blue-600 bg-gradient-to-r from-blue-50/10 via-white/5 to-red-50/10 dark:from-blue-950/20 dark:via-background/10 dark:to-red-950/20',
+                    'Korean': 'border-l-4 border-l-blue-700 bg-gradient-to-r from-blue-50/10 via-red-50/10 to-white/5 dark:from-blue-950/20 dark:via-red-950/20 dark:to-background/10',
+                    'Hindi': 'border-l-4 border-l-orange-600 bg-gradient-to-r from-orange-50/10 via-white/5 to-green-50/10 dark:from-orange-950/20 dark:via-background/10 dark:to-green-950/20',
+                    'Detect Language': 'border-l-4 border-l-primary bg-gradient-to-r from-primary/10 to-accent/10 dark:from-primary/20 dark:to-accent/20'
+                  };
+                  return themes[sourceLanguage] || '';
+                })()}`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                >
+                  {isDragging && (
+                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-primary/20 backdrop-blur-sm rounded-lg border-2 border-dashed border-primary animate-in fade-in-0 zoom-in-95">
+                      <div className="text-center">
+                        <ImagePlus className="h-16 w-16 text-primary mx-auto mb-3 animate-bounce" />
+                        <p className="text-lg font-semibold text-primary">
+                          {t('translation.dragDropImage') || 'Drop image here'}
+                        </p>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Max 5MB • JPG, PNG, WEBP
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <Textarea 
+                    placeholder={t('translation.placeholder')} 
+                    value={inputText} 
+                    onChange={e => setInputText(e.target.value)} 
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleTranslate();
+                      }
+                    }} 
+                    className={`${getTextSize(inputText)} resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60 bg-transparent min-h-[200px] transition-all duration-200`} 
+                  />
                   {inputText.length > 0 && (
                     <span className="absolute bottom-2 right-28 text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded-md animate-fade-in">
                       {inputText.length}
@@ -1118,7 +1192,7 @@ const Index = () => {
                     size="sm" 
                     onClick={() => fileInputRef.current?.click()} 
                     disabled={isTranslatingImage}
-                    className="absolute bottom-2 right-14 h-10 w-10 p-0 rounded-full hover:bg-primary/10"
+                    className="absolute bottom-2 right-14 h-10 w-10 p-0 rounded-full hover:bg-primary/10 transition-all hover:scale-110"
                     aria-label={t('translation.uploadImage')}
                   >
                     {isTranslatingImage ? (
@@ -1129,8 +1203,25 @@ const Index = () => {
                   </Button>
                   
                   {/* Audio Recording Button */}
-                  <Button variant="ghost" size="sm" onClick={isRecording ? stopRecording : startRecording} disabled={isTranscribing} className={`absolute bottom-2 right-2 h-10 w-10 p-0 rounded-full ${isRecording ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' : 'hover:bg-primary/10'}`} aria-label={isRecording ? t('audio.stopRecording') : t('audio.startRecording')}>
-                    {isTranscribing ? <Loader2 className="h-5 w-5 animate-spin" /> : isRecording ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={isRecording ? stopRecording : startRecording} 
+                    disabled={isTranscribing} 
+                    className={`absolute bottom-2 right-2 h-10 w-10 p-0 rounded-full transition-all ${
+                      isRecording 
+                        ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' 
+                        : 'hover:bg-primary/10 hover:scale-110'
+                    }`} 
+                    aria-label={isRecording ? t('audio.stopRecording') : t('audio.startRecording')}
+                  >
+                    {isTranscribing ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : isRecording ? (
+                      <MicOff className="h-5 w-5" />
+                    ) : (
+                      <Mic className="h-5 w-5" />
+                    )}
                   </Button>
                 </div>
               </div>
