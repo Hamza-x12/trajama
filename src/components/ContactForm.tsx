@@ -19,6 +19,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Send, HelpCircle, Lightbulb, AlertCircle } from "lucide-react";
 import confetti from "canvas-confetti";
+import { useTranslation } from "react-i18next";
 
 const contactSchema = z.object({
   inquiryType: z.enum(["question", "suggestion", "problem"], {
@@ -38,6 +39,7 @@ interface ContactFormProps {
 export const ContactForm = ({ pageSource }: ContactFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
@@ -72,16 +74,16 @@ export const ContactForm = ({ pageSource }: ContactFormProps) => {
       });
 
       toast({
-        title: "Message sent!",
-        description: "Thank you for your feedback. We'll get back to you soon.",
+        title: t('contact.success'),
+        description: t('contact.successDescription'),
       });
 
       form.reset();
     } catch (error) {
       console.error("Error submitting contact form:", error);
       toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
+        title: t('contact.error'),
+        description: t('contact.errorDescription'),
         variant: "destructive",
       });
     } finally {
@@ -97,9 +99,9 @@ export const ContactForm = ({ pageSource }: ContactFormProps) => {
             <Send className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <CardTitle className="text-xl sm:text-2xl">Have a Question?</CardTitle>
+            <CardTitle className="text-xl sm:text-2xl">{t('contact.formTitle')}</CardTitle>
             <CardDescription className="text-muted-foreground">
-              Can't find what you're looking for? Send us a message!
+              {t('contact.formDescription')}
             </CardDescription>
           </div>
         </div>
@@ -112,7 +114,7 @@ export const ContactForm = ({ pageSource }: ContactFormProps) => {
               name="inquiryType"
               render={({ field }) => (
                 <FormItem className="space-y-3">
-                  <FormLabel>What would you like to do?</FormLabel>
+                  <FormLabel>{t('contact.inquiryType')}</FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
@@ -125,7 +127,7 @@ export const ContactForm = ({ pageSource }: ContactFormProps) => {
                         </FormControl>
                         <FormLabel className="flex items-center gap-2 font-normal cursor-pointer">
                           <HelpCircle className="w-4 h-4 text-primary" />
-                          I have a question
+                          {t('contact.general')}
                         </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
@@ -134,7 +136,7 @@ export const ContactForm = ({ pageSource }: ContactFormProps) => {
                         </FormControl>
                         <FormLabel className="flex items-center gap-2 font-normal cursor-pointer">
                           <Lightbulb className="w-4 h-4 text-primary" />
-                          I want to make a suggestion
+                          {t('contact.feedback')}
                         </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
@@ -143,7 +145,7 @@ export const ContactForm = ({ pageSource }: ContactFormProps) => {
                         </FormControl>
                         <FormLabel className="flex items-center gap-2 font-normal cursor-pointer">
                           <AlertCircle className="w-4 h-4 text-primary" />
-                          I'm facing a problem
+                          {t('contact.support')}
                         </FormLabel>
                       </FormItem>
                     </RadioGroup>
@@ -157,9 +159,9 @@ export const ContactForm = ({ pageSource }: ContactFormProps) => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t('contact.name')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your name" {...field} />
+                    <Input placeholder={t('contact.namePlaceholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -170,9 +172,9 @@ export const ContactForm = ({ pageSource }: ContactFormProps) => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('contact.email')}</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="your.email@example.com" {...field} />
+                    <Input type="email" placeholder={t('contact.emailPlaceholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -188,10 +190,10 @@ export const ContactForm = ({ pageSource }: ContactFormProps) => {
                 
                 return (
                   <FormItem>
-                    <FormLabel>Message</FormLabel>
+                    <FormLabel>{t('contact.message')}</FormLabel>
                     <FormControl>
                       <Textarea 
-                        placeholder="Ask your question or share your feedback..." 
+                        placeholder={t('contact.messagePlaceholder')} 
                         className="min-h-[120px] resize-none"
                         maxLength={maxLength}
                         {...field} 
@@ -213,7 +215,7 @@ export const ContactForm = ({ pageSource }: ContactFormProps) => {
               disabled={isSubmitting}
             >
               <Send className="w-4 h-4" />
-              {isSubmitting ? "Sending..." : "Send Message"}
+              {isSubmitting ? t('contact.sending') : t('contact.send')}
             </Button>
           </form>
         </Form>
