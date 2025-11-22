@@ -104,11 +104,11 @@ const FAQ = () => {
         </Card>
 
         <div className="mt-8 text-center">
-          <p className="text-muted-foreground mb-4">Can't find what you're looking for?</p>
+          <p className="text-muted-foreground mb-4">{t('faq.cantFindAnswer')}</p>
           <Link to="/contact">
             <Button variant="default" size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-all">
               <MessageCircle className="w-5 h-5" />
-              Contact Us
+              {t('faq.contactUs')}
             </Button>
           </Link>
         </div>
