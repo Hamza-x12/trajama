@@ -123,6 +123,7 @@ const Index = () => {
   const [ocrTextRegions, setOcrTextRegions] = useState<any[]>([]);
   const [ocrTranslation, setOcrTranslation] = useState<string>('');
   const [isDragging, setIsDragging] = useState(false);
+  const [skipSpellingCheck, setSkipSpellingCheck] = useState(false);
 
   // Dynamic font size based on text length
   const getTextSize = (text: string) => {
@@ -187,7 +188,7 @@ const Index = () => {
   
   // Check spelling when user stops typing
   useEffect(() => {
-    if (!inputText.trim() || inputText.length < 3) {
+    if (!inputText.trim() || inputText.length < 3 || skipSpellingCheck) {
       setSpellingSuggestion(null);
       return;
     }
@@ -197,7 +198,7 @@ const Index = () => {
     }, 1500); // Check after 1.5 seconds of inactivity
     
     return () => clearTimeout(timeoutId);
-  }, [inputText, sourceLanguage]);
+  }, [inputText, sourceLanguage, skipSpellingCheck]);
 
   // Auto-select voice based on target language
   useEffect(() => {
@@ -662,9 +663,13 @@ const Index = () => {
             toast.success(t('translation.imageTranslated'));
           }
 
-          // Set the extracted text as input
+          // Set the extracted text as input and skip auto spelling check to avoid rate limits
+          setSkipSpellingCheck(true);
           setInputText(data.extractedText);
           setTranslations(data);
+          
+          // Re-enable spelling check after a delay
+          setTimeout(() => setSkipSpellingCheck(false), 3000);
 
           // Add to history
           const historyItem: HistoryItem = {
