@@ -1,4 +1,4 @@
-import { Settings, Download, Trash2, Loader2, Palette, Type, RotateCcw, Info, FileDown, FileUp, History } from "lucide-react";
+import { Settings, Download, Trash2, Loader2, Palette, Type, RotateCcw, Info, FileDown, FileUp, History, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -37,6 +37,7 @@ interface SettingsDialogProps {
   setSpeechRate?: (rate: number) => void;
   profanityFilterEnabled?: boolean;
   setProfanityFilterEnabled?: (enabled: boolean) => void;
+  onShowTutorial?: () => void;
 }
 
 export function SettingsDialog({ 
@@ -48,7 +49,8 @@ export function SettingsDialog({
   speechRate = 1.0,
   setSpeechRate,
   profanityFilterEnabled = true,
-  setProfanityFilterEnabled
+  setProfanityFilterEnabled,
+  onShowTutorial
 }: SettingsDialogProps) {
   const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
@@ -466,6 +468,20 @@ export function SettingsDialog({
               </div>
             </CollapsibleContent>
           </Collapsible>
+
+          {/* Show Tutorial Button */}
+          {onShowTutorial && (
+            <div className="space-y-2 animate-in slide-in-from-left-3 duration-300 delay-450">
+              <Button
+                variant="outline"
+                onClick={onShowTutorial}
+                className="w-full gap-2 hover-scale hover:bg-primary/10 transition-all duration-200"
+              >
+                <HelpCircle className="h-4 w-4 text-primary" />
+                {t('settings.helpTutorial')}
+              </Button>
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>

@@ -5,35 +5,65 @@
   },
   "settings": {
     "title": "Settings",
-    "language": "Language",
-    "theme": "Theme",
-    "lightMode": "Light Mode",
-    "darkMode": "Dark Mode",
-    "systemMode": "System",
-    "fontSize": "Font Size",
-    "small": "Small",
-    "medium": "Medium",
-    "large": "Large",
-    "voice": "Voice Selection",
-    "selectVoice": "Select voice",
-    "autoVoiceSelect": "Auto voice selection",
-    "autoVoiceDescription": "Automatically select voice based on target language",
-    "speechRate": "Speech speed",
-    "slower": "Slower",
-    "normal": "Normal",
-    "faster": "Faster",
+    "interfaceLanguage": "Interface Language",
+    "speechRate": "Speech Rate",
+    "autoVoiceSelect": "Auto Voice Selection",
     "profanityFilter": "Profanity Filter",
-    "profanityFilterDescription": "Filter inappropriate language from translations",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "fontSize": "Font Size",
     "advanced": "Advanced Settings",
     "clearHistory": "Clear Translation History",
-    "historyClearedSuccess": "Translation history cleared successfully",
     "exportSettings": "Export Settings",
-    "exportSuccess": "Settings exported successfully",
     "importSettings": "Import Settings",
-    "importSuccess": "Settings imported successfully",
-    "importError": "Failed to import settings",
     "resetSettings": "Reset All Settings",
-    "appVersion": "App Version"
+    "appVersion": "App Version",
+    "historyCleared": "Translation history cleared",
+    "settingsExported": "Settings exported successfully",
+    "settingsImported": "Settings imported successfully",
+    "settingsReset": "All settings reset",
+    "helpTutorial": "Show Tutorial"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Welcome to Tarjama!",
+      "description": "Your powerful Moroccan Arabic translator",
+      "content": "Let's take a quick tour to help you get started with all the amazing features."
+    },
+    "voice": {
+      "title": "Voice Translation",
+      "description": "Speak naturally and get instant translations",
+      "step1": "Tap the microphone icon to start recording",
+      "step2": "Speak your text in any supported language",
+      "step3": "Listen to the translation with text-to-speech"
+    },
+    "offline": {
+      "title": "Offline Mode",
+      "description": "Translate even without internet",
+      "step1": "Download language packs from settings",
+      "step2": "Use translations without internet connection",
+      "step3": "Perfect for travel and remote areas"
+    },
+    "settings": {
+      "title": "Advanced Settings",
+      "description": "Customize your experience",
+      "step1": "Adjust speech rate and voice selection",
+      "step2": "Change theme and font size",
+      "step3": "Export and import your settings",
+      "step4": "Access the tutorial anytime from settings"
+    },
+    "complete": {
+      "title": "You're All Set!",
+      "description": "Ready to start translating",
+      "content": "You can restart this tutorial anytime from the settings menu."
+    },
+    "step": "Step {{current}} of {{total}}",
+    "previous": "Previous",
+    "next": "Next",
+    "skip": "Skip",
+    "finish": "Get Started"
   },
   "translation": {
     "placeholder": "Enter text to translate...",
