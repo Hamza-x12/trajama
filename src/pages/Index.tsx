@@ -631,12 +631,13 @@ const Index = () => {
           });
 
           if (error) {
+            console.error('Edge function error:', error);
             if (error.message.includes('429')) {
               toast.error('Rate limit exceeded. Please try again later.');
             } else if (error.message.includes('402')) {
               toast.error('Payment required. Please add credits to your workspace.');
             } else {
-              throw error;
+              toast.error(`Error: ${error.message}`);
             }
             return;
           }
@@ -677,24 +678,29 @@ const Index = () => {
         } catch (error) {
           console.error('Image translation error:', error);
           toast.error(t('translation.failed'));
+        } finally {
+          setIsTranslatingImage(false);
+          // Reset file input
+          if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+          }
         }
       };
 
       reader.onerror = () => {
         toast.error('Failed to read image file');
         setIsTranslatingImage(false);
+        // Reset file input
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
       };
 
       reader.readAsDataURL(file);
     } catch (error) {
       console.error('Image upload error:', error);
       toast.error(t('translation.failed'));
-    } finally {
       setIsTranslatingImage(false);
-      // Reset file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
     }
   };
 
