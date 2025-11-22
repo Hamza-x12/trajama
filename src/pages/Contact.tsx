@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsDialog } from "@/components/SettingsDialog";
@@ -11,7 +12,16 @@ const Contact = () => {
   const { t } = useTranslation();
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+    <>
+      <Helmet>
+        <title>Contact Tarjama - Get Support for Darija Translation</title>
+        <meta name="description" content="Contact Tarjama for support, feedback, or inquiries about our Moroccan Darija translation service. We're here to help with all your translation needs." />
+        <link rel="canonical" href="https://tarjama.lovable.app/contact" />
+        <meta property="og:title" content="Contact Tarjama - Get Support for Darija Translation" />
+        <meta property="og:description" content="Contact Tarjama for support, feedback, or inquiries about our Moroccan Darija translation service. We're here to help with all your translation needs." />
+        <meta property="og:url" content="https://tarjama.lovable.app/contact" />
+      </Helmet>
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-3">
@@ -45,6 +55,7 @@ const Contact = () => {
         <ContactForm pageSource="Contact Page" />
       </main>
     </div>
+    </>
   );
 };
 
