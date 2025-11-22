@@ -617,14 +617,11 @@ const Index = () => {
 
           toast.info(t('translation.extractingText'));
 
-          // Get the first selected target language
-          const selectedTargetLang = languages.find(l => l.name !== sourceLanguage)?.name || 'English';
-
-          // Call the translate-image edge function with only ONE target language
+          // Call the translate-image edge function with only the selected target language
           const { data, error } = await supabase.functions.invoke('translate-image', {
             body: {
               imageData,
-              targetLanguages: [selectedTargetLang],
+              targetLanguages: [targetLanguage],
               uiLanguage: i18n.language
             }
           });
@@ -659,7 +656,7 @@ const Index = () => {
           if (data.textRegions && data.textRegions.length > 0) {
             setOcrTextRegions(data.textRegions);
             // Get the translation for the selected language
-            const translatedText = data.translations[selectedTargetLang] || data.extractedText;
+            const translatedText = data.translations[targetLanguage] || data.extractedText;
             setOcrTranslation(translatedText);
             toast.success(t('translation.imageTranslated'));
           }
