@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -67,15 +67,57 @@ export const ImageOCRViewer = ({
     }
   }, [imageData]);
 
-  // Convert pixel positions to percentages
+  // Detect if the model returned percentage-based positions (0-100) or absolute pixels
+  const isPercentageBased = imageDimensions
+    ? (() => {
+        const maxRight = Math.max(...textRegions.map(r => r.position.left + r.position.width));
+        const maxBottom = Math.max(...textRegions.map(r => r.position.top + r.position.height));
+        return maxRight <= 110 && maxBottom <= 110;
+      })()
+    : false;
+
+  const { scaleX, scaleY } = useMemo(() => {
+    if (!imageDimensions || textRegions.length === 0 || isPercentageBased) {
+      return { scaleX: 1, scaleY: 1 };
+    }
+
+    const maxRight = Math.max(...textRegions.map(r => r.position.left + r.position.width));
+    const maxBottom = Math.max(...textRegions.map(r => r.position.top + r.position.height));
+
+    return {
+      scaleX: maxRight > 0 ? maxRight / imageDimensions.width : 1,
+      scaleY: maxBottom > 0 ? maxBottom / imageDimensions.height : 1,
+    };
+  }, [imageDimensions, textRegions, isPercentageBased]);
+
+  // Convert region positions to percentages relative to the displayed image
   const getRegionStyle = (region: TextRegion) => {
     if (!imageDimensions) return {};
-    
+
+    let topPx: number;
+    let leftPx: number;
+    let widthPx: number;
+    let heightPx: number;
+
+    if (isPercentageBased) {
+      // Model returned values as 0-100 percentages
+      topPx = (region.position.top / 100) * imageDimensions.height;
+      leftPx = (region.position.left / 100) * imageDimensions.width;
+      widthPx = (region.position.width / 100) * imageDimensions.width;
+      heightPx = (region.position.height / 100) * imageDimensions.height;
+    } else {
+      // Model returned absolute pixels, possibly on a resized canvas: normalize by scale
+      topPx = region.position.top / scaleY;
+      leftPx = region.position.left / scaleX;
+      widthPx = region.position.width / scaleX;
+      heightPx = region.position.height / scaleY;
+    }
+
     return {
-      top: `${(region.position.top / imageDimensions.height) * 100}%`,
-      left: `${(region.position.left / imageDimensions.width) * 100}%`,
-      width: `${(region.position.width / imageDimensions.width) * 100}%`,
-      height: `${(region.position.height / imageDimensions.height) * 100}%`,
+      top: `${(topPx / imageDimensions.height) * 100}%`,
+      left: `${(leftPx / imageDimensions.width) * 100}%`,
+      width: `${(widthPx / imageDimensions.width) * 100}%`,
+      height: `${(heightPx / imageDimensions.height) * 100}%`,
     };
   };
 
