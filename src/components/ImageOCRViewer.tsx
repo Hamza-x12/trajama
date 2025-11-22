@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { X, Languages, Copy, Check } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { X, Languages, Copy, Check, Download, RotateCcw, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
@@ -39,6 +40,51 @@ export const ImageOCRViewer = ({
   const [translatingRegion, setTranslatingRegion] = useState<number | null>(null);
   const [regionTranslations, setRegionTranslations] = useState<Record<number, any>>({});
   const [copiedRegion, setCopiedRegion] = useState<number | null>(null);
+  const [failedRegions, setFailedRegions] = useState<Set<number>>(new Set());
+  const [isProcessingBatch, setIsProcessingBatch] = useState(false);
+  const [batchProgress, setBatchProgress] = useState(0);
+
+  const translateRegion = useCallback(async (index: number, retryCount = 0): Promise<boolean> => {
+    try {
+      const region = textRegions[index];
+      const { data, error } = await supabase.functions.invoke('translate-image', {
+        body: {
+          imageData: '',
+          targetLanguages,
+          uiLanguage,
+          textOnly: region.text,
+        }
+      });
+
+      if (error) {
+        // Handle rate limiting with exponential backoff
+        if (error.message.includes('429') && retryCount < 3) {
+          const delay = 1000 * Math.pow(2, retryCount);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          return translateRegion(index, retryCount + 1);
+        }
+        throw error;
+      }
+
+      if (data && data.translations) {
+        setRegionTranslations(prev => ({
+          ...prev,
+          [index]: data.translations
+        }));
+        setFailedRegions(prev => {
+          const next = new Set(prev);
+          next.delete(index);
+          return next;
+        });
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Region translation error:', error);
+      setFailedRegions(prev => new Set(prev).add(index));
+      return false;
+    }
+  }, [textRegions, targetLanguages, uiLanguage]);
 
   const handleRegionClick = async (index: number) => {
     setSelectedRegion(index);
@@ -49,32 +95,66 @@ export const ImageOCRViewer = ({
     }
 
     setTranslatingRegion(index);
-
-    try {
-      const region = textRegions[index];
-      const { data, error } = await supabase.functions.invoke('translate-image', {
-        body: {
-          imageData: '', // No need to send image again
-          targetLanguages,
-          uiLanguage,
-          textOnly: region.text,
-        }
-      });
-
-      if (error) throw error;
-
-      if (data && data.translations) {
-        setRegionTranslations(prev => ({
-          ...prev,
-          [index]: data.translations
-        }));
-      }
-    } catch (error) {
-      console.error('Region translation error:', error);
-      toast.error('Failed to translate this region');
-    } finally {
-      setTranslatingRegion(null);
+    const success = await translateRegion(index);
+    
+    if (success) {
+      toast.success('Region translated successfully');
+    } else {
+      toast.error('Failed to translate region');
     }
+    
+    setTranslatingRegion(null);
+  };
+
+  const handleBatchTranslate = async () => {
+    const untranslatedRegions = textRegions
+      .map((_, idx) => idx)
+      .filter(idx => !regionTranslations[idx] && !failedRegions.has(idx));
+
+    if (untranslatedRegions.length === 0) {
+      toast.info('All regions already translated');
+      return;
+    }
+
+    setIsProcessingBatch(true);
+    setBatchProgress(0);
+    
+    for (let i = 0; i < untranslatedRegions.length; i++) {
+      const regionIdx = untranslatedRegions[i];
+      setTranslatingRegion(regionIdx);
+      await translateRegion(regionIdx);
+      setBatchProgress(((i + 1) / untranslatedRegions.length) * 100);
+      
+      // Add delay between requests to avoid rate limiting
+      if (i < untranslatedRegions.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 800));
+      }
+    }
+
+    setTranslatingRegion(null);
+    setIsProcessingBatch(false);
+    setBatchProgress(0);
+    toast.success('Batch translation complete!');
+  };
+
+  const handleRetryFailed = async () => {
+    if (failedRegions.size === 0) return;
+
+    setIsProcessingBatch(true);
+    const failed = Array.from(failedRegions);
+    
+    for (let i = 0; i < failed.length; i++) {
+      setTranslatingRegion(failed[i]);
+      await translateRegion(failed[i]);
+      
+      if (i < failed.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      }
+    }
+
+    setTranslatingRegion(null);
+    setIsProcessingBatch(false);
+    toast.success('Retry complete');
   };
 
   const handleCopyRegion = (index: number, translationKey: string) => {
@@ -87,6 +167,41 @@ export const ImageOCRViewer = ({
     }
   };
 
+  const handleCopyAll = () => {
+    if (!regionTranslations[selectedRegion!]) return;
+    
+    const translations = regionTranslations[selectedRegion!];
+    const text = Object.entries(translations)
+      .map(([lang, trans]) => `${lang}: ${trans}`)
+      .join('\n\n');
+    
+    navigator.clipboard.writeText(text);
+    toast.success('Copied all translations');
+  };
+
+  const handleExportAll = () => {
+    const allData = textRegions.map((region, idx) => ({
+      text: region.text,
+      position: region.position,
+      label: region.label,
+      translations: regionTranslations[idx] || null,
+      failed: failedRegions.has(idx)
+    }));
+
+    const jsonStr = JSON.stringify(allData, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ocr-translations.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success('Exported translations');
+  };
+
+  const translatedCount = Object.keys(regionTranslations).length;
+  const failedCount = failedRegions.size;
+
   return (
     <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm animate-in fade-in-0 duration-300">
       <div className="container mx-auto px-4 py-6 h-full flex flex-col">
@@ -98,13 +213,59 @@ export const ImageOCRViewer = ({
               {t('translation.imageOCR') || 'Image OCR Analysis'}
             </h2>
             <p className="text-sm text-muted-foreground mt-1">
-              {t('translation.clickRegions') || 'Click on text regions to translate them individually'}
+              {translatedCount}/{textRegions.length} regions translated
+              {failedCount > 0 && ` • ${failedCount} failed`}
             </p>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="h-5 w-5" />
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={handleBatchTranslate}
+              disabled={isProcessingBatch || translatedCount === textRegions.length}
+            >
+              {isProcessingBatch ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Languages className="h-4 w-4 mr-2" />
+              )}
+              Translate All ({textRegions.length - translatedCount - failedCount})
+            </Button>
+            {failedCount > 0 && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={handleRetryFailed}
+                disabled={isProcessingBatch}
+              >
+                <RotateCcw className="h-4 w-4 mr-2" />
+                Retry ({failedCount})
+              </Button>
+            )}
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={handleExportAll}
+              disabled={translatedCount === 0}
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export
+            </Button>
+            <Button variant="ghost" size="icon" onClick={onClose}>
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
+
+        {/* Progress Bar */}
+        {isProcessingBatch && (
+          <div className="mb-4 p-3 bg-muted/50 rounded-lg">
+            <Progress value={batchProgress} className="h-2" />
+            <p className="text-xs text-muted-foreground mt-2 text-center">
+              Processing translations... {Math.round(batchProgress)}%
+            </p>
+          </div>
+        )}
 
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 overflow-hidden">
           {/* Image with Overlays */}
@@ -128,6 +289,10 @@ export const ImageOCRViewer = ({
                     className={`absolute cursor-pointer transition-all duration-200 ${
                       selectedRegion === index
                         ? 'bg-primary/30 border-2 border-primary ring-4 ring-primary/20'
+                        : failedRegions.has(index)
+                        ? 'bg-destructive/20 border-2 border-destructive'
+                        : regionTranslations[index]
+                        ? 'bg-green-500/20 border-2 border-green-500'
                         : hoveredRegion === index
                         ? 'bg-primary/20 border-2 border-primary/60'
                         : 'bg-primary/10 border border-primary/40 hover:bg-primary/15'
@@ -141,14 +306,20 @@ export const ImageOCRViewer = ({
                   >
                     <Badge 
                       className={`absolute -top-2 -left-2 text-xs ${
-                        selectedRegion === index ? 'bg-primary' : 'bg-primary/80'
+                        failedRegions.has(index)
+                          ? 'bg-destructive'
+                          : regionTranslations[index]
+                          ? 'bg-green-500'
+                          : selectedRegion === index
+                          ? 'bg-primary'
+                          : 'bg-primary/80'
                       }`}
                     >
                       {index + 1}
                     </Badge>
                     {translatingRegion === index && (
                       <div className="absolute inset-0 flex items-center justify-center bg-background/80">
-                        <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" />
+                        <Loader2 className="h-6 w-6 animate-spin text-primary" />
                       </div>
                     )}
                   </div>
@@ -166,14 +337,17 @@ export const ImageOCRViewer = ({
                   {t('translation.selectRegion') || 'Select a text region'}
                 </p>
                 <p className="text-sm mt-2">
-                  {t('translation.clickAnyRegion') || 'Click on any highlighted region in the image to see its translation'}
+                  Click on any region to translate it individually
+                </p>
+                <p className="text-sm mt-1 text-xs">
+                  Or use "Translate All" to batch process
                 </p>
               </div>
             ) : (
               <div className="space-y-4 animate-in slide-in-from-right-2 duration-300">
                 {/* Region Header */}
                 <div className="flex items-start justify-between pb-4 border-b">
-                  <div>
+                  <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <Badge variant="outline">
                         {t('translation.region') || 'Region'} {selectedRegion + 1}
@@ -181,11 +355,33 @@ export const ImageOCRViewer = ({
                       <Badge variant="secondary">
                         {textRegions[selectedRegion].label}
                       </Badge>
+                      {regionTranslations[selectedRegion] && (
+                        <Badge variant="default" className="bg-green-500">
+                          <Check className="h-3 w-3 mr-1" />
+                          Translated
+                        </Badge>
+                      )}
+                      {failedRegions.has(selectedRegion) && (
+                        <Badge variant="destructive">
+                          Failed
+                        </Badge>
+                      )}
                     </div>
                     <p className="text-sm font-mono bg-muted p-3 rounded-lg">
                       {textRegions[selectedRegion].text}
                     </p>
                   </div>
+                  {regionTranslations[selectedRegion] && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleCopyAll}
+                      className="ml-2"
+                    >
+                      <Copy className="h-4 w-4 mr-2" />
+                      Copy All
+                    </Button>
+                  )}
                 </div>
 
                 {/* Translations */}
@@ -228,11 +424,25 @@ export const ImageOCRViewer = ({
                 ) : translatingRegion === selectedRegion ? (
                   <div className="flex items-center justify-center py-8">
                     <div className="text-center">
-                      <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-2" />
+                      <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
                       <p className="text-sm text-muted-foreground">
                         {t('translation.translating')}
                       </p>
                     </div>
+                  </div>
+                ) : failedRegions.has(selectedRegion) ? (
+                  <div className="text-center py-8">
+                    <p className="text-sm text-destructive mb-2">
+                      Translation failed for this region
+                    </p>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => handleRegionClick(selectedRegion)}
+                    >
+                      <RotateCcw className="h-4 w-4 mr-2" />
+                      Retry
+                    </Button>
                   </div>
                 ) : (
                   <div className="text-center py-8 text-muted-foreground">
@@ -259,12 +469,28 @@ export const ImageOCRViewer = ({
                 variant={selectedRegion === index ? "default" : "outline"}
                 size="sm"
                 onClick={() => handleRegionClick(index)}
-                className="gap-2"
+                className={`gap-2 ${
+                  failedRegions.has(index)
+                    ? 'border-destructive text-destructive hover:bg-destructive/10'
+                    : regionTranslations[index]
+                    ? 'border-green-500 text-green-600 hover:bg-green-500/10'
+                    : ''
+                }`}
               >
-                <Badge variant="secondary" className="h-5 w-5 p-0 flex items-center justify-center">
+                <Badge 
+                  variant="secondary" 
+                  className={`h-5 w-5 p-0 flex items-center justify-center ${
+                    failedRegions.has(index)
+                      ? 'bg-destructive text-destructive-foreground'
+                      : regionTranslations[index]
+                      ? 'bg-green-500 text-white'
+                      : ''
+                  }`}
+                >
                   {index + 1}
                 </Badge>
                 {region.label}
+                {regionTranslations[index] && <Check className="h-3 w-3" />}
               </Button>
             ))}
           </div>
