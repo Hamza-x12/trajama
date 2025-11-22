@@ -21,6 +21,7 @@ import {
   CheckCircle2,
   Languages,
   Download,
+  ImagePlus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -79,6 +80,38 @@ export const OnboardingTutorial = ({ open, onOpenChange }: OnboardingTutorialPro
             <p className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
               <span>{t("onboarding.voice.step3")}</span>
+            </p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      title: t("onboarding.image.title"),
+      description: t("onboarding.image.description"),
+      icon: ImagePlus,
+      color: "text-green-500",
+      content: (
+        <div className="space-y-4 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
+          <div className="flex items-center justify-center gap-4 p-8">
+            <div className="relative">
+              <ImagePlus className="h-16 w-16 text-green-500 animate-bounce" />
+              <div className="absolute -inset-2 bg-green-500/20 rounded-full animate-ping" />
+            </div>
+            <ArrowRight className="h-8 w-8 text-muted-foreground" />
+            <Languages className="h-16 w-16 text-primary animate-pulse" />
+          </div>
+          <div className="space-y-2 text-sm">
+            <p className="flex items-start gap-2">
+              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+              <span>{t("onboarding.image.step1")}</span>
+            </p>
+            <p className="flex items-start gap-2">
+              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+              <span>{t("onboarding.image.step2")}</span>
+            </p>
+            <p className="flex items-start gap-2">
+              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+              <span>{t("onboarding.image.step3")}</span>
             </p>
           </div>
         </div>

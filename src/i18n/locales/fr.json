@@ -49,6 +49,13 @@
       "step2": "Parlez votre texte dans n'importe quelle langue prise en charge",
       "step3": "Écoutez la traduction avec la synthèse vocale"
     },
+    "image": {
+      "title": "Traduction d'images",
+      "description": "Extraire et traduire le texte des images",
+      "step1": "Téléchargez n'importe quelle image contenant du texte (panneaux, menus, documents)",
+      "step2": "Cliquez sur les régions de texte individuelles pour les traduire",
+      "step3": "Obtenez des traductions précises pour chaque section de l'image"
+    },
     "offline": {
       "title": "Mode hors ligne",
       "description": "Traduisez même sans internet",
@@ -99,7 +106,15 @@
     "imageTranslated": "Texte de l'image extrait et traduit!",
     "noTextFound": "Aucun texte trouvé dans l'image",
     "imageTooBig": "L'image est trop grande. Veuillez utiliser une image de moins de 5 Mo.",
-    "dragDropImage": "Glissez-déposez une image ici, ou cliquez pour sélectionner"
+    "dragDropImage": "Glissez-déposez une image ici, ou cliquez pour sélectionner",
+    "imageOCR": "Analyse OCR de l'image",
+    "clickRegions": "Cliquez sur les régions de texte pour les traduire individuellement",
+    "selectRegion": "Sélectionner une région de texte",
+    "clickAnyRegion": "Cliquez sur n'importe quelle région en surbrillance dans l'image pour voir sa traduction",
+    "region": "Région",
+    "detectedRegions": "Régions de texte détectées",
+    "clickToTranslate": "Cliquez pour traduire cette région",
+    "regionsDetected": "régions de texte détectées"
   },
   "languages": {
     "detectlanguage": "Détecter la langue",
