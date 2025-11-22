@@ -10,6 +10,7 @@ import { SettingsDialog } from "@/components/SettingsDialog";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineScreen } from "@/components/OfflineScreen";
 import { OnboardingTutorial, useOnboarding } from "@/components/OnboardingTutorial";
+import { Helmet } from "react-helmet-async";
 
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X, ImagePlus } from "lucide-react";
@@ -808,7 +809,17 @@ const Index = () => {
       setIsTranscribing(false);
     }
   };
-  return <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col touch-pan-y relative">
+  return (
+    <>
+      <Helmet>
+        <title>Tarjama - Best Darija Translator</title>
+        <meta name="description" content="Free online Moroccan Darija translator. Translate Darija to French, English, Arabic, Spanish and 8+ languages with cultural context. Best Darija translation tool online with voice input and offline support." />
+        <link rel="canonical" href="https://tarjama.lovable.app/" />
+        <meta property="og:title" content="Tarjama - Best Darija Translator" />
+        <meta property="og:description" content="Free online Moroccan Darija translator. Translate Darija to French, English, Arabic, Spanish and 8+ languages with cultural context. Best Darija translation tool online with voice input and offline support." />
+        <meta property="og:url" content="https://tarjama.lovable.app/" />
+      </Helmet>
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col touch-pan-y relative">
       {/* Zellige corner decorations */}
       <div className="fixed top-0 left-0 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 pointer-events-none z-0 overflow-hidden">
         <img src={zelligeCorner} alt="" className="w-full h-full object-cover opacity-90" />
@@ -1392,6 +1403,8 @@ const Index = () => {
       </footer>
 
       <InstallPrompt />
-    </div>;
+    </div>
+    </>
+  );
 };
 export default Index;

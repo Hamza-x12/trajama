@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   Accordion,
   AccordionContent,
@@ -33,7 +34,16 @@ const FAQ = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+    <>
+      <Helmet>
+        <title>FAQ - Tarjama Darija Translator Questions & Answers</title>
+        <meta name="description" content="Get answers to frequently asked questions about Tarjama, the free Moroccan Darija translator. Learn about features, usage, and translation accuracy." />
+        <link rel="canonical" href="https://tarjama.lovable.app/faq" />
+        <meta property="og:title" content="FAQ - Tarjama Darija Translator Questions & Answers" />
+        <meta property="og:description" content="Get answers to frequently asked questions about Tarjama, the free Moroccan Darija translator. Learn about features, usage, and translation accuracy." />
+        <meta property="og:url" content="https://tarjama.lovable.app/faq" />
+      </Helmet>
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-3">
@@ -114,6 +124,7 @@ const FAQ = () => {
         </div>
       </main>
     </div>
+    </>
   );
 };
 

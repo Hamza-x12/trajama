@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { Search, ArrowLeft, MessageCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsDialog } from "@/components/SettingsDialog";
@@ -1254,7 +1255,16 @@ const Dictionary = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+    <>
+      <Helmet>
+        <title>Darija Dictionary - Moroccan Arabic Words & Phrases | Tarjama</title>
+        <meta name="description" content="Comprehensive Darija dictionary with pronunciations, examples, and translations. Learn Moroccan Arabic vocabulary with detailed explanations in French and English." />
+        <link rel="canonical" href="https://tarjama.lovable.app/dictionary" />
+        <meta property="og:title" content="Darija Dictionary - Moroccan Arabic Words & Phrases | Tarjama" />
+        <meta property="og:description" content="Comprehensive Darija dictionary with pronunciations, examples, and translations. Learn Moroccan Arabic vocabulary with detailed explanations in French and English." />
+        <meta property="og:url" content="https://tarjama.lovable.app/dictionary" />
+      </Helmet>
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-3">
@@ -1403,6 +1413,7 @@ const Dictionary = () => {
         onPlayAudio={handlePlayAudio}
       />
     </div>
+    </>
   );
 };
 
