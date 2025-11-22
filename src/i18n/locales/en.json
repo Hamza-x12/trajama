@@ -6,6 +6,14 @@
   "settings": {
     "title": "Settings",
     "language": "Language",
+    "theme": "Theme",
+    "lightMode": "Light Mode",
+    "darkMode": "Dark Mode",
+    "systemMode": "System",
+    "fontSize": "Font Size",
+    "small": "Small",
+    "medium": "Medium",
+    "large": "Large",
     "voice": "Voice Selection",
     "selectVoice": "Select voice",
     "autoVoiceSelect": "Auto voice selection",
@@ -15,7 +23,17 @@
     "normal": "Normal",
     "faster": "Faster",
     "profanityFilter": "Profanity Filter",
-    "profanityFilterDescription": "Filter inappropriate language from translations"
+    "profanityFilterDescription": "Filter inappropriate language from translations",
+    "advanced": "Advanced Settings",
+    "clearHistory": "Clear Translation History",
+    "historyClearedSuccess": "Translation history cleared successfully",
+    "exportSettings": "Export Settings",
+    "exportSuccess": "Settings exported successfully",
+    "importSettings": "Import Settings",
+    "importSuccess": "Settings imported successfully",
+    "importError": "Failed to import settings",
+    "resetSettings": "Reset All Settings",
+    "appVersion": "App Version"
   },
   "translation": {
     "placeholder": "Enter text to translate...",

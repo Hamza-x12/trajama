@@ -6,6 +6,14 @@
   "settings": {
     "title": "Настройки",
     "language": "Язык",
+    "theme": "Тема",
+    "lightMode": "Светлый режим",
+    "darkMode": "Тёмный режим",
+    "systemMode": "Системный",
+    "fontSize": "Размер шрифта",
+    "small": "Маленький",
+    "medium": "Средний",
+    "large": "Большой",
     "voice": "Выбор голоса",
     "selectVoice": "Выберите голос",
     "autoVoiceSelect": "Автоматический выбор голоса",
@@ -15,7 +23,17 @@
     "normal": "Нормально",
     "faster": "Быстрее",
     "profanityFilter": "Фильтр ненормативной лексики",
-    "profanityFilterDescription": "Фильтровать неприемлемую лексику в переводах"
+    "profanityFilterDescription": "Фильтровать неприемлемую лексику в переводах",
+    "advanced": "Расширенные настройки",
+    "clearHistory": "Очистить историю переводов",
+    "historyClearedSuccess": "История успешно очищена",
+    "exportSettings": "Экспортировать настройки",
+    "exportSuccess": "Настройки успешно экспортированы",
+    "importSettings": "Импортировать настройки",
+    "importSuccess": "Настройки успешно импортированы",
+    "importError": "Не удалось импортировать настройки",
+    "resetSettings": "Сбросить все настройки",
+    "appVersion": "Версия приложения"
   },
   "translation": {
     "placeholder": "Введите текст для перевода...",

@@ -6,6 +6,14 @@
   "settings": {
     "title": "Paramètres",
     "language": "Langue",
+    "theme": "Thème",
+    "lightMode": "Mode Clair",
+    "darkMode": "Mode Sombre",
+    "systemMode": "Système",
+    "fontSize": "Taille de Police",
+    "small": "Petit",
+    "medium": "Moyen",
+    "large": "Grand",
     "voice": "Sélection de la voix",
     "selectVoice": "Sélectionner la voix",
     "autoVoiceSelect": "Sélection automatique de la voix",
@@ -15,7 +23,17 @@
     "normal": "Normal",
     "faster": "Plus rapide",
     "profanityFilter": "Filtre de vulgarité",
-    "profanityFilterDescription": "Filtrer le langage inapproprié des traductions"
+    "profanityFilterDescription": "Filtrer le langage inapproprié des traductions",
+    "advanced": "Paramètres Avancés",
+    "clearHistory": "Effacer l'Historique",
+    "historyClearedSuccess": "Historique effacé avec succès",
+    "exportSettings": "Exporter les Paramètres",
+    "exportSuccess": "Paramètres exportés avec succès",
+    "importSettings": "Importer les Paramètres",
+    "importSuccess": "Paramètres importés avec succès",
+    "importError": "Échec de l'importation des paramètres",
+    "resetSettings": "Réinitialiser les Paramètres",
+    "appVersion": "Version de l'Application"
   },
   "translation": {
     "placeholder": "Entrez le texte à traduire...",
