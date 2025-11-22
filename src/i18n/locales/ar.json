@@ -6,6 +6,14 @@
   "settings": {
     "title": "الإعدادات",
     "language": "اللغة",
+    "theme": "المظهر",
+    "lightMode": "الوضع الفاتح",
+    "darkMode": "الوضع الداكن",
+    "systemMode": "النظام",
+    "fontSize": "حجم الخط",
+    "small": "صغير",
+    "medium": "متوسط",
+    "large": "كبير",
     "voice": "اختيار الصوت",
     "selectVoice": "اختر الصوت",
     "autoVoiceSelect": "اختيار الصوت التلقائي",
@@ -15,7 +23,17 @@
     "normal": "عادي",
     "faster": "أسرع",
     "profanityFilter": "تصفية الكلمات البذيئة",
-    "profanityFilterDescription": "تصفية اللغة غير اللائقة من الترجمات"
+    "profanityFilterDescription": "تصفية اللغة غير اللائقة من الترجمات",
+    "advanced": "الإعدادات المتقدمة",
+    "clearHistory": "مسح سجل الترجمة",
+    "historyClearedSuccess": "تم مسح السجل بنجاح",
+    "exportSettings": "تصدير الإعدادات",
+    "exportSuccess": "تم تصدير الإعدادات بنجاح",
+    "importSettings": "استيراد الإعدادات",
+    "importSuccess": "تم استيراد الإعدادات بنجاح",
+    "importError": "فشل استيراد الإعدادات",
+    "resetSettings": "إعادة تعيين الإعدادات",
+    "appVersion": "إصدار التطبيق"
   },
   "translation": {
     "placeholder": "أدخل النص للترجمة...",

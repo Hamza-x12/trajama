@@ -1,4 +1,4 @@
-import { Settings, Download, Trash2, Loader2 } from "lucide-react";
+import { Settings, Download, Trash2, Loader2, Palette, Type, RotateCcw, Info, FileDown, FileUp, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,8 +13,14 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { useTranslation } from "react-i18next";
 import { useOfflineLanguages } from "@/hooks/useOfflineLanguages";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { useTheme } from "next-themes";
 import moroccoFlag from "@/assets/flags/morocco.png";
 import ukFlag from "@/assets/flags/uk.png";
 import franceFlag from "@/assets/flags/france.png";
@@ -45,8 +51,20 @@ export function SettingsDialog({
   setProfanityFilterEnabled
 }: SettingsDialogProps) {
   const { t, i18n } = useTranslation();
+  const { theme, setTheme } = useTheme();
   const { offlineLanguages, downloadLanguage, removeLanguage } = useOfflineLanguages();
   const [downloading, setDownloading] = useState<string | null>(null);
+  const [fontSize, setFontSize] = useState(16);
+  const [advancedOpen, setAdvancedOpen] = useState(false);
+  
+  useEffect(() => {
+    const savedFontSize = localStorage.getItem('fontSize');
+    if (savedFontSize) {
+      const size = parseInt(savedFontSize);
+      setFontSize(size);
+      document.documentElement.style.fontSize = `${size}px`;
+    }
+  }, []);
 
   const handleAutoVoiceToggle = (checked: boolean) => {
     if (setAutoVoiceSelect) {
@@ -101,6 +119,63 @@ export function SettingsDialog({
     toast.success(t('offline.removed'));
   };
 
+  const handleFontSizeChange = (value: number[]) => {
+    const size = value[0];
+    setFontSize(size);
+    document.documentElement.style.fontSize = `${size}px`;
+    localStorage.setItem('fontSize', size.toString());
+  };
+
+  const handleClearHistory = () => {
+    localStorage.removeItem('translationHistory');
+    toast.success(t('settings.historyClearedSuccess'));
+  };
+
+  const handleResetSettings = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
+
+  const handleExportSettings = () => {
+    const settings = {
+      language: i18n.language,
+      theme,
+      fontSize,
+      speechRate,
+      autoVoiceSelect,
+      profanityFilterEnabled,
+    };
+    const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'tarjama-settings.json';
+    a.click();
+    toast.success(t('settings.exportSuccess'));
+  };
+
+  const handleImportSettings = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const settings = JSON.parse(e.target?.result as string);
+          if (settings.language) handleLanguageChange(settings.language);
+          if (settings.theme) setTheme(settings.theme);
+          if (settings.fontSize) handleFontSizeChange([settings.fontSize]);
+          if (settings.speechRate && setSpeechRate) setSpeechRate(settings.speechRate);
+          if (typeof settings.autoVoiceSelect === 'boolean' && setAutoVoiceSelect) setAutoVoiceSelect(settings.autoVoiceSelect);
+          if (typeof settings.profanityFilterEnabled === 'boolean' && setProfanityFilterEnabled) setProfanityFilterEnabled(settings.profanityFilterEnabled);
+          toast.success(t('settings.importSuccess'));
+        } catch (error) {
+          toast.error(t('settings.importError'));
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -109,14 +184,19 @@ export function SettingsDialog({
           <span className="sr-only">{t('settings.title')}</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{t('settings.title')}</DialogTitle>
+      <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto animate-in fade-in-0 zoom-in-95 duration-300">
+        <DialogHeader className="animate-in slide-in-from-top-2 duration-300">
+          <DialogTitle className="flex items-center gap-2 text-xl">
+            <Settings className="h-5 w-5 text-primary animate-spin-slow" style={{ animationDuration: '3s' }} />
+            {t('settings.title')}
+          </DialogTitle>
         </DialogHeader>
         <div className="space-y-6 py-4">
           {/* Language Selection */}
-          <div className="space-y-2">
-            <Label htmlFor="language">{t('settings.language')}</Label>
+          <div className="space-y-2 animate-in slide-in-from-left-3 duration-300 delay-100">
+            <Label htmlFor="language" className="flex items-center gap-2 text-base font-semibold">
+              <span>🌍</span> {t('settings.language')}
+            </Label>
             <Select value={i18n.language} onValueChange={handleLanguageChange}>
               <SelectTrigger id="language">
                 <SelectValue />
@@ -134,9 +214,52 @@ export function SettingsDialog({
             </Select>
           </div>
 
+          {/* Theme Selection */}
+          <div className="space-y-2 animate-in slide-in-from-left-3 duration-300 delay-150">
+            <Label htmlFor="theme" className="flex items-center gap-2 text-base font-semibold">
+              <Palette className="h-4 w-4 text-primary" /> {t('settings.theme')}
+            </Label>
+            <Select value={theme} onValueChange={setTheme}>
+              <SelectTrigger id="theme">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">☀️ {t('settings.lightMode')}</SelectItem>
+                <SelectItem value="dark">🌙 {t('settings.darkMode')}</SelectItem>
+                <SelectItem value="system">💻 {t('settings.systemMode')}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Font Size Control */}
+          <div className="space-y-2 animate-in slide-in-from-left-3 duration-300 delay-200">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="fontSize" className="flex items-center gap-2 text-base font-semibold">
+                <Type className="h-4 w-4 text-primary" /> {t('settings.fontSize')}
+              </Label>
+              <span className="text-sm text-muted-foreground">{fontSize}px</span>
+            </div>
+            <Slider
+              id="fontSize"
+              min={12}
+              max={20}
+              step={1}
+              value={[fontSize]}
+              onValueChange={handleFontSizeChange}
+              className="w-full"
+            />
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>{t('settings.small')}</span>
+              <span>{t('settings.medium')}</span>
+              <span>{t('settings.large')}</span>
+            </div>
+          </div>
+
+          <Separator />
+
           {/* Voice Selection */}
           {availableVoices.length > 0 && (
-            <div className="space-y-3">
+            <div className="space-y-3 animate-in slide-in-from-left-3 duration-300 delay-250">
               <div className="flex items-center justify-between">
                 <Label htmlFor="autoVoice">{t('settings.autoVoiceSelect')}</Label>
                 <Switch
@@ -199,9 +322,11 @@ export function SettingsDialog({
           <Separator />
 
           {/* Profanity Filter */}
-          <div className="space-y-3">
+          <div className="space-y-3 animate-in slide-in-from-left-3 duration-300 delay-300">
             <div className="flex items-center justify-between">
-              <Label htmlFor="profanityFilter">{t('settings.profanityFilter')}</Label>
+              <Label htmlFor="profanityFilter" className="flex items-center gap-2 text-base font-semibold">
+                🛡️ {t('settings.profanityFilter')}
+              </Label>
               <Switch
                 id="profanityFilter"
                 checked={profanityFilterEnabled}
@@ -217,9 +342,11 @@ export function SettingsDialog({
           <Separator />
 
           {/* Offline Languages */}
-          <div className="space-y-3">
+          <div className="space-y-3 animate-in slide-in-from-left-3 duration-300 delay-350">
             <div>
-              <Label>{t('offline.title')}</Label>
+              <Label className="flex items-center gap-2 text-base font-semibold">
+                📦 {t('offline.title')}
+              </Label>
               <p className="text-sm text-muted-foreground mt-1">
                 {t('offline.description')}
               </p>
@@ -228,7 +355,7 @@ export function SettingsDialog({
               {offlineLanguages.map((lang) => (
                 <div
                   key={lang.code}
-                  className="flex items-center justify-between p-2 rounded-lg border bg-card"
+                  className="flex items-center justify-between p-3 rounded-lg border bg-card hover:shadow-md transition-all duration-200 hover:scale-[1.02]"
                 >
                   <div className="flex-1">
                     <p className="text-sm font-medium">{lang.name}</p>
@@ -269,6 +396,76 @@ export function SettingsDialog({
               ))}
             </div>
           </div>
+
+          <Separator />
+
+          {/* Advanced Settings */}
+          <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen} className="animate-in slide-in-from-left-3 duration-300 delay-400">
+            <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-accent transition-colors">
+              <Label className="flex items-center gap-2 text-base font-semibold cursor-pointer">
+                ⚙️ {t('settings.advanced')}
+              </Label>
+              <span className={`transition-transform duration-200 ${advancedOpen ? 'rotate-180' : ''}`}>▼</span>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="space-y-3 mt-3">
+              {/* Clear History */}
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2 hover:bg-destructive/10 hover:text-destructive transition-all duration-200"
+                onClick={handleClearHistory}
+              >
+                <History className="h-4 w-4" />
+                {t('settings.clearHistory')}
+              </Button>
+
+              {/* Export Settings */}
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2 hover:bg-primary/10 transition-all duration-200"
+                onClick={handleExportSettings}
+              >
+                <FileDown className="h-4 w-4" />
+                {t('settings.exportSettings')}
+              </Button>
+
+              {/* Import Settings */}
+              <div>
+                <input
+                  type="file"
+                  accept=".json"
+                  onChange={handleImportSettings}
+                  className="hidden"
+                  id="import-settings"
+                />
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-2 hover:bg-primary/10 transition-all duration-200"
+                  onClick={() => document.getElementById('import-settings')?.click()}
+                >
+                  <FileUp className="h-4 w-4" />
+                  {t('settings.importSettings')}
+                </Button>
+              </div>
+
+              {/* Reset Settings */}
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2 hover:bg-destructive/10 hover:text-destructive transition-all duration-200"
+                onClick={handleResetSettings}
+              >
+                <RotateCcw className="h-4 w-4" />
+                {t('settings.resetSettings')}
+              </Button>
+
+              {/* App Info */}
+              <div className="p-3 rounded-lg bg-muted/50 border">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Info className="h-4 w-4" />
+                  <span>{t('settings.appVersion')}: 2.0.0</span>
+                </div>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
         </div>
       </DialogContent>
     </Dialog>
