@@ -119,12 +119,8 @@ const Index = () => {
   const audioChunksRef = useRef<Blob[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isTranslatingImage, setIsTranslatingImage] = useState(false);
-  const [ocrImageData, setOcrImageData] = useState<string>('');
-  const [ocrTextRegions, setOcrTextRegions] = useState<any[]>([]);
-  const [ocrTranslation, setOcrTranslation] = useState<string>('');
   const [isDragging, setIsDragging] = useState(false);
   const [skipSpellingCheck, setSkipSpellingCheck] = useState(false);
-  const [showOriginalImage, setShowOriginalImage] = useState(false);
 
   // Dynamic font size based on text length
   const getTextSize = (text: string) => {
@@ -613,7 +609,6 @@ const Index = () => {
       reader.onload = async (e) => {
         try {
           const imageData = e.target?.result as string;
-          setOcrImageData(imageData);
 
           toast.info(t('translation.extractingText'));
 
@@ -652,14 +647,7 @@ const Index = () => {
             return;
           }
 
-          // Store text regions and translation for overlay display
-          if (data.textRegions && data.textRegions.length > 0) {
-            setOcrTextRegions(data.textRegions);
-            // Get the translation for the selected language
-            const translatedText = data.translations[targetLanguage] || data.extractedText;
-            setOcrTranslation(translatedText);
-            toast.success(t('translation.imageTranslated'));
-          }
+          toast.success(t('translation.imageTranslated'));
 
           // Set the extracted text as input and skip auto spelling check to avoid rate limits
           setSkipSpellingCheck(true);
@@ -1173,60 +1161,6 @@ const Index = () => {
                     <span className="absolute bottom-2 right-28 text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded-md animate-fade-in">
                       {inputText.length}
                     </span>
-                  )}
-
-                  {ocrImageData && ocrTextRegions.length > 0 && (
-                    <div className="mt-4 rounded-lg border border-border/40 bg-muted/30 p-2">
-                      <div className="flex items-center justify-between mb-2">
-                        <Label className="text-xs text-muted-foreground">
-                          {showOriginalImage 
-                            ? (t('translation.originalImage') || 'Original image')
-                            : (t('translation.translatedImage') || 'Translated image')
-                          }
-                        </Label>
-                        <Button
-                          onClick={() => setShowOriginalImage(!showOriginalImage)}
-                          variant="ghost"
-                          size="sm"
-                          className="h-7 px-2 text-xs"
-                        >
-                          {showOriginalImage 
-                            ? (t('translation.showTranslation') || 'Show Translation')
-                            : (t('translation.showOriginal') || 'Show Original')
-                          }
-                        </Button>
-                      </div>
-                      <div className="relative w-full">
-                        <img
-                          src={ocrImageData}
-                          alt={t('translation.originalImageAlt') || 'Uploaded image with translations'}
-                          className="w-full max-h-96 object-contain rounded-md"
-                          loading="lazy"
-                        />
-                        {/* Overlay translated text on regions when not showing original */}
-                        {!showOriginalImage && ocrTextRegions.map((region: any, index: number) => {
-                          // Split the full translation by lines and use corresponding line
-                          const translationLines = ocrTranslation.split('\n');
-                          const regionTranslation = translationLines[index] || region.text;
-                          
-                          return (
-                            <div
-                              key={index}
-                              className="absolute bg-background/95 text-foreground px-2 py-1 rounded text-xs border border-primary/30 shadow-lg"
-                              style={{
-                                top: `${region.position.top}%`,
-                                left: `${region.position.left}%`,
-                                maxWidth: `${region.position.width}%`,
-                                fontSize: 'clamp(0.65rem, 1.2vw, 0.85rem)',
-                                lineHeight: '1.2'
-                              }}
-                            >
-                              {regionTranslation}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
                   )}
 
                   {/* Hidden file input */}
