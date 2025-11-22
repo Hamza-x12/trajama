@@ -93,7 +93,13 @@
     "cleared": "تمسح",
     "undo": "رجّع",
     "undone": "رجع",
-    "profanityDetected": "الترجمة فيها كلام مامزيانش وماتسجلتش فالتاريخ"
+    "profanityDetected": "الترجمة فيها كلام مامزيانش وماتسجلتش فالتاريخ",
+    "uploadImage": "حمّل صورة",
+    "extractingText": "كنستخرجو النص من الصورة...",
+    "imageTranslated": "تستخرج وتترجم النص من الصورة!",
+    "noTextFound": "ماكاين حتى نص فالصورة",
+    "imageTooBig": "الصورة كبيرة بزاف. استعمل صورة قل من 5 ميجا.",
+    "dragDropImage": "جبد وحط صورة هنا، ولا كليكي باش تختار"
   },
   "languages": {
     "detectlanguage": "اكتشف اللغة",

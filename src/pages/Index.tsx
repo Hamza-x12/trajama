@@ -11,7 +11,7 @@ import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineScreen } from "@/components/OfflineScreen";
 import { OnboardingTutorial, useOnboarding } from "@/components/OnboardingTutorial";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
-import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X } from "lucide-react";
+import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X, ImagePlus } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -116,6 +116,8 @@ const Index = () => {
   } | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isTranslatingImage, setIsTranslatingImage] = useState(false);
 
   // Dynamic font size based on text length
   const getTextSize = (text: string) => {
@@ -570,6 +572,105 @@ const Index = () => {
     setSpeakingLanguage(null);
     toast.info(t('audio.stopped'));
   };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Check file size (5MB limit)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error(t('translation.imageTooBig'));
+      return;
+    }
+
+    // Check file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select a valid image file');
+      return;
+    }
+
+    setIsTranslatingImage(true);
+    setTranslations(null);
+    setDetectedLanguage(null);
+
+    try {
+      // Convert image to base64
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const imageData = e.target?.result as string;
+
+          toast.info(t('translation.extractingText'));
+
+          // Call the translate-image edge function
+          const { data, error } = await supabase.functions.invoke('translate-image', {
+            body: {
+              imageData,
+              targetLanguages: languages.filter(l => l.name !== sourceLanguage).map(l => l.name),
+              uiLanguage: i18n.language
+            }
+          });
+
+          if (error) {
+            if (error.message.includes('429')) {
+              toast.error('Rate limit exceeded. Please try again later.');
+            } else if (error.message.includes('402')) {
+              toast.error('Payment required. Please add credits to your workspace.');
+            } else {
+              throw error;
+            }
+            return;
+          }
+
+          if (data.error) {
+            toast.error(data.error);
+            return;
+          }
+
+          if (!data.extractedText) {
+            toast.error(t('translation.noTextFound'));
+            return;
+          }
+
+          // Set the extracted text as input
+          setInputText(data.extractedText);
+          setTranslations(data);
+          toast.success(t('translation.imageTranslated'));
+
+          // Add to history
+          const historyItem: HistoryItem = {
+            id: Date.now().toString(),
+            text: data.extractedText,
+            sourceLanguage: sourceLanguage,
+            targetLanguage: targetLanguage,
+            timestamp: Date.now(),
+            translations: data.translations
+          };
+          setHistory(prev => [historyItem, ...prev].slice(0, 50));
+        } catch (error) {
+          console.error('Image translation error:', error);
+          toast.error(t('translation.failed'));
+        }
+      };
+
+      reader.onerror = () => {
+        toast.error('Failed to read image file');
+        setIsTranslatingImage(false);
+      };
+
+      reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('Image upload error:', error);
+      toast.error(t('translation.failed'));
+    } finally {
+      setIsTranslatingImage(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
   const handleCopyTranslation = (text: string, languageName: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(languageName);
@@ -962,10 +1063,38 @@ const Index = () => {
                     }
                   }} className={`${getTextSize(inputText)} resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60 bg-transparent min-h-[200px] transition-all duration-200`} />
                   {inputText.length > 0 && (
-                    <span className="absolute bottom-2 right-14 text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded-md animate-fade-in">
+                    <span className="absolute bottom-2 right-28 text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded-md animate-fade-in">
                       {inputText.length}
                     </span>
                   )}
+                  
+                  {/* Hidden file input */}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    aria-label="Upload image"
+                  />
+                  
+                  {/* Image Upload Button */}
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => fileInputRef.current?.click()} 
+                    disabled={isTranslatingImage}
+                    className="absolute bottom-2 right-14 h-10 w-10 p-0 rounded-full hover:bg-primary/10"
+                    aria-label={t('translation.uploadImage')}
+                  >
+                    {isTranslatingImage ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <ImagePlus className="h-5 w-5" />
+                    )}
+                  </Button>
+                  
+                  {/* Audio Recording Button */}
                   <Button variant="ghost" size="sm" onClick={isRecording ? stopRecording : startRecording} disabled={isTranscribing} className={`absolute bottom-2 right-2 h-10 w-10 p-0 rounded-full ${isRecording ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' : 'hover:bg-primary/10'}`} aria-label={isRecording ? t('audio.stopRecording') : t('audio.startRecording')}>
                     {isTranscribing ? <Loader2 className="h-5 w-5 animate-spin" /> : isRecording ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
                   </Button>

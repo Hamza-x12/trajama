@@ -93,7 +93,13 @@
     "cleared": "Effacé",
     "undo": "Annuler",
     "undone": "Restauré",
-    "profanityDetected": "La traduction contient un langage inapproprié et n'a pas été enregistrée dans l'historique"
+    "profanityDetected": "La traduction contient un langage inapproprié et n'a pas été enregistrée dans l'historique",
+    "uploadImage": "Télécharger une image",
+    "extractingText": "Extraction du texte de l'image...",
+    "imageTranslated": "Texte de l'image extrait et traduit!",
+    "noTextFound": "Aucun texte trouvé dans l'image",
+    "imageTooBig": "L'image est trop grande. Veuillez utiliser une image de moins de 5 Mo.",
+    "dragDropImage": "Glissez-déposez une image ici, ou cliquez pour sélectionner"
   },
   "languages": {
     "detectlanguage": "Détecter la langue",
