@@ -462,37 +462,39 @@ export const ImageOCRViewer = ({
             <Badge variant="outline">{textRegions.length}</Badge>
             {t('translation.detectedRegions') || 'Detected Text Regions'}
           </h3>
-          <div className="flex flex-wrap gap-2">
-            {textRegions.map((region, index) => (
-              <Button
-                key={index}
-                variant={selectedRegion === index ? "default" : "outline"}
-                size="sm"
-                onClick={() => handleRegionClick(index)}
-                className={`gap-2 ${
-                  failedRegions.has(index)
-                    ? 'border-destructive text-destructive hover:bg-destructive/10'
-                    : regionTranslations[index]
-                    ? 'border-green-500 text-green-600 hover:bg-green-500/10'
-                    : ''
-                }`}
-              >
-                <Badge 
-                  variant="secondary" 
-                  className={`h-5 w-5 p-0 flex items-center justify-center ${
+          <div className="max-h-48 overflow-y-auto">
+            <div className="flex flex-wrap gap-2">
+              {textRegions.map((region, index) => (
+                <Button
+                  key={index}
+                  variant={selectedRegion === index ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => handleRegionClick(index)}
+                  className={`gap-2 max-w-xs justify-start ${
                     failedRegions.has(index)
-                      ? 'bg-destructive text-destructive-foreground'
+                      ? 'border-destructive text-destructive hover:bg-destructive/10'
                       : regionTranslations[index]
-                      ? 'bg-green-500 text-white'
+                      ? 'border-green-500 text-green-600 hover:bg-green-500/10'
                       : ''
                   }`}
                 >
-                  {index + 1}
-                </Badge>
-                {region.label}
-                {regionTranslations[index] && <Check className="h-3 w-3" />}
-              </Button>
-            ))}
+                  <Badge 
+                    variant="secondary" 
+                    className={`h-5 min-w-5 px-1 flex items-center justify-center shrink-0 ${
+                      failedRegions.has(index)
+                        ? 'bg-destructive text-destructive-foreground'
+                        : regionTranslations[index]
+                        ? 'bg-green-500 text-white'
+                        : ''
+                    }`}
+                  >
+                    {index + 1}
+                  </Badge>
+                  <span className="truncate">{region.text}</span>
+                  {regionTranslations[index] && <Check className="h-3 w-3 shrink-0" />}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
