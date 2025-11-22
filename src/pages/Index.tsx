@@ -10,7 +10,7 @@ import { SettingsDialog } from "@/components/SettingsDialog";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineScreen } from "@/components/OfflineScreen";
 import { OnboardingTutorial, useOnboarding } from "@/components/OnboardingTutorial";
-import { ImageOCRViewer } from "@/components/ImageOCRViewer";
+
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X, ImagePlus } from "lucide-react";
 import { toast } from "sonner";
@@ -119,9 +119,7 @@ const Index = () => {
   const audioChunksRef = useRef<Blob[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isTranslatingImage, setIsTranslatingImage] = useState(false);
-  const [showOCRViewer, setShowOCRViewer] = useState(false);
   const [ocrImageData, setOcrImageData] = useState<string>('');
-  const [ocrTextRegions, setOcrTextRegions] = useState<any[]>([]);
   const [isDragging, setIsDragging] = useState(false);
 
   // Dynamic font size based on text length
@@ -337,18 +335,6 @@ const Index = () => {
     icon: indiaFlag
   }];
 
-  // Show OCR viewer if active
-  if (showOCRViewer && ocrImageData && ocrTextRegions.length > 0) {
-    return (
-      <ImageOCRViewer
-        imageData={ocrImageData}
-        textRegions={ocrTextRegions}
-        targetLanguages={languages.filter(l => l.name !== sourceLanguage).map(l => l.name)}
-        uiLanguage={i18n.language}
-        onClose={() => setShowOCRViewer(false)}
-      />
-    );
-  }
 
   const handleTranslate = async () => {
     if (!inputText.trim()) {
@@ -623,6 +609,7 @@ const Index = () => {
       reader.onload = async (e) => {
         try {
           const imageData = e.target?.result as string;
+          setOcrImageData(imageData);
 
           toast.info(t('translation.extractingText'));
 
@@ -657,11 +644,8 @@ const Index = () => {
             return;
           }
 
-          // If we have text regions, show the OCR viewer
+          // If we have text regions, just show a toast (no overlay viewer)
           if (data.textRegions && data.textRegions.length > 0) {
-            setOcrImageData(imageData);
-            setOcrTextRegions(data.textRegions);
-            setShowOCRViewer(true);
             toast.success(t('translation.regionsDetected') || `${data.textRegions.length} text regions detected`);
           }
 
@@ -1175,7 +1159,21 @@ const Index = () => {
                       {inputText.length}
                     </span>
                   )}
-                  
+
+                  {ocrImageData && (
+                    <div className="mt-4 rounded-lg border border-border/40 bg-muted/30 p-2">
+                      <Label className="text-xs text-muted-foreground mb-1 block">
+                        {t('translation.originalImage') || 'Original image'}
+                      </Label>
+                      <img
+                        src={ocrImageData}
+                        alt={t('translation.originalImageAlt') || 'Uploaded image used for OCR'}
+                        className="w-full max-h-64 object-contain rounded-md border border-border/30"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+
                   {/* Hidden file input */}
                   <input
                     ref={fileInputRef}
