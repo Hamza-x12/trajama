@@ -124,6 +124,7 @@ const Index = () => {
   const [ocrTranslation, setOcrTranslation] = useState<string>('');
   const [isDragging, setIsDragging] = useState(false);
   const [skipSpellingCheck, setSkipSpellingCheck] = useState(false);
+  const [showOriginalImage, setShowOriginalImage] = useState(false);
 
   // Dynamic font size based on text length
   const getTextSize = (text: string) => {
@@ -1179,9 +1180,25 @@ const Index = () => {
 
                   {ocrImageData && ocrTextRegions.length > 0 && (
                     <div className="mt-4 rounded-lg border border-border/40 bg-muted/30 p-2">
-                      <Label className="text-xs text-muted-foreground mb-2 block">
-                        {t('translation.translatedImage') || 'Translated image'}
-                      </Label>
+                      <div className="flex items-center justify-between mb-2">
+                        <Label className="text-xs text-muted-foreground">
+                          {showOriginalImage 
+                            ? (t('translation.originalImage') || 'Original image')
+                            : (t('translation.translatedImage') || 'Translated image')
+                          }
+                        </Label>
+                        <Button
+                          onClick={() => setShowOriginalImage(!showOriginalImage)}
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 px-2 text-xs"
+                        >
+                          {showOriginalImage 
+                            ? (t('translation.showTranslation') || 'Show Translation')
+                            : (t('translation.showOriginal') || 'Show Original')
+                          }
+                        </Button>
+                      </div>
                       <div className="relative w-full">
                         <img
                           src={ocrImageData}
@@ -1189,8 +1206,8 @@ const Index = () => {
                           className="w-full max-h-96 object-contain rounded-md"
                           loading="lazy"
                         />
-                        {/* Overlay translated text on regions */}
-                        {ocrTextRegions.map((region: any, index: number) => {
+                        {/* Overlay translated text on regions when not showing original */}
+                        {!showOriginalImage && ocrTextRegions.map((region: any, index: number) => {
                           // Split the full translation by lines and use corresponding line
                           const translationLines = ocrTranslation.split('\n');
                           const regionTranslation = translationLines[index] || region.text;
