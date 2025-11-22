@@ -70,6 +70,18 @@ Return ONLY a JSON object with this exact structure (no markdown, no additional 
       });
 
       if (!translateResponse.ok) {
+        if (translateResponse.status === 429) {
+          return new Response(
+            JSON.stringify({ error: 'Rate limit exceeded. Please try again later.' }),
+            { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+        if (translateResponse.status === 402) {
+          return new Response(
+            JSON.stringify({ error: 'Payment required. Please add credits to your workspace.' }),
+            { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
         throw new Error(`Translation failed: ${translateResponse.status}`);
       }
 
@@ -240,6 +252,18 @@ Return ONLY a JSON object with this exact structure (no markdown, no additional 
     });
 
     if (!translateResponse.ok) {
+      if (translateResponse.status === 429) {
+        return new Response(
+          JSON.stringify({ error: 'Rate limit exceeded. Please try again later.' }),
+          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      if (translateResponse.status === 402) {
+        return new Response(
+          JSON.stringify({ error: 'Payment required. Please add credits to your workspace.' }),
+          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
       throw new Error(`Translation failed: ${translateResponse.status}`);
     }
 
