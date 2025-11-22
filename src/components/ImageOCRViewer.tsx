@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -43,6 +43,41 @@ export const ImageOCRViewer = ({
   const [failedRegions, setFailedRegions] = useState<Set<number>>(new Set());
   const [isProcessingBatch, setIsProcessingBatch] = useState(false);
   const [batchProgress, setBatchProgress] = useState(0);
+  const [imageDimensions, setImageDimensions] = useState<{ width: number; height: number } | null>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  // Calculate image dimensions on load
+  useEffect(() => {
+    if (imgRef.current) {
+      const updateDimensions = () => {
+        if (imgRef.current) {
+          setImageDimensions({
+            width: imgRef.current.naturalWidth,
+            height: imgRef.current.naturalHeight
+          });
+        }
+      };
+      
+      if (imgRef.current.complete) {
+        updateDimensions();
+      } else {
+        imgRef.current.addEventListener('load', updateDimensions);
+        return () => imgRef.current?.removeEventListener('load', updateDimensions);
+      }
+    }
+  }, [imageData]);
+
+  // Convert pixel positions to percentages
+  const getRegionStyle = (region: TextRegion) => {
+    if (!imageDimensions) return {};
+    
+    return {
+      top: `${(region.position.top / imageDimensions.height) * 100}%`,
+      left: `${(region.position.left / imageDimensions.width) * 100}%`,
+      width: `${(region.position.width / imageDimensions.width) * 100}%`,
+      height: `${(region.position.height / imageDimensions.height) * 100}%`,
+    };
+  };
 
   const translateRegion = useCallback(async (index: number, retryCount = 0): Promise<boolean> => {
     try {
@@ -272,6 +307,7 @@ export const ImageOCRViewer = ({
           <Card className="relative overflow-auto p-4 bg-muted/20">
             <div className="relative inline-block max-w-full">
               <img
+                ref={imgRef}
                 src={imageData}
                 alt="OCR Analysis"
                 className="max-w-full h-auto rounded-lg shadow-lg"
@@ -280,7 +316,7 @@ export const ImageOCRViewer = ({
               
               {/* Text Region Overlays */}
               <div className="absolute inset-0">
-                {textRegions.map((region, index) => (
+                {imageDimensions && textRegions.map((region, index) => (
                   <div
                     key={index}
                     onClick={() => handleRegionClick(index)}
@@ -297,12 +333,7 @@ export const ImageOCRViewer = ({
                         ? 'bg-primary/20 border-2 border-primary/60'
                         : 'bg-primary/10 border border-primary/40 hover:bg-primary/15'
                     }`}
-                    style={{
-                      top: `${region.position.top}%`,
-                      left: `${region.position.left}%`,
-                      width: `${region.position.width}%`,
-                      height: `${region.position.height}%`,
-                    }}
+                    style={getRegionStyle(region)}
                   >
                     <Badge 
                       className={`absolute -top-2 -left-2 text-xs ${
