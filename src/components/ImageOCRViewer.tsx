@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -67,13 +67,27 @@ export const ImageOCRViewer = ({
     }
   }, [imageData]);
 
-  // Backend returns percentages from 0-100, use them directly
+  // Normalize model coordinates to the image by scaling into 0-100%
+  const { normWidth, normHeight } = useMemo(() => {
+    if (!textRegions || textRegions.length === 0) {
+      return { normWidth: 100, normHeight: 100 };
+    }
+
+    const maxRight = Math.max(...textRegions.map(r => r.position.left + r.position.width));
+    const maxBottom = Math.max(...textRegions.map(r => r.position.top + r.position.height));
+
+    return {
+      normWidth: maxRight || 100,
+      normHeight: maxBottom || 100,
+    };
+  }, [textRegions]);
+
   const getRegionStyle = (region: TextRegion) => {
     return {
-      top: `${region.position.top}%`,
-      left: `${region.position.left}%`,
-      width: `${region.position.width}%`,
-      height: `${region.position.height}%`,
+      top: `${(region.position.top / normHeight) * 100}%`,
+      left: `${(region.position.left / normWidth) * 100}%`,
+      width: `${(region.position.width / normWidth) * 100}%`,
+      height: `${(region.position.height / normHeight) * 100}%`,
     };
   };
 
@@ -333,19 +347,6 @@ export const ImageOCRViewer = ({
                     }`}
                     style={getRegionStyle(region)}
                   >
-                    <Badge 
-                      className={`absolute -top-2 -left-2 text-xs ${
-                        failedRegions.has(index)
-                          ? 'bg-destructive'
-                          : regionTranslations[index]
-                          ? 'bg-green-500'
-                          : selectedRegion === index
-                          ? 'bg-primary'
-                          : 'bg-primary/80'
-                      }`}
-                    >
-                      {index + 1}
-                    </Badge>
                     {translatingRegion === index && (
                       <div className="absolute inset-0 flex items-center justify-center bg-background/80">
                         <Loader2 className="h-6 w-6 animate-spin text-primary" />
