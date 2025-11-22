@@ -10,6 +10,7 @@ import { SettingsDialog } from "@/components/SettingsDialog";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineScreen } from "@/components/OfflineScreen";
 import { OnboardingTutorial, useOnboarding } from "@/components/OnboardingTutorial";
+import { ImageOCRViewer } from "@/components/ImageOCRViewer";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X, ImagePlus } from "lucide-react";
 import { toast } from "sonner";
@@ -118,6 +119,9 @@ const Index = () => {
   const audioChunksRef = useRef<Blob[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isTranslatingImage, setIsTranslatingImage] = useState(false);
+  const [showOCRViewer, setShowOCRViewer] = useState(false);
+  const [ocrImageData, setOcrImageData] = useState<string>('');
+  const [ocrTextRegions, setOcrTextRegions] = useState<any[]>([]);
 
   // Dynamic font size based on text length
   const getTextSize = (text: string) => {
@@ -330,6 +334,20 @@ const Index = () => {
     code: "hi",
     icon: indiaFlag
   }];
+
+  // Show OCR viewer if active
+  if (showOCRViewer && ocrImageData && ocrTextRegions.length > 0) {
+    return (
+      <ImageOCRViewer
+        imageData={ocrImageData}
+        textRegions={ocrTextRegions}
+        targetLanguages={languages.filter(l => l.name !== sourceLanguage).map(l => l.name)}
+        uiLanguage={i18n.language}
+        onClose={() => setShowOCRViewer(false)}
+      />
+    );
+  }
+
   const handleTranslate = async () => {
     if (!inputText.trim()) {
       toast.error(t('translation.enterText'));
@@ -630,6 +648,14 @@ const Index = () => {
           if (!data.extractedText) {
             toast.error(t('translation.noTextFound'));
             return;
+          }
+
+          // If we have text regions, show the OCR viewer
+          if (data.textRegions && data.textRegions.length > 0) {
+            setOcrImageData(imageData);
+            setOcrTextRegions(data.textRegions);
+            setShowOCRViewer(true);
+            toast.success(t('translation.regionsDetected') || `${data.textRegions.length} text regions detected`);
           }
 
           // Set the extracted text as input

@@ -39,6 +39,13 @@
       "step2": "Speak your text in any supported language",
       "step3": "Listen to the translation with text-to-speech"
     },
+    "image": {
+      "title": "Image Translation",
+      "description": "Extract and translate text from images",
+      "step1": "Upload any image containing text (signs, menus, documents)",
+      "step2": "Click on individual text regions to translate them",
+      "step3": "Get precise translations for each section of the image"
+    },
     "offline": {
       "title": "Offline Mode",
       "description": "Translate even without internet",
@@ -89,7 +96,15 @@
     "imageTranslated": "Image text extracted and translated!",
     "noTextFound": "No text found in the image",
     "imageTooBig": "Image is too large. Please use an image under 5MB.",
-    "dragDropImage": "Drag & drop an image here, or click to select"
+    "dragDropImage": "Drag & drop an image here, or click to select",
+    "imageOCR": "Image OCR Analysis",
+    "clickRegions": "Click on text regions to translate them individually",
+    "selectRegion": "Select a text region",
+    "clickAnyRegion": "Click on any highlighted region in the image to see its translation",
+    "region": "Region",
+    "detectedRegions": "Detected Text Regions",
+    "clickToTranslate": "Click to translate this region",
+    "regionsDetected": "text regions detected"
   },
   "languages": {
     "detectlanguage": "Detect Language",
