@@ -83,7 +83,13 @@
     "cleared": "Cleared",
     "undo": "Undo",
     "undone": "Restored",
-    "profanityDetected": "Translation contains inappropriate language and was not saved to history"
+    "profanityDetected": "Translation contains inappropriate language and was not saved to history",
+    "uploadImage": "Upload Image",
+    "extractingText": "Extracting text from image...",
+    "imageTranslated": "Image text extracted and translated!",
+    "noTextFound": "No text found in the image",
+    "imageTooBig": "Image is too large. Please use an image under 5MB.",
+    "dragDropImage": "Drag & drop an image here, or click to select"
   },
   "languages": {
     "detectlanguage": "Detect Language",
