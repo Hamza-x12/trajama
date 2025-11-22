@@ -33,7 +33,47 @@
     "importSuccess": "Paramètres importés avec succès",
     "importError": "Échec de l'importation des paramètres",
     "resetSettings": "Réinitialiser les Paramètres",
-    "appVersion": "Version de l'Application"
+    "appVersion": "Version de l'Application",
+    "helpTutorial": "Afficher le tutoriel"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Bienvenue sur Tarjama!",
+      "description": "Votre puissant traducteur d'arabe marocain",
+      "content": "Faisons un tour rapide pour vous aider à démarrer avec toutes les fonctionnalités incroyables."
+    },
+    "voice": {
+      "title": "Traduction vocale",
+      "description": "Parlez naturellement et obtenez des traductions instantanées",
+      "step1": "Appuyez sur l'icône du microphone pour commencer l'enregistrement",
+      "step2": "Parlez votre texte dans n'importe quelle langue prise en charge",
+      "step3": "Écoutez la traduction avec la synthèse vocale"
+    },
+    "offline": {
+      "title": "Mode hors ligne",
+      "description": "Traduisez même sans internet",
+      "step1": "Téléchargez les packs de langue depuis les paramètres",
+      "step2": "Utilisez les traductions sans connexion internet",
+      "step3": "Parfait pour les voyages et les zones reculées"
+    },
+    "settings": {
+      "title": "Paramètres avancés",
+      "description": "Personnalisez votre expérience",
+      "step1": "Ajustez la vitesse de parole et la sélection de la voix",
+      "step2": "Changez le thème et la taille de la police",
+      "step3": "Exportez et importez vos paramètres",
+      "step4": "Accédez au tutoriel à tout moment depuis les paramètres"
+    },
+    "complete": {
+      "title": "Tout est prêt!",
+      "description": "Prêt à commencer la traduction",
+      "content": "Vous pouvez redémarrer ce tutoriel à tout moment depuis le menu des paramètres."
+    },
+    "step": "Étape {{current}} sur {{total}}",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "skip": "Passer",
+    "finish": "Commencer"
   },
   "translation": {
     "placeholder": "Entrez le texte à traduire...",

@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsDialog } from "@/components/SettingsDialog";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineScreen } from "@/components/OfflineScreen";
+import { OnboardingTutorial, useOnboarding } from "@/components/OnboardingTutorial";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X } from "lucide-react";
 import { toast } from "sonner";
@@ -83,6 +84,7 @@ const Index = () => {
     i18n
   } = useTranslation();
   const isOnline = useOnlineStatus();
+  const { showOnboarding, setShowOnboarding, restartOnboarding } = useOnboarding();
   const [inputText, setInputText] = useState("");
   const [sourceLanguage, setSourceLanguage] = useState("Darija");
   const [targetLanguage, setTargetLanguage] = useState("English");
@@ -805,6 +807,11 @@ const Index = () => {
           setSpeechRate={setSpeechRate}
           profanityFilterEnabled={profanityFilterEnabled}
           setProfanityFilterEnabled={setProfanityFilterEnabled}
+          onShowTutorial={restartOnboarding}
+        />
+        <OnboardingTutorial 
+          open={showOnboarding} 
+          onOpenChange={setShowOnboarding}
         />
             <ThemeToggle />
             </div>
