@@ -625,9 +625,13 @@ const Index = () => {
           if (error) {
             console.error('Edge function error:', error);
             if (error.message.includes('429')) {
-              toast.error('Rate limit exceeded. Please try again later.');
+              toast.error('Too many requests at once. Please wait 30 seconds and try again.', {
+                duration: 6000
+              });
             } else if (error.message.includes('402')) {
-              toast.error('Payment required. Please add credits to your workspace.');
+              toast.error('Payment required. Please add credits to your workspace.', {
+                duration: 6000
+              });
             } else {
               toast.error(`Error: ${error.message}`);
             }
