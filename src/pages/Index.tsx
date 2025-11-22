@@ -710,7 +710,7 @@ const Index = () => {
     toast.success(`${languageName} ${t('translation.copied')}`);
     setTimeout(() => setCopiedId(null), 2000);
   };
-  const startRecording = useCallback(async () => {
+  const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true
@@ -737,14 +737,15 @@ const Index = () => {
       console.error('Error starting recording:', error);
       toast.error(t('audio.recordingFailed'));
     }
-  }, []);
-  const stopRecording = useCallback(() => {
+  };
+
+  const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
       toast.info(t('audio.processing'));
     }
-  }, [isRecording]);
+  };
   const transcribeAudio = async (audioBlob: Blob) => {
     setIsTranscribing(true);
     try {
