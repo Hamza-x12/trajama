@@ -19,40 +19,40 @@ const DictionaryFAQ = () => {
 
   const dictionaryFaqs = [
     { 
-      q: "How do I use the dictionary?", 
-      a: "Simply browse through the entries or use the search feature to find specific Darija words. Click on any word card to see detailed information including pronunciation, examples, and related words.",
+      q: t('dictionary.faq1Q'),
+      a: t('dictionary.faq1A'),
       icon: "📖", 
-      category: "Using Dictionary" 
+      category: t('dictionary.faq1Category')
     },
     { 
-      q: "What information is shown for each word?", 
-      a: "Each word entry includes the Darija word, Arabic script, type (noun/verb/pronoun), pronunciation guide, definition, multiple examples with translations in Darija, Arabic, French and English, plus related words.",
+      q: t('dictionary.faq2Q'),
+      a: t('dictionary.faq2A'),
       icon: "ℹ️", 
-      category: "Word Details" 
+      category: t('dictionary.faq2Category')
     },
     { 
-      q: "Can I hear how words are pronounced?", 
-      a: "Yes! Click on any word card to open the detail view, then use the play button next to the word or examples to hear the pronunciation.",
+      q: t('dictionary.faq3Q'),
+      a: t('dictionary.faq3A'),
       icon: "🔊", 
-      category: "Pronunciation" 
+      category: t('dictionary.faq3Category')
     },
     { 
-      q: "What types of words are in the dictionary?", 
-      a: "The dictionary includes common Darija verbs, nouns, pronouns, adjectives, and phrases with their translations and usage examples.",
+      q: t('dictionary.faq4Q'),
+      a: t('dictionary.faq4A'),
       icon: "📚", 
-      category: "Content" 
+      category: t('dictionary.faq4Category')
     },
     { 
-      q: "How are the examples helpful?", 
-      a: "Each word comes with real-world usage examples showing the word in context, with translations in multiple languages to help you understand how to use it naturally.",
+      q: t('dictionary.faq5Q'),
+      a: t('dictionary.faq5A'),
       icon: "💡", 
-      category: "Learning" 
+      category: t('dictionary.faq5Category')
     },
     { 
-      q: "What are related words?", 
-      a: "Related words are other Darija words that are connected in meaning or usage, helping you expand your vocabulary and understand word relationships.",
+      q: t('dictionary.faq6Q'),
+      a: t('dictionary.faq6A'),
       icon: "🔗", 
-      category: "Features" 
+      category: t('dictionary.faq6Category')
     },
   ];
 
@@ -66,8 +66,8 @@ const DictionaryFAQ = () => {
                 <img src={tarjamaLogo} alt="Tarjama Logo" className="w-12 h-12 sm:w-14 sm:h-14" />
               </Link>
               <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-foreground">Dictionary FAQ</h1>
-                <p className="text-xs text-muted-foreground hidden sm:block">Dictionary help and guidance</p>
+                <h1 className="text-xl sm:text-2xl font-bold text-foreground">{t('dictionary.faqTitle')}</h1>
+                <p className="text-xs text-muted-foreground hidden sm:block">{t('dictionary.faqSubtitle')}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -83,7 +83,7 @@ const DictionaryFAQ = () => {
           <Link to="/dictionary">
             <Button variant="ghost" className="gap-2">
               <ArrowLeft className="w-4 h-4" />
-              Back to Dictionary
+              {t('dictionary.backToDictionary')}
             </Button>
           </Link>
         </div>
@@ -98,7 +98,7 @@ const DictionaryFAQ = () => {
                   <path d="M12 17h.01"/>
                 </svg>
               </div>
-              <CardTitle className="text-2xl sm:text-3xl">Dictionary Help</CardTitle>
+              <CardTitle className="text-2xl sm:text-3xl">{t('dictionary.helpTitle')}</CardTitle>
             </div>
           </CardHeader>
           <CardContent className="p-6">
@@ -128,11 +128,11 @@ const DictionaryFAQ = () => {
         </Card>
 
         <div className="mt-8 text-center">
-          <p className="text-muted-foreground mb-4">Still have questions?</p>
+          <p className="text-muted-foreground mb-4">{t('dictionary.stillHaveQuestions')}</p>
           <Link to="/contact">
             <Button variant="default" size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-all">
               <MessageCircle className="w-5 h-5" />
-              Contact Us
+              {t('faq.contactUs')}
             </Button>
           </Link>
         </div>
