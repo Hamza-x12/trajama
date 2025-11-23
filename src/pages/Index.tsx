@@ -18,9 +18,10 @@ import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, 
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
+import { ProfileSection } from "@/components/ProfileSection";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import moroccoFlag from "@/assets/flags/morocco.png";
 import ukFlag from "@/assets/flags/uk.png";
@@ -82,6 +83,7 @@ interface HistoryItem {
 }
 const HISTORY_KEY = 'darija-translation-history';
 const Index = () => {
+  const navigate = useNavigate();
   const {
     t,
     i18n
@@ -89,6 +91,7 @@ const Index = () => {
   const isOnline = useOnlineStatus();
   const { showOnboarding, setShowOnboarding, restartOnboarding } = useOnboarding();
   const { user, session } = useAuth();
+  const [profile, setProfile] = useState<any>(null);
   const [inputText, setInputText] = useState("");
   const [sourceLanguage, setSourceLanguage] = useState("Darija");
   const [targetLanguage, setTargetLanguage] = useState("English");
@@ -140,6 +143,7 @@ const Index = () => {
     if (user) {
       // Load from database if logged in
       loadHistoryFromDatabase();
+      loadProfile();
     } else {
       // Load from localStorage if not logged in
       const savedHistory = localStorage.getItem(HISTORY_KEY);
@@ -215,6 +219,31 @@ const Index = () => {
     } catch (error) {
       console.error('Error loading history from database:', error);
     }
+  };
+
+  // Load user profile from database
+  const loadProfile = async () => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      if (error) throw error;
+      setProfile(data);
+    } catch (error) {
+      console.error('Error loading profile:', error);
+    }
+  };
+
+  // Handle sign out
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setProfile(null);
+    navigate("/");
   };
 
   // Save translation to database
@@ -1085,7 +1114,36 @@ const Index = () => {
               </SheetContent>
             </Sheet>
             
-        <SettingsDialog 
+            {/* Profile Section - when logged in */}
+            {user && profile && (
+              <div className="hidden lg:block">
+                <ProfileSection
+                  displayName={profile.display_name}
+                  avatarUrl={profile.avatar_url}
+                  email={user.email}
+                  totalXp={profile.total_xp}
+                  currentStreak={profile.current_streak}
+                  onSignOut={handleSignOut}
+                  compact
+                />
+              </div>
+            )}
+            
+            {/* Sign In Button - when not logged in */}
+            {!user && (
+              <Link to="/auth">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  className="hidden md:flex gap-2 border-primary/20 hover:border-primary/40 hover:bg-primary/5"
+                >
+                  <GraduationCap className="w-4 h-4" />
+                  Sign In
+                </Button>
+              </Link>
+            )}
+            
+        <SettingsDialog
           selectedVoice={selectedVoice}
           setSelectedVoice={setSelectedVoice}
           availableVoices={availableVoices}
@@ -1106,6 +1164,20 @@ const Index = () => {
           </div>
         </div>
       </header>
+
+      {/* Mobile Profile Section */}
+      {user && profile && (
+        <div className="lg:hidden container mx-auto px-4 pt-4">
+          <ProfileSection
+            displayName={profile.display_name}
+            avatarUrl={profile.avatar_url}
+            email={user.email}
+            totalXp={profile.total_xp}
+            currentStreak={profile.current_streak}
+            onSignOut={handleSignOut}
+          />
+        </div>
+      )}
 
       {/* Main Content - Google Translate Layout */}
       <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 max-w-7xl flex-1">
