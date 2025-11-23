@@ -9,6 +9,7 @@ import { Loader2, Trophy, Flame, BookOpen, Lock, Star, ChevronLeft, LogOut } fro
 import { Helmet } from "react-helmet-async";
 import { LessonModal } from "@/components/LessonModal";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { ProfileSection } from "@/components/ProfileSection";
 
 interface Lesson {
   id: string;
@@ -198,13 +199,25 @@ const Learn = () => {
 
         {/* Main Content */}
         <main className="container max-w-4xl mx-auto px-4 py-8">
+          {/* Profile Section */}
+          <div className="mb-8">
+            <ProfileSection
+              displayName={profile?.display_name}
+              avatarUrl={profile?.avatar_url}
+              email={user?.email}
+              totalXp={profile?.total_xp}
+              currentStreak={profile?.current_streak}
+              onSignOut={handleSignOut}
+            />
+          </div>
+
           {/* Welcome Section */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold mb-2">
-              Merhba, {profile?.display_name || 'Learner'}! 👋
+              Continue your Darija learning journey 🎯
             </h1>
             <p className="text-muted-foreground">
-              Continue your Darija learning journey
+              Keep up the great work!
             </p>
           </div>
 
