@@ -281,7 +281,7 @@ const Index = () => {
     
     const timeoutId = setTimeout(() => {
       checkSpelling(inputText);
-    }, 1500); // Check after 1.5 seconds of inactivity
+    }, 3000); // Check after 3 seconds of inactivity (reduced API calls)
     
     return () => clearTimeout(timeoutId);
   }, [inputText, sourceLanguage, skipSpellingCheck]);
@@ -445,7 +445,14 @@ const Index = () => {
           uiLanguage: i18n.language
         }
       });
-      if (error) throw error;
+      if (error) {
+        // Handle rate limiting specifically
+        if (error.message?.includes('429') || error.message?.includes('Rate limit')) {
+          toast.error('Too many requests. Please wait a moment and try again.', { duration: 4000 });
+          return;
+        }
+        throw error;
+      }
       if (data.error) {
         toast.error(data.error);
         return;
@@ -535,7 +542,15 @@ const Index = () => {
         }
       });
       
-      if (error) throw error;
+      if (error) {
+        // Handle rate limiting gracefully - don't show error toast for 429
+        if (error.message?.includes('429') || error.message?.includes('Rate limit')) {
+          console.log('Rate limit reached for spelling check, skipping silently');
+          setSpellingSuggestion(null);
+          return;
+        }
+        throw error;
+      }
       
       if (data.spellingSuggestion && data.spellingSuggestion !== text) {
         setSpellingSuggestion(data.spellingSuggestion);

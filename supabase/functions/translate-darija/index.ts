@@ -69,18 +69,26 @@ serve(async (req) => {
         }),
       });
       
-      if (spellCheckResponse.ok) {
-        const spellData = await spellCheckResponse.json();
-        const suggestion = spellData.choices[0].message.content.trim();
-        
+      if (!spellCheckResponse.ok) {
+        if (spellCheckResponse.status === 429) {
+          console.log('Rate limit hit for spelling check');
+          return new Response(
+            JSON.stringify({ error: 'Rate limit exceeded. Please try again in a moment.' }),
+            { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+        console.error('Spelling check API error', { status: spellCheckResponse.status });
         return new Response(
-          JSON.stringify({ spellingSuggestion: suggestion !== text ? suggestion : null }),
+          JSON.stringify({ spellingSuggestion: null }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
       
+      const spellData = await spellCheckResponse.json();
+      const suggestion = spellData.choices[0].message.content.trim();
+      
       return new Response(
-        JSON.stringify({ spellingSuggestion: null }),
+        JSON.stringify({ spellingSuggestion: suggestion !== text ? suggestion : null }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
