@@ -18,7 +18,7 @@ const Auth = () => {
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        navigate("/");
+        navigate("/learn");
       }
       setCheckingAuth(false);
     };
@@ -28,7 +28,7 @@ const Auth = () => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session) {
-        navigate("/");
+        navigate("/learn");
       }
     });
 
@@ -38,7 +38,7 @@ const Auth = () => {
   const handleGoogleSignIn = async () => {
     try {
       setLoading(true);
-      const redirectUrl = `${window.location.origin}/`;
+      const redirectUrl = `${window.location.origin}/learn`;
       
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
