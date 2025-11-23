@@ -11,9 +11,10 @@ import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineScreen } from "@/components/OfflineScreen";
 import { OnboardingTutorial, useOnboarding } from "@/components/OnboardingTutorial";
 import { Helmet } from "react-helmet-async";
+import { useAuth } from "@/hooks/useAuth";
 
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
-import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X, ImagePlus } from "lucide-react";
+import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X, ImagePlus, GraduationCap } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -87,6 +88,7 @@ const Index = () => {
   } = useTranslation();
   const isOnline = useOnlineStatus();
   const { showOnboarding, setShowOnboarding, restartOnboarding } = useOnboarding();
+  const { user, session } = useAuth();
   const [inputText, setInputText] = useState("");
   const [sourceLanguage, setSourceLanguage] = useState("Darija");
   const [targetLanguage, setTargetLanguage] = useState("English");
@@ -133,14 +135,20 @@ const Index = () => {
     return 'text-base';
   };
 
-  // Load history from localStorage on mount
+  // Load history from localStorage or database on mount
   useEffect(() => {
-    const savedHistory = localStorage.getItem(HISTORY_KEY);
-    if (savedHistory) {
-      try {
-        setHistory(JSON.parse(savedHistory));
-      } catch (error) {
-        console.error('Failed to parse history:', error);
+    if (user) {
+      // Load from database if logged in
+      loadHistoryFromDatabase();
+    } else {
+      // Load from localStorage if not logged in
+      const savedHistory = localStorage.getItem(HISTORY_KEY);
+      if (savedHistory) {
+        try {
+          setHistory(JSON.parse(savedHistory));
+        } catch (error) {
+          console.error('Failed to parse history:', error);
+        }
       }
     }
 
@@ -177,12 +185,63 @@ const Index = () => {
     // Set document direction based on language
     const currentLang = i18n.language;
     document.documentElement.dir = currentLang === 'ar' || currentLang === 'dar' ? 'rtl' : 'ltr';
-  }, []);
+  }, [user]);
 
-  // Save history to localStorage whenever it changes
+  // Load translation history from database
+  const loadHistoryFromDatabase = async () => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('translation_history')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(50);
+
+      if (error) throw error;
+
+      // Convert database format to app format
+      const formattedHistory = (data || []).map(item => ({
+        id: item.id,
+        text: item.text,
+        sourceLanguage: item.source_language,
+        targetLanguage: item.target_language,
+        timestamp: new Date(item.created_at).getTime(),
+        translations: item.translations as any
+      }));
+
+      setHistory(formattedHistory);
+    } catch (error) {
+      console.error('Error loading history from database:', error);
+    }
+  };
+
+  // Save translation to database
+  const saveTranslationToDatabase = async (historyItem: HistoryItem) => {
+    if (!user) return;
+
+    try {
+      await supabase
+        .from('translation_history')
+        .insert({
+          user_id: user.id,
+          text: historyItem.text,
+          source_language: historyItem.sourceLanguage,
+          target_language: historyItem.targetLanguage,
+          translations: historyItem.translations
+        });
+    } catch (error) {
+      console.error('Error saving to database:', error);
+    }
+  };
+
+  // Save history to localStorage whenever it changes (only if not logged in)
   useEffect(() => {
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-  }, [history]);
+    if (!user) {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    }
+  }, [history, user]);
   
   // Check spelling when user stops typing
   useEffect(() => {
@@ -390,6 +449,11 @@ const Index = () => {
         };
         setHistory(prev => [historyItem, ...prev].slice(0, 50)); // Keep last 50 items
 
+        // Save to database if logged in
+        if (user) {
+          saveTranslationToDatabase(historyItem);
+        }
+
         if (!data.detectedLanguage) {
           toast.success(t('translation.complete'));
         }
@@ -499,11 +563,34 @@ const Index = () => {
     }
   };
   
-  const handleClearHistory = () => {
+  const handleClearHistory = async () => {
+    if (user) {
+      // Clear from database
+      try {
+        await supabase
+          .from('translation_history')
+          .delete()
+          .eq('user_id', user.id);
+      } catch (error) {
+        console.error('Error clearing history from database:', error);
+      }
+    }
     setHistory([]);
     toast.success(t('history.cleared'));
   };
-  const handleDeleteHistoryItem = (id: string) => {
+  
+  const handleDeleteHistoryItem = async (id: string) => {
+    if (user) {
+      // Delete from database
+      try {
+        await supabase
+          .from('translation_history')
+          .delete()
+          .eq('id', id);
+      } catch (error) {
+        console.error('Error deleting from database:', error);
+      }
+    }
     setHistory(prev => prev.filter(item => item.id !== id));
     toast.success(t('history.removed'));
   };
@@ -855,6 +942,16 @@ const Index = () => {
             
             {/* Desktop Navigation - Center */}
             <div className="hidden md:flex items-center justify-center gap-3">
+              <Link to="/learn">
+                <Button 
+                  className="group relative overflow-hidden gap-2.5 px-5 py-2.5 rounded-2xl border-2 border-primary bg-gradient-to-br from-primary via-primary/90 to-accent backdrop-blur-md shadow-lg hover:shadow-2xl hover:shadow-primary/30 transition-all duration-500 hover:scale-105 hover:-translate-y-1 animate-fade-in"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-accent/20 via-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+                  <GraduationCap className="w-4 h-4 relative z-10 transition-all duration-500 group-hover:rotate-12 group-hover:scale-110 text-primary-foreground" />
+                  <span className="font-bold text-sm tracking-wide relative z-10 text-primary-foreground transition-colors duration-300">Learn Darija</span>
+                </Button>
+              </Link>
+              
               <Link to="/dictionary">
                 <Button 
                   variant="outline" 
@@ -913,6 +1010,19 @@ const Index = () => {
                   </SheetTitle>
                 </SheetHeader>
                 <nav className="flex flex-col gap-4 mt-8">
+                  <Link to="/learn" className="w-full">
+                    <Button 
+                      className="group relative overflow-hidden w-full justify-start gap-4 px-5 py-6 rounded-2xl border-2 border-primary bg-gradient-to-r from-primary to-accent backdrop-blur-md shadow-lg hover:shadow-xl hover:shadow-primary/30 hover:translate-x-1 transition-all duration-500 animate-fade-in"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-accent/20 via-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <GraduationCap className="w-5 h-5 text-primary-foreground relative z-10 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
+                      <span className="font-bold text-base relative z-10 text-primary-foreground transition-colors duration-300">Learn Darija</span>
+                      <div className="absolute right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="w-2 h-2 rounded-full bg-primary-foreground animate-pulse" />
+                      </div>
+                    </Button>
+                  </Link>
+                  
                   <Link to="/dictionary" className="w-full">
                     <Button 
                       variant="outline" 
