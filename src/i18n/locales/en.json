@@ -28,7 +28,16 @@
     "settingsExported": "Settings exported successfully",
     "settingsImported": "Settings imported successfully",
     "settingsReset": "All settings reset",
-    "helpTutorial": "Show Tutorial"
+    "helpTutorial": "Show Tutorial",
+    "offlineLanguages": "Offline Languages",
+    "offlineLanguagesDescription": "Download language models to enable AI-powered translation between the selected language and English when you're offline. Models are ~150MB each.",
+    "download": "Download",
+    "remove": "Remove",
+    "offlineDownloaded": "Language model downloaded successfully",
+    "offlineDownloadError": "Failed to download language model",
+    "offlineRemoved": "Language model removed",
+    "downloadPaused": "Download paused",
+    "paused": "Paused"
   },
   "onboarding": {
     "welcome": {

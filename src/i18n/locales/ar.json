@@ -28,7 +28,16 @@
     "settingsExported": "تم تصدير الإعدادات بنجاح",
     "settingsImported": "تم استيراد الإعدادات بنجاح",
     "settingsReset": "تم إعادة تعيين جميع الإعدادات",
-    "helpTutorial": "عرض الدليل التعليمي"
+    "helpTutorial": "عرض الدليل التعليمي",
+    "offlineLanguages": "اللغات دون اتصال",
+    "offlineLanguagesDescription": "قم بتنزيل نماذج اللغة لتمكين الترجمة بالذكاء الاصطناعي بين اللغة المحددة والإنجليزية عندما تكون غير متصل بالإنترنت. حجم كل نموذج ~150 ميجابايت.",
+    "download": "تحميل",
+    "remove": "حذف",
+    "offlineDownloaded": "تم تنزيل نموذج اللغة بنجاح",
+    "offlineDownloadError": "فشل تنزيل نموذج اللغة",
+    "offlineRemoved": "تم حذف نموذج اللغة",
+    "downloadPaused": "تم إيقاف التنزيل مؤقتاً",
+    "paused": "متوقف مؤقتاً"
   },
   "onboarding": {
     "welcome": {

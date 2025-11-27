@@ -1,4 +1,4 @@
-import { Settings, Download, Trash2, Loader2, Palette, Type, RotateCcw, Info, FileDown, FileUp, History, HelpCircle } from "lucide-react";
+import { Settings, Download, Trash2, Loader2, Palette, Type, RotateCcw, Info, FileDown, FileUp, History, HelpCircle, Pause, Play } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import {
@@ -55,7 +55,15 @@ export function SettingsDialog({
 }: SettingsDialogProps) {
   const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
-  const { offlineLanguages, downloadLanguage, removeLanguage, downloadProgress } = useOfflineLanguages();
+  const { 
+    offlineLanguages, 
+    downloadLanguage, 
+    removeLanguage, 
+    downloadProgress,
+    downloadStates,
+    pauseDownload,
+    resumeDownload
+  } = useOfflineLanguages();
   const [downloading, setDownloading] = useState<string | null>(null);
   const [currentProgress, setCurrentProgress] = useState<{ [key: string]: number }>({});
   const [fontSize, setFontSize] = useState(16);
@@ -113,9 +121,12 @@ export function SettingsDialog({
       await downloadLanguage(code, (progress) => {
         setCurrentProgress(prev => ({ ...prev, [code]: progress }));
       });
-      toast.success(t('offline.downloaded'));
+      toast.success(t('settings.offlineDownloaded'));
     } catch (error) {
-      toast.error(t('offline.downloadFailed'));
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      if (errorMessage !== 'Download paused') {
+        toast.error(t('settings.offlineDownloadError'));
+      }
     } finally {
       setDownloading(null);
       setTimeout(() => {
@@ -128,9 +139,32 @@ export function SettingsDialog({
     }
   };
 
+  const handlePause = (code: string) => {
+    pauseDownload(code);
+    toast.info(t('settings.downloadPaused'));
+  };
+
+  const handleResume = async (code: string) => {
+    setDownloading(code);
+    try {
+      setCurrentProgress(prev => ({ ...prev, [code]: downloadProgress[code] || 0 }));
+      await resumeDownload(code, (progress) => {
+        setCurrentProgress(prev => ({ ...prev, [code]: progress }));
+      });
+      toast.success(t('settings.offlineDownloaded'));
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      if (errorMessage !== 'Download paused') {
+        toast.error(t('settings.offlineDownloadError'));
+      }
+    } finally {
+      setDownloading(null);
+    }
+  };
+
   const handleRemove = (code: string) => {
     removeLanguage(code);
-    toast.success(t('offline.removed'));
+    toast.success(t('settings.offlineRemoved'));
   };
 
   const handleFontSizeChange = (value: number[]) => {
@@ -359,10 +393,10 @@ export function SettingsDialog({
           <div className="space-y-3 animate-in slide-in-from-left-3 duration-300 delay-350">
             <div>
               <Label className="flex items-center gap-2 text-base font-semibold">
-                📦 {t('offline.title')}
+                📦 {t('settings.offlineLanguages')}
               </Label>
               <p className="text-sm text-muted-foreground mt-1">
-                Download AI translation models for offline use. Each model enables translation between that language and English.
+                {t('settings.offlineLanguagesDescription')}
               </p>
             </div>
             <div className="space-y-2 max-h-[200px] overflow-y-auto">
@@ -373,45 +407,71 @@ export function SettingsDialog({
                 >
                   <div className="flex-1">
                     <p className="text-sm font-medium">{lang.name}</p>
-                    <p className="text-xs text-muted-foreground">~{lang.size} AI model</p>
-                    {downloading === lang.code && currentProgress[lang.code] !== undefined && (
+                    <p className="text-xs text-muted-foreground">~{lang.size}</p>
+                    {(currentProgress[lang.code] !== undefined || downloadStates[lang.code] === 'paused') && (
                       <div className="mt-2 space-y-1">
-                        <Progress value={currentProgress[lang.code]} className="h-2" />
-                        <p className="text-xs text-muted-foreground text-center">{currentProgress[lang.code]}%</p>
+                        <Progress value={currentProgress[lang.code] || downloadProgress[lang.code] || 0} className="h-2" />
+                        <p className="text-xs text-muted-foreground">
+                          {Math.round(currentProgress[lang.code] || downloadProgress[lang.code] || 0)}%
+                          {downloadStates[lang.code] === 'paused' && ` - ${t('settings.paused')}`}
+                        </p>
                       </div>
                     )}
                   </div>
-                  {lang.downloaded ? (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleRemove(lang.code)}
-                      className="h-8"
-                    >
-                      <Trash2 className="h-4 w-4 mr-1" />
-                      {t('offline.remove')}
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="default"
-                      size="sm"
-                      onClick={() => handleDownload(lang.code)}
-                      disabled={downloading === lang.code}
-                      className="h-8 min-w-[100px]"
-                    >
-                      {downloading === lang.code ? (
-                        <>
-                          <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-                          {currentProgress[lang.code]}%
-                        </>
-                      ) : (
-                        <>
-                          <Download className="h-4 w-4 mr-1" />
-                          {t('offline.download')}
-                        </>
-                      )}
-                    </Button>
-                  )}
+                  <div className="ml-4 flex gap-2">
+                    {lang.downloaded ? (
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => handleRemove(lang.code)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    ) : downloadStates[lang.code] === 'downloading' ? (
+                      <>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          disabled
+                        >
+                          {Math.round(currentProgress[lang.code] || 0)}%
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handlePause(lang.code)}
+                        >
+                          <Pause className="h-4 w-4" />
+                        </Button>
+                      </>
+                    ) : downloadStates[lang.code] === 'paused' ? (
+                      <>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          disabled
+                        >
+                          {Math.round(downloadProgress[lang.code] || 0)}%
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleResume(lang.code)}
+                        >
+                          <Play className="h-4 w-4" />
+                        </Button>
+                      </>
+                    ) : (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDownload(lang.code)}
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        {t('settings.download')}
+                      </Button>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
