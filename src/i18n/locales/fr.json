@@ -38,7 +38,16 @@
     "importError": "Échec de l'importation des paramètres",
     "resetSettings": "Réinitialiser les Paramètres",
     "appVersion": "Version de l'Application",
-    "helpTutorial": "Afficher le tutoriel"
+    "helpTutorial": "Afficher le tutoriel",
+    "offlineLanguages": "Langues hors ligne",
+    "offlineLanguagesDescription": "Téléchargez des modèles de langue pour activer la traduction IA entre la langue sélectionnée et l'anglais lorsque vous êtes hors ligne. Chaque modèle fait ~150 Mo.",
+    "download": "Télécharger",
+    "remove": "Supprimer",
+    "offlineDownloaded": "Modèle de langue téléchargé avec succès",
+    "offlineDownloadError": "Échec du téléchargement du modèle de langue",
+    "offlineRemoved": "Modèle de langue supprimé",
+    "downloadPaused": "Téléchargement en pause",
+    "paused": "En pause"
   },
   "onboarding": {
     "welcome": {

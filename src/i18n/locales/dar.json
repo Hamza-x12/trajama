@@ -38,7 +38,16 @@
     "importError": "ما قدرناش نستوردو الإعدادات",
     "resetSettings": "إعادة تعيين الإعدادات",
     "appVersion": "النسخة ديال التطبيق",
-    "helpTutorial": "شوف الدليل"
+    "helpTutorial": "شوف الدليل",
+    "offlineLanguages": "اللغات بدون نت",
+    "offlineLanguagesDescription": "حمّل موديلات اللغة باش تخدم الترجمة بالذكاء الاصطناعي بين اللغة لي اخترتيها و الإنجليزية واخا متكونش معاك النت. كل موديل تقريبا ~150 ميجا.",
+    "download": "حمّل",
+    "remove": "حيّد",
+    "offlineDownloaded": "تحمّل موديل اللغة بنجاح",
+    "offlineDownloadError": "ماقدرناش نحمّلو موديل اللغة",
+    "offlineRemoved": "تحيّد موديل اللغة",
+    "downloadPaused": "التنزيل واقف",
+    "paused": "واقف"
   },
   "onboarding": {
     "welcome": {

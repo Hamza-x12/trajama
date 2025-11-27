@@ -28,7 +28,16 @@
     "settingsExported": "Настройки успешно экспортированы",
     "settingsImported": "Настройки успешно импортированы",
     "settingsReset": "Все настройки сброшены",
-    "helpTutorial": "Показать руководство"
+    "helpTutorial": "Показать руководство",
+    "offlineLanguages": "Офлайн-языки",
+    "offlineLanguagesDescription": "Загрузите языковые модели для перевода с помощью ИИ между выбранным языком и английским в автономном режиме. Размер каждой модели ~150 МБ.",
+    "download": "Скачать",
+    "remove": "Удалить",
+    "offlineDownloaded": "Языковая модель успешно загружена",
+    "offlineDownloadError": "Не удалось загрузить языковую модель",
+    "offlineRemoved": "Языковая модель удалена",
+    "downloadPaused": "Загрузка приостановлена",
+    "paused": "Приостановлено"
   },
   "onboarding": {
     "welcome": {
