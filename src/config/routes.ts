@@ -11,11 +11,6 @@ export const routes: RouteConfig[] = [
     changefreq: 'weekly'
   },
   {
-    path: '/learn',
-    priority: 0.9,
-    changefreq: 'weekly'
-  },
-  {
     path: '/auth',
     priority: 0.8,
     changefreq: 'monthly'

@@ -14,7 +14,7 @@ import { Helmet } from "react-helmet-async";
 import { useAuth } from "@/hooks/useAuth";
 
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
-import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X, ImagePlus, GraduationCap } from "lucide-react";
+import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X, ImagePlus } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -957,16 +957,6 @@ const Index = () => {
             
             {/* Desktop Navigation - Center */}
             <div className="hidden md:flex items-center justify-center gap-3">
-              <Link to="/learn">
-                <Button 
-                  className="group relative overflow-hidden gap-2.5 px-5 py-2.5 rounded-2xl border-2 border-primary bg-gradient-to-br from-primary via-primary/90 to-accent backdrop-blur-md shadow-lg hover:shadow-2xl hover:shadow-primary/30 transition-all duration-500 hover:scale-105 hover:-translate-y-1 animate-fade-in"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-accent/20 via-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
-                  <GraduationCap className="w-4 h-4 relative z-10 transition-all duration-500 group-hover:rotate-12 group-hover:scale-110 text-primary-foreground" />
-                  <span className="font-bold text-sm tracking-wide relative z-10 text-primary-foreground transition-colors duration-300">Learn Darija</span>
-                </Button>
-              </Link>
-              
               <Link to="/dictionary">
                 <Button 
                   variant="outline" 
@@ -1025,19 +1015,6 @@ const Index = () => {
                   </SheetTitle>
                 </SheetHeader>
                 <nav className="flex flex-col gap-4 mt-8">
-                  <Link to="/learn" className="w-full">
-                    <Button 
-                      className="group relative overflow-hidden w-full justify-start gap-4 px-5 py-6 rounded-2xl border-2 border-primary bg-gradient-to-r from-primary to-accent backdrop-blur-md shadow-lg hover:shadow-xl hover:shadow-primary/30 hover:translate-x-1 transition-all duration-500 animate-fade-in"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-accent/20 via-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      <GraduationCap className="w-5 h-5 text-primary-foreground relative z-10 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
-                      <span className="font-bold text-base relative z-10 text-primary-foreground transition-colors duration-300">Learn Darija</span>
-                      <div className="absolute right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="w-2 h-2 rounded-full bg-primary-foreground animate-pulse" />
-                      </div>
-                    </Button>
-                  </Link>
-                  
                   <Link to="/dictionary" className="w-full">
                     <Button 
                       variant="outline" 
@@ -1121,6 +1098,16 @@ const Index = () => {
           </div>
         </div>
       </header>
+
+      {/* Hero Section */}
+      <div className="container mx-auto px-3 sm:px-4 pt-8 pb-6 md:pt-12 md:pb-8 max-w-5xl text-center">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 animate-fade-in">
+          Translate <span className="text-primary">Darija</span> Instantly
+        </h1>
+        <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto animate-fade-in" style={{ animationDelay: '0.1s' }}>
+          The most advanced AI translator for Moroccan Darija. Bridge the gap between dialects and languages with cultural context.
+        </p>
+      </div>
 
       {/* Main Content - Google Translate Layout */}
       <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 max-w-7xl flex-1">
