@@ -11,17 +11,17 @@ const OFFLINE_LANGUAGES_KEY = 'tarjama-offline-languages';
 
 export function useOfflineLanguages() {
   const [offlineLanguages, setOfflineLanguages] = useState<OfflineLanguage[]>([
-    { code: 'ar', name: 'Arabic', downloaded: false, size: '2.5 MB' },
-    { code: 'fr', name: 'French', downloaded: false, size: '2.1 MB' },
-    { code: 'dar', name: 'Darija', downloaded: false, size: '1.8 MB' },
-    { code: 'en', name: 'English', downloaded: false, size: '2.3 MB' },
-    { code: 'es', name: 'Spanish', downloaded: false, size: '2.2 MB' },
-    { code: 'de', name: 'German', downloaded: false, size: '2.4 MB' },
-    { code: 'it', name: 'Italian', downloaded: false, size: '2.0 MB' },
-    { code: 'pt', name: 'Portuguese', downloaded: false, size: '2.1 MB' },
-    { code: 'zh', name: 'Chinese', downloaded: false, size: '3.2 MB' },
-    { code: 'ja', name: 'Japanese', downloaded: false, size: '2.8 MB' },
-    { code: 'tr', name: 'Turkish', downloaded: false, size: '1.9 MB' },
+    { code: 'ar', name: 'Arabic', downloaded: false, size: '150 MB' },
+    { code: 'fr', name: 'French', downloaded: false, size: '150 MB' },
+    { code: 'dar', name: 'Darija', downloaded: false, size: '150 MB' },
+    { code: 'en', name: 'English', downloaded: false, size: '150 MB' },
+    { code: 'es', name: 'Spanish', downloaded: false, size: '150 MB' },
+    { code: 'de', name: 'German', downloaded: false, size: '150 MB' },
+    { code: 'it', name: 'Italian', downloaded: false, size: '150 MB' },
+    { code: 'pt', name: 'Portuguese', downloaded: false, size: '150 MB' },
+    { code: 'zh', name: 'Chinese', downloaded: false, size: '150 MB' },
+    { code: 'ja', name: 'Japanese', downloaded: false, size: '150 MB' },
+    { code: 'tr', name: 'Turkish', downloaded: false, size: '150 MB' },
   ]);
 
   useEffect(() => {
@@ -38,25 +38,54 @@ export function useOfflineLanguages() {
   }, []);
 
   const downloadLanguage = async (code: string) => {
-    // Simulate download
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    const stored = localStorage.getItem(OFFLINE_LANGUAGES_KEY);
-    const downloadedCodes = stored ? JSON.parse(stored) : [];
-    
-    if (!downloadedCodes.includes(code)) {
-      downloadedCodes.push(code);
-      localStorage.setItem(OFFLINE_LANGUAGES_KEY, JSON.stringify(downloadedCodes));
-    }
+    try {
+      // Import the local translation utility
+      const { loadTranslationModel } = await import('@/utils/localTranslation');
+      
+      // Map language codes to names for the model loader
+      const langMap: Record<string, string> = {
+        'ar': 'Arabic',
+        'fr': 'French',
+        'dar': 'Darija',
+        'en': 'English',
+        'es': 'Spanish',
+        'de': 'German',
+        'it': 'Italian',
+        'pt': 'Portuguese',
+        'zh': 'Chinese',
+        'ja': 'Japanese',
+        'tr': 'Turkish',
+        'ru': 'Russian',
+        'ko': 'Korean',
+        'hi': 'Hindi'
+      };
 
-    setOfflineLanguages(prev =>
-      prev.map(lang =>
-        lang.code === code ? { ...lang, downloaded: true } : lang
-      )
-    );
+      const langName = langMap[code] || code;
+      
+      // Load translation models for this language (to/from English as pivot)
+      await loadTranslationModel(langName, 'English');
+      await loadTranslationModel('English', langName);
+      
+      const stored = localStorage.getItem(OFFLINE_LANGUAGES_KEY);
+      const downloadedCodes = stored ? JSON.parse(stored) : [];
+      
+      if (!downloadedCodes.includes(code)) {
+        downloadedCodes.push(code);
+        localStorage.setItem(OFFLINE_LANGUAGES_KEY, JSON.stringify(downloadedCodes));
+      }
+
+      setOfflineLanguages(prev =>
+        prev.map(lang =>
+          lang.code === code ? { ...lang, downloaded: true } : lang
+        )
+      );
+    } catch (error) {
+      console.error('Failed to download language:', error);
+      throw error;
+    }
   };
 
-  const removeLanguage = (code: string) => {
+  const removeLanguage = async (code: string) => {
     const stored = localStorage.getItem(OFFLINE_LANGUAGES_KEY);
     const downloadedCodes = stored ? JSON.parse(stored) : [];
     
@@ -68,6 +97,9 @@ export function useOfflineLanguages() {
         lang.code === code ? { ...lang, downloaded: false } : lang
       )
     );
+
+    // Note: We don't actually clear the cached models from memory
+    // as they may still be useful for other language pairs
   };
 
   return {

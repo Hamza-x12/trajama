@@ -350,7 +350,7 @@ export function SettingsDialog({
                 📦 {t('offline.title')}
               </Label>
               <p className="text-sm text-muted-foreground mt-1">
-                {t('offline.description')}
+                Download AI translation models for offline use. Each model enables translation between that language and English.
               </p>
             </div>
             <div className="space-y-2 max-h-[200px] overflow-y-auto">
@@ -361,7 +361,7 @@ export function SettingsDialog({
                 >
                   <div className="flex-1">
                     <p className="text-sm font-medium">{lang.name}</p>
-                    <p className="text-xs text-muted-foreground">{lang.size}</p>
+                    <p className="text-xs text-muted-foreground">~{lang.size} AI model</p>
                   </div>
                   {lang.downloaded ? (
                     <Button
