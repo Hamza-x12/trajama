@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import { TranslationCard } from "@/components/TranslationCard";
 import { TranslationHistory } from "@/components/TranslationHistory";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -302,10 +303,10 @@ const Index = () => {
     }
   }, [targetLanguage, availableVoices, autoVoiceSelect]);
   
-  // Show offline screen if not online (after all hooks)
-  if (!isOnline) {
-    return <OfflineScreen />;
-  }
+  // Don't show offline screen anymore, allow local translation
+  // if (!isOnline) {
+  //   return <OfflineScreen />;
+  // }
 
   // Profanity filter
   const containsProfanity = (text: string): boolean => {
@@ -404,7 +405,60 @@ const Index = () => {
     setIsTranslating(true);
     setTranslations(null);
     setDetectedLanguage(null);
+    
     try {
+      // Use local translation if offline
+      if (!isOnline) {
+        const { translateLocally } = await import('@/utils/localTranslation');
+        
+        toast.info('Using offline translation...');
+        
+        const translation = await translateLocally(
+          inputText,
+          sourceLanguage === "Detect Language" ? "English" : sourceLanguage,
+          targetLanguage
+        );
+        
+        // Create translation result with only the target language
+        const emptyTranslations = {
+          darija: '',
+          french: '',
+          arabic: '',
+          english: '',
+          spanish: '',
+          german: '',
+          italian: '',
+          portuguese: '',
+          chinese: '',
+          japanese: '',
+          turkish: '',
+          russian: '',
+          korean: '',
+          hindi: ''
+        };
+        
+        emptyTranslations[targetLanguage.toLowerCase() as keyof typeof emptyTranslations] = translation;
+        
+        setTranslations({
+          translations: emptyTranslations
+        });
+        
+        // Add to history
+        const historyItem: HistoryItem = {
+          id: Date.now().toString(),
+          text: inputText,
+          sourceLanguage: sourceLanguage === "Detect Language" ? "English" : sourceLanguage,
+          targetLanguage: targetLanguage,
+          timestamp: Date.now(),
+          translations: emptyTranslations
+        };
+        setHistory(prev => [historyItem, ...prev].slice(0, 50));
+        
+        toast.success('Translation complete (offline)');
+        return;
+      }
+      
+      // Online translation using API
       const {
         data,
         error
@@ -950,7 +1004,14 @@ const Index = () => {
                 />
               </Link>
               <div>
-                <h1 className="text-xl sm:text-xl md:text-2xl font-bold text-foreground tracking-tight">{t('app.title')}</h1>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-xl sm:text-xl md:text-2xl font-bold text-foreground tracking-tight">{t('app.title')}</h1>
+                  {!isOnline && (
+                    <Badge variant="secondary" className="text-xs bg-orange-500/20 text-orange-600 dark:text-orange-400 border-orange-500/30">
+                      Offline
+                    </Badge>
+                  )}
+                </div>
                 <p className="text-xs sm:text-xs text-muted-foreground hidden sm:block">{t('app.subtitle')}</p>
               </div>
             </div>
