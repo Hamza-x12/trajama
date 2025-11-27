@@ -10,6 +10,7 @@ export interface OfflineLanguage {
 const OFFLINE_LANGUAGES_KEY = 'tarjama-offline-languages';
 
 export function useOfflineLanguages() {
+  const [downloadProgress, setDownloadProgress] = useState<{ [key: string]: number }>({});
   const [offlineLanguages, setOfflineLanguages] = useState<OfflineLanguage[]>([
     { code: 'ar', name: 'Arabic', downloaded: false, size: '150 MB' },
     { code: 'fr', name: 'French', downloaded: false, size: '150 MB' },
@@ -37,8 +38,10 @@ export function useOfflineLanguages() {
     }
   }, []);
 
-  const downloadLanguage = async (code: string) => {
+  const downloadLanguage = async (code: string, onProgress?: (progress: number) => void) => {
     try {
+      setDownloadProgress(prev => ({ ...prev, [code]: 0 }));
+      
       // Import the local translation utility
       const { loadTranslationModel } = await import('@/utils/localTranslation');
       
@@ -62,9 +65,28 @@ export function useOfflineLanguages() {
 
       const langName = langMap[code] || code;
       
+      // Simulate progress for model 1 (0-50%)
+      setDownloadProgress(prev => ({ ...prev, [code]: 10 }));
+      onProgress?.(10);
+      
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setDownloadProgress(prev => ({ ...prev, [code]: 25 }));
+      onProgress?.(25);
+      
       // Load translation models for this language (to/from English as pivot)
       await loadTranslationModel(langName, 'English');
+      
+      setDownloadProgress(prev => ({ ...prev, [code]: 50 }));
+      onProgress?.(50);
+      
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setDownloadProgress(prev => ({ ...prev, [code]: 75 }));
+      onProgress?.(75);
+      
       await loadTranslationModel('English', langName);
+      
+      setDownloadProgress(prev => ({ ...prev, [code]: 100 }));
+      onProgress?.(100);
       
       const stored = localStorage.getItem(OFFLINE_LANGUAGES_KEY);
       const downloadedCodes = stored ? JSON.parse(stored) : [];
@@ -79,8 +101,22 @@ export function useOfflineLanguages() {
           lang.code === code ? { ...lang, downloaded: true } : lang
         )
       );
+      
+      // Clear progress after completion
+      setTimeout(() => {
+        setDownloadProgress(prev => {
+          const newProgress = { ...prev };
+          delete newProgress[code];
+          return newProgress;
+        });
+      }, 1000);
     } catch (error) {
       console.error('Failed to download language:', error);
+      setDownloadProgress(prev => {
+        const newProgress = { ...prev };
+        delete newProgress[code];
+        return newProgress;
+      });
       throw error;
     }
   };
@@ -105,6 +141,7 @@ export function useOfflineLanguages() {
   return {
     offlineLanguages,
     downloadLanguage,
-    removeLanguage
+    removeLanguage,
+    downloadProgress
   };
 }

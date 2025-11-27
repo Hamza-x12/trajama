@@ -1,4 +1,5 @@
 import { Settings, Download, Trash2, Loader2, Palette, Type, RotateCcw, Info, FileDown, FileUp, History, HelpCircle } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -54,8 +55,9 @@ export function SettingsDialog({
 }: SettingsDialogProps) {
   const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
-  const { offlineLanguages, downloadLanguage, removeLanguage } = useOfflineLanguages();
+  const { offlineLanguages, downloadLanguage, removeLanguage, downloadProgress } = useOfflineLanguages();
   const [downloading, setDownloading] = useState<string | null>(null);
+  const [currentProgress, setCurrentProgress] = useState<{ [key: string]: number }>({});
   const [fontSize, setFontSize] = useState(16);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   
@@ -106,13 +108,23 @@ export function SettingsDialog({
 
   const handleDownload = async (code: string) => {
     setDownloading(code);
+    setCurrentProgress(prev => ({ ...prev, [code]: 0 }));
     try {
-      await downloadLanguage(code);
+      await downloadLanguage(code, (progress) => {
+        setCurrentProgress(prev => ({ ...prev, [code]: progress }));
+      });
       toast.success(t('offline.downloaded'));
     } catch (error) {
       toast.error(t('offline.downloadFailed'));
     } finally {
       setDownloading(null);
+      setTimeout(() => {
+        setCurrentProgress(prev => {
+          const newProgress = { ...prev };
+          delete newProgress[code];
+          return newProgress;
+        });
+      }, 1000);
     }
   };
 
@@ -362,6 +374,12 @@ export function SettingsDialog({
                   <div className="flex-1">
                     <p className="text-sm font-medium">{lang.name}</p>
                     <p className="text-xs text-muted-foreground">~{lang.size} AI model</p>
+                    {downloading === lang.code && currentProgress[lang.code] !== undefined && (
+                      <div className="mt-2 space-y-1">
+                        <Progress value={currentProgress[lang.code]} className="h-2" />
+                        <p className="text-xs text-muted-foreground text-center">{currentProgress[lang.code]}%</p>
+                      </div>
+                    )}
                   </div>
                   {lang.downloaded ? (
                     <Button
@@ -379,12 +397,12 @@ export function SettingsDialog({
                       size="sm"
                       onClick={() => handleDownload(lang.code)}
                       disabled={downloading === lang.code}
-                      className="h-8"
+                      className="h-8 min-w-[100px]"
                     >
                       {downloading === lang.code ? (
                         <>
                           <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-                          {t('offline.downloading')}
+                          {currentProgress[lang.code]}%
                         </>
                       ) : (
                         <>

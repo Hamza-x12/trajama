@@ -1163,10 +1163,10 @@ const Index = () => {
       {/* Hero Section */}
       <div className="container mx-auto px-3 sm:px-4 pt-8 pb-6 md:pt-12 md:pb-8 max-w-5xl text-center">
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 animate-fade-in">
-          Translate <span className="text-primary">Darija</span> Instantly
+          {t('hero.title')}
         </h1>
         <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto animate-fade-in" style={{ animationDelay: '0.1s' }}>
-          The most advanced AI translator for Moroccan Darija. Bridge the gap between dialects and languages with cultural context.
+          {t('hero.subtitle')}
         </p>
       </div>
 
