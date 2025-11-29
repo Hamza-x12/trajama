@@ -1,4 +1,4 @@
-import { Settings, Download, Trash2, Loader2, Palette, Type, RotateCcw, Info, FileDown, FileUp, History, HelpCircle, Pause, Play } from "lucide-react";
+import { Settings, Download, Trash2, Loader2, Palette, Type, RotateCcw, Info, FileDown, FileUp, History, HelpCircle, Pause, Play, Globe2, Moon, Sun, Monitor, Languages, Volume2, Shield, CloudDownload, Check } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import {
@@ -227,23 +227,28 @@ export function SettingsDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-9 w-9">
-          <Settings className="h-5 w-5" />
+        <Button variant="ghost" size="icon" className="h-9 w-9 hover:scale-110 transition-transform duration-200">
+          <Settings className="h-5 w-5 hover:rotate-90 transition-transform duration-500" />
           <span className="sr-only">{t('settings.title')}</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto animate-in fade-in-0 zoom-in-95 duration-300">
-        <DialogHeader className="animate-in slide-in-from-top-2 duration-300">
-          <DialogTitle className="flex items-center gap-2 text-xl">
-            <Settings className="h-5 w-5 text-primary animate-spin-slow" style={{ animationDuration: '3s' }} />
+        <DialogHeader className="animate-in slide-in-from-top-2 duration-300 pb-2">
+          <DialogTitle className="flex items-center gap-3 text-2xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+            <div className="p-2 rounded-lg bg-primary/10 animate-pulse">
+              <Settings className="h-6 w-6 text-primary" />
+            </div>
             {t('settings.title')}
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-6 py-4">
           {/* Language Selection */}
-          <div className="space-y-2 animate-in slide-in-from-left-3 duration-300 delay-100">
+          <div className="space-y-3 animate-in slide-in-from-left-3 duration-300 delay-100 group">
             <Label htmlFor="language" className="flex items-center gap-2 text-base font-semibold">
-              <span>🌍</span> {t('settings.language')}
+              <div className="p-1.5 rounded-md bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <Globe2 className="h-4 w-4 text-primary" />
+              </div>
+              {t('settings.language')}
             </Label>
             <Select value={i18n.language} onValueChange={handleLanguageChange}>
               <SelectTrigger id="language">
@@ -263,29 +268,50 @@ export function SettingsDialog({
           </div>
 
           {/* Theme Selection */}
-          <div className="space-y-2 animate-in slide-in-from-left-3 duration-300 delay-150">
+          <div className="space-y-3 animate-in slide-in-from-left-3 duration-300 delay-150 group">
             <Label htmlFor="theme" className="flex items-center gap-2 text-base font-semibold">
-              <Palette className="h-4 w-4 text-primary" /> {t('settings.theme')}
+              <div className="p-1.5 rounded-md bg-secondary/10 group-hover:bg-secondary/20 transition-colors">
+                <Palette className="h-4 w-4 text-secondary" />
+              </div>
+              {t('settings.theme')}
             </Label>
             <Select value={theme} onValueChange={setTheme}>
               <SelectTrigger id="theme">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="light">☀️ {t('settings.lightMode')}</SelectItem>
-                <SelectItem value="dark">🌙 {t('settings.darkMode')}</SelectItem>
-                <SelectItem value="system">💻 {t('settings.systemMode')}</SelectItem>
+                <SelectItem value="light">
+                  <div className="flex items-center gap-2">
+                    <Sun className="h-4 w-4 text-amber-500" />
+                    {t('settings.lightMode')}
+                  </div>
+                </SelectItem>
+                <SelectItem value="dark">
+                  <div className="flex items-center gap-2">
+                    <Moon className="h-4 w-4 text-blue-500" />
+                    {t('settings.darkMode')}
+                  </div>
+                </SelectItem>
+                <SelectItem value="system">
+                  <div className="flex items-center gap-2">
+                    <Monitor className="h-4 w-4 text-gray-500" />
+                    {t('settings.systemMode')}
+                  </div>
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           {/* Font Size Control */}
-          <div className="space-y-2 animate-in slide-in-from-left-3 duration-300 delay-200">
+          <div className="space-y-3 animate-in slide-in-from-left-3 duration-300 delay-200 group">
             <div className="flex items-center justify-between">
               <Label htmlFor="fontSize" className="flex items-center gap-2 text-base font-semibold">
-                <Type className="h-4 w-4 text-primary" /> {t('settings.fontSize')}
+                <div className="p-1.5 rounded-md bg-accent/10 group-hover:bg-accent/20 transition-colors">
+                  <Type className="h-4 w-4 text-accent-foreground" />
+                </div>
+                {t('settings.fontSize')}
               </Label>
-              <span className="text-sm text-muted-foreground">{fontSize}px</span>
+              <span className="text-sm font-mono font-semibold px-2 py-1 rounded-md bg-muted">{fontSize}px</span>
             </div>
             <Slider
               id="fontSize"
@@ -307,9 +333,15 @@ export function SettingsDialog({
 
           {/* Voice Selection */}
           {availableVoices.length > 0 && (
-            <div className="space-y-3 animate-in slide-in-from-left-3 duration-300 delay-250">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="autoVoice">{t('settings.autoVoiceSelect')}</Label>
+            <div className="space-y-3 animate-in slide-in-from-left-3 duration-300 delay-250 group">
+              <Label className="flex items-center gap-2 text-base font-semibold">
+                <div className="p-1.5 rounded-md bg-secondary/10 group-hover:bg-secondary/20 transition-colors">
+                  <Volume2 className="h-4 w-4 text-secondary" />
+                </div>
+                {t('settings.voice')}
+              </Label>
+              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border">
+                <Label htmlFor="autoVoice" className="cursor-pointer">{t('settings.autoVoiceSelect')}</Label>
                 <Switch
                   id="autoVoice"
                   checked={autoVoiceSelect}
@@ -322,19 +354,22 @@ export function SettingsDialog({
               </p>
               
               <div className="space-y-2">
-                <Label htmlFor="voice">{t('settings.voice')}</Label>
                 <Select 
                   value={selectedVoice} 
                   onValueChange={setSelectedVoice}
                   disabled={autoVoiceSelect}
                 >
-                  <SelectTrigger id="voice">
+                  <SelectTrigger id="voice" className={autoVoiceSelect ? 'opacity-50' : ''}>
                     <SelectValue placeholder={t('settings.selectVoice')} />
                   </SelectTrigger>
                   <SelectContent className="max-h-[300px]">
                   {availableVoices.map((voice) => (
                     <SelectItem key={voice.name} value={voice.name}>
-                      {voice.name.split(' ').slice(0, 2).join(' ')} ({voice.lang})
+                      <div className="flex items-center gap-2">
+                        <Volume2 className="h-3 w-3 text-muted-foreground" />
+                        <span>{voice.name.split(' ').slice(0, 2).join(' ')}</span>
+                        <span className="text-xs text-muted-foreground">({voice.lang})</span>
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -370,10 +405,13 @@ export function SettingsDialog({
           <Separator />
 
           {/* Profanity Filter */}
-          <div className="space-y-3 animate-in slide-in-from-left-3 duration-300 delay-300">
+          <div className="space-y-3 animate-in slide-in-from-left-3 duration-300 delay-300 group">
             <div className="flex items-center justify-between">
               <Label htmlFor="profanityFilter" className="flex items-center gap-2 text-base font-semibold">
-                🛡️ {t('settings.profanityFilter')}
+                <div className="p-1.5 rounded-md bg-destructive/10 group-hover:bg-destructive/20 transition-colors">
+                  <Shield className="h-4 w-4 text-destructive" />
+                </div>
+                {t('settings.profanityFilter')}
               </Label>
               <Switch
                 id="profanityFilter"
@@ -390,10 +428,13 @@ export function SettingsDialog({
           <Separator />
 
           {/* Offline Languages */}
-          <div className="space-y-3 animate-in slide-in-from-left-3 duration-300 delay-350">
+          <div className="space-y-3 animate-in slide-in-from-left-3 duration-300 delay-350 group">
             <div>
               <Label className="flex items-center gap-2 text-base font-semibold">
-                📦 {t('settings.offlineLanguages')}
+                <div className="p-1.5 rounded-md bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                  <CloudDownload className="h-4 w-4 text-primary" />
+                </div>
+                {t('settings.offlineLanguages')}
               </Label>
               <p className="text-sm text-muted-foreground mt-1">
                 {t('settings.offlineLanguagesDescription')}
@@ -403,18 +444,38 @@ export function SettingsDialog({
               {offlineLanguages.map((lang) => (
                 <div
                   key={lang.code}
-                  className="flex items-center justify-between p-3 rounded-lg border bg-card hover:shadow-md transition-all duration-200 hover:scale-[1.02]"
+                  className="flex items-center justify-between p-4 rounded-xl border-2 bg-card hover:border-primary/50 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] group"
                 >
                   <div className="flex-1">
-                    <p className="text-sm font-medium">{lang.name}</p>
-                    <p className="text-xs text-muted-foreground">~{lang.size}</p>
+                    <div className="flex items-center gap-2 mb-1">
+                      <Languages className="h-4 w-4 text-primary" />
+                      <p className="text-sm font-semibold">{lang.name}</p>
+                      {lang.downloaded && (
+                        <div className="ml-auto">
+                          <Check className="h-4 w-4 text-green-500" />
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground font-mono">~{lang.size}</p>
                     {(currentProgress[lang.code] !== undefined || downloadStates[lang.code] === 'paused') && (
-                      <div className="mt-2 space-y-1">
-                        <Progress value={currentProgress[lang.code] || downloadProgress[lang.code] || 0} className="h-2" />
-                        <p className="text-xs text-muted-foreground">
-                          {Math.round(currentProgress[lang.code] || downloadProgress[lang.code] || 0)}%
-                          {downloadStates[lang.code] === 'paused' && ` - ${t('settings.paused')}`}
-                        </p>
+                      <div className="mt-3 space-y-2">
+                        <div className="relative">
+                          <Progress 
+                            value={currentProgress[lang.code] || downloadProgress[lang.code] || 0} 
+                            className="h-3 bg-muted rounded-full overflow-hidden"
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-[10px] font-bold text-primary-foreground drop-shadow-sm">
+                              {Math.round(currentProgress[lang.code] || downloadProgress[lang.code] || 0)}%
+                            </span>
+                          </div>
+                        </div>
+                        {downloadStates[lang.code] === 'paused' && (
+                          <p className="text-xs text-amber-600 dark:text-amber-400 font-medium flex items-center gap-1">
+                            <Pause className="h-3 w-3" />
+                            {t('settings.paused')}
+                          </p>
+                        )}
                       </div>
                     )}
                   </div>
@@ -424,6 +485,7 @@ export function SettingsDialog({
                         variant="destructive"
                         size="sm"
                         onClick={() => handleRemove(lang.code)}
+                        className="hover:scale-110 transition-transform shadow-md"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -433,6 +495,7 @@ export function SettingsDialog({
                           variant="outline"
                           size="sm"
                           disabled
+                          className="font-mono font-semibold min-w-[60px]"
                         >
                           {Math.round(currentProgress[lang.code] || 0)}%
                         </Button>
@@ -440,6 +503,7 @@ export function SettingsDialog({
                           variant="outline"
                           size="sm"
                           onClick={() => handlePause(lang.code)}
+                          className="hover:bg-amber-100 dark:hover:bg-amber-900 hover:scale-110 transition-all"
                         >
                           <Pause className="h-4 w-4" />
                         </Button>
@@ -450,25 +514,32 @@ export function SettingsDialog({
                           variant="outline"
                           size="sm"
                           disabled
+                          className="font-mono font-semibold min-w-[60px]"
                         >
                           {Math.round(downloadProgress[lang.code] || 0)}%
                         </Button>
                         <Button
-                          variant="outline"
+                          variant="default"
                           size="sm"
                           onClick={() => handleResume(lang.code)}
+                          className="bg-green-500 hover:bg-green-600 hover:scale-110 transition-all shadow-md"
                         >
                           <Play className="h-4 w-4" />
                         </Button>
                       </>
                     ) : (
                       <Button
-                        variant="outline"
+                        variant="default"
                         size="sm"
                         onClick={() => handleDownload(lang.code)}
+                        disabled={downloading === lang.code}
+                        className="bg-primary hover:bg-primary/90 hover:scale-110 transition-all shadow-md group-hover:shadow-lg"
                       >
-                        <Download className="h-4 w-4 mr-2" />
-                        {t('settings.download')}
+                        {downloading === lang.code ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Download className="h-4 w-4" />
+                        )}
                       </Button>
                     )}
                   </div>
@@ -481,69 +552,81 @@ export function SettingsDialog({
 
           {/* Advanced Settings */}
           <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen} className="animate-in slide-in-from-left-3 duration-300 delay-400">
-            <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-accent transition-colors">
-              <Label className="flex items-center gap-2 text-base font-semibold cursor-pointer">
-                ⚙️ {t('settings.advanced')}
-              </Label>
-              <span className={`transition-transform duration-200 ${advancedOpen ? 'rotate-180' : ''}`}>▼</span>
+            <CollapsibleTrigger asChild>
+              <Button variant="outline" className="w-full justify-between hover:bg-muted/50 transition-all duration-200 group">
+                <span className="flex items-center gap-2">
+                  <div className="p-1 rounded-md bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                    <Info className="h-4 w-4 text-primary" />
+                  </div>
+                  <span className="font-semibold">{t('settings.advanced')}</span>
+                </span>
+                <RotateCcw className={`h-4 w-4 transition-all duration-300 ${advancedOpen ? 'rotate-180 text-primary' : 'text-muted-foreground'}`} />
+              </Button>
             </CollapsibleTrigger>
-            <CollapsibleContent className="space-y-3 mt-3">
-              {/* Clear History */}
-              <Button
-                variant="outline"
-                className="w-full justify-start gap-2 hover:bg-destructive/10 hover:text-destructive transition-all duration-200"
-                onClick={handleClearHistory}
-              >
-                <History className="h-4 w-4" />
-                {t('settings.clearHistory')}
-              </Button>
-
-              {/* Export Settings */}
-              <Button
-                variant="outline"
-                className="w-full justify-start gap-2 hover:bg-primary/10 transition-all duration-200"
-                onClick={handleExportSettings}
-              >
-                <FileDown className="h-4 w-4" />
-                {t('settings.exportSettings')}
-              </Button>
-
-              {/* Import Settings */}
-              <div>
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={handleImportSettings}
-                  className="hidden"
-                  id="import-settings"
-                />
+            <CollapsibleContent className="space-y-4 pt-4 animate-in slide-in-from-top-2 duration-300">
+              <div className="flex gap-2">
                 <Button
                   variant="outline"
-                  className="w-full justify-start gap-2 hover:bg-primary/10 transition-all duration-200"
-                  onClick={() => document.getElementById('import-settings')?.click()}
+                  size="sm"
+                  onClick={handleClearHistory}
+                  className="flex-1 hover:bg-destructive/10 hover:text-destructive hover:border-destructive transition-all"
                 >
-                  <FileUp className="h-4 w-4" />
-                  {t('settings.importSettings')}
+                  <History className="h-4 w-4 mr-2" />
+                  {t('settings.clearHistory')}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleResetSettings}
+                  className="flex-1 hover:bg-amber-100 dark:hover:bg-amber-900 hover:border-amber-500 transition-all"
+                >
+                  <RotateCcw className="h-4 w-4 mr-2" />
+                  {t('settings.reset')}
+                </Button>
+              </div>
+              
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportSettings}
+                  className="flex-1 hover:bg-green-100 dark:hover:bg-green-900 hover:border-green-500 transition-all"
+                >
+                  <FileDown className="h-4 w-4 mr-2" />
+                  {t('settings.export')}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => document.getElementById('import-settings')?.click()}
+                  className="flex-1 hover:bg-blue-100 dark:hover:bg-blue-900 hover:border-blue-500 transition-all"
+                >
+                  <FileUp className="h-4 w-4 mr-2" />
+                  {t('settings.import')}
                 </Button>
               </div>
 
-              {/* Reset Settings */}
-              <Button
-                variant="outline"
-                className="w-full justify-start gap-2 hover:bg-destructive/10 hover:text-destructive transition-all duration-200"
-                onClick={handleResetSettings}
-              >
-                <RotateCcw className="h-4 w-4" />
-                {t('settings.resetSettings')}
-              </Button>
 
-              {/* App Info */}
-              <div className="p-3 rounded-lg bg-muted/50 border">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Info className="h-4 w-4" />
-                  <span>{t('settings.appVersion')}: 2.0.0</span>
-                </div>
-              </div>
+              {/* Hidden file input for import */}
+              <input
+                type="file"
+                accept=".json"
+                onChange={handleImportSettings}
+                className="hidden"
+                id="import-settings"
+              />
+              
+              {onShowTutorial && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={onShowTutorial}
+                  className="w-full hover:bg-purple-100 dark:hover:bg-purple-900 hover:border-purple-500 transition-all"
+                >
+                  <HelpCircle className="h-4 w-4 mr-2" />
+                  {t('settings.showTutorial')}
+                </Button>
+              )}
             </CollapsibleContent>
           </Collapsible>
 
