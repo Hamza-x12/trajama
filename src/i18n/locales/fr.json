@@ -198,7 +198,39 @@
     "faq": "FAQ",
     "contact": "Contact",
     "menu": "Menu",
-    "backToTranslator": "Retour"
+    "backToTranslator": "Retour",
+    "signIn": "Connexion",
+    "signUp": "Inscription",
+    "signOut": "Déconnexion",
+    "profile": "Profil"
+  },
+  "auth": {
+    "welcomeBack": "Bon retour !",
+    "createAccount": "Créer un compte",
+    "signInToSync": "Connectez-vous pour synchroniser votre historique",
+    "signUpToSave": "Inscrivez-vous pour sauvegarder votre progression",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "phone": "Numéro de téléphone",
+    "phoneHint": "Incluez le code pays (ex: +33 pour la France)",
+    "verificationCode": "Code de vérification",
+    "sendCode": "Envoyer le code",
+    "verifyCode": "Vérifier le code",
+    "changePhone": "Changer de numéro",
+    "orContinueWith": "Ou continuer avec",
+    "noAccount": "Pas de compte ?",
+    "haveAccount": "Déjà un compte ?",
+    "continueWithout": "Continuer sans connexion"
+  },
+  "profile": {
+    "title": "Paramètres du profil",
+    "displayName": "Nom d'affichage",
+    "changeAvatar": "Cliquez pour changer l'avatar",
+    "saveChanges": "Enregistrer",
+    "avatarUpdated": "Avatar mis à jour !",
+    "profileUpdated": "Profil mis à jour !",
+    "signedOut": "Déconnexion réussie"
   },
   "dictionary": {
     "title": "Dictionnaire Darija",

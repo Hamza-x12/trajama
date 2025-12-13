@@ -200,7 +200,39 @@
     "faq": "أسئلة",
     "contact": "اتصل بينا",
     "menu": "اللستة",
-    "backToTranslator": "رجع للمترجم"
+    "backToTranslator": "رجع للمترجم",
+    "signIn": "دخول",
+    "signUp": "تسجيل",
+    "signOut": "خروج",
+    "profile": "البروفيل"
+  },
+  "auth": {
+    "welcomeBack": "مرحبا بيك!",
+    "createAccount": "دير حساب",
+    "signInToSync": "دخل باش تسنكرونيزي التاريخ ديالك",
+    "signUpToSave": "تسجل باش تحفظ التقدم ديالك",
+    "email": "الإيميل",
+    "password": "الباسوورد",
+    "confirmPassword": "أكد الباسوورد",
+    "phone": "رقم التيليفون",
+    "phoneHint": "زيد رمز البلد (مثلا: +212)",
+    "verificationCode": "الكود ديال التحقق",
+    "sendCode": "صيفط الكود",
+    "verifyCode": "تحقق من الكود",
+    "changePhone": "بدل الرقم",
+    "orContinueWith": "ولا كمل ب",
+    "noAccount": "ماعندكش حساب؟",
+    "haveAccount": "عندك حساب؟",
+    "continueWithout": "كمل بلا تسجيل"
+  },
+  "profile": {
+    "title": "إعدادات البروفيل",
+    "displayName": "السمية",
+    "changeAvatar": "كليكي باش تبدل التصويرة",
+    "saveChanges": "حفظ",
+    "avatarUpdated": "التصويرة تبدلات!",
+    "profileUpdated": "البروفيل تحدث!",
+    "signedOut": "خرجتي بنجاح"
   },
   "dictionary": {
     "title": "قاموس الدارجة",

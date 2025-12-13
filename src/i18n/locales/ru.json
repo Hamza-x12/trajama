@@ -206,7 +206,39 @@
     "faq": "ЧаВо",
     "contact": "Контакт",
     "menu": "Меню",
-    "backToTranslator": "Назад к переводчику"
+    "backToTranslator": "Назад к переводчику",
+    "signIn": "Войти",
+    "signUp": "Регистрация",
+    "signOut": "Выйти",
+    "profile": "Профиль"
+  },
+  "auth": {
+    "welcomeBack": "С возвращением!",
+    "createAccount": "Создать аккаунт",
+    "signInToSync": "Войдите, чтобы синхронизировать историю",
+    "signUpToSave": "Зарегистрируйтесь, чтобы сохранить прогресс",
+    "email": "Эл. почта",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "phone": "Номер телефона",
+    "phoneHint": "Укажите код страны (напр. +7)",
+    "verificationCode": "Код подтверждения",
+    "sendCode": "Отправить код",
+    "verifyCode": "Подтвердить код",
+    "changePhone": "Изменить номер",
+    "orContinueWith": "Или продолжить с",
+    "noAccount": "Нет аккаунта?",
+    "haveAccount": "Уже есть аккаунт?",
+    "continueWithout": "Продолжить без входа"
+  },
+  "profile": {
+    "title": "Настройки профиля",
+    "displayName": "Отображаемое имя",
+    "changeAvatar": "Нажмите, чтобы изменить аватар",
+    "saveChanges": "Сохранить",
+    "avatarUpdated": "Аватар обновлен!",
+    "profileUpdated": "Профиль обновлен!",
+    "signedOut": "Вы вышли из аккаунта"
   },
   "dictionary": {
     "title": "Словарь Дарижа",
