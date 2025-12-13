@@ -206,7 +206,39 @@
     "faq": "FAQ",
     "contact": "Contact",
     "menu": "Menu",
-    "backToTranslator": "Back to Translator"
+    "backToTranslator": "Back to Translator",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "profile": "Profile"
+  },
+  "auth": {
+    "welcomeBack": "Welcome back!",
+    "createAccount": "Create Account",
+    "signInToSync": "Sign in to sync your translation history",
+    "signUpToSave": "Sign up to save your progress",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "phone": "Phone Number",
+    "phoneHint": "Include country code (e.g., +1 for US)",
+    "verificationCode": "Verification Code",
+    "sendCode": "Send Code",
+    "verifyCode": "Verify Code",
+    "changePhone": "Change phone number",
+    "orContinueWith": "Or continue with",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "continueWithout": "Continue without signing in"
+  },
+  "profile": {
+    "title": "Profile Settings",
+    "displayName": "Display Name",
+    "changeAvatar": "Click to change avatar",
+    "saveChanges": "Save Changes",
+    "avatarUpdated": "Avatar updated!",
+    "profileUpdated": "Profile updated!",
+    "signedOut": "Signed out successfully"
   },
   "dictionary": {
     "title": "Darija Dictionary",

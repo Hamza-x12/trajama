@@ -200,7 +200,39 @@
     "faq": "أسئلة",
     "contact": "اتصل بنا",
     "menu": "القائمة",
-    "backToTranslator": "رجوع للمترجم"
+    "backToTranslator": "رجوع للمترجم",
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "signOut": "تسجيل الخروج",
+    "profile": "الملف الشخصي"
+  },
+  "auth": {
+    "welcomeBack": "مرحباً بعودتك!",
+    "createAccount": "إنشاء حساب",
+    "signInToSync": "سجل الدخول لمزامنة سجل الترجمة",
+    "signUpToSave": "سجل لحفظ تقدمك",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "phone": "رقم الهاتف",
+    "phoneHint": "أضف رمز البلد (مثل: +966)",
+    "verificationCode": "رمز التحقق",
+    "sendCode": "إرسال الرمز",
+    "verifyCode": "تحقق من الرمز",
+    "changePhone": "تغيير الرقم",
+    "orContinueWith": "أو المتابعة عبر",
+    "noAccount": "ليس لديك حساب؟",
+    "haveAccount": "لديك حساب بالفعل؟",
+    "continueWithout": "المتابعة بدون تسجيل"
+  },
+  "profile": {
+    "title": "إعدادات الملف الشخصي",
+    "displayName": "الاسم المعروض",
+    "changeAvatar": "انقر لتغيير الصورة",
+    "saveChanges": "حفظ التغييرات",
+    "avatarUpdated": "تم تحديث الصورة!",
+    "profileUpdated": "تم تحديث الملف الشخصي!",
+    "signedOut": "تم تسجيل الخروج بنجاح"
   },
   "dictionary": {
     "title": "قاموس الدارجة",

@@ -15,7 +15,9 @@ import { Helmet } from "react-helmet-async";
 import { useAuth } from "@/hooks/useAuth";
 
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
-import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X, ImagePlus } from "lucide-react";
+import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X, ImagePlus, User, LogIn } from "lucide-react";
+import { ProfileDialog } from "@/components/ProfileDialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -1054,8 +1056,35 @@ const Index = () => {
               </Link>
             </div>
 
-            {/* Right Side - Settings & Theme Toggle */}
+            {/* Right Side - Profile, Settings & Theme Toggle */}
             <div className="flex items-center justify-end gap-2">
+              {/* Profile / Sign In Button */}
+              {user ? (
+                <ProfileDialog user={user}>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="group relative overflow-hidden rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-background via-background/95 to-primary/5 backdrop-blur-md shadow-lg hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/40 transition-all duration-500 hover:scale-105"
+                  >
+                    <Avatar className="h-7 w-7">
+                      <AvatarImage src={user.user_metadata?.avatar_url} />
+                      <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                        {user.email?.charAt(0).toUpperCase() || user.phone?.charAt(0) || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </ProfileDialog>
+              ) : (
+                <Link to="/auth">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="group relative overflow-hidden rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-background via-background/95 to-primary/5 backdrop-blur-md shadow-lg hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/40 transition-all duration-500 hover:scale-105"
+                  >
+                    <LogIn className="h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
+                  </Button>
+                </Link>
+              )}
               {/* Mobile Navigation Menu */}
               <Sheet>
               <SheetTrigger asChild>
