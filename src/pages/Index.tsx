@@ -478,9 +478,19 @@ const Index = () => {
           toast.error('Too many requests. Please wait a moment and try again.', { duration: 4000 });
           return;
         }
+        // Handle payment required (credits exhausted)
+        if (error.message?.includes('402') || error.message?.includes('Payment required') || error.message?.includes('credits')) {
+          toast.error('AI credits have been exhausted. Please try again later or contact the app administrator.', { duration: 6000 });
+          return;
+        }
         throw error;
       }
       if (data.error) {
+        // Check if error message indicates credit issues
+        if (data.error.includes('402') || data.error.includes('Payment') || data.error.includes('credits')) {
+          toast.error('AI credits have been exhausted. Please try again later or contact the app administrator.', { duration: 6000 });
+          return;
+        }
         toast.error(data.error);
         return;
       }
