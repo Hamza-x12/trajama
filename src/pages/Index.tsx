@@ -127,6 +127,7 @@ const Index = () => {
   const [isTranslatingImage, setIsTranslatingImage] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [skipSpellingCheck, setSkipSpellingCheck] = useState(false);
+  const [isFallbackMode, setIsFallbackMode] = useState(false);
 
   // Dynamic font size based on text length
   const getTextSize = (text: string) => {
@@ -476,6 +477,7 @@ const Index = () => {
       const fallbackToLocalTranslation = async () => {
         const { translateLocally } = await import('@/utils/localTranslation');
         
+        setIsFallbackMode(true);
         toast.info('Using offline translation mode...', { duration: 3000 });
         
         const effectiveSource = sourceLanguage === "Detect Language" ? "English" : sourceLanguage;
@@ -503,6 +505,9 @@ const Index = () => {
         
         toast.success('Translation complete (offline mode)');
       };
+
+      // Reset fallback mode on successful API call
+      setIsFallbackMode(false);
 
       if (error) {
         // Handle rate limiting specifically
@@ -1062,11 +1067,23 @@ const Index = () => {
                 />
               </Link>
               <div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <h1 className="text-xl sm:text-xl md:text-2xl font-bold text-foreground tracking-tight">{t('app.title')}</h1>
-                  {!isOnline && (
-                    <Badge variant="secondary" className="text-xs bg-orange-500/20 text-orange-600 dark:text-orange-400 border-orange-500/30">
+                  {/* Mode indicator */}
+                  {!isOnline ? (
+                    <Badge variant="secondary" className="text-xs bg-orange-500/20 text-orange-600 dark:text-orange-400 border border-orange-500/30 animate-pulse">
+                      <span className="w-1.5 h-1.5 rounded-full bg-orange-500 mr-1.5" />
                       Offline
+                    </Badge>
+                  ) : isFallbackMode ? (
+                    <Badge variant="secondary" className="text-xs bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5 animate-pulse" />
+                      Fallback Mode
+                    </Badge>
+                  ) : (
+                    <Badge variant="secondary" className="text-xs bg-green-500/20 text-green-600 dark:text-green-400 border border-green-500/30 hidden sm:flex">
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5" />
+                      Online
                     </Badge>
                   )}
                 </div>
