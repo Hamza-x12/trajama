@@ -472,24 +472,70 @@ const Index = () => {
           uiLanguage: i18n.language
         }
       });
+      // Helper function to fallback to local translation
+      const fallbackToLocalTranslation = async () => {
+        const { translateLocally } = await import('@/utils/localTranslation');
+        
+        toast.info('Using offline translation mode...', { duration: 3000 });
+        
+        const effectiveSource = sourceLanguage === "Detect Language" ? "English" : sourceLanguage;
+        const translation = await translateLocally(inputText, effectiveSource, targetLanguage);
+        
+        const emptyTranslations = {
+          darija: '', french: '', arabic: '', english: '', spanish: '',
+          german: '', italian: '', portuguese: '', chinese: '', japanese: '',
+          turkish: '', russian: '', korean: '', hindi: ''
+        };
+        
+        emptyTranslations[targetLanguage.toLowerCase() as keyof typeof emptyTranslations] = translation;
+        
+        setTranslations({ translations: emptyTranslations });
+        
+        const historyItem: HistoryItem = {
+          id: Date.now().toString(),
+          text: inputText,
+          sourceLanguage: effectiveSource,
+          targetLanguage: targetLanguage,
+          timestamp: Date.now(),
+          translations: emptyTranslations
+        };
+        setHistory(prev => [historyItem, ...prev].slice(0, 50));
+        
+        toast.success('Translation complete (offline mode)');
+      };
+
       if (error) {
         // Handle rate limiting specifically
         if (error.message?.includes('429') || error.message?.includes('Rate limit')) {
           toast.error('Too many requests. Please wait a moment and try again.', { duration: 4000 });
           return;
         }
-        // Handle payment required (credits exhausted)
+        // Handle payment required (credits exhausted) - fallback to local translation
         if (error.message?.includes('402') || error.message?.includes('Payment required') || error.message?.includes('credits')) {
-          toast.error('AI credits have been exhausted. Please try again later or contact the app administrator.', { duration: 6000 });
-          return;
+          toast.warning('AI credits exhausted. Switching to offline mode...', { duration: 3000 });
+          try {
+            await fallbackToLocalTranslation();
+            return;
+          } catch (localError) {
+            console.error('Local translation also failed:', localError);
+            toast.error('Both online and offline translation failed. Please try again later.');
+            return;
+          }
         }
         throw error;
       }
       if (data.error) {
-        // Check if error message indicates credit issues
+        // Check if error message indicates credit issues - fallback to local translation
         if (data.error.includes('402') || data.error.includes('Payment') || data.error.includes('credits')) {
-          toast.error('AI credits have been exhausted. Please try again later or contact the app administrator.', { duration: 6000 });
-          return;
+          toast.warning('AI credits exhausted. Switching to offline mode...', { duration: 3000 });
+          try {
+            await fallbackToLocalTranslation();
+            return;
+          } catch (localError) {
+            console.error('Local translation also failed:', localError);
+            toast.error('Both online and offline translation failed. Please try again later.');
+            return;
+          }
         }
         toast.error(data.error);
         return;
