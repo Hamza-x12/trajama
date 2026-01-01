@@ -128,6 +128,11 @@ const Index = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [skipSpellingCheck, setSkipSpellingCheck] = useState(false);
   const [isFallbackMode, setIsFallbackMode] = useState(false);
+  const [modelDownloadProgress, setModelDownloadProgress] = useState<{
+    isDownloading: boolean;
+    progress: number;
+    status: string;
+  }>({ isDownloading: false, progress: 0, status: '' });
 
   // Dynamic font size based on text length
   const getTextSize = (text: string) => {
@@ -416,11 +421,32 @@ const Index = () => {
         
         toast.info('Using offline translation...');
         
+        // Progress callback for model download
+        const onProgress = (progress: { status: string; progress?: number }) => {
+          if (progress.status === 'downloading') {
+            setModelDownloadProgress({
+              isDownloading: true,
+              progress: progress.progress || 0,
+              status: `Downloading model: ${Math.round(progress.progress || 0)}%`
+            });
+          } else if (progress.status === 'loading') {
+            setModelDownloadProgress({
+              isDownloading: true,
+              progress: 100,
+              status: 'Loading model...'
+            });
+          } else if (progress.status === 'ready') {
+            setModelDownloadProgress({ isDownloading: false, progress: 0, status: '' });
+          }
+        };
+        
         const translation = await translateLocally(
           inputText,
           sourceLanguage === "Detect Language" ? "English" : sourceLanguage,
-          targetLanguage
+          targetLanguage,
+          onProgress
         );
+        setModelDownloadProgress({ isDownloading: false, progress: 0, status: '' });
         
         // Create translation result with only the target language
         const emptyTranslations = {
@@ -481,7 +507,28 @@ const Index = () => {
         toast.info('Using offline translation mode...', { duration: 3000 });
         
         const effectiveSource = sourceLanguage === "Detect Language" ? "English" : sourceLanguage;
-        const translation = await translateLocally(inputText, effectiveSource, targetLanguage);
+        
+        // Progress callback for model download
+        const onProgress = (progress: { status: string; progress?: number; file?: string }) => {
+          if (progress.status === 'downloading') {
+            setModelDownloadProgress({
+              isDownloading: true,
+              progress: progress.progress || 0,
+              status: `Downloading model: ${Math.round(progress.progress || 0)}%`
+            });
+          } else if (progress.status === 'loading') {
+            setModelDownloadProgress({
+              isDownloading: true,
+              progress: 100,
+              status: 'Loading model...'
+            });
+          } else if (progress.status === 'ready') {
+            setModelDownloadProgress({ isDownloading: false, progress: 0, status: '' });
+          }
+        };
+        
+        const translation = await translateLocally(inputText, effectiveSource, targetLanguage, onProgress);
+        setModelDownloadProgress({ isDownloading: false, progress: 0, status: '' });
         
         const emptyTranslations = {
           darija: '', french: '', arabic: '', english: '', spanish: '',
@@ -1530,8 +1577,12 @@ const Index = () => {
                     <X className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
                     <span className="hidden sm:inline">{t('translation.clear') || 'Clear'}</span>
                   </Button>
-                  <Button onClick={handleTranslate} disabled={isTranslating || !inputText.trim()} className="flex-1 h-10 sm:h-11 md:h-12 text-sm sm:text-base font-semibold shadow-moroccan hover:shadow-hover transition-all duration-300 hover:scale-[1.02]" size="lg">
-                    {isTranslating ? <>
+                  <Button onClick={handleTranslate} disabled={isTranslating || modelDownloadProgress.isDownloading || !inputText.trim()} className="flex-1 h-10 sm:h-11 md:h-12 text-sm sm:text-base font-semibold shadow-moroccan hover:shadow-hover transition-all duration-300 hover:scale-[1.02]" size="lg">
+                    {modelDownloadProgress.isDownloading ? <>
+                        <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin mr-2" />
+                        <span className="hidden sm:inline">{modelDownloadProgress.status}</span>
+                        <span className="sm:hidden">{Math.round(modelDownloadProgress.progress)}%</span>
+                      </> : isTranslating ? <>
                         <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin mr-2" />
                         <span className="hidden sm:inline">{t('translation.translating')}</span>
                         <span className="sm:hidden">{t('translation.translate')}</span>
@@ -1541,6 +1592,25 @@ const Index = () => {
                       </>}
                   </Button>
                 </div>
+                
+                {/* Model download progress bar */}
+                {modelDownloadProgress.isDownloading && (
+                  <div className="mt-3 space-y-1">
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span>Downloading offline translation model...</span>
+                      <span>{Math.round(modelDownloadProgress.progress)}%</span>
+                    </div>
+                    <div className="h-2 bg-muted rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-primary to-primary/80 transition-all duration-300 ease-out"
+                        style={{ width: `${modelDownloadProgress.progress}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground/70">
+                      First-time download only. Model will be cached for future use.
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 
