@@ -12,22 +12,22 @@ interface TranslationPipeline {
 
 const translationPipelines: Map<string, TranslationPipeline> = new Map();
 
-// Language code mapping for models
+// Language code mapping for m2m100 model (uses ISO 639-1 codes)
 const languageMap: Record<string, string> = {
-  'Darija': 'arb_Arab', // Moroccan Arabic
-  'Arabic': 'arb_Arab',
-  'French': 'fra_Latn',
-  'English': 'eng_Latn',
-  'Spanish': 'spa_Latn',
-  'German': 'deu_Latn',
-  'Italian': 'ita_Latn',
-  'Portuguese': 'por_Latn',
-  'Chinese': 'zho_Hans',
-  'Japanese': 'jpn_Jpan',
-  'Turkish': 'tur_Latn',
-  'Russian': 'rus_Cyrl',
-  'Korean': 'kor_Hang',
-  'Hindi': 'hin_Deva'
+  'Darija': 'ar', // Moroccan Arabic (uses Arabic)
+  'Arabic': 'ar',
+  'French': 'fr',
+  'English': 'en',
+  'Spanish': 'es',
+  'German': 'de',
+  'Italian': 'it',
+  'Portuguese': 'pt',
+  'Chinese': 'zh',
+  'Japanese': 'ja',
+  'Turkish': 'tr',
+  'Russian': 'ru',
+  'Korean': 'ko',
+  'Hindi': 'hi'
 };
 
 export async function loadTranslationModel(sourceLanguage: string, targetLanguage: string): Promise<void> {
@@ -42,10 +42,11 @@ export async function loadTranslationModel(sourceLanguage: string, targetLanguag
   try {
     console.log(`Loading translation model: ${sourceLang} -> ${targetLang}`);
     
-    // Use a lightweight translation model from Hugging Face
+    // Use the smaller distilled model (~300MB instead of ~600MB)
+    // For even smaller size, we could use opus-mt models but they're language-pair specific
     const model = await pipeline(
       'translation',
-      'Xenova/nllb-200-distilled-600M',
+      'Xenova/m2m100_418M',
       {
         device: 'webgpu', // Try WebGPU for better performance, falls back to CPU
       }
@@ -89,7 +90,7 @@ export async function translateLocally(
     const result = await pipeline.model(text, {
       src_lang: sourceLang,
       tgt_lang: targetLang,
-      max_length: 512
+      max_new_tokens: 256
     });
 
     return result[0].translation_text || text;
