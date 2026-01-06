@@ -47,7 +47,31 @@
     "offlineDownloadError": "Échec du téléchargement du modèle de langue",
     "offlineRemoved": "Modèle de langue supprimé",
     "downloadPaused": "Téléchargement en pause",
-    "paused": "En pause"
+    "paused": "En pause",
+    "sahbiSettings": "Paramètres Sahbi",
+    "openSahbi": "Ouvrir Sahbi",
+    "sahbiDescription": "Configurez votre compagnon chatbot Darija",
+    "darijaScript": "Préférence d'écriture Darija",
+    "scriptBoth": "Les deux écritures",
+    "scriptBothDesc": "Afficher le Darija en écriture latine et arabe",
+    "scriptLatin": "Écriture latine uniquement",
+    "scriptLatinDesc": "Salam, Labas, Wakha...",
+    "scriptArabic": "Écriture arabe uniquement",
+    "scriptArabicDesc": "سلام، لاباس، واخا...",
+    "sahbiScriptUpdated": "Préférence d'écriture Sahbi mise à jour"
+  },
+  "sahbi": {
+    "pageTitle": "Sahbi - Chatbot Darija",
+    "pageDescription": "Pratiquez le Darija marocain avec Sahbi, votre ami IA",
+    "subtitle": "Votre ami pour apprendre le Darija",
+    "welcomeTitle": "Bienvenue sur Sahbi!",
+    "welcomeDescription": "Votre compagnon IA amical pour vous aider à apprendre et pratiquer le Darija marocain. Sahbi vous encouragera à parler en Darija!",
+    "tag1": "Patient et amical",
+    "tag2": "Conseils culturels",
+    "tag3": "Interactif",
+    "thinking": "Sahbi réfléchit...",
+    "inputPlaceholder": "Écrivez en Darija, anglais ou français...",
+    "encouragement": "Jarreb t'kteb b Darija! (Essayez d'écrire en Darija!)"
   },
   "onboarding": {
     "welcome": {
@@ -197,6 +221,7 @@
     "about": "À propos",
     "faq": "FAQ",
     "contact": "Contact",
+    "sahbi": "Sahbi",
     "menu": "Menu",
     "backToTranslator": "Retour",
     "signIn": "Connexion",

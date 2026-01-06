@@ -55,7 +55,31 @@
     "offlineDownloadError": "ماقدرناش نحمّلو موديل اللغة",
     "offlineRemoved": "تحيّد موديل اللغة",
     "downloadPaused": "التنزيل واقف",
-    "paused": "واقف"
+    "paused": "واقف",
+    "sahbiSettings": "إعدادات صاحبي",
+    "openSahbi": "فتح صاحبي",
+    "sahbiDescription": "عدّل صاحبك اللي كيهدر معاك بالدارجة",
+    "darijaScript": "كيفاش بغيتي الدارجة",
+    "scriptBoth": "الزوج ديال الكتابة",
+    "scriptBothDesc": "بين الدارجة بالحروف اللاتينية والعربية",
+    "scriptLatin": "غير الحروف اللاتينية",
+    "scriptLatinDesc": "Salam, Labas, Wakha...",
+    "scriptArabic": "غير الحروف العربية",
+    "scriptArabicDesc": "سلام، لاباس، واخا...",
+    "sahbiScriptUpdated": "تبدلات كيفية كتابة صاحبي"
+  },
+  "sahbi": {
+    "pageTitle": "صاحبي - روبوت الدارجة",
+    "pageDescription": "تدرب على الدارجة المغربية مع صاحبي",
+    "subtitle": "صاحبك باش تتعلم الدارجة",
+    "welcomeTitle": "مرحبا بيك فـ صاحبي!",
+    "welcomeDescription": "صاحبك الذكي اللي غادي يعاونك تتعلم وتمارس الدارجة المغربية. صاحبي غادي يشجعك باش تهدر بالدارجة!",
+    "tag1": "صبار وودود",
+    "tag2": "نصائح ثقافية",
+    "tag3": "تفاعلي",
+    "thinking": "صاحبي كيفكر...",
+    "inputPlaceholder": "كتب بالدارجة، الإنجليزية، ولا الفرنسية...",
+    "encouragement": "جرب تكتب بالدارجة!"
   },
   "onboarding": {
     "welcome": {
@@ -199,6 +223,7 @@
     "about": "علينا",
     "faq": "أسئلة",
     "contact": "اتصل بينا",
+    "sahbi": "صاحبي",
     "menu": "اللستة",
     "backToTranslator": "رجع للمترجم",
     "signIn": "دخول",

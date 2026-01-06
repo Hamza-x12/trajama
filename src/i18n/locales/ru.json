@@ -55,7 +55,31 @@
     "offlineDownloadError": "Не удалось загрузить языковую модель",
     "offlineRemoved": "Языковая модель удалена",
     "downloadPaused": "Загрузка приостановлена",
-    "paused": "Приостановлено"
+    "paused": "Приостановлено",
+    "sahbiSettings": "Настройки Sahbi",
+    "openSahbi": "Открыть Sahbi",
+    "sahbiDescription": "Настройте вашего чат-бота для изучения Дарижа",
+    "darijaScript": "Предпочтение письма Дарижа",
+    "scriptBoth": "Оба алфавита",
+    "scriptBothDesc": "Показывать Дарижа латиницей и арабским",
+    "scriptLatin": "Только латиница",
+    "scriptLatinDesc": "Salam, Labas, Wakha...",
+    "scriptArabic": "Только арабский",
+    "scriptArabicDesc": "سلام، لاباس، واخا...",
+    "sahbiScriptUpdated": "Предпочтение письма Sahbi обновлено"
+  },
+  "sahbi": {
+    "pageTitle": "Sahbi - Чат-бот Дарижа",
+    "pageDescription": "Практикуйте марокканский Дарижа с Sahbi, вашим ИИ-другом",
+    "subtitle": "Ваш друг для изучения Дарижа",
+    "welcomeTitle": "Добро пожаловать в Sahbi!",
+    "welcomeDescription": "Ваш дружелюбный ИИ-компаньон для изучения и практики марокканского Дарижа. Sahbi будет поощрять вас говорить на Дарижа!",
+    "tag1": "Терпеливый и дружелюбный",
+    "tag2": "Культурные советы",
+    "tag3": "Интерактивный",
+    "thinking": "Sahbi думает...",
+    "inputPlaceholder": "Пишите на Дарижа, английском или французском...",
+    "encouragement": "Попробуйте писать на Дарижа!"
   },
   "onboarding": {
     "welcome": {
@@ -205,6 +229,7 @@
     "about": "О нас",
     "faq": "ЧаВо",
     "contact": "Контакт",
+    "sahbi": "Sahbi",
     "menu": "Меню",
     "backToTranslator": "Назад к переводчику",
     "signIn": "Войти",
