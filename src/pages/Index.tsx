@@ -11,6 +11,7 @@ import { SettingsDialog } from "@/components/SettingsDialog";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineScreen } from "@/components/OfflineScreen";
 import { OnboardingTutorial, useOnboarding } from "@/components/OnboardingTutorial";
+import { DarijaChatbot } from "@/components/DarijaChatbot";
 import { Helmet } from "react-helmet-async";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -1748,6 +1749,7 @@ const Index = () => {
       </footer>
 
       <InstallPrompt />
+      <DarijaChatbot />
     </div>
     </>
   );
