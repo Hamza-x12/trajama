@@ -11,12 +11,11 @@ import { SettingsDialog } from "@/components/SettingsDialog";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineScreen } from "@/components/OfflineScreen";
 import { OnboardingTutorial, useOnboarding } from "@/components/OnboardingTutorial";
-import { DarijaChatbot } from "@/components/DarijaChatbot";
 import { Helmet } from "react-helmet-async";
 import { useAuth } from "@/hooks/useAuth";
 
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
-import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X, ImagePlus, User, LogIn } from "lucide-react";
+import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X, ImagePlus, User, LogIn, MessageCircle } from "lucide-react";
 import { ProfileDialog } from "@/components/ProfileDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
@@ -1284,6 +1283,21 @@ const Index = () => {
                       </div>
                     </Button>
                   </Link>
+                  
+                  <Link to="/sahbi" className="w-full">
+                    <Button 
+                      variant="outline" 
+                      className="group relative overflow-hidden w-full justify-start gap-4 px-5 py-6 rounded-2xl border-2 border-amber-500/20 bg-gradient-to-r from-background via-amber-500/5 to-primary/5 backdrop-blur-md shadow-lg hover:shadow-xl hover:shadow-amber-500/20 hover:border-amber-500/40 hover:translate-x-1 transition-all duration-500 animate-fade-in"
+                      style={{ animationDelay: '0.4s' }}
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-amber-500/10 to-moroccan-red/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <MessageCircle className="w-5 h-5 text-amber-500 relative z-10 transition-transform duration-300 group-hover:scale-110" />
+                      <span className="font-bold text-base relative z-10 group-hover:text-amber-500 transition-colors duration-300">{t('navigation.sahbi')}</span>
+                      <div className="absolute right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                      </div>
+                    </Button>
+                  </Link>
                 </nav>
               </SheetContent>
             </Sheet>
@@ -1720,6 +1734,9 @@ const Index = () => {
             <Link to="/dictionary" className="text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors font-medium">
               {t('navigation.dictionary')}
             </Link>
+            <Link to="/sahbi" className="text-xs sm:text-sm text-muted-foreground hover:text-amber-500 transition-colors font-medium">
+              {t('navigation.sahbi')}
+            </Link>
             <Link to="/about" className="text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors font-medium">
               {t('navigation.about')}
             </Link>
@@ -1749,7 +1766,6 @@ const Index = () => {
       </footer>
 
       <InstallPrompt />
-      <DarijaChatbot />
     </div>
     </>
   );

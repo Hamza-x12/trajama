@@ -1,4 +1,4 @@
-import { Settings, Download, Trash2, Loader2, Palette, Type, RotateCcw, Info, FileDown, FileUp, History, HelpCircle, Pause, Play, Globe2, Moon, Sun, Monitor, Languages, Volume2, Shield, CloudDownload, Check } from "lucide-react";
+import { Settings, Download, Trash2, Loader2, Palette, Type, RotateCcw, Info, FileDown, FileUp, History, HelpCircle, Pause, Play, Globe2, Moon, Sun, Monitor, Languages, Volume2, Shield, CloudDownload, Check, MessageCircle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useTranslation } from "react-i18next";
 import { useOfflineLanguages } from "@/hooks/useOfflineLanguages";
 import { useState, useEffect } from "react";
@@ -27,6 +28,7 @@ import ukFlag from "@/assets/flags/uk.png";
 import franceFlag from "@/assets/flags/france.png";
 import saudiArabiaFlag from "@/assets/flags/saudi-arabia.png";
 import { Separator } from "@/components/ui/separator";
+import { Link } from "react-router-dom";
 
 interface SettingsDialogProps {
   selectedVoice: string;
@@ -68,6 +70,10 @@ export function SettingsDialog({
   const [currentProgress, setCurrentProgress] = useState<{ [key: string]: number }>({});
   const [fontSize, setFontSize] = useState(16);
   const [advancedOpen, setAdvancedOpen] = useState(false);
+  const [sahbiDarijaScript, setSahbiDarijaScript] = useState<'latin' | 'arabic' | 'both'>(() => {
+    const saved = localStorage.getItem('sahbiDarijaScript');
+    return (saved as 'latin' | 'arabic' | 'both') || 'both';
+  });
   
   useEffect(() => {
     const savedFontSize = localStorage.getItem('fontSize');
@@ -423,6 +429,63 @@ export function SettingsDialog({
             <p className="text-xs text-muted-foreground">
               {t('settings.profanityFilterDescription')}
             </p>
+          </div>
+
+          <Separator />
+
+          {/* Sahbi Settings */}
+          <div className="space-y-3 animate-in slide-in-from-left-3 duration-300 delay-325 group">
+            <div className="flex items-center justify-between">
+              <Label className="flex items-center gap-2 text-base font-semibold">
+                <div className="p-1.5 rounded-md bg-gradient-to-r from-primary/10 to-amber-500/10 group-hover:from-primary/20 group-hover:to-amber-500/20 transition-colors">
+                  <MessageCircle className="h-4 w-4 text-primary" />
+                </div>
+                {t('settings.sahbiSettings')}
+              </Label>
+              <Link to="/sahbi">
+                <Button variant="outline" size="sm" className="text-xs">
+                  {t('settings.openSahbi')}
+                </Button>
+              </Link>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {t('settings.sahbiDescription')}
+            </p>
+            
+            <div className="space-y-3 p-4 rounded-xl border bg-muted/30">
+              <Label className="text-sm font-medium">{t('settings.darijaScript')}</Label>
+              <RadioGroup
+                value={sahbiDarijaScript}
+                onValueChange={(value: 'latin' | 'arabic' | 'both') => {
+                  setSahbiDarijaScript(value);
+                  localStorage.setItem('sahbiDarijaScript', value);
+                  toast.success(t('settings.sahbiScriptUpdated'));
+                }}
+                className="grid grid-cols-1 gap-2"
+              >
+                <div className="flex items-center space-x-3 p-3 rounded-lg border bg-background hover:bg-muted/50 transition-colors cursor-pointer">
+                  <RadioGroupItem value="both" id="script-both" />
+                  <Label htmlFor="script-both" className="flex-1 cursor-pointer">
+                    <span className="font-medium">{t('settings.scriptBoth')}</span>
+                    <p className="text-xs text-muted-foreground mt-0.5">{t('settings.scriptBothDesc')}</p>
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-3 p-3 rounded-lg border bg-background hover:bg-muted/50 transition-colors cursor-pointer">
+                  <RadioGroupItem value="latin" id="script-latin" />
+                  <Label htmlFor="script-latin" className="flex-1 cursor-pointer">
+                    <span className="font-medium">{t('settings.scriptLatin')}</span>
+                    <p className="text-xs text-muted-foreground mt-0.5">{t('settings.scriptLatinDesc')}</p>
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-3 p-3 rounded-lg border bg-background hover:bg-muted/50 transition-colors cursor-pointer">
+                  <RadioGroupItem value="arabic" id="script-arabic" />
+                  <Label htmlFor="script-arabic" className="flex-1 cursor-pointer">
+                    <span className="font-medium">{t('settings.scriptArabic')}</span>
+                    <p className="text-xs text-muted-foreground mt-0.5">{t('settings.scriptArabicDesc')}</p>
+                  </Label>
+                </div>
+              </RadioGroup>
+            </div>
           </div>
 
           <Separator />

@@ -55,7 +55,31 @@
     "offlineDownloadError": "Failed to download language model",
     "offlineRemoved": "Language model removed",
     "downloadPaused": "Download paused",
-    "paused": "Paused"
+    "paused": "Paused",
+    "sahbiSettings": "Sahbi Settings",
+    "openSahbi": "Open Sahbi",
+    "sahbiDescription": "Configure your Darija chatbot companion",
+    "darijaScript": "Darija Script Preference",
+    "scriptBoth": "Both Scripts",
+    "scriptBothDesc": "Show Darija in both Latin and Arabic script",
+    "scriptLatin": "Latin Script Only",
+    "scriptLatinDesc": "Salam, Labas, Wakha...",
+    "scriptArabic": "Arabic Script Only",
+    "scriptArabicDesc": "سلام، لاباس، واخا...",
+    "sahbiScriptUpdated": "Sahbi script preference updated"
+  },
+  "sahbi": {
+    "pageTitle": "Sahbi - Darija Chatbot",
+    "pageDescription": "Practice Moroccan Darija with Sahbi, your AI friend",
+    "subtitle": "Your Darija Learning Friend",
+    "welcomeTitle": "Welcome to Sahbi!",
+    "welcomeDescription": "Your friendly AI companion to help you learn and practice Moroccan Darija. Sahbi will encourage you to speak in Darija and help you improve!",
+    "tag1": "Patient & Friendly",
+    "tag2": "Cultural Tips",
+    "tag3": "Interactive",
+    "thinking": "Sahbi is thinking...",
+    "inputPlaceholder": "Type in Darija, English, or French...",
+    "encouragement": "Jarreb t'kteb b Darija! (Try writing in Darija!)"
   },
   "onboarding": {
     "welcome": {
@@ -205,6 +229,7 @@
     "about": "About",
     "faq": "FAQ",
     "contact": "Contact",
+    "sahbi": "Sahbi",
     "menu": "Menu",
     "backToTranslator": "Back to Translator",
     "signIn": "Sign In",
