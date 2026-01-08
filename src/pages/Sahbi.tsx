@@ -4,27 +4,32 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   ArrowLeft, Send, Bot, User, Loader2, Sparkles, 
-  MessageCircle, Heart, Star, Zap, Volume2, VolumeX
+  MessageCircle, Heart, Star, Zap, Volume2, VolumeX, Trash2, History
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
+import { ZelligeCorners } from "@/components/ZelligeCorners";
 import moroccoFlag from "@/assets/flags/morocco.png";
+import { toast } from "sonner";
 
 type Message = {
   role: "user" | "assistant";
   content: string;
+  timestamp?: number;
 };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/darija-chat`;
+const SAHBI_HISTORY_KEY = 'sahbi-chat-history';
 
 const Sahbi = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [historyLoaded, setHistoryLoaded] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -34,6 +39,46 @@ const Sahbi = () => {
     return (saved as 'latin' | 'arabic' | 'both') || 'both';
   });
 
+  // Load conversation history from localStorage
+  useEffect(() => {
+    const savedHistory = localStorage.getItem(SAHBI_HISTORY_KEY);
+    if (savedHistory) {
+      try {
+        const parsed = JSON.parse(savedHistory);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setMessages(parsed);
+        } else {
+          // Set initial greeting if no valid history
+          setMessages([{
+            role: "assistant",
+            content: getGreeting(),
+            timestamp: Date.now()
+          }]);
+        }
+      } catch {
+        setMessages([{
+          role: "assistant",
+          content: getGreeting(),
+          timestamp: Date.now()
+        }]);
+      }
+    } else {
+      setMessages([{
+        role: "assistant",
+        content: getGreeting(),
+        timestamp: Date.now()
+      }]);
+    }
+    setHistoryLoaded(true);
+  }, []);
+
+  // Save conversation history to localStorage
+  useEffect(() => {
+    if (historyLoaded && messages.length > 0) {
+      localStorage.setItem(SAHBI_HISTORY_KEY, JSON.stringify(messages));
+    }
+  }, [messages, historyLoaded]);
+
   useEffect(() => {
     const handleStorageChange = () => {
       const saved = localStorage.getItem('sahbiDarijaScript');
@@ -42,7 +87,6 @@ const Sahbi = () => {
       }
     };
     window.addEventListener('storage', handleStorageChange);
-    // Also check on focus
     window.addEventListener('focus', handleStorageChange);
     return () => {
       window.removeEventListener('storage', handleStorageChange);
@@ -62,17 +106,6 @@ const Sahbi = () => {
     }
   }, []);
 
-  // Send initial greeting
-  useEffect(() => {
-    if (messages.length === 0) {
-      const greeting: Message = {
-        role: "assistant",
-        content: getGreeting()
-      };
-      setMessages([greeting]);
-    }
-  }, [messages.length, darijaScript]);
-
   const getGreeting = () => {
     if (darijaScript === 'latin') {
       return `Salam! Ana Sahbi, sahbek li ghadi y3awnek t3elem Darija! Kifash rak lyoum?
@@ -91,6 +124,17 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
 
 Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
     }
+  };
+
+  const clearHistory = () => {
+    const greeting: Message = {
+      role: "assistant",
+      content: getGreeting(),
+      timestamp: Date.now()
+    };
+    setMessages([greeting]);
+    localStorage.setItem(SAHBI_HISTORY_KEY, JSON.stringify([greeting]));
+    toast.success(t('sahbi.historyCleared') || 'Conversation cleared!');
   };
 
   const getScriptInstruction = () => {
@@ -164,10 +208,10 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                 const lastMsg = prev[prev.length - 1];
                 if (lastMsg?.role === "assistant" && prev.length > 1) {
                   return prev.map((m, i) =>
-                    i === prev.length - 1 ? { ...m, content: assistantContent } : m
+                    i === prev.length - 1 ? { ...m, content: assistantContent, timestamp: Date.now() } : m
                   );
                 }
-                return [...prev, { role: "assistant", content: assistantContent }];
+                return [...prev, { role: "assistant", content: assistantContent, timestamp: Date.now() }];
               });
             }
           } catch {
@@ -185,6 +229,7 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
           content: darijaScript === 'arabic' 
             ? "سمح ليا! كاين مشكل. عاود جرب! 🙏"
             : "Smeh liya! (Sorry!) I had a problem. Try again! 🙏",
+          timestamp: Date.now()
         },
       ]);
     } finally {
@@ -195,7 +240,7 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
-    const userMessage: Message = { role: "user", content: input.trim() };
+    const userMessage: Message = { role: "user", content: input.trim(), timestamp: Date.now() };
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     setInput("");
@@ -217,7 +262,6 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
       return;
     }
 
-    // Clean markdown and extract plain text
     const cleanText = text
       .replace(/\*\*[^*]+\*\*/g, '')
       .replace(/\n/g, ' ')
@@ -253,11 +297,16 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 dark:from-background dark:via-background dark:to-background">
+        <ZelligeCorners size="lg" opacity={0.3} />
+        
         {/* Decorative Elements */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-primary/20 to-amber-500/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-amber-500/20 to-red-500/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
           <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-br from-green-500/10 to-primary/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+          
+          {/* Moroccan pattern overlay */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[length:24px_24px]" />
         </div>
 
         {/* Header */}
@@ -266,17 +315,17 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
             <div className="flex items-center justify-between">
               <Link 
                 to="/" 
-                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group"
               >
-                <ArrowLeft className="h-5 w-5" />
+                <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
                 <span className="hidden sm:inline">{t('navigation.backToTranslator')}</span>
               </Link>
               
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-r from-primary via-amber-500 to-red-500 rounded-full blur animate-pulse" />
-                  <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-primary to-amber-500">
-                    <Sparkles className="h-6 w-6 text-white" />
+                  <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-primary to-amber-500 shadow-lg shadow-primary/30">
+                    <Sparkles className="h-6 w-6 text-white animate-pulse" />
                   </div>
                 </div>
                 <div>
@@ -288,7 +337,16 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
               </div>
 
               <div className="flex items-center gap-2">
-                <img src={moroccoFlag} alt="Morocco" className="w-8 h-8 rounded-full object-cover shadow-lg" />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={clearHistory}
+                  className="text-muted-foreground hover:text-destructive"
+                  title={t('sahbi.clearHistory') || 'Clear history'}
+                >
+                  <Trash2 className="h-5 w-5" />
+                </Button>
+                <img src={moroccoFlag} alt="Morocco" className="w-8 h-8 rounded-full object-cover shadow-lg ring-2 ring-primary/20" />
               </div>
             </div>
           </div>
@@ -298,23 +356,32 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
         <main className="relative z-10 container mx-auto px-4 py-6">
           <div className="max-w-3xl mx-auto">
             {/* Welcome Card */}
-            <div className="mb-6 p-6 rounded-2xl bg-gradient-to-r from-primary/10 via-amber-500/10 to-red-500/10 border border-primary/20 backdrop-blur-sm">
-              <div className="flex items-start gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-amber-500 shadow-lg shadow-primary/30">
-                  <MessageCircle className="h-7 w-7 text-white" />
+            <div className="mb-6 p-6 rounded-3xl bg-gradient-to-r from-primary/10 via-amber-500/10 to-red-500/10 border-2 border-primary/20 backdrop-blur-sm shadow-xl shadow-primary/5 relative overflow-hidden group hover:border-primary/30 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-amber-500/5 to-red-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="flex items-start gap-4 relative z-10">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-amber-500 shadow-xl shadow-primary/40 group-hover:scale-105 transition-transform duration-300">
+                  <MessageCircle className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold mb-1">{t('sahbi.welcomeTitle')}</h2>
+                  <div className="flex items-center gap-3 mb-2">
+                    <h2 className="text-xl font-bold">{t('sahbi.welcomeTitle')}</h2>
+                    {messages.length > 1 && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted text-muted-foreground text-xs">
+                        <History className="h-3 w-3" />
+                        {messages.length} {t('sahbi.messages') || 'messages'}
+                      </span>
+                    )}
+                  </div>
                   <p className="text-sm text-muted-foreground">{t('sahbi.welcomeDescription')}</p>
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
-                      <Heart className="h-3 w-3" /> {t('sahbi.tag1')}
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-medium shadow-sm hover:shadow-md hover:bg-primary/15 transition-all cursor-default">
+                      <Heart className="h-3.5 w-3.5" /> {t('sahbi.tag1')}
                     </span>
-                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-medium">
-                      <Star className="h-3 w-3" /> {t('sahbi.tag2')}
+                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-medium shadow-sm hover:shadow-md hover:bg-amber-500/15 transition-all cursor-default">
+                      <Star className="h-3.5 w-3.5" /> {t('sahbi.tag2')}
                     </span>
-                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 text-xs font-medium">
-                      <Zap className="h-3 w-3" /> {t('sahbi.tag3')}
+                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 text-xs font-medium shadow-sm hover:shadow-md hover:bg-green-500/15 transition-all cursor-default">
+                      <Zap className="h-3.5 w-3.5" /> {t('sahbi.tag3')}
                     </span>
                   </div>
                 </div>
@@ -322,10 +389,10 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
             </div>
 
             {/* Messages Area */}
-            <div className="bg-background/80 backdrop-blur-xl rounded-3xl border border-border/50 shadow-2xl overflow-hidden">
+            <div className="bg-background/90 backdrop-blur-2xl rounded-3xl border-2 border-border/50 shadow-2xl overflow-hidden">
               <ScrollArea 
                 ref={scrollRef} 
-                className="h-[calc(100vh-400px)] min-h-[400px] p-6"
+                className="h-[calc(100vh-420px)] min-h-[380px] p-6"
               >
                 <div className="space-y-6">
                   {messages.map((msg, i) => (
@@ -335,14 +402,14 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                         "flex gap-4 animate-in slide-in-from-bottom-2 duration-300",
                         msg.role === "user" ? "flex-row-reverse" : "flex-row"
                       )}
-                      style={{ animationDelay: `${i * 50}ms` }}
+                      style={{ animationDelay: `${i * 30}ms` }}
                     >
                       <div
                         className={cn(
-                          "flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl shadow-lg",
+                          "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl shadow-lg transition-transform hover:scale-105",
                           msg.role === "user"
-                            ? "bg-gradient-to-br from-blue-500 to-purple-500"
-                            : "bg-gradient-to-br from-primary via-amber-500 to-red-500"
+                            ? "bg-gradient-to-br from-blue-500 to-purple-500 shadow-blue-500/30"
+                            : "bg-gradient-to-br from-primary via-amber-500 to-red-500 shadow-primary/30"
                         )}
                       >
                         {msg.role === "user" ? (
@@ -353,10 +420,10 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                       </div>
                       <div
                         className={cn(
-                          "rounded-3xl px-5 py-4 max-w-[80%] shadow-lg",
+                          "rounded-3xl px-5 py-4 max-w-[85%] shadow-lg transition-all duration-200 hover:shadow-xl",
                           msg.role === "user"
                             ? "bg-gradient-to-br from-blue-500 to-purple-500 text-white rounded-tr-lg"
-                            : "bg-card border border-border/50 rounded-tl-lg"
+                            : "bg-card border-2 border-border/50 rounded-tl-lg hover:border-primary/20"
                         )}
                       >
                         <div className="whitespace-pre-wrap leading-relaxed text-sm">
@@ -367,12 +434,12 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                             variant="ghost"
                             size="sm"
                             onClick={() => speakText(msg.content)}
-                            className="mt-2 h-8 px-2 text-xs text-muted-foreground hover:text-foreground"
+                            className="mt-3 h-8 px-3 text-xs text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full transition-all"
                           >
                             {isSpeaking ? (
-                              <VolumeX className="h-4 w-4 mr-1" />
+                              <VolumeX className="h-4 w-4 mr-1.5" />
                             ) : (
-                              <Volume2 className="h-4 w-4 mr-1" />
+                              <Volume2 className="h-4 w-4 mr-1.5" />
                             )}
                             {isSpeaking ? t('audio.stop') : t('audio.play')}
                           </Button>
@@ -382,12 +449,16 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                   ))}
                   {isLoading && messages[messages.length - 1]?.role === "user" && (
                     <div className="flex gap-4 animate-in slide-in-from-bottom-2">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary via-amber-500 to-red-500 shadow-lg">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary via-amber-500 to-red-500 shadow-lg shadow-primary/30">
                         <Bot className="h-5 w-5 text-white" />
                       </div>
-                      <div className="rounded-3xl rounded-tl-lg bg-card border border-border/50 px-5 py-4 shadow-lg">
-                        <div className="flex items-center gap-2">
-                          <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                      <div className="rounded-3xl rounded-tl-lg bg-card border-2 border-border/50 px-5 py-4 shadow-lg">
+                        <div className="flex items-center gap-3">
+                          <div className="flex gap-1">
+                            <span className="h-2 w-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
+                            <span className="h-2 w-2 rounded-full bg-amber-500 animate-bounce" style={{ animationDelay: '150ms' }} />
+                            <span className="h-2 w-2 rounded-full bg-red-500 animate-bounce" style={{ animationDelay: '300ms' }} />
+                          </div>
                           <span className="text-sm text-muted-foreground">{t('sahbi.thinking')}</span>
                         </div>
                       </div>
@@ -397,7 +468,7 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
               </ScrollArea>
 
               {/* Input Area */}
-              <div className="border-t border-border/50 p-4 bg-muted/30">
+              <div className="border-t-2 border-border/50 p-5 bg-gradient-to-t from-muted/50 to-transparent">
                 <div className="flex gap-3">
                   <Input
                     ref={inputRef}
@@ -405,33 +476,34 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder={t('sahbi.inputPlaceholder')}
-                    className="flex-1 rounded-2xl border-border/50 bg-background/80 h-12 px-5 text-base"
+                    className="flex-1 rounded-2xl border-2 border-border/50 bg-background/90 h-14 px-6 text-base focus:border-primary/50 focus:ring-primary/20 transition-all"
                     disabled={isLoading}
                   />
                   <Button
                     onClick={handleSend}
                     disabled={!input.trim() || isLoading}
                     size="lg"
-                    className="rounded-2xl h-12 w-12 bg-gradient-to-r from-primary to-amber-500 hover:from-primary/90 hover:to-amber-500/90 shadow-lg shadow-primary/30"
+                    className="rounded-2xl h-14 w-14 bg-gradient-to-r from-primary to-amber-500 hover:from-primary/90 hover:to-amber-500/90 shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 hover:scale-105 transition-all duration-300"
                   >
                     <Send className="h-5 w-5" />
                   </Button>
                 </div>
-                <p className="text-xs text-muted-foreground text-center mt-3 flex items-center justify-center gap-2">
-                  <span>🇲🇦</span>
-                  <span>{t('sahbi.encouragement')}</span>
-                  <span>🇲🇦</span>
+                <p className="text-xs text-muted-foreground text-center mt-4 flex items-center justify-center gap-2">
+                  <span className="text-lg">🇲🇦</span>
+                  <span className="font-medium">{t('sahbi.encouragement')}</span>
+                  <span className="text-lg">🇲🇦</span>
                 </p>
               </div>
             </div>
 
             {/* Quick Phrases */}
-            <div className="mt-6 flex flex-wrap gap-2 justify-center">
+            <div className="mt-8 flex flex-wrap gap-3 justify-center">
               {[
-                { label: "Salam!", value: "Salam!" },
-                { label: "Labas?", value: "Labas? How do I respond to this?" },
-                { label: "Shukran", value: "How do I say thank you in Darija?" },
-                { label: "Numbers", value: "Teach me numbers 1-10 in Darija" }
+                { label: "Salam! 👋", value: "Salam!" },
+                { label: "Labas? 🤔", value: "Labas? How do I respond to this?" },
+                { label: "Shukran ❤️", value: "How do I say thank you in Darija?" },
+                { label: "Numbers 🔢", value: "Teach me numbers 1-10 in Darija" },
+                { label: "Greetings 🙋", value: "Teach me common Darija greetings" }
               ].map((phrase) => (
                 <Button
                   key={phrase.label}
@@ -441,9 +513,9 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                     setInput(phrase.value);
                     inputRef.current?.focus();
                   }}
-                  className="rounded-full text-xs hover:bg-primary/10 hover:text-primary hover:border-primary/30"
+                  className="rounded-full px-5 py-2 text-sm hover:bg-gradient-to-r hover:from-primary/10 hover:to-amber-500/10 hover:text-primary hover:border-primary/40 shadow-sm hover:shadow-md transition-all duration-300 group"
                 >
-                  {phrase.label}
+                  <span className="group-hover:scale-110 transition-transform inline-block">{phrase.label}</span>
                 </Button>
               ))}
             </div>

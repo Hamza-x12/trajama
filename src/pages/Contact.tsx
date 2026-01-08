@@ -7,6 +7,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsDialog } from "@/components/SettingsDialog";
 import { ContactForm } from "@/components/ContactForm";
 import { useTranslation } from "react-i18next";
+import { ZelligeCorners } from "@/components/ZelligeCorners";
 
 const Contact = () => {
   const { t } = useTranslation();
@@ -22,6 +23,7 @@ const Contact = () => {
         <meta property="og:url" content="https://tarjama.lovable.app/contact" />
       </Helmet>
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <ZelligeCorners size="md" opacity={0.35} />
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-3">

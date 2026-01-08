@@ -16,6 +16,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsDialog } from "@/components/SettingsDialog";
 import { WordDetailDialog } from "@/components/WordDetailDialog";
 import { toast } from "sonner";
+import { ZelligeCorners } from "@/components/ZelligeCorners";
 
 interface DictionaryEntry {
   darija: string;
@@ -1001,6 +1002,7 @@ const Dictionary = () => {
         <meta property="og:url" content="https://tarjama.lovable.app/dictionary" />
       </Helmet>
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <ZelligeCorners size="md" opacity={0.35} />
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-3">
