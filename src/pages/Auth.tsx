@@ -11,6 +11,7 @@ import { Loader2, Languages, Mail, Phone, Eye, EyeOff } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import { z } from "zod";
+import { ZelligeCorners } from "@/components/ZelligeCorners";
 
 const emailSchema = z.string().trim().email({ message: "Invalid email address" });
 const passwordSchema = z.string().min(6, { message: "Password must be at least 6 characters" });
@@ -219,6 +220,7 @@ const Auth = () => {
       </Helmet>
 
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-primary/5 to-accent/5 p-4">
+        <ZelligeCorners size="lg" opacity={0.35} />
         <Card className="w-full max-w-md p-6 bg-card/80 backdrop-blur-sm border-border/50 shadow-elegant">
           <div className="flex flex-col items-center space-y-4">
             {/* Logo */}

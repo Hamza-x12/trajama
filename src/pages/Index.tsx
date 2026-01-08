@@ -39,7 +39,7 @@ import turkeyFlag from "@/assets/flags/turkey.png";
 import russiaFlag from "@/assets/flags/russia.png";
 import koreaFlag from "@/assets/flags/south-korea.png";
 import indiaFlag from "@/assets/flags/india.png";
-import zelligeCorner from "@/assets/zellige-corner.png";
+import { ZelligeCorners } from "@/components/ZelligeCorners";
 interface TranslationResult {
   translations: {
     darija: string;
@@ -1087,18 +1087,7 @@ const Index = () => {
       </Helmet>
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col touch-pan-y relative">
       {/* Zellige corner decorations */}
-      <div className="fixed top-0 left-0 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 pointer-events-none z-0 overflow-hidden">
-        <img src={zelligeCorner} alt="" className="w-full h-full object-cover opacity-90" />
-      </div>
-      <div className="fixed top-0 right-0 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 pointer-events-none z-0 overflow-hidden">
-        <img src={zelligeCorner} alt="" className="w-full h-full object-cover opacity-90 scale-x-[-1]" />
-      </div>
-      <div className="fixed bottom-0 left-0 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 pointer-events-none z-0 overflow-hidden">
-        <img src={zelligeCorner} alt="" className="w-full h-full object-cover opacity-90 scale-y-[-1]" />
-      </div>
-      <div className="fixed bottom-0 right-0 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 pointer-events-none z-0 overflow-hidden">
-        <img src={zelligeCorner} alt="" className="w-full h-full object-cover opacity-90 scale-[-1]" />
-      </div>
+      <ZelligeCorners size="lg" opacity={0.5} />
       
       {/* Header */}
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft touch-none relative">

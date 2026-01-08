@@ -14,6 +14,7 @@ import tarjamaLogo from "@/assets/tarjama-logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsDialog } from "@/components/SettingsDialog";
 import { MessageCircle } from "lucide-react";
+import { ZelligeCorners } from "@/components/ZelligeCorners";
 
 const FAQ = () => {
   const { t } = useTranslation();
@@ -44,6 +45,7 @@ const FAQ = () => {
         <meta property="og:url" content="https://tarjama.lovable.app/faq" />
       </Helmet>
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <ZelligeCorners size="md" opacity={0.35} />
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-soft">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-3">

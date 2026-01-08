@@ -1,4 +1,9 @@
 {
+  "sahbi": {
+    "historyCleared": "تمسحات الكونفيرساسيون!",
+    "clearHistory": "امسح الهيستوري",
+    "messages": "رسائل"
+  },
   "app": {
     "title": "ترجمة",
     "subtitle": "ترجمة محترفة بزاف ديال اللغات"

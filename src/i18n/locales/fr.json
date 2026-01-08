@@ -1,4 +1,9 @@
 {
+  "sahbi": {
+    "historyCleared": "Conversation effacée!",
+    "clearHistory": "Effacer l'historique",
+    "messages": "messages"
+  },
   "app": {
     "title": "Tarjama",
     "subtitle": "Traduction professionnelle multilingue"

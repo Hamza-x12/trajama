@@ -1,4 +1,9 @@
 {
+  "sahbi": {
+    "historyCleared": "تم مسح المحادثة!",
+    "clearHistory": "مسح السجل",
+    "messages": "رسائل"
+  },
   "app": {
     "title": "ترجمة",
     "subtitle": "ترجمة احترافية متعددة اللغات"
