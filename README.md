@@ -1,73 +1,107 @@
-# Welcome to your Lovable project
+🇲🇦 Tarjama - Moroccan Darija Translator
+<div align="center">
+Tarjama Logo
 
-## Project info
+AI-powered translation for Moroccan Darija — bridging cultures, one word at a time.
 
-**URL**: https://lovable.dev/projects/96bb1758-3464-45fa-a3e2-00fe6bbe563b
+Live DemoPWA ReadyMade with Lovable
 
-## How can I edit this code?
+</div>
+✨ Features
+🔄 Smart Translation
+Bidirectional translation between Darija and 14+ languages
+AI-powered accuracy using advanced language models
+Context-aware translations with multiple variants
+Image translation — snap a photo and get instant translations
+Voice input — speak naturally and translate on the fly
+🤖 Sahbi — Your Darija Companion
+Interactive AI chatbot for learning Moroccan Darija
+Configurable script preferences (Latin, Arabic, or both)
+Persistent conversation history
+Text-to-speech pronunciation
+📚 Comprehensive Dictionary
+30+ categories covering everyday topics
+Audio pronunciation for each phrase
+Beautiful Moroccan-inspired design with zellige patterns
+Offline access for downloaded languages
+🌍 Multilingual Interface
+Full UI support for: English, French, Arabic, Darija, Russian
+RTL support for Arabic languages
+📱 Progressive Web App
+Install on any device (mobile, tablet, desktop)
+Offline functionality
+Native app-like experience
+🛠️ Tech Stack
+Category	Technologies
+Frontend	React 18, TypeScript, Vite
+Styling	Tailwind CSS, shadcn/ui
+Backend	Supabase (Auth, Database, Edge Functions)
+AI	Google Gemini, OpenAI GPT
+i18n	i18next, react-i18next
+PWA	vite-plugin-pwa, Workbox
+🚀 Getting Started
+Prerequisites
+Node.js 18+ or Bun
+npm, yarn, or bun
+Installation
 
-There are several ways of editing your application.
+# Clone the repository
+git clone https://github.com/yourusername/tarjama.git
+cd tarjama
 
-**Use Lovable**
+# Install dependencies
+npm install
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/96bb1758-3464-45fa-a3e2-00fe6bbe563b) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
-```
+Visit http://localhost:5173 to see the app.
 
-**Edit a file directly in GitHub**
+Environment Variables
+Create a .env file with:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
 
-**Use GitHub Codespaces**
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_PUBLISHABLE_KEY=your_anon_key
+📁 Project Structure
+src/
+├── assets/          # Images, flags, logos
+├── components/      # Reusable UI components
+│   └── ui/          # shadcn/ui components
+├── hooks/           # Custom React hooks
+├── i18n/            # Internationalization
+│   └── locales/     # Translation files (en, fr, ar, dar, ru)
+├── pages/           # Route pages
+├── utils/           # Utility functions
+└── integrations/    # Supabase client & types
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+supabase/
+└── functions/       # Edge functions (translate, chat, transcribe)
+🎨 Design Philosophy
+Tarjama celebrates Moroccan heritage through:
 
-## What technologies are used for this project?
+Zellige patterns — Traditional geometric tile art as decorative corners
+Warm color palette — Inspired by Moroccan sunsets and terracotta
+Elegant typography — Clean, readable fonts with Arabic support
+Smooth animations — Framer Motion for delightful interactions
+🤝 Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-This project is built with:
+Fork the repository
+Create your feature branch (git checkout -b feature/amazing-feature)
+Commit your changes (git commit -m 'Add amazing feature')
+Push to the branch (git push origin feature/amazing-feature)
+Open a Pull Request
+📄 License
+This project is licensed under the MIT License — see the LICENSE file for details.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+🙏 Acknowledgments
+Lovable — AI-powered development platform
+shadcn/ui — Beautiful component library
+Supabase — Backend infrastructure
+The Moroccan community for language insights
+<div align="center">
+Built with ❤️ for the Moroccan diaspora and language enthusiasts worldwide
 
-## How can I deploy this project?
+Report Bug · Request Feature
 
-Simply open [Lovable](https://lovable.dev/projects/96bb1758-3464-45fa-a3e2-00fe6bbe563b) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+</div>
