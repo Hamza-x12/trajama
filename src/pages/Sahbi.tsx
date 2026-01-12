@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
-  ArrowLeft, Send, Bot, User, Loader2, Sparkles, 
-  MessageCircle, Heart, Star, Zap, Volume2, VolumeX, Trash2, History
+  ArrowLeft, Send, Bot, User, Sparkles, 
+  MessageCircle, Heart, Star, Zap, Volume2, VolumeX, 
+  MessageSquarePlus, Loader2, Copy, Check
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
@@ -13,23 +14,33 @@ import { Helmet } from "react-helmet-async";
 import { ZelligeCorners } from "@/components/ZelligeCorners";
 import moroccoFlag from "@/assets/flags/morocco.png";
 import { toast } from "sonner";
-
-type Message = {
-  role: "user" | "assistant";
-  content: string;
-  timestamp?: number;
-};
+import { SahbiSidebar } from "@/components/SahbiSidebar";
+import { useSahbiConversations, Message } from "@/hooks/useSahbiConversations";
+import { useAuth } from "@/hooks/useAuth";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/darija-chat`;
-const SAHBI_HISTORY_KEY = 'sahbi-chat-history';
 
 const Sahbi = () => {
   const { t } = useTranslation();
-  const [messages, setMessages] = useState<Message[]>([]);
+  const { user } = useAuth();
+  const {
+    conversations,
+    currentConversation,
+    messages,
+    setMessages,
+    isLoading: isLoadingConversations,
+    createConversation,
+    addMessage,
+    saveAssistantMessage,
+    updateTitle,
+    deleteConversation,
+    selectConversation
+  } = useSahbiConversations();
+
   const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [historyLoaded, setHistoryLoaded] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -38,46 +49,6 @@ const Sahbi = () => {
     const saved = localStorage.getItem('sahbiDarijaScript');
     return (saved as 'latin' | 'arabic' | 'both') || 'both';
   });
-
-  // Load conversation history from localStorage
-  useEffect(() => {
-    const savedHistory = localStorage.getItem(SAHBI_HISTORY_KEY);
-    if (savedHistory) {
-      try {
-        const parsed = JSON.parse(savedHistory);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setMessages(parsed);
-        } else {
-          // Set initial greeting if no valid history
-          setMessages([{
-            role: "assistant",
-            content: getGreeting(),
-            timestamp: Date.now()
-          }]);
-        }
-      } catch {
-        setMessages([{
-          role: "assistant",
-          content: getGreeting(),
-          timestamp: Date.now()
-        }]);
-      }
-    } else {
-      setMessages([{
-        role: "assistant",
-        content: getGreeting(),
-        timestamp: Date.now()
-      }]);
-    }
-    setHistoryLoaded(true);
-  }, []);
-
-  // Save conversation history to localStorage
-  useEffect(() => {
-    if (historyLoaded && messages.length > 0) {
-      localStorage.setItem(SAHBI_HISTORY_KEY, JSON.stringify(messages));
-    }
-  }, [messages, historyLoaded]);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -104,7 +75,7 @@ const Sahbi = () => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, []);
+  }, [currentConversation]);
 
   const getGreeting = () => {
     if (darijaScript === 'latin') {
@@ -126,17 +97,6 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
     }
   };
 
-  const clearHistory = () => {
-    const greeting: Message = {
-      role: "assistant",
-      content: getGreeting(),
-      timestamp: Date.now()
-    };
-    setMessages([greeting]);
-    localStorage.setItem(SAHBI_HISTORY_KEY, JSON.stringify([greeting]));
-    toast.success(t('sahbi.historyCleared') || 'Conversation cleared!');
-  };
-
   const getScriptInstruction = () => {
     if (darijaScript === 'latin') {
       return "IMPORTANT: Respond ONLY in Latin script Darija (like 'Salam', 'Labas', 'Wakha'). Do NOT include Arabic script.";
@@ -146,8 +106,36 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
     return "Format your responses with both Latin and Arabic script sections clearly labeled.";
   };
 
+  const handleNewConversation = async () => {
+    const conv = await createConversation();
+    if (conv) {
+      // Add greeting message
+      const greeting: Message = {
+        role: "assistant",
+        content: getGreeting(),
+        timestamp: Date.now()
+      };
+      setMessages([greeting]);
+      addMessage(greeting);
+    }
+  };
+
+  // Auto-create first conversation with greeting
+  useEffect(() => {
+    if (!isLoadingConversations && conversations.length === 0) {
+      handleNewConversation();
+    } else if (!isLoadingConversations && currentConversation && messages.length === 0) {
+      const greeting: Message = {
+        role: "assistant",
+        content: getGreeting(),
+        timestamp: Date.now()
+      };
+      setMessages([greeting]);
+    }
+  }, [isLoadingConversations, conversations.length, currentConversation]);
+
   const streamChat = async (userMessages: Message[]) => {
-    setIsLoading(true);
+    setIsStreaming(true);
     let assistantContent = "";
 
     try {
@@ -155,7 +143,7 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
         if (idx === 0 && msg.role === 'user') {
           return { ...msg, content: `[Script preference: ${getScriptInstruction()}]\n\n${msg.content}` };
         }
-        return msg;
+        return { role: msg.role, content: msg.content };
       });
 
       const response = await fetch(CHAT_URL, {
@@ -220,30 +208,47 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
           }
         }
       }
+
+      // Save the final assistant message
+      if (assistantContent) {
+        saveAssistantMessage(assistantContent);
+        
+        // Auto-generate title from first user message if this is a new conversation
+        if (currentConversation && currentConversation.message_count === 0 && userMessages.length > 0) {
+          const firstUserMsg = userMessages.find(m => m.role === 'user');
+          if (firstUserMsg) {
+            const title = firstUserMsg.content.length > 40 
+              ? firstUserMsg.content.slice(0, 40) + '...' 
+              : firstUserMsg.content;
+            updateTitle(currentConversation.id, title);
+          }
+        }
+      }
     } catch (error) {
       console.error("Chat error:", error);
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: darijaScript === 'arabic' 
-            ? "سمح ليا! كاين مشكل. عاود جرب! 🙏"
-            : "Smeh liya! (Sorry!) I had a problem. Try again! 🙏",
-          timestamp: Date.now()
-        },
-      ]);
+      const errorMessage: Message = {
+        role: "assistant",
+        content: darijaScript === 'arabic' 
+          ? "سمح ليا! كاين مشكل. عاود جرب! 🙏"
+          : "Smeh liya! (Sorry!) I had a problem. Try again! 🙏",
+        timestamp: Date.now()
+      };
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
-      setIsLoading(false);
+      setIsStreaming(false);
     }
   };
 
   const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isStreaming || !currentConversation) return;
 
     const userMessage: Message = { role: "user", content: input.trim(), timestamp: Date.now() };
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     setInput("");
+
+    // Save user message
+    addMessage(userMessage);
 
     await streamChat(newMessages);
   };
@@ -276,6 +281,17 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
     window.speechSynthesis.speak(utterance);
   };
 
+  const copyToClipboard = async (text: string, id: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedId(id);
+      toast.success(t('common.copied') || 'Copied!');
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch {
+      toast.error('Failed to copy');
+    }
+  };
+
   const renderMessageContent = (content: string) => {
     return content.split(/(\*\*[^*]+\*\*)/).map((part, idx) => {
       if (part.startsWith("**") && part.endsWith("**")) {
@@ -287,6 +303,11 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
       }
       return <span key={idx}>{part}</span>;
     });
+  };
+
+  const formatTime = (timestamp?: number) => {
+    if (!timestamp) return '';
+    return new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
   return (
@@ -304,8 +325,6 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
           <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-primary/20 to-amber-500/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-amber-500/20 to-red-500/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
           <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-br from-green-500/10 to-primary/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-          
-          {/* Moroccan pattern overlay */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[length:24px_24px]" />
         </div>
 
@@ -313,13 +332,15 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
         <header className="relative z-10 border-b border-border/50 bg-background/80 backdrop-blur-xl sticky top-0">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
-              <Link 
-                to="/" 
-                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group"
-              >
-                <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
-                <span className="hidden sm:inline">{t('navigation.backToTranslator')}</span>
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link 
+                  to="/" 
+                  className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group"
+                >
+                  <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
+                  <span className="hidden sm:inline">{t('navigation.backToTranslator')}</span>
+                </Link>
+              </div>
               
               <div className="flex items-center gap-3">
                 <div className="relative">
@@ -337,14 +358,23 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
               </div>
 
               <div className="flex items-center gap-2">
+                <SahbiSidebar
+                  conversations={conversations}
+                  currentConversation={currentConversation}
+                  onSelect={selectConversation}
+                  onCreate={handleNewConversation}
+                  onRename={updateTitle}
+                  onDelete={deleteConversation}
+                  isLoading={isLoadingConversations}
+                />
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={clearHistory}
-                  className="text-muted-foreground hover:text-destructive"
-                  title={t('sahbi.clearHistory') || 'Clear history'}
+                  onClick={handleNewConversation}
+                  className="text-muted-foreground hover:text-primary"
+                  title={t('sahbi.newConversation') || 'New Conversation'}
                 >
-                  <Trash2 className="h-5 w-5" />
+                  <MessageSquarePlus className="h-5 w-5" />
                 </Button>
                 <img src={moroccoFlag} alt="Morocco" className="w-8 h-8 rounded-full object-cover shadow-lg ring-2 ring-primary/20" />
               </div>
@@ -362,13 +392,18 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                 <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-amber-500 shadow-xl shadow-primary/40 group-hover:scale-105 transition-transform duration-300">
                   <MessageCircle className="h-8 w-8 text-white" />
                 </div>
-                <div>
-                  <div className="flex items-center gap-3 mb-2">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2 flex-wrap">
                     <h2 className="text-xl font-bold">{t('sahbi.welcomeTitle')}</h2>
-                    {messages.length > 1 && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted text-muted-foreground text-xs">
-                        <History className="h-3 w-3" />
-                        {messages.length} {t('sahbi.messages') || 'messages'}
+                    {currentConversation && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-muted text-muted-foreground text-xs font-medium">
+                        <MessageCircle className="h-3 w-3" />
+                        {currentConversation.title}
+                      </span>
+                    )}
+                    {!user && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 text-xs">
+                        {t('sahbi.guestMode') || 'Guest Mode'}
                       </span>
                     )}
                   </div>
@@ -394,77 +429,115 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                 ref={scrollRef} 
                 className="h-[calc(100vh-420px)] min-h-[380px] p-6"
               >
-                <div className="space-y-6">
-                  {messages.map((msg, i) => (
-                    <div
-                      key={i}
-                      className={cn(
-                        "flex gap-4 animate-in slide-in-from-bottom-2 duration-300",
-                        msg.role === "user" ? "flex-row-reverse" : "flex-row"
-                      )}
-                      style={{ animationDelay: `${i * 30}ms` }}
-                    >
+                {isLoadingConversations ? (
+                  <div className="flex items-center justify-center h-full">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    {messages.map((msg, i) => (
                       <div
+                        key={msg.id || i}
                         className={cn(
-                          "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl shadow-lg transition-transform hover:scale-105",
-                          msg.role === "user"
-                            ? "bg-gradient-to-br from-blue-500 to-purple-500 shadow-blue-500/30"
-                            : "bg-gradient-to-br from-primary via-amber-500 to-red-500 shadow-primary/30"
+                          "flex gap-4 animate-in slide-in-from-bottom-2 duration-300",
+                          msg.role === "user" ? "flex-row-reverse" : "flex-row"
                         )}
+                        style={{ animationDelay: `${i * 30}ms` }}
                       >
-                        {msg.role === "user" ? (
-                          <User className="h-5 w-5 text-white" />
-                        ) : (
-                          <Bot className="h-5 w-5 text-white" />
-                        )}
-                      </div>
-                      <div
-                        className={cn(
-                          "rounded-3xl px-5 py-4 max-w-[85%] shadow-lg transition-all duration-200 hover:shadow-xl",
-                          msg.role === "user"
-                            ? "bg-gradient-to-br from-blue-500 to-purple-500 text-white rounded-tr-lg"
-                            : "bg-card border-2 border-border/50 rounded-tl-lg hover:border-primary/20"
-                        )}
-                      >
-                        <div className="whitespace-pre-wrap leading-relaxed text-sm">
-                          {renderMessageContent(msg.content)}
+                        <div
+                          className={cn(
+                            "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl shadow-lg transition-transform hover:scale-105",
+                            msg.role === "user"
+                              ? "bg-gradient-to-br from-blue-500 to-purple-500 shadow-blue-500/30"
+                              : "bg-gradient-to-br from-primary via-amber-500 to-red-500 shadow-primary/30"
+                          )}
+                        >
+                          {msg.role === "user" ? (
+                            <User className="h-5 w-5 text-white" />
+                          ) : (
+                            <Bot className="h-5 w-5 text-white" />
+                          )}
                         </div>
-                        {msg.role === "assistant" && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => speakText(msg.content)}
-                            className="mt-3 h-8 px-3 text-xs text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full transition-all"
-                          >
-                            {isSpeaking ? (
-                              <VolumeX className="h-4 w-4 mr-1.5" />
-                            ) : (
-                              <Volume2 className="h-4 w-4 mr-1.5" />
-                            )}
-                            {isSpeaking ? t('audio.stop') : t('audio.play')}
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                  {isLoading && messages[messages.length - 1]?.role === "user" && (
-                    <div className="flex gap-4 animate-in slide-in-from-bottom-2">
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary via-amber-500 to-red-500 shadow-lg shadow-primary/30">
-                        <Bot className="h-5 w-5 text-white" />
-                      </div>
-                      <div className="rounded-3xl rounded-tl-lg bg-card border-2 border-border/50 px-5 py-4 shadow-lg">
-                        <div className="flex items-center gap-3">
-                          <div className="flex gap-1">
-                            <span className="h-2 w-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
-                            <span className="h-2 w-2 rounded-full bg-amber-500 animate-bounce" style={{ animationDelay: '150ms' }} />
-                            <span className="h-2 w-2 rounded-full bg-red-500 animate-bounce" style={{ animationDelay: '300ms' }} />
+                        <div
+                          className={cn(
+                            "rounded-3xl px-5 py-4 max-w-[85%] shadow-lg transition-all duration-200 hover:shadow-xl group/message",
+                            msg.role === "user"
+                              ? "bg-gradient-to-br from-blue-500 to-purple-500 text-white rounded-tr-lg"
+                              : "bg-card border-2 border-border/50 rounded-tl-lg hover:border-primary/20"
+                          )}
+                        >
+                          <div className="whitespace-pre-wrap leading-relaxed text-sm">
+                            {renderMessageContent(msg.content)}
                           </div>
-                          <span className="text-sm text-muted-foreground">{t('sahbi.thinking')}</span>
+                          
+                          <div className={cn(
+                            "flex items-center gap-2 mt-3 pt-2 border-t",
+                            msg.role === "user" ? "border-white/20" : "border-border/50"
+                          )}>
+                            <span className={cn(
+                              "text-[10px]",
+                              msg.role === "user" ? "text-white/70" : "text-muted-foreground"
+                            )}>
+                              {formatTime(msg.timestamp)}
+                            </span>
+                            
+                            <div className="flex-1" />
+                            
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => copyToClipboard(msg.content, msg.id || String(i))}
+                              className={cn(
+                                "h-7 px-2 text-xs opacity-0 group-hover/message:opacity-100 transition-opacity",
+                                msg.role === "user" 
+                                  ? "text-white/80 hover:text-white hover:bg-white/10" 
+                                  : "text-muted-foreground hover:text-primary hover:bg-primary/10"
+                              )}
+                            >
+                              {copiedId === (msg.id || String(i)) ? (
+                                <Check className="h-3 w-3" />
+                              ) : (
+                                <Copy className="h-3 w-3" />
+                              )}
+                            </Button>
+                            
+                            {msg.role === "assistant" && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => speakText(msg.content)}
+                                className="h-7 px-2 text-xs text-muted-foreground hover:text-primary hover:bg-primary/10 opacity-0 group-hover/message:opacity-100 transition-opacity"
+                              >
+                                {isSpeaking ? (
+                                  <VolumeX className="h-3 w-3" />
+                                ) : (
+                                  <Volume2 className="h-3 w-3" />
+                                )}
+                              </Button>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </div>
+                    ))}
+                    {isStreaming && messages[messages.length - 1]?.role === "user" && (
+                      <div className="flex gap-4 animate-in slide-in-from-bottom-2">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary via-amber-500 to-red-500 shadow-lg shadow-primary/30">
+                          <Bot className="h-5 w-5 text-white" />
+                        </div>
+                        <div className="rounded-3xl rounded-tl-lg bg-card border-2 border-border/50 px-5 py-4 shadow-lg">
+                          <div className="flex items-center gap-3">
+                            <div className="flex gap-1">
+                              <span className="h-2 w-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
+                              <span className="h-2 w-2 rounded-full bg-amber-500 animate-bounce" style={{ animationDelay: '150ms' }} />
+                              <span className="h-2 w-2 rounded-full bg-red-500 animate-bounce" style={{ animationDelay: '300ms' }} />
+                            </div>
+                            <span className="text-sm text-muted-foreground">{t('sahbi.thinking')}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </ScrollArea>
 
               {/* Input Area */}
@@ -477,15 +550,19 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                     onKeyDown={handleKeyDown}
                     placeholder={t('sahbi.inputPlaceholder')}
                     className="flex-1 rounded-2xl border-2 border-border/50 bg-background/90 h-14 px-6 text-base focus:border-primary/50 focus:ring-primary/20 transition-all"
-                    disabled={isLoading}
+                    disabled={isStreaming || !currentConversation}
                   />
                   <Button
                     onClick={handleSend}
-                    disabled={!input.trim() || isLoading}
+                    disabled={!input.trim() || isStreaming || !currentConversation}
                     size="lg"
                     className="rounded-2xl h-14 w-14 bg-gradient-to-r from-primary to-amber-500 hover:from-primary/90 hover:to-amber-500/90 shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 hover:scale-105 transition-all duration-300"
                   >
-                    <Send className="h-5 w-5" />
+                    {isStreaming ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <Send className="h-5 w-5" />
+                    )}
                   </Button>
                 </div>
                 <p className="text-xs text-muted-foreground text-center mt-4 flex items-center justify-center gap-2">
@@ -513,6 +590,7 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                     setInput(phrase.value);
                     inputRef.current?.focus();
                   }}
+                  disabled={!currentConversation}
                   className="rounded-full px-5 py-2 text-sm hover:bg-gradient-to-r hover:from-primary/10 hover:to-amber-500/10 hover:text-primary hover:border-primary/40 shadow-sm hover:shadow-md transition-all duration-300 group"
                 >
                   <span className="group-hover:scale-110 transition-transform inline-block">{phrase.label}</span>

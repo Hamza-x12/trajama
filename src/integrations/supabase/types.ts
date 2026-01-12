@@ -160,6 +160,68 @@ export type Database = {
         }
         Relationships: []
       }
+      sahbi_conversations: {
+        Row: {
+          created_at: string
+          id: string
+          last_message_preview: string | null
+          message_count: number
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_message_preview?: string | null
+          message_count?: number
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_message_preview?: string | null
+          message_count?: number
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      sahbi_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          role: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          role: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sahbi_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "sahbi_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       translation_history: {
         Row: {
           created_at: string | null
@@ -248,10 +310,53 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      exercise_questions: {
+        Row: {
+          created_at: string | null
+          darija_audio_url: string | null
+          exercise_type: string | null
+          id: string | null
+          lesson_id: string | null
+          options: Json | null
+          order_index: number | null
+          question: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          darija_audio_url?: string | null
+          exercise_type?: string | null
+          id?: string | null
+          lesson_id?: string | null
+          options?: Json | null
+          order_index?: number | null
+          question?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          darija_audio_url?: string | null
+          exercise_type?: string | null
+          id?: string | null
+          lesson_id?: string | null
+          options?: Json | null
+          order_index?: number | null
+          question?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_exercises_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
-      [_ in never]: never
+      check_exercise_answer: {
+        Args: { exercise_id: string; user_answer: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
