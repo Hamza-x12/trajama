@@ -66,7 +66,7 @@ AI-powered translation for Moroccan Darija — bridging cultures, one word at a 
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/tarjama.git
+git clone https://github.com/Hamza-x12/tarjama.git
 cd tarjama
 
 # Install dependencies
