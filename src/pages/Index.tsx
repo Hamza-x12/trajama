@@ -15,7 +15,7 @@ import { Helmet } from "react-helmet-async";
 import { useAuth } from "@/hooks/useAuth";
 
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
-import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X, ImagePlus, User, LogIn, MessageCircle } from "lucide-react";
+import { Languages, Loader2, Wand2, Copy, Check, Volume2, VolumeX, Mic, MicOff, Instagram, BookOpen, Info, HelpCircle, Menu, X, ImagePlus, User, LogIn, MessageCircle, Sparkles } from "lucide-react";
 import { ProfileDialog } from "@/components/ProfileDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
@@ -1129,6 +1129,20 @@ const Index = () => {
             
             {/* Desktop Navigation - Center */}
             <div className="hidden md:flex items-center justify-center gap-3">
+              {/* Sahbi - Featured Button with Special Effects */}
+              <Link to="/sahbi">
+                <Button 
+                  variant="outline" 
+                  className="sahbi-button group relative overflow-hidden gap-3 px-6 py-3 rounded-2xl border-2 border-accent/40 bg-gradient-to-br from-accent/20 via-amber-500/15 to-primary/10 backdrop-blur-md shadow-xl hover:shadow-2xl hover:shadow-accent/30 hover:border-accent/60 transition-all duration-500 hover:scale-110 hover:-translate-y-2 animate-fade-in"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-accent/10 via-amber-400/20 to-primary/10 opacity-60 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+                  <div className="absolute -inset-1 bg-gradient-to-r from-accent/30 via-amber-500/20 to-accent/30 blur-lg opacity-50 group-hover:opacity-80 transition-opacity duration-500 -z-20" />
+                  <MessageCircle className="sahbi-icon w-5 h-5 relative z-10 text-amber-500 group-hover:text-amber-400 transition-all duration-300" />
+                  <span className="font-black text-base tracking-wide relative z-10 text-amber-600 dark:text-amber-400 group-hover:text-amber-500 transition-colors duration-300">{t('navigation.sahbi')}</span>
+                  <Sparkles className="w-4 h-4 text-accent opacity-80 group-hover:opacity-100 transition-opacity animate-pulse" />
+                </Button>
+              </Link>
+              
               <Link to="/dictionary">
                 <Button 
                   variant="outline" 
@@ -1214,10 +1228,31 @@ const Index = () => {
                   </SheetTitle>
                 </SheetHeader>
                 <nav className="flex flex-col gap-4 mt-8">
+                {/* Sahbi - Featured at Top with Special Effects */}
+                  <Link to="/sahbi" className="w-full">
+                    <Button 
+                      variant="outline" 
+                      className="sahbi-button group relative overflow-hidden w-full justify-start gap-4 px-6 py-8 rounded-2xl border-2 border-accent/40 bg-gradient-to-r from-accent/20 via-amber-500/15 to-primary/10 backdrop-blur-md shadow-xl hover:shadow-2xl hover:shadow-accent/30 hover:border-accent/60 hover:translate-x-1 transition-all duration-500 animate-fade-in"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-accent/10 via-amber-400/20 to-primary/10 opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+                      <div className="absolute -inset-1 bg-gradient-to-r from-accent/20 via-amber-500/15 to-accent/20 blur-lg opacity-40 group-hover:opacity-70 transition-opacity duration-500 -z-10" />
+                      <MessageCircle className="sahbi-icon w-6 h-6 text-amber-500 relative z-10 transition-all duration-300 group-hover:scale-110" />
+                      <div className="flex flex-col items-start relative z-10">
+                        <span className="font-black text-lg text-amber-600 dark:text-amber-400 group-hover:text-amber-500 transition-colors duration-300">{t('navigation.sahbi')}</span>
+                        <span className="text-xs text-muted-foreground group-hover:text-amber-600/70 transition-colors">AI Darija Assistant</span>
+                      </div>
+                      <div className="absolute right-4 flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-accent animate-pulse" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
+                      </div>
+                    </Button>
+                  </Link>
+                  
                   <Link to="/dictionary" className="w-full">
                     <Button 
                       variant="outline" 
                       className="group relative overflow-hidden w-full justify-start gap-4 px-5 py-6 rounded-2xl border-2 border-primary/20 bg-gradient-to-r from-background to-primary/5 backdrop-blur-md shadow-lg hover:shadow-xl hover:shadow-primary/20 hover:border-primary/40 hover:translate-x-1 transition-all duration-500 animate-fade-in"
+                      style={{ animationDelay: '0.05s' }}
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-moroccan-red/5 via-moroccan-gold/5 to-moroccan-green/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       <BookOpen className="w-5 h-5 text-primary relative z-10 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
@@ -1247,7 +1282,7 @@ const Index = () => {
                     <Button 
                       variant="outline" 
                       className="group relative overflow-hidden w-full justify-start gap-4 px-5 py-6 rounded-2xl border-2 border-moroccan-green/20 bg-gradient-to-r from-background to-moroccan-green/5 backdrop-blur-md shadow-lg hover:shadow-xl hover:shadow-moroccan-green/20 hover:border-moroccan-green/40 hover:translate-x-1 transition-all duration-500 animate-fade-in"
-                      style={{ animationDelay: '0.2s' }}
+                      style={{ animationDelay: '0.15s' }}
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-moroccan-green/5 via-primary/5 to-moroccan-red/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       <HelpCircle className="w-5 h-5 text-moroccan-green relative z-10 transition-transform duration-300 group-hover:rotate-180 group-hover:scale-110" />
@@ -1262,28 +1297,13 @@ const Index = () => {
                     <Button 
                       variant="outline" 
                       className="group relative overflow-hidden w-full justify-start gap-4 px-5 py-6 rounded-2xl border-2 border-moroccan-red/20 bg-gradient-to-r from-background to-moroccan-red/5 backdrop-blur-md shadow-lg hover:shadow-xl hover:shadow-moroccan-red/20 hover:border-moroccan-red/40 hover:translate-x-1 transition-all duration-500 animate-fade-in"
-                      style={{ animationDelay: '0.3s' }}
+                      style={{ animationDelay: '0.2s' }}
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-moroccan-red/5 via-moroccan-gold/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       <Instagram className="w-5 h-5 text-moroccan-red relative z-10 transition-transform duration-300 group-hover:scale-110" />
                       <span className="font-bold text-base relative z-10 group-hover:text-moroccan-red transition-colors duration-300">{t('navigation.contact')}</span>
                       <div className="absolute right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <div className="w-2 h-2 rounded-full bg-moroccan-red animate-pulse" />
-                      </div>
-                    </Button>
-                  </Link>
-                  
-                  <Link to="/sahbi" className="w-full">
-                    <Button 
-                      variant="outline" 
-                      className="group relative overflow-hidden w-full justify-start gap-4 px-5 py-6 rounded-2xl border-2 border-amber-500/20 bg-gradient-to-r from-background via-amber-500/5 to-primary/5 backdrop-blur-md shadow-lg hover:shadow-xl hover:shadow-amber-500/20 hover:border-amber-500/40 hover:translate-x-1 transition-all duration-500 animate-fade-in"
-                      style={{ animationDelay: '0.4s' }}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-amber-500/10 to-moroccan-red/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      <MessageCircle className="w-5 h-5 text-amber-500 relative z-10 transition-transform duration-300 group-hover:scale-110" />
-                      <span className="font-bold text-base relative z-10 group-hover:text-amber-500 transition-colors duration-300">{t('navigation.sahbi')}</span>
-                      <div className="absolute right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                       </div>
                     </Button>
                   </Link>
