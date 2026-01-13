@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -35,7 +35,8 @@ import {
   X,
   MessageCircle,
   Clock,
-  ChevronRight
+  ChevronRight,
+  GripVertical
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
@@ -53,6 +54,10 @@ interface SahbiSidebarProps {
   isLoading?: boolean;
 }
 
+const MIN_WIDTH = 280;
+const MAX_WIDTH = 500;
+const DEFAULT_WIDTH = 320;
+
 export function SahbiSidebar({
   conversations,
   currentConversation,
@@ -68,6 +73,39 @@ export function SahbiSidebar({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
   const [deleteDialogId, setDeleteDialogId] = useState<string | null>(null);
+  const [width, setWidth] = useState(() => {
+    const saved = localStorage.getItem('sahbi-sidebar-width');
+    return saved ? Math.min(Math.max(parseInt(saved), MIN_WIDTH), MAX_WIDTH) : DEFAULT_WIDTH;
+  });
+  const [isResizing, setIsResizing] = useState(false);
+
+  // Save width to localStorage
+  useEffect(() => {
+    localStorage.setItem('sahbi-sidebar-width', String(width));
+  }, [width]);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizing(true);
+    
+    const startX = e.clientX;
+    const startWidth = width;
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      const diff = e.clientX - startX;
+      const newWidth = Math.min(Math.max(startWidth + diff, MIN_WIDTH), MAX_WIDTH);
+      setWidth(newWidth);
+    };
+    
+    const handleMouseUp = () => {
+      setIsResizing(false);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+    
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
 
   const handleStartEdit = (conv: Conversation) => {
     setEditingId(conv.id);
@@ -102,6 +140,11 @@ export function SahbiSidebar({
     }
   };
 
+  // Only show the history button for logged-in users
+  if (!user) {
+    return null;
+  }
+
   return (
     <>
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -120,11 +163,26 @@ export function SahbiSidebar({
             )}
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-80 p-0 flex flex-col">
+        <SheetContent 
+          side="left" 
+          className="p-0 flex flex-col"
+          style={{ width: `${width}px`, maxWidth: '90vw' }}
+        >
+          {/* Resize Handle */}
+          <div 
+            className={cn(
+              "absolute right-0 top-0 bottom-0 w-2 cursor-ew-resize z-50 flex items-center justify-center hover:bg-primary/10 transition-colors",
+              isResizing && "bg-primary/20"
+            )}
+            onMouseDown={handleMouseDown}
+          >
+            <GripVertical className="h-4 w-4 text-muted-foreground/50" />
+          </div>
+          
           <SheetHeader className="p-4 border-b bg-gradient-to-r from-primary/5 to-amber-500/5">
             <SheetTitle className="flex items-center gap-2">
               <MessageCircle className="h-5 w-5 text-primary" />
-              {t('sahbi.conversations') || 'Conversations'}
+              {t('sahbi.conversations')}
             </SheetTitle>
           </SheetHeader>
 
@@ -137,17 +195,9 @@ export function SahbiSidebar({
               className="w-full bg-gradient-to-r from-primary to-amber-500 hover:from-primary/90 hover:to-amber-500/90"
             >
               <MessageSquarePlus className="h-4 w-4 mr-2" />
-              {t('sahbi.newConversation') || 'New Conversation'}
+              {t('sahbi.newConversation')}
             </Button>
           </div>
-
-          {!user && (
-            <div className="px-3 py-2 bg-amber-500/10 border-b">
-              <p className="text-xs text-amber-600 dark:text-amber-400">
-                {t('sahbi.guestMode') || 'Guest mode: conversations saved locally'}
-              </p>
-            </div>
-          )}
 
           <ScrollArea className="flex-1">
             {isLoading ? (
@@ -161,8 +211,8 @@ export function SahbiSidebar({
             ) : conversations.length === 0 ? (
               <div className="p-8 text-center text-muted-foreground">
                 <MessageCircle className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                <p className="text-sm">{t('sahbi.noConversations') || 'No conversations yet'}</p>
-                <p className="text-xs mt-1">{t('sahbi.startNew') || 'Start a new chat to begin'}</p>
+                <p className="text-sm">{t('sahbi.noConversations')}</p>
+                <p className="text-xs mt-1">{t('sahbi.startNew')}</p>
               </div>
             ) : (
               <div className="p-2 space-y-1">
@@ -223,7 +273,7 @@ export function SahbiSidebar({
                               <Clock className="h-3 w-3" />
                               <span>{formatDate(conv.updated_at)}</span>
                               <span className="text-primary">•</span>
-                              <span>{conv.message_count} {t('sahbi.messages') || 'messages'}</span>
+                              <span>{conv.message_count} {t('sahbi.messages')}</span>
                             </div>
                           </div>
                           <ChevronRight className={cn(
@@ -271,9 +321,9 @@ export function SahbiSidebar({
       <AlertDialog open={!!deleteDialogId} onOpenChange={() => setDeleteDialogId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t('sahbi.deleteConversation') || 'Delete Conversation?'}</AlertDialogTitle>
+            <AlertDialogTitle>{t('sahbi.deleteConversation')}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t('sahbi.deleteWarning') || 'This will permanently delete this conversation and all its messages. This action cannot be undone.'}
+              {t('sahbi.deleteWarning')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

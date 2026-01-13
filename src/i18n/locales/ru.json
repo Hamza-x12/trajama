@@ -1,9 +1,4 @@
 {
-  "sahbi": {
-    "historyCleared": "Разговор очищен!",
-    "clearHistory": "Очистить историю",
-    "messages": "сообщений"
-  },
   "app": {
     "title": "Тарджама",
     "subtitle": "Профессиональный многоязычный перевод"
@@ -73,7 +68,7 @@
     "scriptArabicDesc": "سلام، لاباس، واخا...",
     "sahbiScriptUpdated": "Предпочтение письма Sahbi обновлено"
   },
-  "sahbi": {
+"sahbi": {
     "pageTitle": "Sahbi - Чат-бот Дарижа",
     "pageDescription": "Практикуйте марокканский Дарижа с Sahbi, вашим ИИ-другом",
     "subtitle": "Ваш друг для изучения Дарижа",
@@ -84,7 +79,19 @@
     "tag3": "Интерактивный",
     "thinking": "Sahbi думает...",
     "inputPlaceholder": "Пишите на Дарижа, английском или французском...",
-    "encouragement": "Попробуйте писать на Дарижа!"
+    "encouragement": "Попробуйте писать на Дарижа!",
+    "historyCleared": "Разговор очищен!",
+    "clearHistory": "Очистить историю",
+    "messages": "сообщений",
+    "conversations": "Разговоры",
+    "newConversation": "Новый разговор",
+    "guestMode": "Гостевой режим: разговоры сохраняются локально",
+    "noConversations": "Пока нет разговоров",
+    "startNew": "Начните новый чат",
+    "history": "История чатов",
+    "deleteConversation": "Удалить разговор?",
+    "deleteWarning": "Это навсегда удалит этот разговор и все его сообщения. Это действие нельзя отменить.",
+    "loginRequired": "Войдите, чтобы сохранять разговоры"
   },
   "onboarding": {
     "welcome": {

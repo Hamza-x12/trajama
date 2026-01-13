@@ -1,9 +1,4 @@
 {
-  "sahbi": {
-    "historyCleared": "تم مسح المحادثة!",
-    "clearHistory": "مسح السجل",
-    "messages": "رسائل"
-  },
   "app": {
     "title": "ترجمة",
     "subtitle": "ترجمة احترافية متعددة اللغات"
@@ -73,7 +68,7 @@
     "scriptArabicDesc": "سلام، لاباس، واخا...",
     "sahbiScriptUpdated": "تم تحديث تفضيل كتابة صاحبي"
   },
-  "sahbi": {
+"sahbi": {
     "pageTitle": "صاحبي - روبوت الدردشة بالدارجة",
     "pageDescription": "تدرب على الدارجة المغربية مع صاحبي، صديقك الذكي",
     "subtitle": "صديقك لتعلم الدارجة",
@@ -84,7 +79,19 @@
     "tag3": "تفاعلي",
     "thinking": "صاحبي يفكر...",
     "inputPlaceholder": "اكتب بالدارجة، الإنجليزية، أو الفرنسية...",
-    "encouragement": "جرب تكتب بالدارجة!"
+    "encouragement": "جرب تكتب بالدارجة!",
+    "historyCleared": "تم مسح المحادثة!",
+    "clearHistory": "مسح السجل",
+    "messages": "رسائل",
+    "conversations": "المحادثات",
+    "newConversation": "محادثة جديدة",
+    "guestMode": "وضع الضيف: المحادثات محفوظة محلياً",
+    "noConversations": "لا توجد محادثات بعد",
+    "startNew": "ابدأ دردشة جديدة",
+    "history": "سجل المحادثات",
+    "deleteConversation": "حذف المحادثة؟",
+    "deleteWarning": "سيؤدي هذا إلى حذف هذه المحادثة وجميع رسائلها نهائياً. لا يمكن التراجع عن هذا الإجراء.",
+    "loginRequired": "سجل الدخول لحفظ محادثاتك"
   },
   "onboarding": {
     "welcome": {

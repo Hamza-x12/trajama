@@ -17,12 +17,14 @@ import { toast } from "sonner";
 import { SahbiSidebar } from "@/components/SahbiSidebar";
 import { useSahbiConversations, Message } from "@/hooks/useSahbiConversations";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/darija-chat`;
 
 const Sahbi = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const [userName, setUserName] = useState<string | null>(null);
   const {
     conversations,
     currentConversation,
@@ -65,6 +67,43 @@ const Sahbi = () => {
     };
   }, []);
 
+  // Fetch user's display name
+  useEffect(() => {
+    const fetchUserName = async () => {
+      if (!user) {
+        setUserName(null);
+        return;
+      }
+
+      // Try to get display name from user metadata first
+      const metaName = user.user_metadata?.display_name || user.user_metadata?.full_name || user.user_metadata?.name;
+      if (metaName) {
+        setUserName(metaName);
+        return;
+      }
+
+      // Fallback to profile table
+      try {
+        const { data } = await supabase
+          .from('profiles')
+          .select('display_name')
+          .eq('id', user.id)
+          .single();
+        
+        if (data?.display_name) {
+          setUserName(data.display_name);
+        } else {
+          // Use email prefix as fallback
+          setUserName(user.email?.split('@')[0] || null);
+        }
+      } catch {
+        setUserName(user.email?.split('@')[0] || null);
+      }
+    };
+
+    fetchUserName();
+  }, [user]);
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -78,20 +117,22 @@ const Sahbi = () => {
   }, [currentConversation]);
 
   const getGreeting = () => {
+    const nameGreeting = userName ? ` ${userName}` : '';
+    
     if (darijaScript === 'latin') {
-      return `Salam! Ana Sahbi, sahbek li ghadi y3awnek t3elem Darija! Kifash rak lyoum?
+      return `Salam${nameGreeting}! Ana Sahbi, sahbek li ghadi y3awnek t3elem Darija! Kifash rak lyoum?
 
 Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
     } else if (darijaScript === 'arabic') {
-      return `سلام! أنا صاحبي، صاحبك لي غادي يعاونك تعلم الدارجة! كيفاش راك اليوم؟
+      return `سلام${nameGreeting}! أنا صاحبي، صاحبك لي غادي يعاونك تعلم الدارجة! كيفاش راك اليوم؟
 
 يلاه، قول ليا شنو بغيتي تعلم! 🇲🇦`;
     } else {
-      return `**Darija (Latin):** Salam! Ana Sahbi, sahbek li ghadi y3awnek t3elem Darija! Kifash rak lyoum?
+      return `**Darija (Latin):** Salam${nameGreeting}! Ana Sahbi, sahbek li ghadi y3awnek t3elem Darija! Kifash rak lyoum?
 
-**Darija (Arabic):** سلام! أنا صاحبي، صاحبك لي غادي يعاونك تعلم الدارجة! كيفاش راك اليوم؟
+**Darija (Arabic):** سلام${nameGreeting}! أنا صاحبي، صاحبك لي غادي يعاونك تعلم الدارجة! كيفاش راك اليوم؟
 
-**Translation:** Hello! I'm Sahbi, your friend who will help you learn Darija! How are you today?
+**Translation:** Hello${nameGreeting}! I'm Sahbi, your friend who will help you learn Darija! How are you today?
 
 Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
     }

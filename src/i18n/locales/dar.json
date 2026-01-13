@@ -1,9 +1,4 @@
 {
-  "sahbi": {
-    "historyCleared": "تمسحات الكونفيرساسيون!",
-    "clearHistory": "امسح الهيستوري",
-    "messages": "رسائل"
-  },
   "app": {
     "title": "ترجمة",
     "subtitle": "ترجمة محترفة بزاف ديال اللغات"
@@ -73,7 +68,7 @@
     "scriptArabicDesc": "سلام، لاباس، واخا...",
     "sahbiScriptUpdated": "تبدلات كيفية كتابة صاحبي"
   },
-  "sahbi": {
+"sahbi": {
     "pageTitle": "صاحبي - روبوت الدارجة",
     "pageDescription": "تدرب على الدارجة المغربية مع صاحبي",
     "subtitle": "صاحبك باش تتعلم الدارجة",
@@ -84,7 +79,19 @@
     "tag3": "تفاعلي",
     "thinking": "صاحبي كيفكر...",
     "inputPlaceholder": "كتب بالدارجة، الإنجليزية، ولا الفرنسية...",
-    "encouragement": "جرب تكتب بالدارجة!"
+    "encouragement": "جرب تكتب بالدارجة!",
+    "historyCleared": "تمسحات الكونفيرساسيون!",
+    "clearHistory": "امسح الهيستوري",
+    "messages": "رسائل",
+    "conversations": "الكونفيرساسيونات",
+    "newConversation": "كونفيرساسيون جديدة",
+    "guestMode": "وضع الضيف: الكونفيرساسيونات محفوظة محليا",
+    "noConversations": "مازال ما كاين حتى كونفيرساسيون",
+    "startNew": "بدا شي شات جديد",
+    "history": "الهيستوري ديال الشاتات",
+    "deleteConversation": "امسح الكونفيرساسيون؟",
+    "deleteWarning": "غادي تتمسح هاد الكونفيرساسيون وجميع الرسائل ديالها نهائيا. ما يمكنش ترجع",
+    "loginRequired": "كونيكتا باش تحفظ الكونفيرساسيونات ديالك"
   },
   "onboarding": {
     "welcome": {
