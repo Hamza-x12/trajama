@@ -216,3 +216,89 @@ button, a, input, textarea, select {
 .touch-manipulation:active {
   transform: scale(0.95);
 }
+
+/* Sahbi Special Effects */
+@keyframes sahbi-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px hsl(45 85% 70% / 0.3),
+                0 0 10px hsl(45 85% 70% / 0.2),
+                0 0 15px hsl(45 85% 70% / 0.1);
+  }
+  50% {
+    box-shadow: 0 0 10px hsl(45 85% 70% / 0.5),
+                0 0 20px hsl(45 85% 70% / 0.3),
+                0 0 30px hsl(45 85% 70% / 0.2);
+  }
+}
+
+@keyframes sahbi-sparkle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    opacity: 0.8;
+    transform: scale(1.1) rotate(5deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  75% {
+    opacity: 0.8;
+    transform: scale(1.1) rotate(-5deg);
+  }
+}
+
+@keyframes sahbi-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes sahbi-float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.02);
+  }
+}
+
+.sahbi-button {
+  animation: sahbi-glow 2s ease-in-out infinite, sahbi-float 3s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.sahbi-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(45 85% 70% / 0.3),
+    transparent
+  );
+  animation: sahbi-shimmer 3s ease-in-out infinite;
+}
+
+.sahbi-button:hover {
+  animation: sahbi-glow 1s ease-in-out infinite;
+  transform: scale(1.05) translateY(-2px);
+}
+
+.sahbi-icon {
+  animation: sahbi-sparkle 2s ease-in-out infinite;
+}
+
+.sahbi-button:hover .sahbi-icon {
+  animation: sahbi-sparkle 0.5s ease-in-out infinite;
+}
