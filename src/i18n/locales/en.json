@@ -1,9 +1,4 @@
 {
-  "sahbi": {
-    "historyCleared": "Conversation cleared!",
-    "clearHistory": "Clear history",
-    "messages": "messages"
-  },
   "app": {
     "title": "Tarjama",
     "subtitle": "Professional multilingual translation"
@@ -73,7 +68,7 @@
     "scriptArabicDesc": "سلام، لاباس، واخا...",
     "sahbiScriptUpdated": "Sahbi script preference updated"
   },
-  "sahbi": {
+"sahbi": {
     "pageTitle": "Sahbi - Darija Chatbot",
     "pageDescription": "Practice Moroccan Darija with Sahbi, your AI friend",
     "subtitle": "Your Darija Learning Friend",
@@ -84,7 +79,19 @@
     "tag3": "Interactive",
     "thinking": "Sahbi is thinking...",
     "inputPlaceholder": "Type in Darija, English, or French...",
-    "encouragement": "Jarreb t'kteb b Darija! (Try writing in Darija!)"
+    "encouragement": "Jarreb t'kteb b Darija! (Try writing in Darija!)",
+    "historyCleared": "Conversation cleared!",
+    "clearHistory": "Clear history",
+    "messages": "messages",
+    "conversations": "Conversations",
+    "newConversation": "New Conversation",
+    "guestMode": "Guest mode: conversations saved locally",
+    "noConversations": "No conversations yet",
+    "startNew": "Start a new chat to begin",
+    "history": "Chat History",
+    "deleteConversation": "Delete Conversation?",
+    "deleteWarning": "This will permanently delete this conversation and all its messages. This action cannot be undone.",
+    "loginRequired": "Sign in to save your conversations"
   },
   "onboarding": {
     "welcome": {

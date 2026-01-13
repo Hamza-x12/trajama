@@ -1,9 +1,4 @@
 {
-  "sahbi": {
-    "historyCleared": "Conversation effacée!",
-    "clearHistory": "Effacer l'historique",
-    "messages": "messages"
-  },
   "app": {
     "title": "Tarjama",
     "subtitle": "Traduction professionnelle multilingue"
@@ -65,7 +60,7 @@
     "scriptArabicDesc": "سلام، لاباس، واخا...",
     "sahbiScriptUpdated": "Préférence d'écriture Sahbi mise à jour"
   },
-  "sahbi": {
+"sahbi": {
     "pageTitle": "Sahbi - Chatbot Darija",
     "pageDescription": "Pratiquez le Darija marocain avec Sahbi, votre ami IA",
     "subtitle": "Votre ami pour apprendre le Darija",
@@ -76,7 +71,19 @@
     "tag3": "Interactif",
     "thinking": "Sahbi réfléchit...",
     "inputPlaceholder": "Écrivez en Darija, anglais ou français...",
-    "encouragement": "Jarreb t'kteb b Darija! (Essayez d'écrire en Darija!)"
+    "encouragement": "Jarreb t'kteb b Darija! (Essayez d'écrire en Darija!)",
+    "historyCleared": "Conversation effacée!",
+    "clearHistory": "Effacer l'historique",
+    "messages": "messages",
+    "conversations": "Conversations",
+    "newConversation": "Nouvelle Conversation",
+    "guestMode": "Mode invité: conversations sauvegardées localement",
+    "noConversations": "Pas encore de conversations",
+    "startNew": "Commencez une nouvelle discussion",
+    "history": "Historique des chats",
+    "deleteConversation": "Supprimer la conversation?",
+    "deleteWarning": "Cela supprimera définitivement cette conversation et tous ses messages. Cette action est irréversible.",
+    "loginRequired": "Connectez-vous pour sauvegarder vos conversations"
   },
   "onboarding": {
     "welcome": {
