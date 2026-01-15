@@ -1133,13 +1133,11 @@ const Index = () => {
               <Link to="/sahbi">
                 <Button 
                   variant="outline" 
-                  className="sahbi-button group relative overflow-hidden gap-3 px-6 py-3 rounded-2xl border-2 border-accent/40 bg-gradient-to-br from-accent/20 via-amber-500/15 to-primary/10 backdrop-blur-md shadow-xl hover:shadow-2xl hover:shadow-accent/30 hover:border-accent/60 transition-all duration-500 hover:scale-110 hover:-translate-y-2 animate-fade-in"
+                  className="sahbi-button group relative overflow-hidden gap-2 px-4 py-2.5 rounded-xl border border-accent/50 bg-accent/10 backdrop-blur-sm hover:bg-accent/20 hover:border-accent transition-all duration-300"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-accent/10 via-amber-400/20 to-primary/10 opacity-60 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
-                  <div className="absolute -inset-1 bg-gradient-to-r from-accent/30 via-amber-500/20 to-accent/30 blur-lg opacity-50 group-hover:opacity-80 transition-opacity duration-500 -z-20" />
-                  <MessageCircle className="sahbi-icon w-5 h-5 relative z-10 text-amber-500 group-hover:text-amber-400 transition-all duration-300" />
-                  <span className="font-black text-base tracking-wide relative z-10 text-amber-600 dark:text-amber-400 group-hover:text-amber-500 transition-colors duration-300">{t('navigation.sahbi')}</span>
-                  <Sparkles className="w-4 h-4 text-accent opacity-80 group-hover:opacity-100 transition-opacity animate-pulse" />
+                  <MessageCircle className="sahbi-icon w-4 h-4 text-accent" />
+                  <span className="font-semibold text-sm text-accent">{t('navigation.sahbi')}</span>
+                  <Sparkles className="w-3.5 h-3.5 text-accent/70 animate-pulse" />
                 </Button>
               </Link>
               
@@ -1232,19 +1230,14 @@ const Index = () => {
                   <Link to="/sahbi" className="w-full">
                     <Button 
                       variant="outline" 
-                      className="sahbi-button group relative overflow-hidden w-full justify-start gap-4 px-6 py-8 rounded-2xl border-2 border-accent/40 bg-gradient-to-r from-accent/20 via-amber-500/15 to-primary/10 backdrop-blur-md shadow-xl hover:shadow-2xl hover:shadow-accent/30 hover:border-accent/60 hover:translate-x-1 transition-all duration-500 animate-fade-in"
+                      className="sahbi-button group relative overflow-hidden w-full justify-start gap-3 px-5 py-6 rounded-xl border border-accent/50 bg-accent/10 hover:bg-accent/20 hover:border-accent transition-all duration-300"
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-accent/10 via-amber-400/20 to-primary/10 opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
-                      <div className="absolute -inset-1 bg-gradient-to-r from-accent/20 via-amber-500/15 to-accent/20 blur-lg opacity-40 group-hover:opacity-70 transition-opacity duration-500 -z-10" />
-                      <MessageCircle className="sahbi-icon w-6 h-6 text-amber-500 relative z-10 transition-all duration-300 group-hover:scale-110" />
-                      <div className="flex flex-col items-start relative z-10">
-                        <span className="font-black text-lg text-amber-600 dark:text-amber-400 group-hover:text-amber-500 transition-colors duration-300">{t('navigation.sahbi')}</span>
-                        <span className="text-xs text-muted-foreground group-hover:text-amber-600/70 transition-colors">AI Darija Assistant</span>
+                      <MessageCircle className="sahbi-icon w-5 h-5 text-accent" />
+                      <div className="flex flex-col items-start">
+                        <span className="font-semibold text-base text-accent">{t('navigation.sahbi')}</span>
+                        <span className="text-xs text-muted-foreground">AI Darija Assistant</span>
                       </div>
-                      <div className="absolute right-4 flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-accent animate-pulse" />
-                        <div className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
-                      </div>
+                      <Sparkles className="w-4 h-4 text-accent/70 animate-pulse absolute right-4" />
                     </Button>
                   </Link>
                   
@@ -1335,10 +1328,10 @@ const Index = () => {
 
       {/* Hero Section */}
       <div className="container mx-auto px-3 sm:px-4 pt-8 pb-6 md:pt-12 md:pb-8 max-w-5xl text-center">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 animate-fade-in">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 animate-fade-in bg-gradient-to-r from-foreground via-foreground/90 to-foreground bg-clip-text">
           {t('hero.title')}
         </h1>
-        <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto animate-fade-in" style={{ animationDelay: '0.1s' }}>
+        <p className="text-sm sm:text-base md:text-lg text-muted-foreground/80 max-w-2xl mx-auto animate-fade-in font-medium tracking-wide" style={{ animationDelay: '0.1s' }}>
           {t('hero.subtitle')}
         </p>
       </div>
