@@ -58,6 +58,12 @@ const Sahbi = () => {
     const saved = localStorage.getItem('sahbiDarijaScript');
     return (saved as 'latin' | 'arabic' | 'both') || 'both';
   });
+  
+  // Translation in response toggle
+  const [includeTranslation, setIncludeTranslation] = useState<boolean>(() => {
+    const saved = localStorage.getItem('sahbiIncludeTranslation');
+    return saved !== 'false'; // Default true
+  });
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -146,12 +152,25 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
   };
 
   const getScriptInstruction = () => {
+    let instruction = "";
+    
     if (darijaScript === 'latin') {
-      return "IMPORTANT: Respond ONLY in Latin script Darija (like 'Salam', 'Labas', 'Wakha'). Do NOT include Arabic script.";
+      instruction = "SCRIPT: Respond ONLY in Latin script Darija (like 'Salam', 'Labas', 'Wakha'). Do NOT include Arabic script.";
     } else if (darijaScript === 'arabic') {
-      return "IMPORTANT: Respond ONLY in Arabic script Darija (like 'سلام', 'لاباس', 'واخا'). Do NOT include Latin script.";
+      instruction = "SCRIPT: Respond ONLY in Arabic script Darija (like 'سلام', 'لاباس', 'واخا'). Do NOT include Latin script.";
+    } else {
+      instruction = "SCRIPT: Format your responses with both Latin and Arabic script sections clearly labeled.";
     }
-    return "Format your responses with both Latin and Arabic script sections clearly labeled.";
+    
+    if (includeTranslation) {
+      instruction += "\n\nTRANSLATION: After your Darija response, add a clear '📖 Translation:' section with the English meaning. Keep it concise but helpful for learners.";
+    } else {
+      instruction += "\n\nTRANSLATION: Do NOT include English translations. The user wants to practice immersively. Only provide translations if they explicitly ask.";
+    }
+    
+    instruction += "\n\nFORMAT: Keep responses clear and well-structured. Use short paragraphs. Be conversational and friendly, not formal.";
+    
+    return instruction;
   };
 
   const handleNewConversation = async () => {
@@ -295,8 +314,25 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
     setMessages(newMessages);
     setInput("");
 
-    // Save user message
-    addMessage(userMessage);
+    // Save user message to DB only (don't call addMessage which updates state again)
+    if (user && currentConversation) {
+      try {
+        await supabase.from('sahbi_messages').insert({
+          id: crypto.randomUUID(),
+          conversation_id: currentConversation.id,
+          role: 'user',
+          content: userMessage.content
+        });
+      } catch (error) {
+        console.error('Error saving user message:', error);
+      }
+    } else if (currentConversation) {
+      // Guest: save to localStorage
+      const stored = localStorage.getItem(`sahbi-messages-${currentConversation.id}`);
+      const existingMessages: Message[] = stored ? JSON.parse(stored) : [];
+      existingMessages.push({ ...userMessage, id: crypto.randomUUID() });
+      localStorage.setItem(`sahbi-messages-${currentConversation.id}`, JSON.stringify(existingMessages));
+    }
 
     await streamChat(newMessages);
   };
@@ -446,6 +482,31 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                         <h4 className="font-semibold text-sm">{t('settings.sahbiSettings')}</h4>
                       </div>
                       <p className="text-xs text-muted-foreground">{t('settings.darijaScript')}</p>
+                      {/* Translation toggle */}
+                      <div className="flex items-center justify-between p-2 rounded-lg border hover:bg-muted/50 transition-colors">
+                        <Label htmlFor="include-translation" className="cursor-pointer text-sm flex-1">
+                          {t('settings.includeTranslation') || 'Include Translation'}
+                        </Label>
+                        <input
+                          type="checkbox"
+                          id="include-translation"
+                          checked={includeTranslation}
+                          onChange={(e) => {
+                            setIncludeTranslation(e.target.checked);
+                            localStorage.setItem('sahbiIncludeTranslation', String(e.target.checked));
+                            toast.success(e.target.checked 
+                              ? (t('settings.translationEnabled') || 'Translation enabled')
+                              : (t('settings.translationDisabled') || 'Translation disabled - immersive mode!')
+                            );
+                          }}
+                          className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+                        />
+                      </div>
+                      
+                      <div className="border-t pt-3 mt-2">
+                        <p className="text-xs text-muted-foreground mb-2">{t('settings.darijaScript')}</p>
+                      </div>
+                      
                       <RadioGroup
                         value={darijaScript}
                         onValueChange={(value: 'latin' | 'arabic' | 'both') => {

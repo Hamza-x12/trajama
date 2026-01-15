@@ -66,7 +66,11 @@
     "scriptLatinDesc": "Salam, Labas, Wakha...",
     "scriptArabic": "الحرف العربي فقط",
     "scriptArabicDesc": "سلام، لاباس، واخا...",
-    "sahbiScriptUpdated": "تم تحديث تفضيل كتابة صاحبي"
+    "sahbiScriptUpdated": "تم تحديث تفضيل كتابة صاحبي",
+    "includeTranslation": "تضمين الترجمة",
+    "includeTranslationDesc": "إضافة ترجمة إنجليزية للردود",
+    "translationEnabled": "تم تفعيل الترجمة",
+    "translationDisabled": "تم إيقاف الترجمة - وضع الانغماس!"
   },
 "sahbi": {
     "pageTitle": "صاحبي - روبوت الدردشة بالدارجة",

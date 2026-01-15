@@ -58,7 +58,11 @@
     "scriptLatinDesc": "Salam, Labas, Wakha...",
     "scriptArabic": "Écriture arabe uniquement",
     "scriptArabicDesc": "سلام، لاباس، واخا...",
-    "sahbiScriptUpdated": "Préférence d'écriture Sahbi mise à jour"
+    "sahbiScriptUpdated": "Préférence d'écriture Sahbi mise à jour",
+    "includeTranslation": "Inclure la traduction",
+    "includeTranslationDesc": "Ajouter une traduction anglaise aux réponses",
+    "translationEnabled": "Traduction activée",
+    "translationDisabled": "Traduction désactivée - mode immersif!"
   },
 "sahbi": {
     "pageTitle": "Sahbi - Chatbot Darija",
