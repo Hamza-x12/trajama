@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -262,7 +263,14 @@ export const OnboardingTutorial = ({ open, onOpenChange }: OnboardingTutorialPro
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px] p-0 gap-0 overflow-hidden border-0 bg-transparent shadow-none">
+      <DialogContent 
+        className="sm:max-w-[500px] p-0 gap-0 overflow-hidden border-0 bg-transparent shadow-none"
+        aria-describedby="onboarding-description"
+      >
+        <DialogTitle className="sr-only">{currentStepData.title}</DialogTitle>
+        <div id="onboarding-description" className="sr-only">
+          {currentStepData.description}
+        </div>
         <div className="relative bg-card rounded-2xl overflow-hidden shadow-2xl border border-border/50">
           {/* Gradient header */}
           <div className={cn(
@@ -273,7 +281,8 @@ export const OnboardingTutorial = ({ open, onOpenChange }: OnboardingTutorialPro
           {/* Close button */}
           <button
             onClick={handleSkip}
-            className="absolute top-4 right-4 z-10 p-2 rounded-full bg-muted/80 hover:bg-muted transition-colors"
+            className="absolute top-4 right-4 z-10 p-3 rounded-full bg-muted/80 hover:bg-muted transition-colors"
+            aria-label={t("onboarding.skip")}
           >
             <X className="h-4 w-4 text-muted-foreground" />
           </button>
@@ -303,18 +312,21 @@ export const OnboardingTutorial = ({ open, onOpenChange }: OnboardingTutorialPro
           </div>
 
           {/* Step indicators */}
-          <div className="flex items-center justify-center gap-2 pb-4">
-            {steps.map((_, index) => (
+          <div className="flex items-center justify-center gap-3 pb-4" role="tablist" aria-label="Tutorial steps">
+            {steps.map((step, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentStep(index)}
+                aria-label={`${t("onboarding.step", { current: index + 1, total: steps.length })} - ${step.title}`}
+                aria-selected={index === currentStep}
+                role="tab"
                 className={cn(
-                  "h-2 rounded-full transition-all duration-300",
+                  "h-3 rounded-full transition-all duration-300 min-w-[12px]",
                   index === currentStep 
                     ? "w-8 bg-primary" 
                     : index < currentStep
-                      ? "w-2 bg-primary/50"
-                      : "w-2 bg-muted-foreground/30"
+                      ? "w-3 bg-primary/50"
+                      : "w-3 bg-muted-foreground/30"
                 )}
               />
             ))}
@@ -334,7 +346,7 @@ export const OnboardingTutorial = ({ open, onOpenChange }: OnboardingTutorialPro
             
             <div className="flex gap-2">
               {currentStep < steps.length - 1 && (
-                <Button variant="ghost" onClick={handleSkip} className="text-muted-foreground">
+                <Button variant="outline" onClick={handleSkip} className="text-foreground">
                   {t("onboarding.skip")}
                 </Button>
               )}
