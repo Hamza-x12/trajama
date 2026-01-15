@@ -488,11 +488,11 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
         <main className="relative z-10 container mx-auto px-4 py-6">
           <div className="max-w-3xl mx-auto">
             {/* Welcome Card */}
-            <div className="mb-6 p-6 rounded-3xl bg-gradient-to-r from-primary/10 via-amber-500/10 to-red-500/10 border-2 border-primary/20 backdrop-blur-sm shadow-xl shadow-primary/5 relative overflow-hidden group hover:border-primary/30 transition-all duration-500">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-amber-500/5 to-red-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="mb-6 p-6 rounded-3xl bg-gradient-to-r from-[#c1272d]/10 via-[#006233]/10 to-[#4a9fd4]/10 border-2 border-[#c1272d]/20 backdrop-blur-sm shadow-xl shadow-[#c1272d]/5 relative overflow-hidden group hover:border-[#c1272d]/30 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#c1272d]/0 via-[#006233]/5 to-[#4a9fd4]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="flex items-start gap-4 relative z-10">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-amber-500 shadow-xl shadow-primary/40 group-hover:scale-105 transition-transform duration-300">
-                  <MessageCircle className="h-8 w-8 text-white" />
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#c1272d] via-[#006233] to-[#4a9fd4] shadow-xl shadow-[#c1272d]/40 group-hover:scale-105 transition-transform duration-300 p-2">
+                  <img src={sahbiLogo} alt="Sahbi" className="w-full h-full object-contain" />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2 flex-wrap">
@@ -548,16 +548,16 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                       >
                         <div
                           className={cn(
-                            "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl shadow-lg transition-transform hover:scale-105",
+                            "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl shadow-lg transition-transform hover:scale-105 overflow-hidden",
                             msg.role === "user"
                               ? "bg-gradient-to-br from-blue-500 to-purple-500 shadow-blue-500/30"
-                              : "bg-gradient-to-br from-primary via-amber-500 to-red-500 shadow-primary/30"
+                              : "bg-gradient-to-br from-[#c1272d] via-[#006233] to-[#4a9fd4] shadow-[#c1272d]/30 p-1.5"
                           )}
                         >
                           {msg.role === "user" ? (
                             <User className="h-5 w-5 text-white" />
                           ) : (
-                            <Bot className="h-5 w-5 text-white" />
+                            <img src={sahbiLogo} alt="Sahbi" className="w-full h-full object-contain" />
                           )}
                         </div>
                         <div
@@ -623,15 +623,15 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                     ))}
                     {isStreaming && messages[messages.length - 1]?.role === "user" && (
                       <div className="flex gap-4 animate-in slide-in-from-bottom-2">
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary via-amber-500 to-red-500 shadow-lg shadow-primary/30">
-                          <Bot className="h-5 w-5 text-white" />
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#c1272d] via-[#006233] to-[#4a9fd4] shadow-lg shadow-[#c1272d]/30 p-1.5">
+                          <img src={sahbiLogo} alt="Sahbi" className="w-full h-full object-contain" />
                         </div>
                         <div className="rounded-3xl rounded-tl-lg bg-card border-2 border-border/50 px-5 py-4 shadow-lg">
                           <div className="flex items-center gap-3">
                             <div className="flex gap-1">
-                              <span className="h-2 w-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
-                              <span className="h-2 w-2 rounded-full bg-amber-500 animate-bounce" style={{ animationDelay: '150ms' }} />
-                              <span className="h-2 w-2 rounded-full bg-red-500 animate-bounce" style={{ animationDelay: '300ms' }} />
+                              <span className="h-2 w-2 rounded-full bg-[#c1272d] animate-bounce" style={{ animationDelay: '0ms' }} />
+                              <span className="h-2 w-2 rounded-full bg-[#006233] animate-bounce" style={{ animationDelay: '150ms' }} />
+                              <span className="h-2 w-2 rounded-full bg-[#4a9fd4] animate-bounce" style={{ animationDelay: '300ms' }} />
                             </div>
                             <span className="text-sm text-muted-foreground">{t('sahbi.thinking')}</span>
                           </div>
@@ -658,7 +658,7 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                     onClick={handleSend}
                     disabled={!input.trim() || isStreaming || !currentConversation}
                     size="lg"
-                    className="rounded-2xl h-14 w-14 bg-gradient-to-r from-primary to-amber-500 hover:from-primary/90 hover:to-amber-500/90 shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 hover:scale-105 transition-all duration-300"
+                    className="rounded-2xl h-14 w-14 bg-gradient-to-r from-[#c1272d] via-[#006233] to-[#4a9fd4] hover:opacity-90 shadow-xl shadow-[#c1272d]/30 hover:shadow-2xl hover:shadow-[#c1272d]/40 hover:scale-105 transition-all duration-300"
                   >
                     {isStreaming ? (
                       <Loader2 className="h-5 w-5 animate-spin" />
@@ -693,7 +693,7 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                     inputRef.current?.focus();
                   }}
                   disabled={!currentConversation}
-                  className="rounded-full px-5 py-2 text-sm hover:bg-gradient-to-r hover:from-primary/10 hover:to-amber-500/10 hover:text-primary hover:border-primary/40 shadow-sm hover:shadow-md transition-all duration-300 group"
+                  className="rounded-full px-5 py-2 text-sm hover:bg-gradient-to-r hover:from-[#c1272d]/10 hover:via-[#006233]/10 hover:to-[#4a9fd4]/10 hover:text-[#c1272d] hover:border-[#c1272d]/40 shadow-sm hover:shadow-md transition-all duration-300 group"
                 >
                   <span className="group-hover:scale-110 transition-transform inline-block">{phrase.label}</span>
                 </Button>
