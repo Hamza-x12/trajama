@@ -44,83 +44,6 @@ export type Database = {
         }
         Relationships: []
       }
-      lesson_exercises: {
-        Row: {
-          correct_answer: string
-          created_at: string | null
-          darija_audio_url: string | null
-          exercise_type: string
-          id: string
-          lesson_id: string
-          options: Json | null
-          order_index: number
-          question: string
-        }
-        Insert: {
-          correct_answer: string
-          created_at?: string | null
-          darija_audio_url?: string | null
-          exercise_type: string
-          id?: string
-          lesson_id: string
-          options?: Json | null
-          order_index: number
-          question: string
-        }
-        Update: {
-          correct_answer?: string
-          created_at?: string | null
-          darija_audio_url?: string | null
-          exercise_type?: string
-          id?: string
-          lesson_id?: string
-          options?: Json | null
-          order_index?: number
-          question?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "lesson_exercises_lesson_id_fkey"
-            columns: ["lesson_id"]
-            isOneToOne: false
-            referencedRelation: "lessons"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      lessons: {
-        Row: {
-          category: string
-          created_at: string | null
-          description: string | null
-          id: string
-          level: number
-          order_index: number
-          title: string
-          xp_reward: number | null
-        }
-        Insert: {
-          category: string
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          level?: number
-          order_index: number
-          title: string
-          xp_reward?: number | null
-        }
-        Update: {
-          category?: string
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          level?: number
-          order_index?: number
-          title?: string
-          xp_reward?: number | null
-        }
-        Relationships: []
-      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -260,103 +183,12 @@ export type Database = {
           },
         ]
       }
-      user_progress: {
-        Row: {
-          attempts: number | null
-          completed: boolean | null
-          completed_at: string | null
-          id: string
-          last_attempted_at: string | null
-          lesson_id: string
-          score: number | null
-          user_id: string
-        }
-        Insert: {
-          attempts?: number | null
-          completed?: boolean | null
-          completed_at?: string | null
-          id?: string
-          last_attempted_at?: string | null
-          lesson_id: string
-          score?: number | null
-          user_id: string
-        }
-        Update: {
-          attempts?: number | null
-          completed?: boolean | null
-          completed_at?: string | null
-          id?: string
-          last_attempted_at?: string | null
-          lesson_id?: string
-          score?: number | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_progress_lesson_id_fkey"
-            columns: ["lesson_id"]
-            isOneToOne: false
-            referencedRelation: "lessons"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_progress_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
     }
     Views: {
-      exercise_questions: {
-        Row: {
-          created_at: string | null
-          darija_audio_url: string | null
-          exercise_type: string | null
-          id: string | null
-          lesson_id: string | null
-          options: Json | null
-          order_index: number | null
-          question: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          darija_audio_url?: string | null
-          exercise_type?: string | null
-          id?: string | null
-          lesson_id?: string | null
-          options?: Json | null
-          order_index?: number | null
-          question?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          darija_audio_url?: string | null
-          exercise_type?: string | null
-          id?: string | null
-          lesson_id?: string | null
-          options?: Json | null
-          order_index?: number | null
-          question?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "lesson_exercises_lesson_id_fkey"
-            columns: ["lesson_id"]
-            isOneToOne: false
-            referencedRelation: "lessons"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
+      [_ in never]: never
     }
     Functions: {
-      check_exercise_answer: {
-        Args: { exercise_id: string; user_answer: string }
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never
