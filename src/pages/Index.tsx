@@ -1328,8 +1328,10 @@ const Index = () => {
 
       {/* Hero Section */}
       <div className="container mx-auto px-3 sm:px-4 pt-8 pb-6 md:pt-12 md:pb-8 max-w-5xl text-center">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 animate-fade-in bg-gradient-to-r from-foreground via-foreground/90 to-foreground bg-clip-text">
+        <h1 className="relative inline-block text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 animate-fade-in bg-gradient-to-r from-foreground via-foreground/90 to-foreground bg-clip-text">
           {t('hero.title')}
+          {/* Gradient underline */}
+          <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-gradient-to-r from-transparent via-primary to-transparent rounded-full opacity-70" />
         </h1>
         <p className="text-sm sm:text-base md:text-lg text-muted-foreground/80 max-w-2xl mx-auto animate-fade-in font-medium tracking-wide" style={{ animationDelay: '0.1s' }}>
           {t('hero.subtitle')}

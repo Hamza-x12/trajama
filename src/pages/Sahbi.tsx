@@ -5,19 +5,26 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   ArrowLeft, Send, Bot, User, Sparkles, 
   MessageCircle, Heart, Star, Zap, Volume2, VolumeX, 
-  MessageSquarePlus, Loader2, Copy, Check
+  MessageSquarePlus, Loader2, Copy, Check, Settings2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
 import { ZelligeCorners } from "@/components/ZelligeCorners";
-import moroccoFlag from "@/assets/flags/morocco.png";
+import sahbiLogo from "@/assets/sahbi-logo.png";
 import { toast } from "sonner";
 import { SahbiSidebar } from "@/components/SahbiSidebar";
 import { useSahbiConversations, Message } from "@/hooks/useSahbiConversations";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/darija-chat`;
 
@@ -384,14 +391,16 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
               </div>
               
               <div className="flex items-center gap-3">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary via-amber-500 to-red-500 rounded-full blur animate-pulse" />
-                  <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-primary to-amber-500 shadow-lg shadow-primary/30">
-                    <Sparkles className="h-6 w-6 text-white animate-pulse" />
-                  </div>
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#c1272d] via-[#006233] to-[#4a9fd4] rounded-full blur-md opacity-60 group-hover:opacity-100 transition-opacity animate-pulse" />
+                  <img 
+                    src={sahbiLogo} 
+                    alt="Sahbi Logo" 
+                    className="relative w-14 h-14 object-contain drop-shadow-xl group-hover:scale-105 transition-transform duration-300" 
+                  />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-primary via-amber-500 to-red-500 bg-clip-text text-transparent">
+                  <h1 className="text-xl font-bold bg-gradient-to-r from-[#c1272d] via-[#006233] to-[#4a9fd4] bg-clip-text text-transparent">
                     صاحبي (Sahbi)
                   </h1>
                   <p className="text-xs text-muted-foreground">{t('sahbi.subtitle')}</p>
@@ -417,7 +426,59 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                 >
                   <MessageSquarePlus className="h-5 w-5" />
                 </Button>
-                <img src={moroccoFlag} alt="Morocco" className="w-8 h-8 rounded-full object-cover shadow-lg ring-2 ring-primary/20" />
+                
+                {/* Sahbi Settings Popover */}
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-muted-foreground hover:text-primary"
+                      title={t('settings.sahbiSettings') || 'Sahbi Settings'}
+                    >
+                      <Settings2 className="h-5 w-5" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-72" align="end">
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <img src={sahbiLogo} alt="Sahbi" className="w-6 h-6" />
+                        <h4 className="font-semibold text-sm">{t('settings.sahbiSettings')}</h4>
+                      </div>
+                      <p className="text-xs text-muted-foreground">{t('settings.darijaScript')}</p>
+                      <RadioGroup
+                        value={darijaScript}
+                        onValueChange={(value: 'latin' | 'arabic' | 'both') => {
+                          setDarijaScript(value);
+                          localStorage.setItem('sahbiDarijaScript', value);
+                          toast.success(t('settings.sahbiScriptUpdated') || 'Script preference updated');
+                        }}
+                        className="space-y-2"
+                      >
+                        <div className="flex items-center space-x-2 p-2 rounded-lg border hover:bg-muted/50 transition-colors cursor-pointer">
+                          <RadioGroupItem value="both" id="sahbi-script-both" />
+                          <Label htmlFor="sahbi-script-both" className="flex-1 cursor-pointer text-sm">
+                            {t('settings.scriptBoth')}
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2 p-2 rounded-lg border hover:bg-muted/50 transition-colors cursor-pointer">
+                          <RadioGroupItem value="latin" id="sahbi-script-latin" />
+                          <Label htmlFor="sahbi-script-latin" className="flex-1 cursor-pointer text-sm">
+                            {t('settings.scriptLatin')}
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2 p-2 rounded-lg border hover:bg-muted/50 transition-colors cursor-pointer">
+                          <RadioGroupItem value="arabic" id="sahbi-script-arabic" />
+                          <Label htmlFor="sahbi-script-arabic" className="flex-1 cursor-pointer text-sm">
+                            {t('settings.scriptArabic')}
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+                
+                <img src={sahbiLogo} alt="Sahbi" className="w-10 h-10 object-contain drop-shadow-lg" />
               </div>
             </div>
           </div>
