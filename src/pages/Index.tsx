@@ -11,6 +11,7 @@ import { SettingsDialog } from "@/components/SettingsDialog";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineScreen } from "@/components/OfflineScreen";
 import { OnboardingTutorial, useOnboarding } from "@/components/OnboardingTutorial";
+import { SahbiLandingSection } from "@/components/SahbiLandingSection";
 import { Helmet } from "react-helmet-async";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -1337,6 +1338,15 @@ const Index = () => {
         <p className="text-sm sm:text-base md:text-lg text-muted-foreground/80 max-w-2xl mx-auto animate-fade-in font-medium tracking-wide" style={{ animationDelay: '0.1s' }}>
           {t('hero.subtitle')}
         </p>
+      </div>
+
+      {/* Sahbi Landing Section */}
+      <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
+        <SahbiLandingSection 
+          isLoggedIn={!!user}
+          userAvatarUrl={user?.user_metadata?.avatar_url}
+          userInitial={user?.email?.charAt(0).toUpperCase() || user?.phone?.charAt(0) || "U"}
+        />
       </div>
 
       {/* Main Content - Google Translate Layout */}
