@@ -378,5 +378,24 @@
     "a12": "Oui, vous pouvez activer ou désactiver le filtre de vulgarité dans les paramètres selon votre préférence.",
     "cantFindAnswer": "Vous ne trouvez pas ce que vous cherchez?",
     "contactUs": "Contactez-nous"
+  },
+  "sahbiSection": {
+    "title": "Découvrez Sahbi",
+    "subtitle": "Votre compagnon amical pour apprendre le Darija",
+    "description": "Sahbi (qui signifie 'mon ami' en Darija) est votre assistant IA pour apprendre l'arabe marocain. Posez des questions, pratiquez des conversations et découvrez la riche culture du Maroc.",
+    "feature1Title": "Pratiquer le Darija",
+    "feature1Desc": "Discutez naturellement et apprenez le dialecte marocain",
+    "feature2Title": "Aperçus Culturels",
+    "feature2Desc": "Comprenez les expressions et le contexte",
+    "feature3Title": "Multilingue",
+    "feature3Desc": "Obtenez de l'aide dans votre langue préférée",
+    "feature4Title": "Réponses Instantanées",
+    "feature4Desc": "Réponses alimentées par l'IA en quelques secondes",
+    "cta": "Discuter avec Sahbi",
+    "syncedMessage": "Vos chats sont synchronisés",
+    "online": "En ligne",
+    "sampleQuestion": "Comment dit-on 'bonjour' en Darija?",
+    "sampleAnswer": "Bonjour en Darija se dit \"Sbah lkhir\" (صباح الخير). Cela signifie littéralement \"matin de bonté\"! 🌅",
+    "typing": "Sahbi écrit..."
   }
 }

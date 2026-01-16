@@ -386,5 +386,24 @@
     "a12": "Yes, you can enable or disable the profanity filter in the settings based on your preference.",
     "cantFindAnswer": "Can't find what you're looking for?",
     "contactUs": "Contact Us"
+  },
+  "sahbiSection": {
+    "title": "Meet Sahbi",
+    "subtitle": "Your friendly Darija learning companion",
+    "description": "Sahbi (which means 'my friend' in Darija) is your AI-powered assistant for learning Moroccan Arabic. Ask questions, practice conversations, and discover the rich culture of Morocco.",
+    "feature1Title": "Practice Darija",
+    "feature1Desc": "Chat naturally and learn Moroccan dialect",
+    "feature2Title": "Cultural Insights",
+    "feature2Desc": "Understand expressions and context",
+    "feature3Title": "Multilingual",
+    "feature3Desc": "Get help in your preferred language",
+    "feature4Title": "Instant Answers",
+    "feature4Desc": "AI-powered responses in seconds",
+    "cta": "Chat with Sahbi",
+    "syncedMessage": "Your chats are synced",
+    "online": "Online",
+    "sampleQuestion": "How do I say 'good morning' in Darija?",
+    "sampleAnswer": "Good morning in Darija is \"Sbah lkhir\" (صباح الخير). It literally means \"morning of goodness\"! 🌅",
+    "typing": "Sahbi is typing..."
   }
 }
