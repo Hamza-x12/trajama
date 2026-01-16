@@ -432,7 +432,7 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                   <img 
                     src={sahbiLogo} 
                     alt="Sahbi Logo" 
-                    className="relative w-14 h-14 object-contain drop-shadow-xl group-hover:scale-105 transition-transform duration-300" 
+                    className="relative w-16 h-16 object-contain drop-shadow-xl group-hover:scale-105 transition-transform duration-300" 
                   />
                 </div>
                 <div>
@@ -552,7 +552,7 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
             <div className="mb-6 p-6 rounded-3xl bg-gradient-to-r from-[#c1272d]/10 via-[#006233]/10 to-[#4a9fd4]/10 border-2 border-[#c1272d]/20 backdrop-blur-sm shadow-xl shadow-[#c1272d]/5 relative overflow-hidden group hover:border-[#c1272d]/30 transition-all duration-500">
               <div className="absolute inset-0 bg-gradient-to-r from-[#c1272d]/0 via-[#006233]/5 to-[#4a9fd4]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="flex items-start gap-4 relative z-10">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#c1272d] via-[#006233] to-[#4a9fd4] shadow-xl shadow-[#c1272d]/40 group-hover:scale-105 transition-transform duration-300 p-2">
+                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#c1272d] via-[#006233] to-[#4a9fd4] shadow-xl shadow-[#c1272d]/40 group-hover:scale-105 transition-transform duration-300 p-2.5">
                   <img src={sahbiLogo} alt="Sahbi" className="w-full h-full object-contain" />
                 </div>
                 <div className="flex-1">
@@ -609,10 +609,10 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                       >
                         <div
                           className={cn(
-                            "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl shadow-lg transition-transform hover:scale-105 overflow-hidden",
+                            "flex shrink-0 items-center justify-center rounded-2xl shadow-lg transition-transform hover:scale-105 overflow-hidden",
                             msg.role === "user"
-                              ? "bg-gradient-to-br from-blue-500 to-purple-500 shadow-blue-500/30"
-                              : "bg-gradient-to-br from-[#c1272d] via-[#006233] to-[#4a9fd4] shadow-[#c1272d]/30 p-1.5"
+                              ? "h-11 w-11 bg-gradient-to-br from-blue-500 to-purple-500 shadow-blue-500/30"
+                              : "h-12 w-12 bg-gradient-to-br from-[#c1272d] via-[#006233] to-[#4a9fd4] shadow-[#c1272d]/30 p-2"
                           )}
                         >
                           {msg.role === "user" ? (
@@ -684,7 +684,7 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                     ))}
                     {isStreaming && messages[messages.length - 1]?.role === "user" && (
                       <div className="flex gap-4 animate-in slide-in-from-bottom-2">
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#c1272d] via-[#006233] to-[#4a9fd4] shadow-lg shadow-[#c1272d]/30 p-1.5">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#c1272d] via-[#006233] to-[#4a9fd4] shadow-lg shadow-[#c1272d]/30 p-2">
                           <img src={sahbiLogo} alt="Sahbi" className="w-full h-full object-contain" />
                         </div>
                         <div className="rounded-3xl rounded-tl-lg bg-card border-2 border-border/50 px-5 py-4 shadow-lg">

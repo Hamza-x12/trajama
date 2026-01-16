@@ -1136,7 +1136,7 @@ const Index = () => {
                   variant="outline" 
                   className="sahbi-button group relative overflow-hidden gap-2 px-4 py-2.5 rounded-xl border border-accent/50 bg-accent/10 backdrop-blur-sm hover:bg-accent/20 hover:border-accent transition-all duration-300"
                 >
-                  <img src={sahbiLogo} alt="Sahbi" className="sahbi-icon w-5 h-5 object-contain" />
+                  <img src={sahbiLogo} alt="Sahbi" className="sahbi-icon w-6 h-6 object-contain" />
                   <span className="font-semibold text-sm text-accent">{t('navigation.sahbi')}</span>
                   <Sparkles className="w-3.5 h-3.5 text-accent/70 animate-pulse" />
                 </Button>
@@ -1233,7 +1233,7 @@ const Index = () => {
                       variant="outline" 
                       className="sahbi-button group relative overflow-hidden w-full justify-start gap-3 px-5 py-6 rounded-xl border border-accent/50 bg-accent/10 hover:bg-accent/20 hover:border-accent transition-all duration-300"
                     >
-                      <img src={sahbiLogo} alt="Sahbi" className="sahbi-icon w-7 h-7 object-contain" />
+                      <img src={sahbiLogo} alt="Sahbi" className="sahbi-icon w-8 h-8 object-contain" />
                       <div className="flex flex-col items-start">
                         <span className="font-semibold text-base text-accent">{t('navigation.sahbi')}</span>
                         <span className="text-xs text-muted-foreground">AI Darija Assistant</span>
