@@ -1,4 +1,4 @@
-# 🇲🇦 Tarjama — Moroccan Darija Translator
+#  Tarjama — Moroccan Darija Translator
 
 <div align="center">
 
@@ -15,7 +15,7 @@
 
 ---
 
-## 🚀 Desktop Version (EXE) (Mobile version coming soon)
+## 💻 Desktop Version (EXE) 
 You can now use Tarjama as a standalone desktop application on Windows. 
 
 * **Offline Access:** Load the interface and dictionary without an internet connection.
@@ -23,6 +23,9 @@ You can now use Tarjama as a standalone desktop application on Windows.
 * **Direct Access:** Launch from your taskbar or desktop.
   
 ![Recording 2026-01-17 194159](https://github.com/user-attachments/assets/a869166a-3411-411a-a767-d4cbc186b132)
+
+
+## 📱 Mobile version coming soon !!
 
 ---
 
