@@ -6,8 +6,7 @@
 
 **AI-powered translation for Moroccan Darija — bridging cultures, one word at a time.**
 
-[<img width="502" height="497" alt="tarjama logo" src="https://github.com/user-attachments/assets/4d4e9e42-1ad8-45e6-ae89-292f4d8849e8" />
- Try the App Now](https://trajama.lovable.app/)
+[🌐 Try the App Now](https://trajama.lovable.app/)
 
 </div>
 
