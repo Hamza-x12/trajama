@@ -20,8 +20,6 @@ You can now use Tarjama as a standalone desktop application on Windows.
 * **Local Speed:** Faster startup and native window management.
 * **Direct Access:** Launch from your taskbar or desktop.
 
-**[👉 Click here to download the latest .msi installer](https://github.com/Hamza-x12/trajama/releases/latest)**
-
 ---
 
 ## ✨ Features
@@ -59,23 +57,5 @@ You can now use Tarjama as a standalone desktop application on Windows.
 
 ---
 
-## 💻 Development
 
-### Prerequisites
-- Node.js 18+
-- Rust (for Desktop builds)
 
-### Installation
-```bash
-# Clone the repository
-git clone [https://github.com/Hamza-x12/trajama.git](https://github.com/Hamza-x12/trajama.git)
-cd trajama
-
-# Install dependencies
-npm install
-
-# Run Web Dev Server
-npm run dev
-
-# Run Desktop Dev Mode
-npx tauri dev
