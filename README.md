@@ -4,9 +4,9 @@
 
 <img width="502" height="497" alt="tarjama logo" src="https://github.com/user-attachments/assets/bb0c6bd1-2fc3-43a1-bace-9b2e7ba0bdb4" />
 
+**AI-powered translation for Moroccan Darija — bridging cultures, one word at a time.**
 
-AI-powered translation for Moroccan Darija — bridging cultures, one word at a time.  
-
+[🌐 Try the App Now](https://trajama.lovable.app/)
 
 </div>
 
@@ -20,8 +20,9 @@ AI-powered translation for Moroccan Darija — bridging cultures, one word at a 
 - Image translation — snap a photo for instant results  
 - Voice input — speak naturally and translate on the fly  
 
-### 🤖 Sahbi — Your Darija Companion
-- Interactive AI chatbot for learning Moroccan Darija  
+### 🤖 Sahbi — Your Darija Chatbot
+- Available directly on the [Tarjama website](https://trajama.lovable.app/)  
+- Interactive AI chatbot for learning and practicing Moroccan Darija  
 - Configurable script preferences (Latin, Arabic, or both)  
 - Persistent conversation history  
 - Text-to-speech pronunciation  
