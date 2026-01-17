@@ -26,7 +26,6 @@ You can now use Tarjama as a standalone desktop application on Windows.
 
 
 ## 📱 Mobile version coming soon !!
-
 ---
 
 ## ✨ Features
