@@ -6,9 +6,21 @@
 
 **AI-powered translation for Moroccan Darija — bridging cultures, one word at a time.**
 
-[🌐 Try the App Now](https://trajama.lovable.app/)
+[![Download for Windows](https://img.shields.io/badge/Download%20for-Windows-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Hamza-x12/trajama/releases/latest)
+[![Try the Web App](https://img.shields.io/badge/Try%20the-Web%20App-FF4B4B?style=for-the-badge&logo=google-chrome&logoColor=white)](https://trajama.lovable.app/)
 
 </div>
+
+---
+
+## 🚀 Desktop Version (EXE)
+You can now use Tarjama as a standalone desktop application on Windows. 
+
+* **Offline Access:** Load the interface and dictionary without an internet connection.
+* **Local Speed:** Faster startup and native window management.
+* **Direct Access:** Launch from your taskbar or desktop.
+
+**[👉 Click here to download the latest .msi installer](https://github.com/Hamza-x12/trajama/releases/latest)**
 
 ---
 
@@ -21,7 +33,6 @@
 - Voice input — speak naturally and translate on the fly  
 
 ### 🤖 Sahbi — Your Darija Chatbot
-- Available directly on the [Tarjama website](https://trajama.lovable.app/)  
 - Interactive AI chatbot for learning and practicing Moroccan Darija  
 - Configurable script preferences (Latin, Arabic, or both)  
 - Persistent conversation history  
@@ -33,44 +44,38 @@
 - Moroccan-inspired design with zellige patterns  
 - Offline access for downloaded languages  
 
-### 🌍 Multilingual Interface
-- Full UI support: English, French, Arabic, Darija, Russian  
-- RTL support for Arabic languages  
-
-### 📱 Progressive Web App
-- Install on any device (mobile, tablet, desktop)  
-- Offline functionality  
-- Native app-like experience  
-
 ---
 
 ## 🛠 Tech Stack
 
-| Category   | Technologies |
+| Category    | Technologies |
 |------------|--------------|
-| Frontend   | React 18, TypeScript, Vite |
-| Styling    | Tailwind CSS, shadcn/ui |
-| Backend    | Supabase (Auth, Database, Edge Functions) |
-| AI         | Google Gemini, OpenAI GPT |
-| i18n       | i18next, react-i18next |
-| PWA        | vite-plugin-pwa, Workbox |
+| **Desktop** | **Tauri, Rust** |
+| **Frontend** | React 18, TypeScript, Vite |
+| **Styling** | Tailwind CSS, shadcn/ui |
+| **Backend** | Supabase (Auth, Database, Edge Functions) |
+| **AI** | Google Gemini, OpenAI GPT |
+| **i18n** | i18next, react-i18next |
 
 ---
 
-## 🚀 Getting Started
+## 💻 Development
 
 ### Prerequisites
-- Node.js 18+ or Bun  
-- npm, yarn, or bun  
+- Node.js 18+
+- Rust (for Desktop builds)
 
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/Hamza-x12/tarjama.git
-cd tarjama
+git clone [https://github.com/Hamza-x12/trajama.git](https://github.com/Hamza-x12/trajama.git)
+cd trajama
 
 # Install dependencies
 npm install
 
-# Start development server
+# Run Web Dev Server
 npm run dev
+
+# Run Desktop Dev Mode
+npx tauri dev
