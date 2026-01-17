@@ -7,7 +7,6 @@
 
 AI-powered translation for Moroccan Darija — bridging cultures, one word at a time.  
 
-[Live Demo] · [PWA Ready] 
 
 </div>
 
