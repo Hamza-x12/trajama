@@ -2,16 +2,15 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
-  ArrowLeft, Send, Bot, User, Sparkles, 
-  MessageCircle, Heart, Star, Zap, Volume2, VolumeX, 
-  MessageSquarePlus, Loader2, Copy, Check, Settings2
+  ArrowLeft, Send, User, 
+  MessageSquarePlus, Loader2, Copy, Check, Settings2, Volume2, VolumeX
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
-import { ZelligeCorners } from "@/components/ZelligeCorners";
 import sahbiLogo from "@/assets/sahbi-logo.png";
 import { toast } from "sonner";
 import { SahbiSidebar } from "@/components/SahbiSidebar";
@@ -88,14 +87,12 @@ const Sahbi = () => {
         return;
       }
 
-      // Try to get display name from user metadata first
       const metaName = user.user_metadata?.display_name || user.user_metadata?.full_name || user.user_metadata?.name;
       if (metaName) {
         setUserName(metaName);
         return;
       }
 
-      // Fallback to profile table
       try {
         const { data } = await supabase
           .from('profiles')
@@ -106,7 +103,6 @@ const Sahbi = () => {
         if (data?.display_name) {
           setUserName(data.display_name);
         } else {
-          // Use email prefix as fallback
           setUserName(user.email?.split('@')[0] || null);
         }
       } catch {
@@ -176,7 +172,6 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
   const handleNewConversation = async () => {
     const conv = await createConversation();
     if (conv) {
-      // Add greeting message
       const greeting: Message = {
         role: "assistant",
         content: getGreeting(),
@@ -276,11 +271,9 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
         }
       }
 
-      // Save the final assistant message
       if (assistantContent) {
         saveAssistantMessage(assistantContent);
         
-        // Auto-generate title from first user message if this is a new conversation
         if (currentConversation && currentConversation.message_count === 0 && userMessages.length > 0) {
           const firstUserMsg = userMessages.find(m => m.role === 'user');
           if (firstUserMsg) {
@@ -314,7 +307,6 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
     setMessages(newMessages);
     setInput("");
 
-    // Save user message to DB only (don't call addMessage which updates state again)
     if (user && currentConversation) {
       try {
         await supabase.from('sahbi_messages').insert({
@@ -327,7 +319,6 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
         console.error('Error saving user message:', error);
       }
     } else if (currentConversation) {
-      // Guest: save to localStorage
       const stored = localStorage.getItem(`sahbi-messages-${currentConversation.id}`);
       const existingMessages: Message[] = stored ? JSON.parse(stored) : [];
       existingMessages.push({ ...userMessage, id: crypto.randomUUID() });
@@ -401,49 +392,34 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
         <meta name="description" content={t('sahbi.pageDescription')} />
       </Helmet>
 
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 dark:from-background dark:via-background dark:to-background">
-        <ZelligeCorners size="lg" opacity={0.3} />
-        
-        {/* Decorative Elements */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-primary/20 to-amber-500/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-amber-500/20 to-red-500/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
-          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-br from-green-500/10 to-primary/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[length:24px_24px]" />
-        </div>
-
+      <div className="min-h-screen bg-background">
         {/* Header */}
-        <header className="relative z-10 border-b border-border/50 bg-background/80 backdrop-blur-xl sticky top-0">
-          <div className="container mx-auto px-4 py-4">
+        <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50">
+          <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Link 
-                  to="/" 
-                  className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group"
-                >
-                  <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
-                  <span className="hidden sm:inline">{t('navigation.backToTranslator')}</span>
-                </Link>
-              </div>
+              <Link 
+                to="/" 
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group"
+              >
+                <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
+                <span className="hidden sm:inline text-sm">{t('navigation.backToTranslator')}</span>
+              </Link>
               
-              <div className="flex items-center gap-3">
-                <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#c1272d] via-[#006233] to-[#4a9fd4] rounded-full blur-md opacity-60 group-hover:opacity-100 transition-opacity animate-pulse" />
-                  <img 
-                    src={sahbiLogo} 
-                    alt="Sahbi Logo" 
-                    className="relative w-16 h-16 object-contain drop-shadow-xl group-hover:scale-105 transition-transform duration-300" 
-                  />
-                </div>
+              <div className="flex items-center gap-2.5">
+                <Avatar className="h-9 w-9">
+                  <AvatarImage src={sahbiLogo} className="object-contain" />
+                  <AvatarFallback className="bg-accent/20">S</AvatarFallback>
+                </Avatar>
                 <div>
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-[#c1272d] via-[#006233] to-[#4a9fd4] bg-clip-text text-transparent">
-                    صاحبي (Sahbi)
-                  </h1>
-                  <p className="text-xs text-muted-foreground">{t('sahbi.subtitle')}</p>
+                  <h1 className="text-base font-semibold text-foreground">Sahbi</h1>
+                  <p className="text-[10px] text-moroccan-green flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-moroccan-green animate-pulse" />
+                    {t('sahbiSection.online') || "Online"}
+                  </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <SahbiSidebar
                   conversations={conversations}
                   currentConversation={currentConversation}
@@ -457,31 +433,31 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                   variant="ghost"
                   size="icon"
                   onClick={handleNewConversation}
-                  className="text-muted-foreground hover:text-primary"
+                  className="h-8 w-8 text-muted-foreground hover:text-primary"
                   title={t('sahbi.newConversation') || 'New Conversation'}
                 >
-                  <MessageSquarePlus className="h-5 w-5" />
+                  <MessageSquarePlus className="h-4 w-4" />
                 </Button>
                 
-                {/* Sahbi Settings Popover */}
+                {/* Settings Popover */}
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="text-muted-foreground hover:text-primary"
+                      className="h-8 w-8 text-muted-foreground hover:text-primary"
                       title={t('settings.sahbiSettings') || 'Sahbi Settings'}
                     >
-                      <Settings2 className="h-5 w-5" />
+                      <Settings2 className="h-4 w-4" />
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-72" align="end">
                     <div className="space-y-3">
                       <div className="flex items-center gap-2">
-                        <img src={sahbiLogo} alt="Sahbi" className="w-6 h-6" />
+                        <img src={sahbiLogo} alt="Sahbi" className="w-5 h-5" />
                         <h4 className="font-semibold text-sm">{t('settings.sahbiSettings')}</h4>
                       </div>
-                      <p className="text-xs text-muted-foreground">{t('settings.darijaScript')}</p>
+                      
                       {/* Translation toggle */}
                       <div className="flex items-center justify-between p-2 rounded-lg border hover:bg-muted/50 transition-colors">
                         <Label htmlFor="include-translation" className="cursor-pointer text-sm flex-1">
@@ -499,11 +475,11 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                               : (t('settings.translationDisabled') || 'Translation disabled - immersive mode!')
                             );
                           }}
-                          className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+                          className="h-4 w-4 rounded border-border text-primary focus:ring-primary cursor-pointer"
                         />
                       </div>
                       
-                      <div className="border-t pt-3 mt-2">
+                      <div className="border-t pt-3">
                         <p className="text-xs text-muted-foreground mb-2">{t('settings.darijaScript')}</p>
                       </div>
                       
@@ -538,212 +514,162 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                     </div>
                   </PopoverContent>
                 </Popover>
-                
-                <img src={sahbiLogo} alt="Sahbi" className="w-10 h-10 object-contain drop-shadow-lg" />
               </div>
             </div>
           </div>
         </header>
 
         {/* Chat Container */}
-        <main className="relative z-10 container mx-auto px-4 py-6">
-          <div className="max-w-3xl mx-auto">
-            {/* Welcome Card */}
-            <div className="mb-6 p-6 rounded-3xl bg-gradient-to-r from-[#c1272d]/10 via-[#006233]/10 to-[#4a9fd4]/10 border-2 border-[#c1272d]/20 backdrop-blur-sm shadow-xl shadow-[#c1272d]/5 relative overflow-hidden group hover:border-[#c1272d]/30 transition-all duration-500">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#c1272d]/0 via-[#006233]/5 to-[#4a9fd4]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="flex items-start gap-4 relative z-10">
-                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#c1272d] via-[#006233] to-[#4a9fd4] shadow-xl shadow-[#c1272d]/40 group-hover:scale-105 transition-transform duration-300 p-2.5">
-                  <img src={sahbiLogo} alt="Sahbi" className="w-full h-full object-contain" />
+        <main className="container mx-auto max-w-3xl">
+          {/* Messages Area */}
+          <ScrollArea 
+            ref={scrollRef} 
+            className="h-[calc(100vh-140px)] px-4"
+          >
+            <div className="py-6 space-y-4">
+              {isLoadingConversations ? (
+                <div className="flex items-center justify-center h-64">
+                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2 flex-wrap">
-                    <h2 className="text-xl font-bold">{t('sahbi.welcomeTitle')}</h2>
-                    {currentConversation && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-muted text-muted-foreground text-xs font-medium">
-                        <MessageCircle className="h-3 w-3" />
-                        {currentConversation.title}
-                      </span>
-                    )}
-                    {!user && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 text-xs">
-                        {t('sahbi.guestMode') || 'Guest Mode'}
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-sm text-muted-foreground">{t('sahbi.welcomeDescription')}</p>
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-medium shadow-sm hover:shadow-md hover:bg-primary/15 transition-all cursor-default">
-                      <Heart className="h-3.5 w-3.5" /> {t('sahbi.tag1')}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-medium shadow-sm hover:shadow-md hover:bg-amber-500/15 transition-all cursor-default">
-                      <Star className="h-3.5 w-3.5" /> {t('sahbi.tag2')}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 text-xs font-medium shadow-sm hover:shadow-md hover:bg-green-500/15 transition-all cursor-default">
-                      <Zap className="h-3.5 w-3.5" /> {t('sahbi.tag3')}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Messages Area */}
-            <div className="bg-background/90 backdrop-blur-2xl rounded-3xl border-2 border-border/50 shadow-2xl overflow-hidden">
-              <ScrollArea 
-                ref={scrollRef} 
-                className="h-[calc(100vh-420px)] min-h-[380px] p-6"
-              >
-                {isLoadingConversations ? (
-                  <div className="flex items-center justify-center h-full">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                  </div>
-                ) : (
-                  <div className="space-y-6">
-                    {messages.map((msg, i) => (
+              ) : (
+                <>
+                  {messages.map((msg, i) => (
+                    <div
+                      key={msg.id || i}
+                      className={cn(
+                        "flex gap-2.5 animate-in slide-in-from-bottom-2 duration-200",
+                        msg.role === "user" ? "flex-row-reverse" : "flex-row"
+                      )}
+                    >
+                      {/* Avatar */}
+                      {msg.role === "assistant" ? (
+                        <Avatar className="h-8 w-8 shrink-0 ring-2 ring-border/30">
+                          <AvatarImage src={sahbiLogo} className="object-contain" />
+                          <AvatarFallback className="bg-accent/20 text-xs">S</AvatarFallback>
+                        </Avatar>
+                      ) : (
+                        <div className="h-7 w-7 shrink-0 rounded-full bg-gradient-to-br from-moroccan-red to-moroccan-gold flex items-center justify-center">
+                          <User className="h-3.5 w-3.5 text-white" />
+                        </div>
+                      )}
+                      
+                      {/* Message Bubble */}
                       <div
-                        key={msg.id || i}
                         className={cn(
-                          "flex gap-4 animate-in slide-in-from-bottom-2 duration-300",
-                          msg.role === "user" ? "flex-row-reverse" : "flex-row"
+                          "group/message max-w-[80%]",
+                          msg.role === "user" ? "flex flex-col items-end" : ""
                         )}
-                        style={{ animationDelay: `${i * 30}ms` }}
                       >
                         <div
                           className={cn(
-                            "flex shrink-0 items-center justify-center rounded-2xl shadow-lg transition-transform hover:scale-105 overflow-hidden",
+                            "rounded-2xl px-4 py-2.5 shadow-sm",
                             msg.role === "user"
-                              ? "h-11 w-11 bg-gradient-to-br from-blue-500 to-purple-500 shadow-blue-500/30"
-                              : "h-12 w-12 bg-gradient-to-br from-[#c1272d] via-[#006233] to-[#4a9fd4] shadow-[#c1272d]/30 p-2"
-                          )}
-                        >
-                          {msg.role === "user" ? (
-                            <User className="h-5 w-5 text-white" />
-                          ) : (
-                            <img src={sahbiLogo} alt="Sahbi" className="w-full h-full object-contain" />
-                          )}
-                        </div>
-                        <div
-                          className={cn(
-                            "rounded-3xl px-5 py-4 max-w-[85%] shadow-lg transition-all duration-200 hover:shadow-xl group/message",
-                            msg.role === "user"
-                              ? "bg-gradient-to-br from-blue-500 to-purple-500 text-white rounded-tr-lg"
-                              : "bg-card border-2 border-border/50 rounded-tl-lg hover:border-primary/20"
+                              ? "bg-gradient-to-r from-moroccan-red to-moroccan-gold/90 text-white rounded-br-md"
+                              : "bg-muted/50 dark:bg-[hsl(225,20%,18%)] border border-border/30 rounded-tl-md text-foreground"
                           )}
                         >
                           <div className="whitespace-pre-wrap leading-relaxed text-sm">
                             {renderMessageContent(msg.content)}
                           </div>
+                        </div>
+                        
+                        {/* Message Actions */}
+                        <div className={cn(
+                          "flex items-center gap-1.5 mt-1 opacity-0 group-hover/message:opacity-100 transition-opacity",
+                          msg.role === "user" ? "flex-row-reverse" : ""
+                        )}>
+                          <span className="text-[10px] text-muted-foreground">
+                            {formatTime(msg.timestamp)}
+                          </span>
                           
-                          <div className={cn(
-                            "flex items-center gap-2 mt-3 pt-2 border-t",
-                            msg.role === "user" ? "border-white/20" : "border-border/50"
-                          )}>
-                            <span className={cn(
-                              "text-[10px]",
-                              msg.role === "user" ? "text-white/70" : "text-muted-foreground"
-                            )}>
-                              {formatTime(msg.timestamp)}
-                            </span>
-                            
-                            <div className="flex-1" />
-                            
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => copyToClipboard(msg.content, msg.id || String(i))}
+                            className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
+                          >
+                            {copiedId === (msg.id || String(i)) ? (
+                              <Check className="h-3 w-3" />
+                            ) : (
+                              <Copy className="h-3 w-3" />
+                            )}
+                          </Button>
+                          
+                          {msg.role === "assistant" && (
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => copyToClipboard(msg.content, msg.id || String(i))}
-                              className={cn(
-                                "h-7 px-2 text-xs opacity-0 group-hover/message:opacity-100 transition-opacity",
-                                msg.role === "user" 
-                                  ? "text-white/80 hover:text-white hover:bg-white/10" 
-                                  : "text-muted-foreground hover:text-primary hover:bg-primary/10"
-                              )}
+                              onClick={() => speakText(msg.content)}
+                              className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
                             >
-                              {copiedId === (msg.id || String(i)) ? (
-                                <Check className="h-3 w-3" />
+                              {isSpeaking ? (
+                                <VolumeX className="h-3 w-3" />
                               ) : (
-                                <Copy className="h-3 w-3" />
+                                <Volume2 className="h-3 w-3" />
                               )}
                             </Button>
-                            
-                            {msg.role === "assistant" && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => speakText(msg.content)}
-                                className="h-7 px-2 text-xs text-muted-foreground hover:text-primary hover:bg-primary/10 opacity-0 group-hover/message:opacity-100 transition-opacity"
-                              >
-                                {isSpeaking ? (
-                                  <VolumeX className="h-3 w-3" />
-                                ) : (
-                                  <Volume2 className="h-3 w-3" />
-                                )}
-                              </Button>
-                            )}
-                          </div>
+                          )}
                         </div>
                       </div>
-                    ))}
-                    {isStreaming && messages[messages.length - 1]?.role === "user" && (
-                      <div className="flex gap-4 animate-in slide-in-from-bottom-2">
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#c1272d] via-[#006233] to-[#4a9fd4] shadow-lg shadow-[#c1272d]/30 p-2">
-                          <img src={sahbiLogo} alt="Sahbi" className="w-full h-full object-contain" />
-                        </div>
-                        <div className="rounded-3xl rounded-tl-lg bg-card border-2 border-border/50 px-5 py-4 shadow-lg">
-                          <div className="flex items-center gap-3">
-                            <div className="flex gap-1">
-                              <span className="h-2 w-2 rounded-full bg-[#c1272d] animate-bounce" style={{ animationDelay: '0ms' }} />
-                              <span className="h-2 w-2 rounded-full bg-[#006233] animate-bounce" style={{ animationDelay: '150ms' }} />
-                              <span className="h-2 w-2 rounded-full bg-[#4a9fd4] animate-bounce" style={{ animationDelay: '300ms' }} />
-                            </div>
-                            <span className="text-sm text-muted-foreground">{t('sahbi.thinking')}</span>
+                    </div>
+                  ))}
+                  
+                  {/* Typing indicator */}
+                  {isStreaming && messages[messages.length - 1]?.role === "user" && (
+                    <div className="flex gap-2.5 animate-in slide-in-from-bottom-2">
+                      <Avatar className="h-8 w-8 shrink-0 ring-2 ring-border/30">
+                        <AvatarImage src={sahbiLogo} className="object-contain" />
+                        <AvatarFallback className="bg-accent/20 text-xs">S</AvatarFallback>
+                      </Avatar>
+                      <div className="bg-muted/50 dark:bg-[hsl(225,20%,18%)] border border-border/30 rounded-2xl rounded-tl-md px-4 py-2.5">
+                        <div className="flex items-center gap-2">
+                          <div className="flex gap-1">
+                            <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: '0ms' }} />
+                            <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: '150ms' }} />
+                            <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: '300ms' }} />
                           </div>
+                          <span className="text-xs text-muted-foreground">{t('sahbi.thinking')}</span>
                         </div>
                       </div>
-                    )}
-                  </div>
-                )}
-              </ScrollArea>
-
-              {/* Input Area */}
-              <div className="border-t-2 border-border/50 p-5 bg-gradient-to-t from-muted/50 to-transparent">
-                <div className="flex gap-3">
-                  <Input
-                    ref={inputRef}
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder={t('sahbi.inputPlaceholder')}
-                    className="flex-1 rounded-2xl border-2 border-border/50 bg-background/90 h-14 px-6 text-base focus:border-primary/50 focus:ring-primary/20 transition-all"
-                    disabled={isStreaming || !currentConversation}
-                  />
-                  <Button
-                    onClick={handleSend}
-                    disabled={!input.trim() || isStreaming || !currentConversation}
-                    size="lg"
-                    className="rounded-2xl h-14 w-14 bg-gradient-to-r from-[#c1272d] via-[#006233] to-[#4a9fd4] hover:opacity-90 shadow-xl shadow-[#c1272d]/30 hover:shadow-2xl hover:shadow-[#c1272d]/40 hover:scale-105 transition-all duration-300"
-                  >
-                    {isStreaming ? (
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                    ) : (
-                      <Send className="h-5 w-5" />
-                    )}
-                  </Button>
-                </div>
-                <p className="text-xs text-muted-foreground text-center mt-4 flex items-center justify-center gap-2">
-                  <span className="text-lg">🇲🇦</span>
-                  <span className="font-medium">{t('sahbi.encouragement')}</span>
-                  <span className="text-lg">🇲🇦</span>
-                </p>
-              </div>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
+          </ScrollArea>
 
+          {/* Input Area */}
+          <div className="sticky bottom-0 bg-background border-t border-border/50 p-4">
+            <div className="flex gap-2">
+              <Input
+                ref={inputRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={t('sahbi.inputPlaceholder')}
+                className="flex-1 rounded-xl border-border/50 bg-muted/30 h-11 px-4 text-sm focus:border-primary/50 transition-all"
+                disabled={isStreaming || !currentConversation}
+              />
+              <Button
+                onClick={handleSend}
+                disabled={!input.trim() || isStreaming || !currentConversation}
+                size="icon"
+                className="h-11 w-11 rounded-xl bg-gradient-to-r from-moroccan-red to-moroccan-gold hover:opacity-90 shadow-md transition-all"
+              >
+                {isStreaming ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Send className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+            
             {/* Quick Phrases */}
-            <div className="mt-8 flex flex-wrap gap-3 justify-center">
+            <div className="flex flex-wrap gap-2 mt-3 justify-center">
               {[
                 { label: "Salam! 👋", value: "Salam!" },
                 { label: "Labas? 🤔", value: "Labas? How do I respond to this?" },
                 { label: "Shukran ❤️", value: "How do I say thank you in Darija?" },
-                { label: "Numbers 🔢", value: "Teach me numbers 1-10 in Darija" },
-                { label: "Greetings 🙋", value: "Teach me common Darija greetings" }
               ].map((phrase) => (
                 <Button
                   key={phrase.label}
@@ -754,9 +680,9 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                     inputRef.current?.focus();
                   }}
                   disabled={!currentConversation}
-                  className="rounded-full px-5 py-2 text-sm hover:bg-gradient-to-r hover:from-[#c1272d]/10 hover:via-[#006233]/10 hover:to-[#4a9fd4]/10 hover:text-[#c1272d] hover:border-[#c1272d]/40 shadow-sm hover:shadow-md transition-all duration-300 group"
+                  className="rounded-full px-3 py-1 text-xs h-7 hover:bg-accent/10 hover:text-accent hover:border-accent/40 transition-all"
                 >
-                  <span className="group-hover:scale-110 transition-transform inline-block">{phrase.label}</span>
+                  {phrase.label}
                 </Button>
               ))}
             </div>
