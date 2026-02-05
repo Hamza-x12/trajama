@@ -5,7 +5,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   ArrowLeft, Send, User, 
-  MessageSquarePlus, Loader2, Copy, Check, Settings2, Volume2, VolumeX
+  MessageSquarePlus, Loader2, Copy, Check, Settings2, Volume2, VolumeX,
+  GraduationCap, MessageCircle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
@@ -62,6 +63,12 @@ const Sahbi = () => {
   const [includeTranslation, setIncludeTranslation] = useState<boolean>(() => {
     const saved = localStorage.getItem('sahbiIncludeTranslation');
     return saved !== 'false'; // Default true
+  });
+
+  // Sahbi mode: 'learn' or 'chat'
+  const [sahbiMode, setSahbiMode] = useState<'learn' | 'chat'>(() => {
+    const saved = localStorage.getItem('sahbiMode');
+    return (saved as 'learn' | 'chat') || 'learn';
   });
 
   useEffect(() => {
@@ -150,12 +157,19 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
   const getScriptInstruction = () => {
     let instruction = "";
     
-    if (darijaScript === 'latin') {
-      instruction = "SCRIPT: Respond ONLY in Latin script Darija (like 'Salam', 'Labas', 'Wakha'). Do NOT include Arabic script.";
-    } else if (darijaScript === 'arabic') {
-      instruction = "SCRIPT: Respond ONLY in Arabic script Darija (like 'سلام', 'لاباس', 'واخا'). Do NOT include Latin script.";
+    // Mode-specific instructions
+    if (sahbiMode === 'learn') {
+      instruction = "MODE: You are in LEARNING mode. Focus on teaching Darija language. Explain vocabulary, grammar, pronunciation, and cultural context. Provide examples and encourage practice. Be educational but friendly.\n\n";
     } else {
-      instruction = "SCRIPT: Format your responses with both Latin and Arabic script sections clearly labeled.";
+      instruction = "MODE: You are in CHAT mode. Have a natural, casual conversation. Answer questions on any topic. You can still use Darija naturally but don't force lessons. Be helpful, friendly, and conversational like a real Moroccan friend.\n\n";
+    }
+    
+    if (darijaScript === 'latin') {
+      instruction += "SCRIPT: Respond ONLY in Latin script Darija (like 'Salam', 'Labas', 'Wakha'). Do NOT include Arabic script.";
+    } else if (darijaScript === 'arabic') {
+      instruction += "SCRIPT: Respond ONLY in Arabic script Darija (like 'سلام', 'لاباس', 'واخا'). Do NOT include Latin script.";
+    } else {
+      instruction += "SCRIPT: Format your responses with both Latin and Arabic script sections clearly labeled.";
     }
     
     if (includeTranslation) {
@@ -405,7 +419,7 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                 <span className="hidden sm:inline text-sm">{t('navigation.backToTranslator')}</span>
               </Link>
               
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-3">
                 <Avatar className="h-9 w-9">
                   <AvatarImage src={sahbiLogo} className="object-contain" />
                   <AvatarFallback className="bg-accent/20">S</AvatarFallback>
@@ -416,6 +430,40 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
                     <span className="w-1.5 h-1.5 rounded-full bg-moroccan-green animate-pulse" />
                     {t('sahbiSection.online') || "Online"}
                   </p>
+                </div>
+                
+                {/* Mode Toggle */}
+                <div className="flex items-center bg-muted/50 rounded-full p-0.5 border border-border/50">
+                  <button
+                    onClick={() => {
+                      setSahbiMode('learn');
+                      localStorage.setItem('sahbiMode', 'learn');
+                      toast.success(t('sahbi.learnModeEnabled') || 'Learning mode enabled');
+                    }}
+                    className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all ${
+                      sahbiMode === 'learn' 
+                        ? 'bg-primary text-primary-foreground shadow-sm' 
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    <GraduationCap className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">{t('sahbi.learnMode') || 'Learn'}</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSahbiMode('chat');
+                      localStorage.setItem('sahbiMode', 'chat');
+                      toast.success(t('sahbi.chatModeEnabled') || 'Chat mode enabled');
+                    }}
+                    className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all ${
+                      sahbiMode === 'chat' 
+                        ? 'bg-accent text-accent-foreground shadow-sm' 
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    <MessageCircle className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">{t('sahbi.chatMode') || 'Chat'}</span>
+                  </button>
                 </div>
               </div>
 
