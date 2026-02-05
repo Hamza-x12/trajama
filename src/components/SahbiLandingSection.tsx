@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +19,7 @@ export const SahbiLandingSection = ({
   isLoggedIn = false 
 }: SahbiLandingSectionProps) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const features = [
     {
@@ -121,9 +122,15 @@ export const SahbiLandingSection = ({
               </div>
             </div>
 
-            {/* Right side - Chat Preview (minimalist style) */}
-            <div className="relative">
-              <div className="bg-card/95 dark:bg-[hsl(225,25%,12%)] rounded-xl border border-border/30 shadow-lg overflow-hidden">
+            {/* Right side - Chat Preview (minimalist style) - Clickable */}
+            <div 
+              className="relative cursor-pointer group"
+              onClick={() => navigate('/sahbi')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && navigate('/sahbi')}
+            >
+              <div className="bg-card/95 dark:bg-[hsl(225,25%,12%)] rounded-xl border border-border/30 shadow-lg overflow-hidden transition-all duration-300 group-hover:shadow-hover group-hover:border-accent/50 group-hover:scale-[1.02]">
                 {/* Chat header preview */}
                 <div className="flex items-center gap-2.5 px-4 py-3 border-b border-border/30">
                   <Avatar className="h-8 w-8">
