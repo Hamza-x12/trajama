@@ -640,26 +640,26 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
 
           {/* Input Area */}
           <div className="sticky bottom-0 bg-background border-t border-border/50 p-4">
-            <div className="flex gap-2">
+            <div className="flex gap-2 max-w-4xl mx-auto">
               <Input
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={t('sahbi.inputPlaceholder')}
-                className="flex-1 rounded-xl border-border/50 bg-muted/30 h-11 px-4 text-sm focus:border-primary/50 transition-all"
+                className="flex-1 rounded-xl border-border/50 bg-muted/30 h-12 px-5 text-base focus:border-primary/50 transition-all"
                 disabled={isStreaming || !currentConversation}
               />
               <Button
                 onClick={handleSend}
                 disabled={!input.trim() || isStreaming || !currentConversation}
                 size="icon"
-                className="h-11 w-11 rounded-xl bg-gradient-to-r from-moroccan-red to-moroccan-gold hover:opacity-90 shadow-md transition-all"
+                className="h-12 w-12 rounded-xl bg-gradient-to-r from-moroccan-red to-moroccan-gold hover:opacity-90 shadow-md transition-all shrink-0"
               >
                 {isStreaming ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (
-                  <Send className="h-4 w-4" />
+                  <Send className="h-5 w-5" />
                 )}
               </Button>
             </div>
