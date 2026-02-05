@@ -8,6 +8,7 @@ import tarjamaLogo from "@/assets/tarjama-logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsDialog } from "@/components/SettingsDialog";
 import { ZelligeCorners } from "@/components/ZelligeCorners";
+import { SahbiLandingSection } from "@/components/SahbiLandingSection";
 
 const About = () => {
   const { t } = useTranslation();
@@ -154,6 +155,9 @@ const About = () => {
             </div>
           </div>
         </Card>
+
+        {/* Sahbi Section */}
+        <SahbiLandingSection />
       </main>
     </div>
     </>
