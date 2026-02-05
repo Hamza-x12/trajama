@@ -712,27 +712,45 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
               </Button>
             </div>
             
-            {/* Quick Phrases */}
-            <div className="flex flex-wrap gap-2 mt-3 justify-center">
-              {[
-                { label: "Salam! 👋", value: "Salam!" },
-                { label: "Labas? 🤔", value: "Labas? How do I respond to this?" },
-                { label: "Shukran ❤️", value: "How do I say thank you in Darija?" },
-              ].map((phrase) => (
-                <Button
-                  key={phrase.label}
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setInput(phrase.value);
-                    inputRef.current?.focus();
-                  }}
-                  disabled={!currentConversation}
-                  className="rounded-full px-3 py-1 text-xs h-7 hover:bg-accent/10 hover:text-accent hover:border-accent/40 transition-all"
-                >
-                  {phrase.label}
-                </Button>
-              ))}
+            {/* Mode Indicator + Quick Phrases */}
+            <div className="flex flex-col items-center gap-2 mt-3">
+              {/* Subtle mode indicator */}
+              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/70">
+                {sahbiMode === 'learn' ? (
+                  <>
+                    <GraduationCap className="h-3 w-3" />
+                    <span>{t('sahbi.learnModeActive') || 'Learning mode active'}</span>
+                  </>
+                ) : (
+                  <>
+                    <MessageCircle className="h-3 w-3" />
+                    <span>{t('sahbi.chatModeActive') || 'Chat mode active'}</span>
+                  </>
+                )}
+              </div>
+              
+              {/* Quick Phrases */}
+              <div className="flex flex-wrap gap-2 justify-center">
+                {[
+                  { label: "Salam! 👋", value: "Salam!" },
+                  { label: "Labas? 🤔", value: "Labas? How do I respond to this?" },
+                  { label: "Shukran ❤️", value: "How do I say thank you in Darija?" },
+                ].map((phrase) => (
+                  <Button
+                    key={phrase.label}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setInput(phrase.value);
+                      inputRef.current?.focus();
+                    }}
+                    disabled={!currentConversation}
+                    className="rounded-full px-3 py-1 text-xs h-7 hover:bg-accent/10 hover:text-accent hover:border-accent/40 transition-all"
+                  >
+                    {phrase.label}
+                  </Button>
+                ))}
+              </div>
             </div>
           </div>
         </main>
