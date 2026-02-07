@@ -172,7 +172,7 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
     if (sahbiMode === 'learn') {
       instruction = "MODE: You are in LEARNING mode. Focus on teaching Darija language. Explain vocabulary, grammar, pronunciation, and cultural context. Provide examples and encourage practice. Be educational but friendly.\n\n";
     } else {
-      instruction = "MODE: You are in CHAT mode. Have a natural, casual conversation. Answer questions on any topic. You can still use Darija naturally but don't force lessons. Be helpful, friendly, and conversational like a real Moroccan friend.\n\n";
+      instruction = "MODE: You are in CHAT mode. Respond DIRECTLY and NATURALLY in Darija only - like a real Moroccan friend chatting. DO NOT teach, explain, or give language lessons. DO NOT add translations. Just have a normal conversation in Darija. Answer any question directly without making it a language lesson. Be casual, natural, and friendly.\n\n";
     }
     
     if (darijaScript === 'latin') {
@@ -183,13 +183,15 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
       instruction += "SCRIPT: Format your responses with both Latin and Arabic script sections clearly labeled.";
     }
     
-    if (includeTranslation) {
+    if (sahbiMode === 'learn' && includeTranslation) {
       instruction += "\n\nTRANSLATION: After your Darija response, add a clear '📖 Translation:' section with the English meaning. Keep it concise but helpful for learners.";
+    } else if (sahbiMode === 'learn') {
+      instruction += "\n\nTRANSLATION: Do NOT include English translations unless explicitly asked. The user wants to practice immersively.";
     } else {
-      instruction += "\n\nTRANSLATION: Do NOT include English translations. The user wants to practice immersively. Only provide translations if they explicitly ask.";
+      instruction += "\n\nTRANSLATION: NEVER include translations. Respond purely in Darija. This is a natural conversation, not a lesson.";
     }
     
-    instruction += "\n\nFORMAT: Keep responses clear and well-structured. Use short paragraphs. Be conversational and friendly, not formal.";
+    instruction += "\n\nFORMAT: Keep responses clear and natural. Be conversational and friendly, not formal.";
     
     return instruction;
   };
