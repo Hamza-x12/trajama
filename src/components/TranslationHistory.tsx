@@ -4,6 +4,21 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Clock, Trash2, X } from "lucide-react";
 import { format } from "date-fns";
 
+import moroccoFlag from "@/assets/flags/morocco.png";
+import ukFlag from "@/assets/flags/uk.png";
+import franceFlag from "@/assets/flags/france.png";
+import spainFlag from "@/assets/flags/spain.png";
+import saudiArabiaFlag from "@/assets/flags/saudi-arabia.png";
+import germanyFlag from "@/assets/flags/germany.png";
+import italyFlag from "@/assets/flags/italy.png";
+import portugalFlag from "@/assets/flags/portugal.png";
+import chinaFlag from "@/assets/flags/china.png";
+import japanFlag from "@/assets/flags/japan.png";
+import turkeyFlag from "@/assets/flags/turkey.png";
+import russiaFlag from "@/assets/flags/russia.png";
+import koreaFlag from "@/assets/flags/south-korea.png";
+import indiaFlag from "@/assets/flags/india.png";
+
 interface HistoryItem {
   id: string;
   text: string;
@@ -96,6 +111,23 @@ const getLanguageBadgeColor = (lang: string): string => {
   return colors[lang] || 'text-muted-foreground bg-muted border-border';
 };
 
+const languageFlags: Record<string, string> = {
+  'Darija': moroccoFlag,
+  'French': franceFlag,
+  'Arabic': saudiArabiaFlag,
+  'English': ukFlag,
+  'Spanish': spainFlag,
+  'German': germanyFlag,
+  'Italian': italyFlag,
+  'Portuguese': portugalFlag,
+  'Chinese': chinaFlag,
+  'Japanese': japanFlag,
+  'Turkish': turkeyFlag,
+  'Russian': russiaFlag,
+  'Korean': koreaFlag,
+  'Hindi': indiaFlag,
+};
+
 export const TranslationHistory = ({ 
   history, 
   onSelectItem, 
@@ -149,14 +181,16 @@ export const TranslationHistory = ({
                 
                 <div className="pr-10">
                   <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3 flex-wrap">
-                    <span className={`font-semibold px-3 py-1 rounded-lg border ${getLanguageBadgeColor(item.sourceLanguage)}`}>
+                    <span className={`flex items-center gap-1.5 font-semibold px-3 py-1 rounded-lg border ${getLanguageBadgeColor(item.sourceLanguage)}`}>
+                      {languageFlags[item.sourceLanguage] && <img src={languageFlags[item.sourceLanguage]} alt="" className="w-4 h-4 rounded-sm object-cover" />}
                       {item.sourceLanguage}
                     </span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground/50">
                       <path d="M5 12h14"/>
                       <path d="m12 5 7 7-7 7"/>
                     </svg>
-                    <span className={`font-semibold px-3 py-1 rounded-lg border ${getLanguageBadgeColor(item.targetLanguage)}`}>
+                    <span className={`flex items-center gap-1.5 font-semibold px-3 py-1 rounded-lg border ${getLanguageBadgeColor(item.targetLanguage)}`}>
+                      {languageFlags[item.targetLanguage] && <img src={languageFlags[item.targetLanguage]} alt="" className="w-4 h-4 rounded-sm object-cover" />}
                       {item.targetLanguage}
                     </span>
                     <span className="opacity-50">•</span>
