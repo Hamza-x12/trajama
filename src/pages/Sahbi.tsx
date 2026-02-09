@@ -428,23 +428,52 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
 
       {/* Welcome Animation Overlay */}
       {showWelcome && (
-        <div className="fixed inset-0 z-[100] bg-background flex items-center justify-center animate-in fade-in duration-300">
-          <div className="text-center space-y-6 animate-in zoom-in-95 duration-500">
-            <div className="relative">
+        <div className="fixed inset-0 z-[100] bg-background flex items-center justify-center animate-welcome-fade-out">
+          {/* Animated background pattern */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-r from-moroccan-red/10 via-moroccan-gold/10 to-moroccan-green/10 blur-3xl animate-welcome-glow" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full bg-gradient-to-tr from-moroccan-green/15 to-moroccan-red/15 blur-2xl animate-welcome-glow" style={{ animationDelay: '0.3s' }} />
+          </div>
+          
+          {/* Floating particles */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            {[...Array(8)].map((_, i) => (
+              <span
+                key={i}
+                className="absolute w-2 h-2 rounded-full animate-float-particle"
+                style={{
+                  background: i % 3 === 0 ? '#c1272d' : i % 3 === 1 ? '#006233' : '#d4a017',
+                  animationDelay: `${i * 0.15}s`,
+                  left: `${Math.cos((i * Math.PI * 2) / 8) * 60}px`,
+                  top: `${Math.sin((i * Math.PI * 2) / 8) * 60}px`,
+                }}
+              />
+            ))}
+          </div>
+
+          <div className="text-center space-y-6 relative z-10">
+            <div className="relative inline-block">
               <img 
                 src={sahbiLogo} 
                 alt="Sahbi" 
-                className="w-24 h-24 mx-auto animate-in spin-in-180 duration-700"
+                className="w-28 h-28 mx-auto animate-welcome-logo drop-shadow-2xl"
               />
-              <div className="absolute -inset-4 bg-gradient-to-r from-moroccan-red/20 via-moroccan-gold/20 to-moroccan-green/20 rounded-full blur-xl animate-pulse" />
+              <div className="absolute -inset-6 bg-gradient-to-r from-moroccan-red/25 via-moroccan-gold/25 to-moroccan-green/25 rounded-full blur-2xl animate-welcome-glow" />
+              {/* Ring effect */}
+              <div className="absolute -inset-3 rounded-full border-2 border-moroccan-gold/30 animate-ping" style={{ animationDuration: '1.5s' }} />
             </div>
-            <div className="space-y-2">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-moroccan-red via-moroccan-gold to-moroccan-green bg-clip-text text-transparent animate-in slide-in-from-bottom-4 duration-500 delay-200">
+            <div className="space-y-3">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-moroccan-red via-moroccan-gold to-moroccan-green bg-clip-text text-transparent animate-welcome-text" style={{ animationDelay: '0.4s', opacity: 0 }}>
                 {userName ? `Merhba, ${userName}!` : 'Merhba!'}
               </h1>
-              <p className="text-muted-foreground animate-in slide-in-from-bottom-4 duration-500 delay-300">
+              <p className="text-lg text-muted-foreground animate-welcome-text" style={{ animationDelay: '0.6s', opacity: 0 }}>
                 {t('sahbi.welcomeMessage') || "Ready to learn Darija?"}
               </p>
+              <div className="flex items-center justify-center gap-2 animate-welcome-text" style={{ animationDelay: '0.8s', opacity: 0 }}>
+                <span className="text-2xl">🇲🇦</span>
+                <Sparkles className="h-5 w-5 text-moroccan-gold" />
+                <span className="text-2xl">🇲🇦</span>
+              </div>
             </div>
           </div>
         </div>
