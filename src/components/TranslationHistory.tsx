@@ -164,7 +164,7 @@ export const TranslationHistory = ({
             return (
               <div
                 key={item.id}
-                className={`group p-5 rounded-xl border border-border/40 hover:shadow-moroccan hover:scale-[1.02] transition-all duration-300 cursor-pointer relative overflow-hidden ${getCountryTheme(item.targetLanguage)} ${getCountryThemeRight(item.sourceLanguage)}`}
+                className={`group p-5 rounded-xl border border-border/40 hover:shadow-moroccan hover:scale-[1.02] transition-all duration-300 cursor-pointer relative overflow-hidden ${getCountryTheme(item.sourceLanguage)} ${getCountryThemeRight(item.targetLanguage)}`}
                 onClick={() => onSelectItem(item)}
               >
                 <Button
