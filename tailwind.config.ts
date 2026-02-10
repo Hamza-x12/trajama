@@ -110,6 +110,11 @@ export default {
           "20%": { opacity: "1", transform: "scale(1)" },
           "100%": { transform: "translateY(-80px) translateX(30px) scale(0)", opacity: "0" },
         },
+        "gradient-shift": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
