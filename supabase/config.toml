@@ -1,7 +1,10 @@
 project_id = "zvvvsurmgfnankspkibu"
 
+[functions.darija-chat]
+verify_jwt = false
+
 [functions.translate-darija]
-verify_jwt = true
+verify_jwt = false
 
 [functions.transcribe-audio]
 verify_jwt = true
