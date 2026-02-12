@@ -234,11 +234,19 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
         return { role: msg.role, content: msg.content };
       });
 
+      // Get user's session token for authenticated requests
+      const { data: { session: currentSession } } = await supabase.auth.getSession();
+      if (!currentSession?.access_token) {
+        toast.error("Please sign in to use Sahbi chat");
+        setIsStreaming(false);
+        return;
+      }
+
       const response = await fetch(CHAT_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${currentSession.access_token}`,
         },
         body: JSON.stringify({ 
           messages: messagesWithScript,
