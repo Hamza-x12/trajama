@@ -412,5 +412,17 @@
     "sampleQuestion": "How do I say 'good morning' in Darija?",
     "sampleAnswer": "Good morning in Darija is \"Sbah lkhir\" (صباح الخير). It literally means \"morning of goodness\"! 🌅",
     "typing": "Sahbi is typing..."
+  },
+  "dailyChallenge": {
+    "title": "Daily Challenge",
+    "subtitle": "Guess the meaning of this Darija word",
+    "correct": "Correct! You got it! 🎉",
+    "incorrect": "Not quite. The correct answer is:",
+    "alreadyCompleted": "You've completed today's challenge! Come back tomorrow. 🌟",
+    "streak": "Streak",
+    "longestStreak": "Best Streak",
+    "days": "days",
+    "whatDoesItMean": "What does this mean?",
+    "nextChallenge": "Next challenge in"
   }
 }

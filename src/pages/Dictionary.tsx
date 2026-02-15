@@ -15,6 +15,7 @@ import tarjamaLogo from "@/assets/tarjama-logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsDialog } from "@/components/SettingsDialog";
 import { WordDetailDialog } from "@/components/WordDetailDialog";
+import { DailyChallenge } from "@/components/DailyChallenge";
 import { toast } from "sonner";
 import { ZelligeCorners } from "@/components/ZelligeCorners";
 
@@ -1037,6 +1038,11 @@ const Dictionary = () => {
                 FAQ
               </Button>
             </Link>
+        </div>
+
+        {/* Daily Challenge */}
+        <div className="mb-8">
+          <DailyChallenge entries={dictionaryEntries} />
         </div>
 
         {/* Stats Section */}

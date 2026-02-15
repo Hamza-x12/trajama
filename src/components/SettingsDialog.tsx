@@ -27,6 +27,7 @@ import moroccoFlag from "@/assets/flags/morocco.png";
 import ukFlag from "@/assets/flags/uk.png";
 import franceFlag from "@/assets/flags/france.png";
 import saudiArabiaFlag from "@/assets/flags/saudi-arabia.png";
+import amazighFlag from "@/assets/flags/amazigh.png";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
 
@@ -111,6 +112,7 @@ export function SettingsDialog({
     { code: 'ar', name: 'العربية', flag: saudiArabiaFlag },
     { code: 'fr', name: 'Français', flag: franceFlag },
     { code: 'dar', name: 'الدارجة', flag: moroccoFlag },
+    { code: 'ama', name: 'ⵜⴰⵎⴰⵣⵉⵖⵜ', flag: amazighFlag },
   ];
 
   const handleLanguageChange = (langCode: string) => {
