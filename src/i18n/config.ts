@@ -5,6 +5,7 @@ import ar from './locales/ar.json';
 import fr from './locales/fr.json';
 import dar from './locales/dar.json';
 import ru from './locales/ru.json';
+import ama from './locales/ama.json';
 
 i18n
   .use(initReactI18next)
@@ -15,6 +16,7 @@ i18n
       fr: { translation: fr },
       dar: { translation: dar },
       ru: { translation: ru },
+      ama: { translation: ama },
     },
     lng: localStorage.getItem('language') || 'en',
     fallbackLng: 'en',

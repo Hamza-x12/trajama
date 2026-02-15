@@ -404,5 +404,17 @@
     "sampleQuestion": "Comment dit-on 'bonjour' en Darija?",
     "sampleAnswer": "Bonjour en Darija se dit \"Sbah lkhir\" (صباح الخير). Cela signifie littéralement \"matin de bonté\"! 🌅",
     "typing": "Sahbi écrit..."
+  },
+  "dailyChallenge": {
+    "title": "Défi du Jour",
+    "subtitle": "Devinez le sens de ce mot en Darija",
+    "correct": "Correct ! Bien joué ! 🎉",
+    "incorrect": "Pas tout à fait. La bonne réponse est :",
+    "alreadyCompleted": "Vous avez terminé le défi du jour ! Revenez demain. 🌟",
+    "streak": "Série",
+    "longestStreak": "Meilleure Série",
+    "days": "jours",
+    "whatDoesItMean": "Que signifie ce mot ?",
+    "nextChallenge": "Prochain défi dans"
   }
 }
