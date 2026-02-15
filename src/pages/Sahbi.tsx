@@ -427,6 +427,40 @@ Yallah, goul liya shnu bghiti t3elem! 🇲🇦`;
   // Empty state - show centered welcome
   const showEmptyState = messages.length <= 1 && !isStreaming;
 
+  // Show sign-in prompt for unauthenticated users
+  if (!user) {
+    return (
+      <>
+        <Helmet>
+          <title>{t('sahbi.pageTitle')} - Tarjama</title>
+          <meta name="description" content={t('sahbi.pageDescription')} />
+        </Helmet>
+        <div className="h-screen flex items-center justify-center bg-background p-4">
+          <div className="text-center space-y-6 max-w-md">
+            <div className="relative inline-block">
+              <div className="absolute -inset-6 rounded-full bg-gradient-to-r from-moroccan-red/15 via-moroccan-gold/20 to-moroccan-green/15 blur-2xl" />
+              <img src={sahbiLogo} alt="Sahbi" className="w-24 h-24 rounded-full relative z-10 ring-2 ring-moroccan-gold/30" />
+            </div>
+            <h1 className="text-2xl font-bold text-foreground">Sign in to chat with Sahbi</h1>
+            <p className="text-muted-foreground">
+              Sahbi is your Darija learning companion. Sign in to start practicing Moroccan Arabic! 🇲🇦
+            </p>
+            <div className="flex flex-col gap-3 items-center">
+              <Link to="/auth">
+                <Button size="lg" className="bg-moroccan-red hover:bg-moroccan-red/90 text-white px-8">
+                  Sign In
+                </Button>
+              </Link>
+              <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <span className="flex items-center gap-1"><ArrowLeft className="w-3 h-3" /> Back to home</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <Helmet>
