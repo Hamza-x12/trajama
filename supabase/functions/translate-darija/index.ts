@@ -93,9 +93,9 @@ serve(async (req) => {
       );
     }
     
-    if (!Array.isArray(targetLanguages) || targetLanguages.length === 0 || targetLanguages.length > 14) {
+    if (!Array.isArray(targetLanguages) || targetLanguages.length === 0 || targetLanguages.length > 15) {
       return new Response(
-        JSON.stringify({ error: 'Target languages must be an array with 1-14 languages' }),
+        JSON.stringify({ error: 'Target languages must be an array with 1-15 languages' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -129,7 +129,7 @@ serve(async (req) => {
           messages: [
             { 
               role: 'system', 
-              content: 'You are a language detection expert. Detect the language of the given text and respond with ONLY the language name from this list: Darija, French, Arabic, English, Spanish, German, Italian, Portuguese, Chinese, Japanese, Turkish, Russian, Korean, Hindi. Respond with exactly one word.' 
+              content: 'You are a language detection expert. Detect the language of the given text and respond with ONLY the language name from this list: Darija, French, Arabic, English, Spanish, German, Italian, Portuguese, Chinese, Japanese, Turkish, Russian, Korean, Hindi, Amazigh. Respond with exactly one word.' 
             },
             { role: 'user', content: text }
           ],
@@ -171,6 +171,7 @@ serve(async (req) => {
 • Explain slang, idioms, or cultural references when relevant.
 • Support both Arabic script and Latin transliteration.
 • Detect and reflect regional dialects (Fassi, Casaoui, Rifi) when relevant.
+• For Amazigh (Tamazight/Berber): Use Tifinagh script (ⵜⴰⵎⴰⵣⵉⵖⵜ) as primary, with Latin transliteration when helpful.
 
 📚 Dataset Integration
 • Use knowledge of Moroccan Darija vocabulary, conjugations, and gender-aware translation.
@@ -193,7 +194,8 @@ Provide translations in this EXACT JSON format:
     "turkish": "Turkish translation",
     "russian": "Russian translation",
     "korean": "Korean translation",
-    "hindi": "Hindi translation"
+    "hindi": "Hindi translation",
+    "amazigh": "Amazigh (Tamazight) translation in Tifinagh script"
   },
   "culturalNotes": "Optional cultural context or explanation of idioms/slang IN ${culturalNotesLanguage}"
 }
@@ -272,7 +274,8 @@ IMPORTANT:
           turkish: '',
           russian: '',
           korean: '',
-          hindi: ''
+          hindi: '',
+          amazigh: ''
         },
         culturalNotes: 'Translation formatting error. Please try again.'
       };
