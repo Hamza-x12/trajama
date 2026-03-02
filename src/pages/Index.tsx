@@ -41,6 +41,7 @@ import turkeyFlag from "@/assets/flags/turkey.png";
 import russiaFlag from "@/assets/flags/russia.png";
 import koreaFlag from "@/assets/flags/south-korea.png";
 import indiaFlag from "@/assets/flags/india.png";
+import amazighFlag from "@/assets/flags/amazigh.png";
 import { ZelligeCorners } from "@/components/ZelligeCorners";
 interface TranslationResult {
   translations: {
@@ -58,6 +59,7 @@ interface TranslationResult {
     russian: string;
     korean: string;
     hindi: string;
+    amazigh: string;
   };
   culturalNotes?: string;
   detectedLanguage?: string;
@@ -83,6 +85,7 @@ interface HistoryItem {
     russian: string;
     korean: string;
     hindi: string;
+    amazigh: string;
   };
 }
 const HISTORY_KEY = 'darija-translation-history';
@@ -404,6 +407,10 @@ const Index = () => {
     name: "Hindi",
     code: "hi",
     icon: indiaFlag
+  }, {
+    name: "Amazigh",
+    code: "ber",
+    icon: amazighFlag
   }];
 
 
@@ -465,7 +472,8 @@ const Index = () => {
           turkish: '',
           russian: '',
           korean: '',
-          hindi: ''
+          hindi: '',
+          amazigh: ''
         };
         
         emptyTranslations[targetLanguage.toLowerCase() as keyof typeof emptyTranslations] = translation;
@@ -535,7 +543,7 @@ const Index = () => {
         const emptyTranslations = {
           darija: '', french: '', arabic: '', english: '', spanish: '',
           german: '', italian: '', portuguese: '', chinese: '', japanese: '',
-          turkish: '', russian: '', korean: '', hindi: ''
+          turkish: '', russian: '', korean: '', hindi: '', amazigh: ''
         };
         
         emptyTranslations[targetLanguage.toLowerCase() as keyof typeof emptyTranslations] = translation;
@@ -1486,6 +1494,7 @@ const Index = () => {
                     'Russian': 'border-l-4 border-l-blue-600 bg-gradient-to-r from-blue-50/10 via-white/5 to-red-50/10 dark:from-blue-950/20 dark:via-background/10 dark:to-red-950/20',
                     'Korean': 'border-l-4 border-l-blue-700 bg-gradient-to-r from-blue-50/10 via-red-50/10 to-white/5 dark:from-blue-950/20 dark:via-red-950/20 dark:to-background/10',
                     'Hindi': 'border-l-4 border-l-orange-600 bg-gradient-to-r from-orange-50/10 via-white/5 to-green-50/10 dark:from-orange-950/20 dark:via-background/10 dark:to-green-950/20',
+                    'Amazigh': 'border-l-4 border-l-blue-500 bg-gradient-to-r from-blue-50/10 via-green-50/10 to-yellow-50/10 dark:from-blue-950/20 dark:via-green-950/20 dark:to-yellow-950/20',
                     'Detect Language': 'border-l-4 border-l-primary bg-gradient-to-r from-primary/10 to-accent/10 dark:from-primary/20 dark:to-accent/20'
                   };
                   return themes[sourceLanguage] || '';
@@ -1664,7 +1673,8 @@ const Index = () => {
                     'Turkish': 'border-l-4 border-l-red-600 bg-gradient-to-r from-red-50/10 to-white/5 dark:from-red-950/20 dark:to-background/10',
                     'Russian': 'border-l-4 border-l-blue-600 bg-gradient-to-r from-blue-50/10 via-white/5 to-red-50/10 dark:from-blue-950/20 dark:via-background/10 dark:to-red-950/20',
                     'Korean': 'border-l-4 border-l-blue-700 bg-gradient-to-r from-blue-50/10 via-red-50/10 to-white/5 dark:from-blue-950/20 dark:via-red-950/20 dark:to-background/10',
-                    'Hindi': 'border-l-4 border-l-orange-600 bg-gradient-to-r from-orange-50/10 via-white/5 to-green-50/10 dark:from-orange-950/20 dark:via-background/10 dark:to-green-950/20'
+                    'Hindi': 'border-l-4 border-l-orange-600 bg-gradient-to-r from-orange-50/10 via-white/5 to-green-50/10 dark:from-orange-950/20 dark:via-background/10 dark:to-green-950/20',
+                    'Amazigh': 'border-l-4 border-l-blue-500 bg-gradient-to-r from-blue-50/10 via-green-50/10 to-yellow-50/10 dark:from-blue-950/20 dark:via-green-950/20 dark:to-yellow-950/20'
                   };
                   return themes[lang] || '';
                 };
