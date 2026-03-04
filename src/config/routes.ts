@@ -39,5 +39,10 @@ export const routes: RouteConfig[] = [
     path: '/contact',
     priority: 0.6,
     changefreq: 'monthly'
+  },
+  {
+    path: '/privacy',
+    priority: 0.5,
+    changefreq: 'monthly'
   }
 ];
