@@ -1771,6 +1771,9 @@ const Index = () => {
             <Link to="/contact" className="text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors font-medium">
               {t('navigation.contact')}
             </Link>
+            <Link to="/privacy" className="text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors font-medium">
+              {t('navigation.privacy')}
+            </Link>
           </div>
 
           {/* Copyright */}
