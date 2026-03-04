@@ -11,6 +11,7 @@ import FAQ from "./pages/FAQ";
 import DictionaryFAQ from "./pages/DictionaryFAQ";
 import Contact from "./pages/Contact";
 import Sahbi from "./pages/Sahbi";
+import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/dictionary/faq" element={<DictionaryFAQ />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/sahbi" element={<Sahbi />} />
+          <Route path="/privacy" element={<Privacy />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
