@@ -238,7 +238,7 @@ export function SettingsDialog({
           <span className="sr-only">{t('settings.title')}</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto animate-in fade-in-0 zoom-in-95 duration-300">
+      <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto animate-in fade-in-0 zoom-in-95 duration-300" aria-describedby={undefined}>
         <DialogHeader className="animate-in slide-in-from-top-2 duration-300 pb-2">
           <DialogTitle className="flex items-center gap-3 text-2xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
             <div className="p-2 rounded-lg bg-primary/10 animate-pulse">
