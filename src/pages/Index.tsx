@@ -1364,6 +1364,20 @@ const Index = () => {
 
       {/* Main Content - Google Translate Layout */}
       <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 max-w-7xl flex-1">
+        {/* Sign-in prompt for guests */}
+        {!user && (
+          <div className="mb-4 flex items-center gap-3 rounded-2xl border border-primary/20 bg-primary/5 backdrop-blur-sm px-4 py-3 shadow-soft animate-fade-in">
+            <LogIn className="w-5 h-5 text-primary shrink-0" />
+            <p className="text-sm text-foreground/80 flex-1">
+              {t('auth.signInPrompt', 'Sign in to unlock AI-powered translations, translation history, and more.')}
+            </p>
+            <Link to="/auth">
+              <Button size="sm" className="rounded-xl whitespace-nowrap">
+                {t('auth.signIn', 'Sign In')}
+              </Button>
+            </Link>
+          </div>
+        )}
         <Card className="overflow-hidden border-border/50 shadow-elegant hover:shadow-hover transition-all duration-500 bg-card/50 backdrop-blur-sm">
           {/* Language Selectors with Swap Button */}
           <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card via-muted/5 to-card px-[5px]">
