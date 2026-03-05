@@ -567,6 +567,11 @@ const Index = () => {
       setIsFallbackMode(false);
 
       if (error) {
+        // Handle unauthorized - user must sign in
+        if (error.message?.includes('401') || error.message?.includes('Unauthorized')) {
+          toast.error('Please sign in to use the translation service.', { duration: 4000 });
+          return;
+        }
         // Handle rate limiting specifically
         if (error.message?.includes('429') || error.message?.includes('Rate limit')) {
           toast.error('Too many requests. Please wait a moment and try again.', { duration: 4000 });
