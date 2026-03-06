@@ -139,6 +139,27 @@ const Index = () => {
     status: string;
   }>({ isDownloading: false, progress: 0, status: '' });
 
+  // Guest translation limit (5 per day)
+  const GUEST_DAILY_LIMIT = 5;
+  const getGuestTranslationCount = (): number => {
+    const data = localStorage.getItem('guest_translations');
+    if (!data) return 0;
+    try {
+      const parsed = JSON.parse(data);
+      const today = new Date().toDateString();
+      if (parsed.date !== today) return 0;
+      return parsed.count || 0;
+    } catch { return 0; }
+  };
+  const incrementGuestTranslationCount = () => {
+    const today = new Date().toDateString();
+    const current = getGuestTranslationCount();
+    localStorage.setItem('guest_translations', JSON.stringify({ date: today, count: current + 1 }));
+    setGuestTranslationsUsed(current + 1);
+  };
+  const [guestTranslationsUsed, setGuestTranslationsUsed] = useState(() => getGuestTranslationCount());
+  const guestLimitReached = !user && guestTranslationsUsed >= GUEST_DAILY_LIMIT;
+
   // Dynamic font size based on text length
   const getTextSize = (text: string) => {
     const length = text.length;
