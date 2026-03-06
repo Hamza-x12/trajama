@@ -139,6 +139,27 @@ const Index = () => {
     status: string;
   }>({ isDownloading: false, progress: 0, status: '' });
 
+  // Guest translation limit (5 per day)
+  const GUEST_DAILY_LIMIT = 5;
+  const getGuestTranslationCount = (): number => {
+    const data = localStorage.getItem('guest_translations');
+    if (!data) return 0;
+    try {
+      const parsed = JSON.parse(data);
+      const today = new Date().toDateString();
+      if (parsed.date !== today) return 0;
+      return parsed.count || 0;
+    } catch { return 0; }
+  };
+  const incrementGuestTranslationCount = () => {
+    const today = new Date().toDateString();
+    const current = getGuestTranslationCount();
+    localStorage.setItem('guest_translations', JSON.stringify({ date: today, count: current + 1 }));
+    setGuestTranslationsUsed(current + 1);
+  };
+  const [guestTranslationsUsed, setGuestTranslationsUsed] = useState(() => getGuestTranslationCount());
+  const guestLimitReached = !user && guestTranslationsUsed >= GUEST_DAILY_LIMIT;
+
   // Dynamic font size based on text length
   const getTextSize = (text: string) => {
     const length = text.length;
@@ -419,6 +440,11 @@ const Index = () => {
       toast.error(t('translation.enterText'));
       return;
     }
+    // Guest daily limit check
+    if (!user && getGuestTranslationCount() >= GUEST_DAILY_LIMIT) {
+      setGuestTranslationsUsed(getGuestTranslationCount());
+      return;
+    }
     setIsTranslating(true);
     setTranslations(null);
     setDetectedLanguage(null);
@@ -481,6 +507,7 @@ const Index = () => {
         setTranslations({
           translations: emptyTranslations
         });
+        if (!user) incrementGuestTranslationCount();
         
         // Add to history
         const historyItem: HistoryItem = {
@@ -608,6 +635,8 @@ const Index = () => {
         return;
       }
       setTranslations(data);
+      // Increment guest translation counter
+      if (!user) incrementGuestTranslationCount();
 
       // Show detected language if available
       if (data.detectedLanguage) {
@@ -1365,11 +1394,14 @@ const Index = () => {
       {/* Main Content - Google Translate Layout */}
       <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 max-w-7xl flex-1">
         {/* Sign-in prompt for guests */}
-        {!user && (
+        {!user && !guestLimitReached && (
           <div className="mb-4 flex items-center gap-3 rounded-2xl border border-primary/20 bg-primary/5 backdrop-blur-sm px-4 py-3 shadow-soft animate-fade-in">
             <LogIn className="w-5 h-5 text-primary shrink-0" />
             <p className="text-sm text-foreground/80 flex-1">
-              {t('auth.signInPrompt', 'Sign in to unlock AI-powered translations, translation history, and more.')}
+              {t('auth.signInPrompt', 'Sign in to unlock unlimited AI-powered translations, translation history, and more.')}
+              <span className="ml-2 font-semibold text-primary">
+                ({GUEST_DAILY_LIMIT - guestTranslationsUsed} {t('translation.remaining', 'remaining today')})
+              </span>
             </p>
             <Link to="/auth">
               <Button size="sm" className="rounded-xl whitespace-nowrap">
@@ -1378,7 +1410,35 @@ const Index = () => {
             </Link>
           </div>
         )}
-        <Card className="overflow-hidden border-border/50 shadow-elegant hover:shadow-hover transition-all duration-500 bg-card/50 backdrop-blur-sm">
+        {/* Guest limit reached overlay */}
+        {guestLimitReached && (
+          <div className="mb-4 rounded-2xl border border-destructive/30 bg-card/95 backdrop-blur-xl p-8 shadow-elegant animate-fade-in">
+            <div className="text-center space-y-5 max-w-md mx-auto">
+              <div className="relative inline-block">
+                <div className="absolute -inset-6 rounded-full bg-gradient-to-r from-primary/15 via-accent/20 to-primary/15 blur-2xl" />
+                <img src={tarjamaLogo} alt="Tarjama" className="w-20 h-20 rounded-full relative z-10 ring-2 ring-primary/30" />
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+                {t('translation.limitReachedTitle', "You've used all your free translations today")}
+              </h2>
+              <p className="text-muted-foreground text-sm sm:text-base">
+                {t('translation.limitReachedDesc', 'Sign in to get unlimited translations, translation history, and access to all features. It\'s free!')}
+              </p>
+              <div className="flex flex-col gap-3 items-center w-full max-w-xs mx-auto">
+                <Link to="/auth" className="w-full">
+                  <Button size="lg" className="w-full">
+                    <LogIn className="w-5 h-5 mr-2" />
+                    {t('auth.signIn', 'Sign In')}
+                  </Button>
+                </Link>
+                <p className="text-xs text-muted-foreground">
+                  {t('translation.limitResetsAt', 'Your free translations reset tomorrow')}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+        <Card className={`overflow-hidden border-border/50 shadow-elegant hover:shadow-hover transition-all duration-500 bg-card/50 backdrop-blur-sm ${guestLimitReached ? 'pointer-events-none' : ''}`}>
           {/* Language Selectors with Swap Button */}
           <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card via-muted/5 to-card px-[5px]">
             <div className="flex items-center gap-3 justify-center">
@@ -1546,7 +1606,8 @@ const Index = () => {
                         handleTranslate();
                       }
                     }} 
-                    className={`${getTextSize(inputText)} resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60 bg-transparent min-h-[200px] transition-all duration-200`} 
+                    className={`${getTextSize(inputText)} resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60 bg-transparent min-h-[200px] transition-all duration-200 ${guestLimitReached ? 'blur-sm opacity-50' : ''}`} 
+                    disabled={guestLimitReached}
                   />
                   {inputText.length > 0 && (
                     <span className="absolute bottom-2 right-28 text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded-md animate-fade-in">
@@ -1635,7 +1696,7 @@ const Index = () => {
                     <X className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
                     <span className="hidden sm:inline">{t('translation.clear') || 'Clear'}</span>
                   </Button>
-                  <Button onClick={handleTranslate} disabled={isTranslating || modelDownloadProgress.isDownloading || !inputText.trim()} className="flex-1 h-10 sm:h-11 md:h-12 text-sm sm:text-base font-semibold shadow-moroccan hover:shadow-hover transition-all duration-300 hover:scale-[1.02]" size="lg">
+                  <Button onClick={handleTranslate} disabled={isTranslating || modelDownloadProgress.isDownloading || !inputText.trim() || guestLimitReached} className="flex-1 h-10 sm:h-11 md:h-12 text-sm sm:text-base font-semibold shadow-moroccan hover:shadow-hover transition-all duration-300 hover:scale-[1.02]" size="lg">
                     {modelDownloadProgress.isDownloading ? <>
                         <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin mr-2" />
                         <span className="hidden sm:inline">{modelDownloadProgress.status}</span>
