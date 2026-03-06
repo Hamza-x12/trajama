@@ -1410,7 +1410,35 @@ const Index = () => {
             </Link>
           </div>
         )}
-        <Card className="overflow-hidden border-border/50 shadow-elegant hover:shadow-hover transition-all duration-500 bg-card/50 backdrop-blur-sm">
+        {/* Guest limit reached overlay */}
+        {guestLimitReached && (
+          <div className="mb-4 rounded-2xl border border-destructive/30 bg-card/95 backdrop-blur-xl p-8 shadow-elegant animate-fade-in">
+            <div className="text-center space-y-5 max-w-md mx-auto">
+              <div className="relative inline-block">
+                <div className="absolute -inset-6 rounded-full bg-gradient-to-r from-primary/15 via-accent/20 to-primary/15 blur-2xl" />
+                <img src={tarjamaLogo} alt="Tarjama" className="w-20 h-20 rounded-full relative z-10 ring-2 ring-primary/30" />
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+                {t('translation.limitReachedTitle', "You've used all your free translations today")}
+              </h2>
+              <p className="text-muted-foreground text-sm sm:text-base">
+                {t('translation.limitReachedDesc', 'Sign in to get unlimited translations, translation history, and access to all features. It\'s free!')}
+              </p>
+              <div className="flex flex-col gap-3 items-center w-full max-w-xs mx-auto">
+                <Link to="/auth" className="w-full">
+                  <Button size="lg" className="w-full">
+                    <LogIn className="w-5 h-5 mr-2" />
+                    {t('auth.signIn', 'Sign In')}
+                  </Button>
+                </Link>
+                <p className="text-xs text-muted-foreground">
+                  {t('translation.limitResetsAt', 'Your free translations reset tomorrow')}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+        <Card className={`overflow-hidden border-border/50 shadow-elegant hover:shadow-hover transition-all duration-500 bg-card/50 backdrop-blur-sm ${guestLimitReached ? 'pointer-events-none' : ''}`}>
           {/* Language Selectors with Swap Button */}
           <div className="border-b border-border/50 p-3 sm:p-4 md:p-5 bg-gradient-to-r from-card via-muted/5 to-card px-[5px]">
             <div className="flex items-center gap-3 justify-center">
