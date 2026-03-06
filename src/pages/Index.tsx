@@ -634,6 +634,8 @@ const Index = () => {
         return;
       }
       setTranslations(data);
+      // Increment guest translation counter
+      if (!user) incrementGuestTranslationCount();
 
       // Show detected language if available
       if (data.detectedLanguage) {
