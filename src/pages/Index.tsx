@@ -1606,7 +1606,8 @@ const Index = () => {
                         handleTranslate();
                       }
                     }} 
-                    className={`${getTextSize(inputText)} resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60 bg-transparent min-h-[200px] transition-all duration-200`} 
+                    className={`${getTextSize(inputText)} resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 leading-relaxed placeholder:text-muted-foreground/60 bg-transparent min-h-[200px] transition-all duration-200 ${guestLimitReached ? 'blur-sm opacity-50' : ''}`} 
+                    disabled={guestLimitReached}
                   />
                   {inputText.length > 0 && (
                     <span className="absolute bottom-2 right-28 text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded-md animate-fade-in">
