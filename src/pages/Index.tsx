@@ -507,6 +507,7 @@ const Index = () => {
         setTranslations({
           translations: emptyTranslations
         });
+        if (!user) incrementGuestTranslationCount();
         
         // Add to history
         const historyItem: HistoryItem = {
