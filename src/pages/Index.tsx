@@ -440,6 +440,11 @@ const Index = () => {
       toast.error(t('translation.enterText'));
       return;
     }
+    // Guest daily limit check
+    if (!user && getGuestTranslationCount() >= GUEST_DAILY_LIMIT) {
+      setGuestTranslationsUsed(getGuestTranslationCount());
+      return;
+    }
     setIsTranslating(true);
     setTranslations(null);
     setDetectedLanguage(null);
