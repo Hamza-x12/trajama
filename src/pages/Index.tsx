@@ -1696,7 +1696,7 @@ const Index = () => {
                     <X className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
                     <span className="hidden sm:inline">{t('translation.clear') || 'Clear'}</span>
                   </Button>
-                  <Button onClick={handleTranslate} disabled={isTranslating || modelDownloadProgress.isDownloading || !inputText.trim()} className="flex-1 h-10 sm:h-11 md:h-12 text-sm sm:text-base font-semibold shadow-moroccan hover:shadow-hover transition-all duration-300 hover:scale-[1.02]" size="lg">
+                  <Button onClick={handleTranslate} disabled={isTranslating || modelDownloadProgress.isDownloading || !inputText.trim() || guestLimitReached} className="flex-1 h-10 sm:h-11 md:h-12 text-sm sm:text-base font-semibold shadow-moroccan hover:shadow-hover transition-all duration-300 hover:scale-[1.02]" size="lg">
                     {modelDownloadProgress.isDownloading ? <>
                         <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin mr-2" />
                         <span className="hidden sm:inline">{modelDownloadProgress.status}</span>
