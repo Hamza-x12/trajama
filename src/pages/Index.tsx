@@ -1394,11 +1394,14 @@ const Index = () => {
       {/* Main Content - Google Translate Layout */}
       <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 max-w-7xl flex-1">
         {/* Sign-in prompt for guests */}
-        {!user && (
+        {!user && !guestLimitReached && (
           <div className="mb-4 flex items-center gap-3 rounded-2xl border border-primary/20 bg-primary/5 backdrop-blur-sm px-4 py-3 shadow-soft animate-fade-in">
             <LogIn className="w-5 h-5 text-primary shrink-0" />
             <p className="text-sm text-foreground/80 flex-1">
-              {t('auth.signInPrompt', 'Sign in to unlock AI-powered translations, translation history, and more.')}
+              {t('auth.signInPrompt', 'Sign in to unlock unlimited AI-powered translations, translation history, and more.')}
+              <span className="ml-2 font-semibold text-primary">
+                ({GUEST_DAILY_LIMIT - guestTranslationsUsed} {t('translation.remaining', 'remaining today')})
+              </span>
             </p>
             <Link to="/auth">
               <Button size="sm" className="rounded-xl whitespace-nowrap">
