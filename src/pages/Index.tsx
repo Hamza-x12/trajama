@@ -1348,18 +1348,7 @@ const Index = () => {
               </SheetContent>
             </Sheet>
             
-        <SettingsDialog
-          selectedVoice={selectedVoice}
-          setSelectedVoice={setSelectedVoice}
-          availableVoices={availableVoices}
-          autoVoiceSelect={autoVoiceSelect}
-          setAutoVoiceSelect={setAutoVoiceSelect}
-          speechRate={speechRate}
-          setSpeechRate={setSpeechRate}
-          profanityFilterEnabled={profanityFilterEnabled}
-          setProfanityFilterEnabled={setProfanityFilterEnabled}
-          onShowTutorial={restartOnboarding}
-        />
+        <SettingsLink />
         <OnboardingTutorial 
           open={showOnboarding} 
           onOpenChange={setShowOnboarding}

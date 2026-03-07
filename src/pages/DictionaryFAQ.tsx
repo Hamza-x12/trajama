@@ -81,7 +81,7 @@ const DictionaryFAQ = () => {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <SettingsDialog selectedVoice="" setSelectedVoice={() => {}} availableVoices={[]} />
+              <SettingsLink />
               <ThemeToggle />
             </div>
           </div>
