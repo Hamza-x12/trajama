@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { SettingsDialog } from "@/components/SettingsDialog";
+import { SettingsLink } from "@/components/SettingsLink";
 import { ZelligeCorners } from "@/components/ZelligeCorners";
 import { SahbiLandingSection } from "@/components/SahbiLandingSection";
 
