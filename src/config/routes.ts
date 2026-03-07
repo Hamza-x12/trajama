@@ -44,5 +44,10 @@ export const routes: RouteConfig[] = [
     path: '/privacy',
     priority: 0.5,
     changefreq: 'monthly'
+  },
+  {
+    path: '/settings',
+    priority: 0.6,
+    changefreq: 'monthly'
   }
 ];

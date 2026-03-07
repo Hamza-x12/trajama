@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { SettingsDialog } from "@/components/SettingsDialog";
+import { SettingsLink } from "@/components/SettingsLink";
 import { ContactForm } from "@/components/ContactForm";
 import { useTranslation } from "react-i18next";
 import { ZelligeCorners } from "@/components/ZelligeCorners";
@@ -37,7 +37,7 @@ const Contact = () => {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <SettingsDialog selectedVoice="" setSelectedVoice={() => {}} availableVoices={[]} />
+              <SettingsLink />
               <ThemeToggle />
             </div>
           </div>

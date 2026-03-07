@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { SettingsDialog } from "@/components/SettingsDialog";
+import { SettingsLink } from "@/components/SettingsLink";
 import { WordDetailDialog } from "@/components/WordDetailDialog";
 import { DailyChallenge } from "@/components/DailyChallenge";
 import { toast } from "sonner";
@@ -1017,7 +1017,7 @@ const Dictionary = () => {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <SettingsDialog selectedVoice="" setSelectedVoice={() => {}} availableVoices={[]} />
+              <SettingsLink />
               <ThemeToggle />
             </div>
           </div>

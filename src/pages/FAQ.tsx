@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/accordion";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { SettingsDialog } from "@/components/SettingsDialog";
+import { SettingsLink } from "@/components/SettingsLink";
 import { MessageCircle } from "lucide-react";
 import { ZelligeCorners } from "@/components/ZelligeCorners";
 
@@ -59,7 +59,7 @@ const FAQ = () => {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <SettingsDialog selectedVoice="" setSelectedVoice={() => {}} availableVoices={[]} />
+              <SettingsLink />
               <ThemeToggle />
             </div>
           </div>

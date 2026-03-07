@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { TranslationCard } from "@/components/TranslationCard";
 import { TranslationHistory } from "@/components/TranslationHistory";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { SettingsDialog } from "@/components/SettingsDialog";
+import { SettingsLink } from "@/components/SettingsLink";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineScreen } from "@/components/OfflineScreen";
 import { OnboardingTutorial, useOnboarding } from "@/components/OnboardingTutorial";
@@ -1348,18 +1348,7 @@ const Index = () => {
               </SheetContent>
             </Sheet>
             
-        <SettingsDialog
-          selectedVoice={selectedVoice}
-          setSelectedVoice={setSelectedVoice}
-          availableVoices={availableVoices}
-          autoVoiceSelect={autoVoiceSelect}
-          setAutoVoiceSelect={setAutoVoiceSelect}
-          speechRate={speechRate}
-          setSpeechRate={setSpeechRate}
-          profanityFilterEnabled={profanityFilterEnabled}
-          setProfanityFilterEnabled={setProfanityFilterEnabled}
-          onShowTutorial={restartOnboarding}
-        />
+        <SettingsLink />
         <OnboardingTutorial 
           open={showOnboarding} 
           onOpenChange={setShowOnboarding}
