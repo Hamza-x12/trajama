@@ -12,6 +12,7 @@ import DictionaryFAQ from "./pages/DictionaryFAQ";
 import Contact from "./pages/Contact";
 import Sahbi from "./pages/Sahbi";
 import Privacy from "./pages/Privacy";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
