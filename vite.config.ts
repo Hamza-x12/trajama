@@ -49,11 +49,6 @@ export default defineConfig(({ mode }) => ({
                 statuses: [0, 200]
               }
             }
-          },
-          {
-            // Catch ALL HuggingFace domains and subdomains — bypass SW completely
-            urlPattern: /^https:\/\/.*(?:huggingface\.co|hf\.co)\/.*/i,
-            handler: 'NetworkOnly'
           }
         ]
       }
