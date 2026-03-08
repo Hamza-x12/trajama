@@ -62,7 +62,6 @@ export async function loadTranslationModel(
       'translation',
       'Xenova/m2m100_418M',
       {
-        device: 'webgpu',
         progress_callback: (progressData: any) => {
           if (progressData.status === 'progress') {
             onProgress?.({
