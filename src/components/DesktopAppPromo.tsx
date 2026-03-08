@@ -49,9 +49,9 @@ export function DesktopAppPromo() {
         </div>
 
         {/* Platform & version */}
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-3">
           <Badge variant="outline" className="border-accent/30 text-accent gap-1.5 text-xs">
-            <img src={windowsLogo} alt="" className="w-3.5 h-3.5" />
+            <img src={windowsLogo} alt="" className="w-4 h-4" />
             Windows 10/11
           </Badge>
           <Badge variant="outline" className="border-muted-foreground/30 text-muted-foreground text-xs">
@@ -59,10 +59,10 @@ export function DesktopAppPromo() {
           </Badge>
         </div>
 
-        {/* Download button — styled like the reference images */}
+        {/* Download button */}
         <a href={DOWNLOAD_URL} target="_blank" rel="noopener noreferrer" className="block">
           <div className="relative w-full h-14 rounded-xl bg-gradient-to-r from-[hsl(var(--accent))] to-[hsl(var(--primary))] flex items-center justify-center gap-3 cursor-pointer shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 group/btn">
-            <img src={windowsLogo} alt="" className="w-5 h-5 brightness-0 invert" />
+            <img src={windowsLogo} alt="" className="w-6 h-6 brightness-0 invert" />
             <span className="text-primary-foreground font-bold text-base tracking-wide">
               {t('desktopApp.download')}
             </span>
