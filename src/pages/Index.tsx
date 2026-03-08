@@ -1538,12 +1538,8 @@ const Index = () => {
                     <X className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
                     <span className="hidden sm:inline">{t('translation.clear') || 'Clear'}</span>
                   </Button>
-                  <Button onClick={handleTranslate} disabled={isTranslating || modelDownloadProgress.isDownloading || !inputText.trim() || guestLimitReached} className="flex-1 h-10 sm:h-11 md:h-12 text-sm sm:text-base font-semibold shadow-moroccan hover:shadow-hover transition-all duration-300 hover:scale-[1.02]" size="lg">
-                    {modelDownloadProgress.isDownloading ? <>
-                        <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin mr-2" />
-                        <span className="hidden sm:inline">{modelDownloadProgress.status}</span>
-                        <span className="sm:hidden">{Math.round(modelDownloadProgress.progress)}%</span>
-                      </> : isTranslating ? <>
+                  <Button onClick={handleTranslate} disabled={isTranslating || !inputText.trim() || guestLimitReached} className="flex-1 h-10 sm:h-11 md:h-12 text-sm sm:text-base font-semibold shadow-moroccan hover:shadow-hover transition-all duration-300 hover:scale-[1.02]" size="lg">
+                    {isTranslating ? <>
                         <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin mr-2" />
                         <span className="hidden sm:inline">{t('translation.translating')}</span>
                         <span className="sm:hidden">{t('translation.translate')}</span>
@@ -1552,26 +1548,6 @@ const Index = () => {
                         {t('translation.translate')}
                       </>}
                   </Button>
-                </div>
-                
-                {/* Model download progress bar */}
-                {modelDownloadProgress.isDownloading && (
-                  <div className="mt-3 space-y-1">
-                    <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <span>Downloading offline translation model...</span>
-                      <span>{Math.round(modelDownloadProgress.progress)}%</span>
-                    </div>
-                    <div className="h-2 bg-muted rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-gradient-to-r from-primary to-primary/80 transition-all duration-300 ease-out"
-                        style={{ width: `${modelDownloadProgress.progress}%` }}
-                      />
-                    </div>
-                    <p className="text-xs text-muted-foreground/70">
-                      First-time download only. Model will be cached for future use.
-                    </p>
-                  </div>
-                )}
               </div>
             </div>
 
