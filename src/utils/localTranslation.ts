@@ -22,38 +22,49 @@ export type ProgressCallback = (progress: {
 
 const translationPipelines: Map<string, TranslationPipeline> = new Map();
 
-// Per-language opus-mt models (Helsinki-NLP via Xenova, ~15-30MB each direction)
-// Format: Xenova/opus-mt-{src}-{tgt}
+// Verified Xenova opus-mt models on HuggingFace (confirmed to exist)
 const opusModelMap: Record<string, string> = {
+  // Arabic
   'ar-en': 'Xenova/opus-mt-ar-en',
   'en-ar': 'Xenova/opus-mt-en-ar',
+  // French
   'fr-en': 'Xenova/opus-mt-fr-en',
   'en-fr': 'Xenova/opus-mt-en-fr',
+  // Spanish
   'es-en': 'Xenova/opus-mt-es-en',
   'en-es': 'Xenova/opus-mt-en-es',
+  // German
   'de-en': 'Xenova/opus-mt-de-en',
   'en-de': 'Xenova/opus-mt-en-de',
+  // Italian
   'it-en': 'Xenova/opus-mt-it-en',
   'en-it': 'Xenova/opus-mt-en-it',
-  'pt-en': 'Xenova/opus-mt-tc-big-en', // Portuguese via Romance group
-  'en-pt': 'Xenova/opus-mt-en-roa',    // English to Romance group
+  // Chinese
   'zh-en': 'Xenova/opus-mt-zh-en',
   'en-zh': 'Xenova/opus-mt-en-zh',
-  'ja-en': 'Xenova/opus-mt-ja-en',
-  'en-ja': 'Xenova/opus-mt-en-jap',
-  'tr-en': 'Xenova/opus-mt-tr-en',
-  'en-tr': 'Xenova/opus-mt-en-trk',
+  // Russian
   'ru-en': 'Xenova/opus-mt-ru-en',
   'en-ru': 'Xenova/opus-mt-en-ru',
-  'ko-en': 'Xenova/opus-mt-ko-en',
-  'en-ko': 'Xenova/opus-mt-en-ko',
+  // Japanese (uses "jap" code in opus-mt)
+  'ja-en': 'Xenova/opus-mt-jap-en',
+  'en-ja': 'Xenova/opus-mt-en-jap',
+  // Hindi
   'hi-en': 'Xenova/opus-mt-hi-en',
   'en-hi': 'Xenova/opus-mt-en-hi',
+  // Korean (only ko→en exists, use en-mul for reverse)
+  'ko-en': 'Xenova/opus-mt-ko-en',
+  'en-ko': 'Xenova/opus-mt-en-mul',
+  // Turkish (only tr→en exists, use en-mul for reverse)
+  'tr-en': 'Xenova/opus-mt-tr-en',
+  'en-tr': 'Xenova/opus-mt-en-mul',
+  // Portuguese (use mul-en / en-ROMANCE)
+  'pt-en': 'Xenova/opus-mt-mul-en',
+  'en-pt': 'Xenova/opus-mt-en-ROMANCE',
 };
 
 // Language name → ISO code
 const languageMap: Record<string, string> = {
-  'Darija': 'ar', // Uses Arabic model as closest match
+  'Darija': 'ar',
   'Arabic': 'ar',
   'French': 'fr',
   'English': 'en',
@@ -73,7 +84,7 @@ function getModelId(sourceLang: string, targetLang: string): string {
   const key = `${sourceLang}-${targetLang}`;
   const model = opusModelMap[key];
   if (!model) {
-    throw new Error(`No offline model available for ${sourceLang} → ${targetLang}. Try translating via English as a bridge.`);
+    throw new Error(`No offline model available for ${sourceLang} → ${targetLang}`);
   }
   return model;
 }
@@ -143,7 +154,6 @@ export async function translateLocally(
   const pipelineKey = `${sourceLang}-${targetLang}`;
 
   try {
-    // Load model if not already loaded
     if (!translationPipelines.has(pipelineKey)) {
       await loadTranslationModel(sourceLanguage, targetLanguage, onProgress);
     }
@@ -155,10 +165,17 @@ export async function translateLocally(
 
     console.log(`Translating with opus-mt: ${text.substring(0, 50)}...`);
     
-    const result = await pipelineInstance.model(text, {
-      max_new_tokens: 256
-    });
+    // For multilingual models, we need to specify source/target language
+    const modelId = getModelId(sourceLang, targetLang);
+    const opts: any = { max_new_tokens: 256 };
+    
+    // en-mul and mul-en models need language prefix
+    if (modelId.includes('mul-en') || modelId.includes('en-mul') || modelId.includes('en-ROMANCE')) {
+      opts.src_lang = sourceLang;
+      opts.tgt_lang = targetLang;
+    }
 
+    const result = await pipelineInstance.model(text, opts);
     return result[0].translation_text || text;
   } catch (error) {
     console.error('Local translation error:', error);
@@ -169,8 +186,7 @@ export async function translateLocally(
 export function isModelLoaded(sourceLanguage: string, targetLanguage: string): boolean {
   const sourceLang = languageMap[sourceLanguage] || sourceLanguage.toLowerCase();
   const targetLang = languageMap[targetLanguage] || targetLanguage.toLowerCase();
-  const pipelineKey = `${sourceLang}-${targetLang}`;
-  return translationPipelines.has(pipelineKey);
+  return translationPipelines.has(`${sourceLang}-${targetLang}`);
 }
 
 export function clearAllModels(): void {
@@ -178,7 +194,6 @@ export function clearAllModels(): void {
   console.log('All translation models cleared');
 }
 
-// Check if a specific language pair model is cached
 export async function isModelCached(sourceLang?: string, targetLang?: string): Promise<boolean> {
   try {
     const cache = await caches.open('transformers-cache');
