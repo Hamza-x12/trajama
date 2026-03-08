@@ -486,15 +486,8 @@ const Index = () => {
       if (data.error) {
         // Check if error message indicates credit issues - fallback to local translation
         if (data.error.includes('402') || data.error.includes('Payment') || data.error.includes('credits')) {
-          toast.warning('AI credits exhausted. Switching to offline mode...', { duration: 3000 });
-          try {
-            await fallbackToLocalTranslation();
-            return;
-          } catch (localError) {
-            console.error('Local translation also failed:', localError);
-            toast.error('Both online and offline translation failed. Please try again later.');
-            return;
-          }
+          toast.error('AI credits exhausted. Please try again later.');
+          return;
         }
         toast.error(data.error);
         return;
