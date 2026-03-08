@@ -1,5 +1,4 @@
-import { Settings, Download, Trash2, Loader2, Palette, Type, RotateCcw, Info, FileDown, FileUp, History, HelpCircle, Pause, Play, Globe2, Moon, Sun, Monitor, Languages, Volume2, Shield, CloudDownload, Check, MessageCircle } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
+import { Settings, Palette, Type, RotateCcw, Info, FileDown, FileUp, History, HelpCircle, Play, Globe2, Moon, Sun, Monitor, Volume2, Shield, Check, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
