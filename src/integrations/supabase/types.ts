@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      challenge_scores: {
+        Row: {
+          challenge_date: string
+          challenge_type: string
+          created_at: string
+          id: string
+          score: number
+          user_id: string
+        }
+        Insert: {
+          challenge_date?: string
+          challenge_type: string
+          created_at?: string
+          id?: string
+          score?: number
+          user_id: string
+        }
+        Update: {
+          challenge_date?: string
+          challenge_type?: string
+          created_at?: string
+          id?: string
+          score?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           created_at: string
@@ -188,7 +215,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_leaderboard: {
+        Args: never
+        Returns: {
+          avatar_url: string
+          display_name: string
+          total_score: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
