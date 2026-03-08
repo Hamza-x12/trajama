@@ -1013,11 +1013,6 @@ const Index = () => {
                       <span className="w-1.5 h-1.5 rounded-full bg-orange-500 mr-1.5" />
                       Offline
                     </Badge>
-                  ) : isFallbackMode ? (
-                    <Badge variant="secondary" className="text-xs bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5 animate-pulse" />
-                      Fallback Mode
-                    </Badge>
                   ) : (
                     <Badge variant="secondary" className="text-xs bg-green-500/20 text-green-600 dark:text-green-400 border border-green-500/30 hidden sm:flex">
                       <span className="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5" />
