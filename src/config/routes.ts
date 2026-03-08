@@ -21,6 +21,11 @@ export const routes: RouteConfig[] = [
     changefreq: 'weekly'
   },
   {
+    path: '/sahbi',
+    priority: 0.8,
+    changefreq: 'weekly'
+  },
+  {
     path: '/about',
     priority: 0.7,
     changefreq: 'monthly'
@@ -41,13 +46,13 @@ export const routes: RouteConfig[] = [
     changefreq: 'monthly'
   },
   {
-    path: '/privacy',
-    priority: 0.5,
+    path: '/settings',
+    priority: 0.6,
     changefreq: 'monthly'
   },
   {
-    path: '/settings',
-    priority: 0.6,
+    path: '/privacy',
+    priority: 0.5,
     changefreq: 'monthly'
   }
 ];
