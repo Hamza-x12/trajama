@@ -444,77 +444,9 @@ const Index = () => {
     setDetectedLanguage(null);
     
     try {
-      // Use local translation if offline
+      // If offline, show message
       if (!isOnline) {
-        const { translateLocally } = await import('@/utils/localTranslation');
-        
-        toast.info('Using offline translation...');
-        
-        // Progress callback for model download
-        const onProgress = (progress: { status: string; progress?: number }) => {
-          if (progress.status === 'downloading') {
-            setModelDownloadProgress({
-              isDownloading: true,
-              progress: progress.progress || 0,
-              status: `Downloading model: ${Math.round(progress.progress || 0)}%`
-            });
-          } else if (progress.status === 'loading') {
-            setModelDownloadProgress({
-              isDownloading: true,
-              progress: 100,
-              status: 'Loading model...'
-            });
-          } else if (progress.status === 'ready') {
-            setModelDownloadProgress({ isDownloading: false, progress: 0, status: '' });
-          }
-        };
-        
-        const translation = await translateLocally(
-          inputText,
-          sourceLanguage === "Detect Language" ? "English" : sourceLanguage,
-          targetLanguage,
-          onProgress
-        );
-        setModelDownloadProgress({ isDownloading: false, progress: 0, status: '' });
-        
-        // Create translation result with only the target language
-        const emptyTranslations = {
-          darija: '',
-          french: '',
-          arabic: '',
-          english: '',
-          spanish: '',
-          german: '',
-          italian: '',
-          portuguese: '',
-          chinese: '',
-          japanese: '',
-          turkish: '',
-          russian: '',
-          korean: '',
-          hindi: '',
-          amazigh: ''
-        };
-        
-        emptyTranslations[targetLanguage.toLowerCase() as keyof typeof emptyTranslations] = translation;
-        
-        setTranslations({
-          translations: emptyTranslations
-        });
-        if (!user) incrementGuestTranslationCount();
-        
-        // Add to history
-        const historyItem: HistoryItem = {
-          id: Date.now().toString(),
-          text: inputText,
-          sourceLanguage: sourceLanguage === "Detect Language" ? "English" : sourceLanguage,
-          targetLanguage: targetLanguage,
-          timestamp: Date.now(),
-          translations: emptyTranslations
-        };
-        setHistory(prev => [historyItem, ...prev].slice(0, 50));
-        
-        toast.success('Translation complete (offline)');
+        toast.error('Translation requires an internet connection.');
         return;
       }
       
