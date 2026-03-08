@@ -18,13 +18,11 @@ export function DesktopAppPromo() {
 
       <div className="relative p-5 sm:p-6 flex flex-col h-full">
         {/* Top section */}
-        <div className="flex items-start gap-4 mb-6">
+        <div className="flex items-start gap-4 mb-4">
           <div className="relative shrink-0">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent/20 to-primary/20 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
-              <img src={tarjamaLogo} alt="Tarjama" className="w-10 h-10 object-contain" />
-            </div>
+            <img src={tarjamaLogo} alt="Tarjama" className="w-16 h-16 object-contain group-hover:scale-105 transition-transform duration-300" />
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 pt-1">
             <div className="flex items-center gap-2 mb-1">
               <h3 className="text-lg sm:text-xl font-bold text-foreground">Tarjama Desktop</h3>
               <Badge className="bg-accent/20 text-accent border-0 text-[10px] px-1.5 py-0 font-semibold">
@@ -36,7 +34,7 @@ export function DesktopAppPromo() {
         </div>
 
         {/* Features grid */}
-        <div className="grid grid-cols-2 gap-2.5 mb-6">
+        <div className="grid grid-cols-2 gap-2.5 mb-4">
           {[
             { icon: Zap, label: "Fast & Light" },
             { icon: Monitor, label: "Native App" },
@@ -49,9 +47,6 @@ export function DesktopAppPromo() {
             </div>
           ))}
         </div>
-
-        {/* Spacer */}
-        <div className="flex-1" />
 
         {/* Platform & version */}
         <div className="flex items-center gap-2 mb-4">
