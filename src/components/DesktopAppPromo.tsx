@@ -26,7 +26,7 @@ export function DesktopAppPromo() {
             <div className="flex items-center gap-2 mb-1">
               <h3 className="text-lg sm:text-xl font-bold text-foreground">Tarjama Desktop</h3>
               <Badge className="bg-accent/20 text-accent border-0 text-[10px] px-1.5 py-0 font-semibold">
-                FREE
+                NEW
               </Badge>
             </div>
             <p className="text-sm text-muted-foreground">{t('desktopApp.subtitle')}</p>
