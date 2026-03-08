@@ -337,10 +337,10 @@ const Index = () => {
     }
   }, [targetLanguage, availableVoices, autoVoiceSelect]);
   
-  // Don't show offline screen anymore, allow local translation
-  // if (!isOnline) {
-  //   return <OfflineScreen />;
-  // }
+  // Show offline screen with functional translator when offline
+  if (!isOnline) {
+    return <OfflineScreen />;
+  }
 
   // Profanity filter
   const containsProfanity = (text: string): boolean => {

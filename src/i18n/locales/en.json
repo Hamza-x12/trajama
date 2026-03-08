@@ -254,11 +254,15 @@
     "remove": "Remove",
     "removed": "Language removed",
     "noConnection": "No Internet Connection",
-    "offlineMessage": "You're currently offline. You can use the languages you've downloaded.",
+    "offlineMessage": "You're currently offline. Download languages in Settings when online to translate offline.",
+    "offlineTranslationAvailable": "Translate using your downloaded language models",
     "downloadedLanguages": "Downloaded Languages",
     "noDownloadedLanguages": "No languages downloaded yet",
-    "downloadLanguagesWhenOnline": "Download languages when online to use them offline",
-    "reconnectMessage": "You'll automatically reconnect when internet is available"
+    "downloadLanguagesWhenOnline": "Go to Settings → Offline Languages when online to download models",
+    "reconnectMessage": "You'll automatically reconnect when internet is available",
+    "downloadingModel": "Downloading model… ",
+    "loadingModel": "Loading model…",
+    "translationFailed": "Offline translation failed. The model may not be downloaded yet."
   },
   "install": {
     "title": "Install Tarjama",
