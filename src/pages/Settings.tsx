@@ -15,9 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { useOfflineLanguages } from "@/hooks/useOfflineLanguages";
 import { cn } from "@/lib/utils";
 
 import moroccoFlag from "@/assets/flags/morocco.png";
