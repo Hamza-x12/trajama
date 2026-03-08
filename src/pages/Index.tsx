@@ -132,12 +132,6 @@ const Index = () => {
   const [isTranslatingImage, setIsTranslatingImage] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [skipSpellingCheck, setSkipSpellingCheck] = useState(false);
-  const [isFallbackMode, setIsFallbackMode] = useState(false);
-  const [modelDownloadProgress, setModelDownloadProgress] = useState<{
-    isDownloading: boolean;
-    progress: number;
-    status: string;
-  }>({ isDownloading: false, progress: 0, status: '' });
 
   // Guest translation limit (5 per day)
   const GUEST_DAILY_LIMIT = 5;
