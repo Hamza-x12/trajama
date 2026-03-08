@@ -11,31 +11,32 @@ export type DownloadState = 'idle' | 'downloading' | 'paused' | 'completed';
 
 const OFFLINE_LANGUAGES_KEY = 'tarjama-offline-languages';
 const DOWNLOAD_STATES_KEY = 'tarjama-download-states';
-const PARTIAL_PROGRESS_KEY = 'tarjama-partial-progress';
 
 export function useOfflineLanguages() {
   const [downloadProgress, setDownloadProgress] = useState<{ [key: string]: number }>({});
   const [downloadStates, setDownloadStates] = useState<{ [key: string]: DownloadState }>({});
   const abortControllers = useRef<{ [key: string]: AbortController }>({});
+
+  // The m2m100 model is shared (~150MB total, downloaded once).
+  // Each "language" just registers a pair; model files are cached after first download.
   const [offlineLanguages, setOfflineLanguages] = useState<OfflineLanguage[]>([
-    { code: 'ar', name: 'Arabic', downloaded: false, size: '150 MB' },
-    { code: 'fr', name: 'French', downloaded: false, size: '150 MB' },
-    { code: 'dar', name: 'Darija', downloaded: false, size: '150 MB' },
-    { code: 'en', name: 'English', downloaded: false, size: '150 MB' },
-    { code: 'es', name: 'Spanish', downloaded: false, size: '150 MB' },
-    { code: 'de', name: 'German', downloaded: false, size: '150 MB' },
-    { code: 'it', name: 'Italian', downloaded: false, size: '150 MB' },
-    { code: 'pt', name: 'Portuguese', downloaded: false, size: '150 MB' },
-    { code: 'zh', name: 'Chinese', downloaded: false, size: '150 MB' },
-    { code: 'ja', name: 'Japanese', downloaded: false, size: '150 MB' },
-    { code: 'tr', name: 'Turkish', downloaded: false, size: '150 MB' },
+    { code: 'ar', name: 'Arabic', downloaded: false, size: '~150 MB (shared model)' },
+    { code: 'fr', name: 'French', downloaded: false, size: '~150 MB (shared model)' },
+    { code: 'dar', name: 'Darija', downloaded: false, size: '~150 MB (shared model)' },
+    { code: 'en', name: 'English', downloaded: false, size: '~150 MB (shared model)' },
+    { code: 'es', name: 'Spanish', downloaded: false, size: '~150 MB (shared model)' },
+    { code: 'de', name: 'German', downloaded: false, size: '~150 MB (shared model)' },
+    { code: 'it', name: 'Italian', downloaded: false, size: '~150 MB (shared model)' },
+    { code: 'pt', name: 'Portuguese', downloaded: false, size: '~150 MB (shared model)' },
+    { code: 'zh', name: 'Chinese', downloaded: false, size: '~150 MB (shared model)' },
+    { code: 'ja', name: 'Japanese', downloaded: false, size: '~150 MB (shared model)' },
+    { code: 'tr', name: 'Turkish', downloaded: false, size: '~150 MB (shared model)' },
   ]);
 
   useEffect(() => {
     const stored = localStorage.getItem(OFFLINE_LANGUAGES_KEY);
     const storedStates = localStorage.getItem(DOWNLOAD_STATES_KEY);
-    const storedProgress = localStorage.getItem(PARTIAL_PROGRESS_KEY);
-    
+
     if (stored) {
       const downloadedCodes = JSON.parse(stored);
       setOfflineLanguages(prev =>
@@ -45,109 +46,67 @@ export function useOfflineLanguages() {
         }))
       );
     }
-    
+
     if (storedStates) {
       setDownloadStates(JSON.parse(storedStates));
     }
-    
-    if (storedProgress) {
-      setDownloadProgress(JSON.parse(storedProgress));
-    }
   }, []);
+
+  const langMap: Record<string, string> = {
+    'ar': 'Arabic', 'fr': 'French', 'dar': 'Darija', 'en': 'English',
+    'es': 'Spanish', 'de': 'German', 'it': 'Italian', 'pt': 'Portuguese',
+    'zh': 'Chinese', 'ja': 'Japanese', 'tr': 'Turkish', 'ru': 'Russian',
+    'ko': 'Korean', 'hi': 'Hindi'
+  };
 
   const downloadLanguage = async (code: string, onProgress?: (progress: number) => void) => {
     try {
-      // Check if resuming from paused state
-      const storedProgress = localStorage.getItem(PARTIAL_PROGRESS_KEY);
-      const partialProgress = storedProgress ? JSON.parse(storedProgress) : {};
-      const startProgress = partialProgress[code] || 0;
-      
-      // Create abort controller for this download
       const controller = new AbortController();
       abortControllers.current[code] = controller;
-      
-      setDownloadProgress(prev => ({ ...prev, [code]: startProgress }));
+
+      setDownloadProgress(prev => ({ ...prev, [code]: 0 }));
       setDownloadStates(prev => {
         const newStates = { ...prev, [code]: 'downloading' as DownloadState };
         localStorage.setItem(DOWNLOAD_STATES_KEY, JSON.stringify(newStates));
         return newStates;
       });
-      
-      // Import the local translation utility
+
       const { loadTranslationModel } = await import('@/utils/localTranslation');
-      
-      // Map language codes to names for the model loader
-      const langMap: Record<string, string> = {
-        'ar': 'Arabic',
-        'fr': 'French',
-        'dar': 'Darija',
-        'en': 'English',
-        'es': 'Spanish',
-        'de': 'German',
-        'it': 'Italian',
-        'pt': 'Portuguese',
-        'zh': 'Chinese',
-        'ja': 'Japanese',
-        'tr': 'Turkish',
-        'ru': 'Russian',
-        'ko': 'Korean',
-        'hi': 'Hindi'
+      const langName = langMap[code] || code;
+
+      // We track progress across multiple model file downloads.
+      // Phase 1 (0-50%): load lang→English model
+      // Phase 2 (50-100%): load English→lang model
+      const makeProgressCb = (phaseOffset: number) => (progressData: any) => {
+        if (controller.signal.aborted) return;
+        if (progressData.status === 'downloading' && progressData.progress != null) {
+          const total = phaseOffset + (progressData.progress / 100) * 50;
+          const rounded = Math.round(total);
+          setDownloadProgress(prev => ({ ...prev, [code]: rounded }));
+          onProgress?.(rounded);
+        } else if (progressData.status === 'loading') {
+          const total = phaseOffset + 48;
+          setDownloadProgress(prev => ({ ...prev, [code]: Math.round(total) }));
+          onProgress?.(Math.round(total));
+        } else if (progressData.status === 'ready') {
+          const total = phaseOffset + 50;
+          setDownloadProgress(prev => ({ ...prev, [code]: Math.round(total) }));
+          onProgress?.(Math.round(total));
+        }
       };
 
-      const langName = langMap[code] || code;
-      
-      // Check if we should skip already loaded parts
-      if (startProgress < 50) {
-        // Load first model (to target language)
-        if (startProgress < 10) {
-          setDownloadProgress(prev => ({ ...prev, [code]: 10 }));
-          onProgress?.(10);
-          const updated1 = { ...partialProgress, [code]: 10 };
-          localStorage.setItem(PARTIAL_PROGRESS_KEY, JSON.stringify(updated1));
-        }
-        
-        if (controller.signal.aborted) throw new Error('Download paused');
-        await new Promise(resolve => setTimeout(resolve, 300));
-        
-        if (startProgress < 25) {
-          setDownloadProgress(prev => ({ ...prev, [code]: 25 }));
-          onProgress?.(25);
-          const updated2 = { ...partialProgress, [code]: 25 };
-          localStorage.setItem(PARTIAL_PROGRESS_KEY, JSON.stringify(updated2));
-        }
-        
-        if (controller.signal.aborted) throw new Error('Download paused');
-        await loadTranslationModel(langName, 'English');
-        
-        setDownloadProgress(prev => ({ ...prev, [code]: 50 }));
-        onProgress?.(50);
-        const updated3 = { ...partialProgress, [code]: 50 };
-        localStorage.setItem(PARTIAL_PROGRESS_KEY, JSON.stringify(updated3));
-      }
-      
       if (controller.signal.aborted) throw new Error('Download paused');
-      
-      if (startProgress < 100) {
-        // Load second model (from target language)
-        await new Promise(resolve => setTimeout(resolve, 300));
-        
-        if (startProgress < 75) {
-          setDownloadProgress(prev => ({ ...prev, [code]: 75 }));
-          onProgress?.(75);
-          const updated4 = { ...partialProgress, [code]: 75 };
-          localStorage.setItem(PARTIAL_PROGRESS_KEY, JSON.stringify(updated4));
-        }
-        
-        if (controller.signal.aborted) throw new Error('Download paused');
-        await loadTranslationModel('English', langName);
-        
-        setDownloadProgress(prev => ({ ...prev, [code]: 100 }));
-        onProgress?.(100);
-      }
-      
+      await loadTranslationModel(langName, 'English', makeProgressCb(0));
+
+      if (controller.signal.aborted) throw new Error('Download paused');
+      await loadTranslationModel('English', langName, makeProgressCb(50));
+
+      // Mark complete
+      setDownloadProgress(prev => ({ ...prev, [code]: 100 }));
+      onProgress?.(100);
+
       const stored = localStorage.getItem(OFFLINE_LANGUAGES_KEY);
       const downloadedCodes = stored ? JSON.parse(stored) : [];
-      
       if (!downloadedCodes.includes(code)) {
         downloadedCodes.push(code);
         localStorage.setItem(OFFLINE_LANGUAGES_KEY, JSON.stringify(downloadedCodes));
@@ -158,21 +117,15 @@ export function useOfflineLanguages() {
           lang.code === code ? { ...lang, downloaded: true } : lang
         )
       );
-      
-      // Clear state and partial progress after completion
+
       setDownloadStates(prev => {
         const newStates = { ...prev, [code]: 'completed' as DownloadState };
         localStorage.setItem(DOWNLOAD_STATES_KEY, JSON.stringify(newStates));
         return newStates;
       });
-      
-      const finalProgress = localStorage.getItem(PARTIAL_PROGRESS_KEY);
-      const finalPartial = finalProgress ? JSON.parse(finalProgress) : {};
-      delete finalPartial[code];
-      localStorage.setItem(PARTIAL_PROGRESS_KEY, JSON.stringify(finalPartial));
-      
+
       delete abortControllers.current[code];
-      
+
       setTimeout(() => {
         setDownloadProgress(prev => {
           const newProgress = { ...prev };
@@ -188,9 +141,8 @@ export function useOfflineLanguages() {
       }, 1000);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      
+
       if (errorMessage === 'Download paused') {
-        // Save paused state
         setDownloadStates(prev => {
           const newStates = { ...prev, [code]: 'paused' as DownloadState };
           localStorage.setItem(DOWNLOAD_STATES_KEY, JSON.stringify(newStates));
@@ -209,13 +161,6 @@ export function useOfflineLanguages() {
           localStorage.setItem(DOWNLOAD_STATES_KEY, JSON.stringify(newStates));
           return newStates;
         });
-        
-        // Clear partial progress on error
-        const errorProgress = localStorage.getItem(PARTIAL_PROGRESS_KEY);
-        const errorPartial = errorProgress ? JSON.parse(errorProgress) : {};
-        delete errorPartial[code];
-        localStorage.setItem(PARTIAL_PROGRESS_KEY, JSON.stringify(errorPartial));
-        
         delete abortControllers.current[code];
         throw error;
       }
@@ -236,7 +181,6 @@ export function useOfflineLanguages() {
   const removeLanguage = async (code: string) => {
     const stored = localStorage.getItem(OFFLINE_LANGUAGES_KEY);
     const downloadedCodes = stored ? JSON.parse(stored) : [];
-    
     const filtered = downloadedCodes.filter((c: string) => c !== code);
     localStorage.setItem(OFFLINE_LANGUAGES_KEY, JSON.stringify(filtered));
 
@@ -245,9 +189,6 @@ export function useOfflineLanguages() {
         lang.code === code ? { ...lang, downloaded: false } : lang
       )
     );
-
-    // Note: We don't actually clear the cached models from memory
-    // as they may still be useful for other language pairs
   };
 
   return {
