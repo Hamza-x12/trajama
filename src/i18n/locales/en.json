@@ -255,8 +255,6 @@
     "removed": "Language removed",
     "noConnection": "No Internet Connection",
     "offlineMessage": "You're currently offline. Translation requires an internet connection.",
-    "noDownloadedLanguages": "No languages downloaded yet",
-    "downloadLanguagesWhenOnline": "Go to Settings → Offline Languages when online to download models",
     "reconnectMessage": "You'll automatically reconnect when internet is available",
     "downloadingModel": "Downloading model… ",
     "loadingModel": "Loading model…",

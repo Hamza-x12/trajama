@@ -246,10 +246,7 @@
     "remove": "Supprimer",
     "removed": "Langue supprimée",
     "noConnection": "Pas de connexion Internet",
-    "offlineMessage": "Vous êtes actuellement hors ligne. Vous pouvez utiliser les langues que vous avez téléchargées.",
-    "downloadedLanguages": "Langues téléchargées",
-    "noDownloadedLanguages": "Aucune langue téléchargée",
-    "downloadLanguagesWhenOnline": "Téléchargez des langues en ligne pour les utiliser hors ligne",
+    "offlineMessage": "Vous êtes actuellement hors ligne. La traduction nécessite une connexion Internet.",
     "reconnectMessage": "Vous serez automatiquement reconnecté lorsque Internet sera disponible"
   },
   "install": {

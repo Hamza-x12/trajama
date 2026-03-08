@@ -253,10 +253,7 @@
     "remove": "ⴽⴽⵙ",
     "removed": "ⵜⵓⵜⵍⴰⵢⵜ ⵜⵜⵓⴽⴽⵙ",
     "noConnection": "ⵓⵔ ⵜⵍⵍⵉ ⵉⵏⵜⵔⵏⵜ",
-    "offlineMessage": "ⵓⵔ ⵜⵙⵓⵏⴷ. ⵜⵣⵎⵔⴷ ⴰⴷ ⵜⵙⵎⵔⵙⴷ ⵜⵓⵜⵍⴰⵢⵉⵏ ⵉⵜⵜⵓⵙⴰⴷⴷⵏ.",
-    "downloadedLanguages": "ⵜⵓⵜⵍⴰⵢⵉⵏ ⵉⵜⵜⵓⵙⴰⴷⴷⵏ",
-    "noDownloadedLanguages": "ⵓⵔ ⵜⵍⵍⵉ ⵜⵓⵜⵍⴰⵢⵜ ⵉⵜⵜⵓⵙⴰⴷⴷⵏ",
-    "downloadLanguagesWhenOnline": "ⵙⴰⴷⴷ ⵜⵓⵜⵍⴰⵢⵉⵏ ⵎⴽ ⵜⵙⵓⵏⴷ",
+    "offlineMessage": "ⵓⵔ ⵜⵙⵓⵏⴷ. ⴰⵙⵓⵖⵍ ⵉⵅⵚⵚⴰⵜ ⵉⵏⵜⵔⵏⵜ.",
     "reconnectMessage": "ⵜⵔⴰⴷ ⵜⵙⵓⵏⴷ ⵎⴽ ⵜⵍⵍⴰ ⵉⵏⵜⵔⵏⵜ"
   },
   "install": {

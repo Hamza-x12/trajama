@@ -254,10 +254,7 @@
     "remove": "احذف",
     "removed": "تحذفت اللغة",
     "noConnection": "ماكاينش كونيكسيون",
-    "offlineMessage": "راك بلا كونيكسيون دابا. تقدر تخدم باللوغات اللي تيليشارجيتي.",
-    "downloadedLanguages": "اللوغات المتيليشارجين",
-    "noDownloadedLanguages": "ماكاين حتى لوغة متيليشارجية",
-    "downloadLanguagesWhenOnline": "تيليشارجي اللوغات ملي تكون متصل باش تخدم بيهوم بلا إنترنت",
+    "offlineMessage": "راك بلا كونيكسيون دابا. الترجمة خاصها إنترنت.",
     "reconnectMessage": "غادي تولي متصل أوتوماتيكيا ملي يرجع الإنترنت"
   },
   "navigation": {
