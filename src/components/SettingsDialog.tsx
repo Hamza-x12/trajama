@@ -13,7 +13,6 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useTranslation } from "react-i18next";
-import { useOfflineLanguages } from "@/hooks/useOfflineLanguages";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import {
