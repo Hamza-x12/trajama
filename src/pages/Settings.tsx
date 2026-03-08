@@ -37,10 +37,6 @@ export default function SettingsPage() {
   const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
-  const {
-    offlineLanguages, downloadLanguage, removeLanguage,
-    downloadProgress, downloadStates, pauseDownload, resumeDownload
-  } = useOfflineLanguages();
 
   const [activeSection, setActiveSection] = useState<SettingsSection>("general");
   const [downloading, setDownloading] = useState<string | null>(null);
