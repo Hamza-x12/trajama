@@ -13,36 +13,36 @@ interface SahbiLandingSectionProps {
   isLoggedIn?: boolean;
 }
 
-export const SahbiLandingSection = ({ 
-  userAvatarUrl, 
+export const SahbiLandingSection = ({
+  userAvatarUrl,
   userInitial = "U",
-  isLoggedIn = false 
+  isLoggedIn = false
 }: SahbiLandingSectionProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   const features = [
-    {
-      icon: MessageCircle,
-      title: t('sahbiSection.feature1Title') || "Practice Darija",
-      color: "text-moroccan-red"
-    },
-    {
-      icon: BookOpen,
-      title: t('sahbiSection.feature2Title') || "Cultural Insights",
-      color: "text-moroccan-gold"
-    },
-    {
-      icon: Globe,
-      title: t('sahbiSection.feature3Title') || "Multilingual",
-      color: "text-moroccan-green"
-    },
-    {
-      icon: Zap,
-      title: t('sahbiSection.feature4Title') || "Instant Answers",
-      color: "text-primary"
-    }
-  ];
+  {
+    icon: MessageCircle,
+    title: t('sahbiSection.feature1Title') || "Practice Darija",
+    color: "text-moroccan-red"
+  },
+  {
+    icon: BookOpen,
+    title: t('sahbiSection.feature2Title') || "Cultural Insights",
+    color: "text-moroccan-gold"
+  },
+  {
+    icon: Globe,
+    title: t('sahbiSection.feature3Title') || "Multilingual",
+    color: "text-moroccan-green"
+  },
+  {
+    icon: Zap,
+    title: t('sahbiSection.feature4Title') || "Instant Answers",
+    color: "text-primary"
+  }];
+
 
   return (
     <section className="py-6 sm:py-8">
@@ -58,11 +58,11 @@ export const SahbiLandingSection = ({
               {/* Header with logo */}
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <img 
-                    src={sahbiLogo} 
-                    alt="Sahbi" 
-                    className="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-lg"
-                  />
+                  <img
+                    src={sahbiLogo}
+                    alt="Sahbi"
+                    className="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-lg" />
+                  
                   <div className="absolute -top-1 -right-1">
                     <Sparkles className="w-4 h-4 text-accent animate-pulse" />
                   </div>
@@ -84,32 +84,32 @@ export const SahbiLandingSection = ({
 
               {/* Features - compact grid */}
               <div className="grid grid-cols-2 gap-2">
-                {features.map((feature, index) => (
-                  <div 
-                    key={index}
-                    className="flex items-center gap-2 p-2 rounded-lg bg-background/50 border border-border/50"
-                  >
+                {features.map((feature, index) =>
+                <div
+                  key={index}
+                  className="flex items-center gap-2 p-2 rounded-lg bg-background/50 border border-border/50">
+                  
                     <feature.icon className={`w-4 h-4 ${feature.color} shrink-0`} />
                     <p className="font-medium text-xs text-foreground">{feature.title}</p>
                   </div>
-                ))}
+                )}
               </div>
 
               {/* CTA Button */}
               <div className="flex items-center gap-3">
                 <Link to="/sahbi">
-                  <Button 
-                    size="default"
-                    className="sahbi-button group gap-2 px-6 rounded-xl bg-gradient-to-r from-accent via-accent to-primary hover:from-accent/90 hover:to-primary/90 text-accent-foreground font-semibold shadow-moroccan hover:shadow-hover transition-all duration-500 hover:scale-105"
-                  >
-                    <img src={sahbiLogo} alt="" className="w-5 h-5 object-contain" />
-                    <span>{t('sahbiSection.cta') || "Chat with Sahbi"}</span>
-                  </Button>
+                  
+
+
+
+
+
+                  
                 </Link>
                 
                 {/* User avatar indicator when logged in */}
-                {isLoggedIn && (
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                {isLoggedIn &&
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Avatar className="h-6 w-6 ring-2 ring-accent/50">
                       <AvatarImage src={userAvatarUrl} />
                       <AvatarFallback className="bg-primary/10 text-primary text-[10px]">
@@ -118,18 +118,18 @@ export const SahbiLandingSection = ({
                     </Avatar>
                     <span className="hidden sm:inline">{t('sahbiSection.syncedMessage') || "Synced"}</span>
                   </div>
-                )}
+                }
               </div>
             </div>
 
             {/* Right side - Chat Preview (minimalist style) - Clickable */}
-            <div 
+            <div
               className="relative cursor-pointer group"
               onClick={() => navigate('/sahbi')}
               role="button"
               tabIndex={0}
-              onKeyDown={(e) => e.key === 'Enter' && navigate('/sahbi')}
-            >
+              onKeyDown={(e) => e.key === 'Enter' && navigate('/sahbi')}>
+              
               <div className="bg-card/95 dark:bg-[hsl(225,25%,12%)] rounded-xl border border-border/30 shadow-lg overflow-hidden transition-all duration-300 group-hover:shadow-hover group-hover:border-accent/50 group-hover:scale-[1.02]">
                 {/* Chat header preview */}
                 <div className="flex items-center gap-2.5 px-4 py-3 border-b border-border/30">
@@ -163,8 +163,8 @@ export const SahbiLandingSection = ({
                     </Avatar>
                     <div className="bg-muted/50 dark:bg-[hsl(225,20%,18%)] border border-border/30 px-3 py-2 rounded-xl rounded-tl-sm max-w-[80%]">
                       <p className="text-xs text-foreground/90">
-                        {t('sahbiSection.sampleAnswer') || 
-                          'Good morning in Darija is "Sbah lkhir" (صباح الخير). It literally means "morning of goodness"!'} 
+                        {t('sahbiSection.sampleAnswer') ||
+                        'Good morning in Darija is "Sbah lkhir" (صباح الخير). It literally means "morning of goodness"!'} 
                         <span className="ml-1">🇲🇦</span>
                       </p>
                     </div>
@@ -185,6 +185,6 @@ export const SahbiLandingSection = ({
           </div>
         </div>
       </Card>
-    </section>
-  );
+    </section>);
+
 };
