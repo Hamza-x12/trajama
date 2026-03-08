@@ -462,62 +462,8 @@ const Index = () => {
           uiLanguage: i18n.language
         }
       });
-      // Helper function to fallback to local translation
-      const fallbackToLocalTranslation = async () => {
-        const { translateLocally } = await import('@/utils/localTranslation');
-        
-        setIsFallbackMode(true);
-        toast.info('Using offline translation mode...', { duration: 3000 });
-        
-        const effectiveSource = sourceLanguage === "Detect Language" ? "English" : sourceLanguage;
-        
-        // Progress callback for model download
-        const onProgress = (progress: { status: string; progress?: number; file?: string }) => {
-          if (progress.status === 'downloading') {
-            setModelDownloadProgress({
-              isDownloading: true,
-              progress: progress.progress || 0,
-              status: `Downloading model: ${Math.round(progress.progress || 0)}%`
-            });
-          } else if (progress.status === 'loading') {
-            setModelDownloadProgress({
-              isDownloading: true,
-              progress: 100,
-              status: 'Loading model...'
-            });
-          } else if (progress.status === 'ready') {
-            setModelDownloadProgress({ isDownloading: false, progress: 0, status: '' });
-          }
-        };
-        
-        const translation = await translateLocally(inputText, effectiveSource, targetLanguage, onProgress);
-        setModelDownloadProgress({ isDownloading: false, progress: 0, status: '' });
-        
-        const emptyTranslations = {
-          darija: '', french: '', arabic: '', english: '', spanish: '',
-          german: '', italian: '', portuguese: '', chinese: '', japanese: '',
-          turkish: '', russian: '', korean: '', hindi: '', amazigh: ''
-        };
-        
-        emptyTranslations[targetLanguage.toLowerCase() as keyof typeof emptyTranslations] = translation;
-        
-        setTranslations({ translations: emptyTranslations });
-        
-        const historyItem: HistoryItem = {
-          id: Date.now().toString(),
-          text: inputText,
-          sourceLanguage: effectiveSource,
-          targetLanguage: targetLanguage,
-          timestamp: Date.now(),
-          translations: emptyTranslations
-        };
-        setHistory(prev => [historyItem, ...prev].slice(0, 50));
-        
-        toast.success('Translation complete (offline mode)');
-      };
 
-      // Reset fallback mode on successful API call
-      setIsFallbackMode(false);
+      // Reset on successful API call
 
       if (error) {
         // Handle unauthorized - user must sign in
