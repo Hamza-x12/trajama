@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsLink } from "@/components/SettingsLink";
 import { ZelligeCorners } from "@/components/ZelligeCorners";
 import { SahbiLandingSection } from "@/components/SahbiLandingSection";
+import { DesktopAppPromo } from "@/components/DesktopAppPromo";
 
 const About = () => {
   const { t } = useTranslation();
@@ -156,8 +157,11 @@ const About = () => {
           </div>
         </Card>
 
-        {/* Sahbi Section */}
-        <SahbiLandingSection />
+        {/* Sahbi Section + Desktop App */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-8">
+          <SahbiLandingSection />
+          <DesktopAppPromo />
+        </div>
       </main>
     </div>
     </>

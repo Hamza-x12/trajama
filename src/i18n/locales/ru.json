@@ -436,6 +436,23 @@
     "longestStreak": "Лучшая серия",
     "days": "дней",
     "whatDoesItMean": "Что это значит?",
-    "nextChallenge": "Следующий вызов через"
+    "nextChallenge": "Следующий вызов через",
+    "fillInBlank": "Заполните пробел",
+    "listeningChallenge": "Аудиовызов",
+    "multipleChoice": "Множественный выбор",
+    "typeAnswer": "Введите перевод на английский...",
+    "listen": "Прослушайте слово и выберите его значение",
+    "replay": "Повторить",
+    "leaderboard": "Таблица лидеров",
+    "topPlayers": "Лучшие игроки",
+    "points": "очк.",
+    "noScoresYet": "Пока нет результатов. Будьте первым!"
+  },
+  "desktopApp": {
+    "title": "Скачать Tarjama Desktop",
+    "subtitle": "Нативное приложение для Windows",
+    "description": "Переводите Дарижа прямо с рабочего стола с нашим нативным приложением для Windows. Быстрое, лёгкое и всегда доступное.",
+    "download": "Скачать для Windows",
+    "windowsOnly": "Доступно для Windows • Бесплатная загрузка"
   }
 }

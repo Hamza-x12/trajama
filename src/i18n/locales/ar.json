@@ -430,6 +430,23 @@
     "longestStreak": "أطول سلسلة",
     "days": "أيام",
     "whatDoesItMean": "ماذا تعني هذه الكلمة؟",
-    "nextChallenge": "التحدي القادم في"
+    "nextChallenge": "التحدي القادم في",
+    "fillInBlank": "املأ الفراغ",
+    "listeningChallenge": "تحدي الاستماع",
+    "multipleChoice": "اختيار من متعدد",
+    "typeAnswer": "اكتب الترجمة بالإنجليزية...",
+    "listen": "استمع للكلمة واختر معناها",
+    "replay": "إعادة التشغيل",
+    "leaderboard": "لوحة المتصدرين",
+    "topPlayers": "أفضل اللاعبين",
+    "points": "نقطة",
+    "noScoresYet": "لا توجد نتائج بعد. كن الأول!"
+  },
+  "desktopApp": {
+    "title": "حمّل Tarjama Desktop",
+    "subtitle": "تطبيق أصلي لويندوز",
+    "description": "ترجم الدارجة مباشرة من سطح المكتب مع تطبيقنا الأصلي لويندوز. سريع وخفيف ومتاح دائماً.",
+    "download": "تحميل لويندوز",
+    "windowsOnly": "متاح لويندوز • تحميل مجاني"
   }
 }

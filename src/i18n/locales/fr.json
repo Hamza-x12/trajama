@@ -428,6 +428,23 @@
     "longestStreak": "Meilleure Série",
     "days": "jours",
     "whatDoesItMean": "Que signifie ce mot ?",
-    "nextChallenge": "Prochain défi dans"
+    "nextChallenge": "Prochain défi dans",
+    "fillInBlank": "Remplir le blanc",
+    "listeningChallenge": "Défi d'écoute",
+    "multipleChoice": "Choix multiple",
+    "typeAnswer": "Tapez la traduction en anglais...",
+    "listen": "Écoutez le mot et choisissez sa signification",
+    "replay": "Réécouter",
+    "leaderboard": "Classement",
+    "topPlayers": "Meilleurs joueurs",
+    "points": "pts",
+    "noScoresYet": "Pas encore de scores. Soyez le premier !"
+  },
+  "desktopApp": {
+    "title": "Télécharger Tarjama Desktop",
+    "subtitle": "Application native pour Windows",
+    "description": "Traduisez le Darija directement depuis votre bureau avec notre application Windows native. Rapide, légère et toujours accessible.",
+    "download": "Télécharger pour Windows",
+    "windowsOnly": "Disponible pour Windows • Téléchargement gratuit"
   }
 }

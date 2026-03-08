@@ -439,6 +439,23 @@
     "longestStreak": "Best Streak",
     "days": "days",
     "whatDoesItMean": "What does this mean?",
-    "nextChallenge": "Next challenge in"
+    "nextChallenge": "Next challenge in",
+    "fillInBlank": "Fill in the Blank",
+    "listeningChallenge": "Listening Challenge",
+    "multipleChoice": "Multiple Choice",
+    "typeAnswer": "Type the English translation...",
+    "listen": "Listen to the word and pick its meaning",
+    "replay": "Play Again",
+    "leaderboard": "Leaderboard",
+    "topPlayers": "Top Players",
+    "points": "pts",
+    "noScoresYet": "No scores yet. Be the first!"
+  },
+  "desktopApp": {
+    "title": "Get Tarjama Desktop",
+    "subtitle": "Native app for Windows",
+    "description": "Translate Darija right from your desktop with our native Windows application. Fast, lightweight, and always accessible.",
+    "download": "Download for Windows",
+    "windowsOnly": "Available for Windows • Free download"
   }
 }

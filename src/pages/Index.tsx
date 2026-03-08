@@ -12,6 +12,7 @@ import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineScreen } from "@/components/OfflineScreen";
 import { OnboardingTutorial, useOnboarding } from "@/components/OnboardingTutorial";
 import { SahbiLandingSection } from "@/components/SahbiLandingSection";
+import { DesktopAppPromo } from "@/components/DesktopAppPromo";
 import { Helmet } from "react-helmet-async";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -1224,13 +1225,16 @@ const Index = () => {
         </p>
       </div>
 
-      {/* Sahbi Landing Section */}
+      {/* Sahbi Landing Section + Desktop App */}
       <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
-        <SahbiLandingSection 
-          isLoggedIn={!!user}
-          userAvatarUrl={user?.user_metadata?.avatar_url}
-          userInitial={user?.email?.charAt(0).toUpperCase() || user?.phone?.charAt(0) || "U"}
-        />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+          <SahbiLandingSection 
+            isLoggedIn={!!user}
+            userAvatarUrl={user?.user_metadata?.avatar_url}
+            userInitial={user?.email?.charAt(0).toUpperCase() || user?.phone?.charAt(0) || "U"}
+          />
+          <DesktopAppPromo />
+        </div>
       </div>
 
       {/* Main Content - Google Translate Layout */}

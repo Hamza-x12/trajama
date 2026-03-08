@@ -430,6 +430,23 @@
     "longestStreak": "أطول سلسلة",
     "days": "يام",
     "whatDoesItMean": "شنو كيعني هاد الكلام؟",
-    "nextChallenge": "التحدي الجاي في"
+    "nextChallenge": "التحدي الجاي في",
+    "fillInBlank": "عمر البلاصة الخاوية",
+    "listeningChallenge": "تحدي السماع",
+    "multipleChoice": "اختيار من بزاف",
+    "typeAnswer": "كتب الترجمة بالإنجليزية...",
+    "listen": "سمع الكلمة و ختار المعنى ديالها",
+    "replay": "عاود سمع",
+    "leaderboard": "الترتيب",
+    "topPlayers": "حسن اللاعبين",
+    "points": "نقطة",
+    "noScoresYet": "مازال ما كاين حتى نتيجة. كون الأول!"
+  },
+  "desktopApp": {
+    "title": "حمل Tarjama Desktop",
+    "subtitle": "تطبيق أصلي ديال ويندوز",
+    "description": "ترجم الدارجة من الكمبيوتر ديالك مع التطبيق ديالنا لويندوز. خفيف وسريع وديما موجود.",
+    "download": "حمل لويندوز",
+    "windowsOnly": "موجود لويندوز • تحميل بالمجان"
   }
 }
