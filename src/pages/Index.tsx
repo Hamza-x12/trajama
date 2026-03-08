@@ -1548,6 +1548,7 @@ const Index = () => {
                         {t('translation.translate')}
                       </>}
                   </Button>
+                </div>
               </div>
             </div>
 
