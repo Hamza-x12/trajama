@@ -393,6 +393,27 @@ export default function SettingsPage() {
 
             <Separator />
 
+            {/* Include Translation */}
+            <SettingRow
+              icon={Languages}
+              label={t('settings.includeTranslation') || 'Include Translation'}
+              description={t('settings.includeTranslationDesc') || 'Add English translation to Sahbi responses in Learn mode'}
+            >
+              <Switch
+                checked={includeTranslation}
+                onCheckedChange={(checked) => {
+                  setIncludeTranslation(checked);
+                  localStorage.setItem('sahbiIncludeTranslation', String(checked));
+                  toast.success(checked
+                    ? (t('settings.translationEnabled') || 'Translation enabled')
+                    : (t('settings.translationDisabled') || 'Translation disabled')
+                  );
+                }}
+              />
+            </SettingRow>
+
+            <Separator />
+
             {/* Open Sahbi Button */}
             <Button variant="outline" onClick={() => navigate('/sahbi')} className="w-full gap-2">
               <MessageCircle className="h-4 w-4" />
