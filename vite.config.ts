@@ -32,9 +32,8 @@ export default defineConfig(({ mode }) => ({
         ]
       },
       workbox: {
-        navigateFallbackDenylist: [/^\/~oauth/, /^https:\/\/huggingface\.co/, /^https:\/\/cdn-lfs\.hf\.co/],
+        navigateFallbackDenylist: [/^\/~oauth/],
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-        // Do NOT cache .json globally — it interferes with HuggingFace model downloads
         navigateFallback: '/index.html',
         runtimeCaching: [
           {
@@ -52,8 +51,8 @@ export default defineConfig(({ mode }) => ({
             }
           },
           {
-            // Let HuggingFace model requests pass through without SW interception
-            urlPattern: /^https:\/\/(huggingface\.co|cdn-lfs\.hf\.co)\/.*/i,
+            // Catch ALL HuggingFace domains and subdomains — bypass SW completely
+            urlPattern: /^https:\/\/.*(?:huggingface\.co|hf\.co)\/.*/i,
             handler: 'NetworkOnly'
           }
         ]
