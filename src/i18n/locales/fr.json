@@ -58,7 +58,7 @@
     "voicePreview": "Aperçu de la voix",
     "testVoice": "Tester la voix",
     "offlineLanguages": "Langues hors ligne",
-    "offlineLanguagesDescription": "Téléchargez des modèles de langue pour activer la traduction IA entre la langue sélectionnée et l'anglais lorsque vous êtes hors ligne. Chaque modèle fait ~150 Mo.",
+    "offlineLanguagesDescription": "Téléchargez des modèles de langue pour activer la traduction IA entre la langue sélectionnée et l'anglais lorsque vous êtes hors ligne. Chaque langue fait ~30 Mo.",
     "download": "Télécharger",
     "remove": "Supprimer",
     "offlineDownloaded": "Modèle de langue téléchargé avec succès",
