@@ -49,6 +49,10 @@ export default function SettingsPage() {
     const saved = localStorage.getItem('sahbiDarijaScript');
     return (saved as 'latin' | 'arabic' | 'both') || 'both';
   });
+  const [includeTranslation, setIncludeTranslation] = useState(() => {
+    const saved = localStorage.getItem('sahbiIncludeTranslation');
+    return saved !== 'false';
+  });
   const [notificationsEnabled, setNotificationsEnabled] = useState(() => {
     return localStorage.getItem('notificationsEnabled') !== 'false';
   });
