@@ -57,10 +57,6 @@
     "notificationsDesc": "Activer ou désactiver les notifications",
     "voicePreview": "Aperçu de la voix",
     "testVoice": "Tester la voix",
-    "offlineLanguages": "Langues hors ligne",
-    "offlineLanguagesDescription": "Téléchargez des modèles de langue pour activer la traduction IA entre la langue sélectionnée et l'anglais lorsque vous êtes hors ligne. Chaque langue fait ~30 Mo.",
-    "download": "Télécharger",
-    "remove": "Supprimer",
     "offlineDownloaded": "Modèle de langue téléchargé avec succès",
     "offlineDownloadError": "Échec du téléchargement du modèle de langue",
     "offlineRemoved": "Modèle de langue supprimé",
@@ -246,10 +242,7 @@
     "remove": "Supprimer",
     "removed": "Langue supprimée",
     "noConnection": "Pas de connexion Internet",
-    "offlineMessage": "Vous êtes actuellement hors ligne. Vous pouvez utiliser les langues que vous avez téléchargées.",
-    "downloadedLanguages": "Langues téléchargées",
-    "noDownloadedLanguages": "Aucune langue téléchargée",
-    "downloadLanguagesWhenOnline": "Téléchargez des langues en ligne pour les utiliser hors ligne",
+    "offlineMessage": "Vous êtes actuellement hors ligne. La traduction nécessite une connexion Internet.",
     "reconnectMessage": "Vous serez automatiquement reconnecté lorsque Internet sera disponible"
   },
   "install": {

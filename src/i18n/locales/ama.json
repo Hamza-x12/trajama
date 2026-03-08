@@ -65,10 +65,6 @@
     "notificationsDesc": "ⵙⵔⵎⴷ ⵏⵉⵖⴷ ⵙⵏⵙ ⵉⵏⵖⵎⵉⵙⵏ",
     "voicePreview": "ⴰⵙⵏⴰⵍ ⵏ ⵜⵎⵙⵙⵉⵡⵍⵜ",
     "testVoice": "ⴰⵔⵎ ⵜⴰⵎⵙⵙⵉⵡⵍⵜ",
-    "offlineLanguages": "ⵜⵓⵜⵍⴰⵢⵉⵏ ⴱⵍⴰ ⵉⵏⵜⵔⵏⵜ",
-    "offlineLanguagesDescription": "ⵙⴰⴷⴷ ⵉⵎⵓⴷⴰⵍⵏ ⵏ ⵜⵓⵜⵍⴰⵢⵜ ⵉ ⵓⵙⵓⵖⵍ ⴱⵍⴰ ⵉⵏⵜⵔⵏⵜ.",
-    "download": "ⵙⴰⴷⴷ",
-    "remove": "ⴽⴽⵙ",
     "offlineDownloaded": "ⴰⵎⵓⴷⴰⵍ ⵉⵜⵜⵓⵙⴰⴷⴷ",
     "offlineDownloadError": "ⵓⵔ ⵉⵎⴽⵉⵏ ⴰⴷ ⵉⵜⵜⵓⵙⴰⴷⴷ",
     "offlineRemoved": "ⴰⵎⵓⴷⴰⵍ ⵉⵜⵜⵓⴽⴽⵙ",
@@ -253,10 +249,7 @@
     "remove": "ⴽⴽⵙ",
     "removed": "ⵜⵓⵜⵍⴰⵢⵜ ⵜⵜⵓⴽⴽⵙ",
     "noConnection": "ⵓⵔ ⵜⵍⵍⵉ ⵉⵏⵜⵔⵏⵜ",
-    "offlineMessage": "ⵓⵔ ⵜⵙⵓⵏⴷ. ⵜⵣⵎⵔⴷ ⴰⴷ ⵜⵙⵎⵔⵙⴷ ⵜⵓⵜⵍⴰⵢⵉⵏ ⵉⵜⵜⵓⵙⴰⴷⴷⵏ.",
-    "downloadedLanguages": "ⵜⵓⵜⵍⴰⵢⵉⵏ ⵉⵜⵜⵓⵙⴰⴷⴷⵏ",
-    "noDownloadedLanguages": "ⵓⵔ ⵜⵍⵍⵉ ⵜⵓⵜⵍⴰⵢⵜ ⵉⵜⵜⵓⵙⴰⴷⴷⵏ",
-    "downloadLanguagesWhenOnline": "ⵙⴰⴷⴷ ⵜⵓⵜⵍⴰⵢⵉⵏ ⵎⴽ ⵜⵙⵓⵏⴷ",
+    "offlineMessage": "ⵓⵔ ⵜⵙⵓⵏⴷ. ⴰⵙⵓⵖⵍ ⵉⵅⵚⵚⴰⵜ ⵉⵏⵜⵔⵏⵜ.",
     "reconnectMessage": "ⵜⵔⴰⴷ ⵜⵙⵓⵏⴷ ⵎⴽ ⵜⵍⵍⴰ ⵉⵏⵜⵔⵏⵜ"
   },
   "install": {

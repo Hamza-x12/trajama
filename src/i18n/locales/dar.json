@@ -65,10 +65,6 @@
     "notificationsDesc": "فعّل ولا طفي الإشعارات",
     "voicePreview": "تجربة الصوت",
     "testVoice": "جرّب الصوت",
-    "offlineLanguages": "اللغات بدون نت",
-    "offlineLanguagesDescription": "حمّل موديلات اللغة باش تخدم الترجمة بالذكاء الاصطناعي بين اللغة لي اخترتيها و الإنجليزية واخا متكونش معاك النت. كل لغة تقريبا ~30 ميجا.",
-    "download": "حمّل",
-    "remove": "حيّد",
     "offlineDownloaded": "تحمّل موديل اللغة بنجاح",
     "offlineDownloadError": "ماقدرناش نحمّلو موديل اللغة",
     "offlineRemoved": "تحيّد موديل اللغة",
@@ -254,10 +250,7 @@
     "remove": "احذف",
     "removed": "تحذفت اللغة",
     "noConnection": "ماكاينش كونيكسيون",
-    "offlineMessage": "راك بلا كونيكسيون دابا. تقدر تخدم باللوغات اللي تيليشارجيتي.",
-    "downloadedLanguages": "اللوغات المتيليشارجين",
-    "noDownloadedLanguages": "ماكاين حتى لوغة متيليشارجية",
-    "downloadLanguagesWhenOnline": "تيليشارجي اللوغات ملي تكون متصل باش تخدم بيهوم بلا إنترنت",
+    "offlineMessage": "راك بلا كونيكسيون دابا. الترجمة خاصها إنترنت.",
     "reconnectMessage": "غادي تولي متصل أوتوماتيكيا ملي يرجع الإنترنت"
   },
   "navigation": {

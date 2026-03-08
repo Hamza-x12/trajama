@@ -65,10 +65,6 @@
     "notificationsDesc": "تفعيل أو تعطيل إشعارات التطبيق",
     "voicePreview": "معاينة الصوت",
     "testVoice": "اختبار الصوت",
-    "offlineLanguages": "اللغات دون اتصال",
-    "offlineLanguagesDescription": "قم بتنزيل نماذج اللغة لتمكين الترجمة بالذكاء الاصطناعي بين اللغة المحددة والإنجليزية عندما تكون غير متصل بالإنترنت. حجم كل لغة ~30 ميجابايت.",
-    "download": "تحميل",
-    "remove": "حذف",
     "offlineDownloaded": "تم تنزيل نموذج اللغة بنجاح",
     "offlineDownloadError": "فشل تنزيل نموذج اللغة",
     "offlineRemoved": "تم حذف نموذج اللغة",
@@ -254,10 +250,7 @@
     "remove": "إزالة",
     "removed": "تم إزالة اللغة",
     "noConnection": "لا يوجد اتصال بالإنترنت",
-    "offlineMessage": "أنت غير متصل حالياً. يمكنك استخدام اللغات التي قمت بتنزيلها.",
-    "downloadedLanguages": "اللغات المحملة",
-    "noDownloadedLanguages": "لم يتم تنزيل أي لغات بعد",
-    "downloadLanguagesWhenOnline": "قم بتنزيل اللغات عندما تكون متصلاً لاستخدامها دون اتصال",
+    "offlineMessage": "أنت غير متصل حالياً. الترجمة تحتاج اتصال بالإنترنت.",
     "reconnectMessage": "سيتم إعادة الاتصال تلقائياً عند توفر الإنترنت"
   },
   "navigation": {
