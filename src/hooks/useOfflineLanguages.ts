@@ -17,20 +17,19 @@ export function useOfflineLanguages() {
   const [downloadStates, setDownloadStates] = useState<{ [key: string]: DownloadState }>({});
   const abortControllers = useRef<{ [key: string]: AbortController }>({});
 
-  // The m2m100 model is shared (~150MB total, downloaded once).
-  // Each "language" just registers a pair; model files are cached after first download.
+  // Individual opus-mt models per language (~15-30MB each direction, ~30-60MB total per language)
   const [offlineLanguages, setOfflineLanguages] = useState<OfflineLanguage[]>([
-    { code: 'ar', name: 'Arabic', downloaded: false, size: '~150 MB (shared model)' },
-    { code: 'fr', name: 'French', downloaded: false, size: '~150 MB (shared model)' },
-    { code: 'dar', name: 'Darija', downloaded: false, size: '~150 MB (shared model)' },
-    { code: 'en', name: 'English', downloaded: false, size: '~150 MB (shared model)' },
-    { code: 'es', name: 'Spanish', downloaded: false, size: '~150 MB (shared model)' },
-    { code: 'de', name: 'German', downloaded: false, size: '~150 MB (shared model)' },
-    { code: 'it', name: 'Italian', downloaded: false, size: '~150 MB (shared model)' },
-    { code: 'pt', name: 'Portuguese', downloaded: false, size: '~150 MB (shared model)' },
-    { code: 'zh', name: 'Chinese', downloaded: false, size: '~150 MB (shared model)' },
-    { code: 'ja', name: 'Japanese', downloaded: false, size: '~150 MB (shared model)' },
-    { code: 'tr', name: 'Turkish', downloaded: false, size: '~150 MB (shared model)' },
+    { code: 'ar', name: 'Arabic', downloaded: false, size: '~30 MB' },
+    { code: 'fr', name: 'French', downloaded: false, size: '~30 MB' },
+    { code: 'dar', name: 'Darija', downloaded: false, size: '~30 MB' },
+    { code: 'en', name: 'English', downloaded: false, size: '—' },
+    { code: 'es', name: 'Spanish', downloaded: false, size: '~30 MB' },
+    { code: 'de', name: 'German', downloaded: false, size: '~30 MB' },
+    { code: 'it', name: 'Italian', downloaded: false, size: '~30 MB' },
+    { code: 'pt', name: 'Portuguese', downloaded: false, size: '~35 MB' },
+    { code: 'zh', name: 'Chinese', downloaded: false, size: '~30 MB' },
+    { code: 'ja', name: 'Japanese', downloaded: false, size: '~35 MB' },
+    { code: 'tr', name: 'Turkish', downloaded: false, size: '~30 MB' },
   ]);
 
   useEffect(() => {
@@ -74,9 +73,16 @@ export function useOfflineLanguages() {
       const { loadTranslationModel } = await import('@/utils/localTranslation');
       const langName = langMap[code] || code;
 
-      // We track progress across multiple model file downloads.
-      // Phase 1 (0-50%): load lang→English model
-      // Phase 2 (50-100%): load English→lang model
+      // English is a base language used by all pairs, no separate download needed
+      if (code === 'en') {
+        setDownloadProgress(prev => ({ ...prev, [code]: 100 }));
+        onProgress?.(100);
+        markComplete(code);
+        return;
+      }
+
+      // Phase 1 (0-50%): lang → English
+      // Phase 2 (50-100%): English → lang
       const makeProgressCb = (phaseOffset: number) => (progressData: any) => {
         if (controller.signal.aborted) return;
         if (progressData.status === 'downloading' && progressData.progress != null) {
@@ -101,44 +107,9 @@ export function useOfflineLanguages() {
       if (controller.signal.aborted) throw new Error('Download paused');
       await loadTranslationModel('English', langName, makeProgressCb(50));
 
-      // Mark complete
       setDownloadProgress(prev => ({ ...prev, [code]: 100 }));
       onProgress?.(100);
-
-      const stored = localStorage.getItem(OFFLINE_LANGUAGES_KEY);
-      const downloadedCodes = stored ? JSON.parse(stored) : [];
-      if (!downloadedCodes.includes(code)) {
-        downloadedCodes.push(code);
-        localStorage.setItem(OFFLINE_LANGUAGES_KEY, JSON.stringify(downloadedCodes));
-      }
-
-      setOfflineLanguages(prev =>
-        prev.map(lang =>
-          lang.code === code ? { ...lang, downloaded: true } : lang
-        )
-      );
-
-      setDownloadStates(prev => {
-        const newStates = { ...prev, [code]: 'completed' as DownloadState };
-        localStorage.setItem(DOWNLOAD_STATES_KEY, JSON.stringify(newStates));
-        return newStates;
-      });
-
-      delete abortControllers.current[code];
-
-      setTimeout(() => {
-        setDownloadProgress(prev => {
-          const newProgress = { ...prev };
-          delete newProgress[code];
-          return newProgress;
-        });
-        setDownloadStates(prev => {
-          const newStates = { ...prev };
-          delete newStates[code];
-          localStorage.setItem(DOWNLOAD_STATES_KEY, JSON.stringify(newStates));
-          return newStates;
-        });
-      }, 1000);
+      markComplete(code);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
 
@@ -165,6 +136,43 @@ export function useOfflineLanguages() {
         throw error;
       }
     }
+  };
+
+  const markComplete = (code: string) => {
+    const stored = localStorage.getItem(OFFLINE_LANGUAGES_KEY);
+    const downloadedCodes = stored ? JSON.parse(stored) : [];
+    if (!downloadedCodes.includes(code)) {
+      downloadedCodes.push(code);
+      localStorage.setItem(OFFLINE_LANGUAGES_KEY, JSON.stringify(downloadedCodes));
+    }
+
+    setOfflineLanguages(prev =>
+      prev.map(lang =>
+        lang.code === code ? { ...lang, downloaded: true } : lang
+      )
+    );
+
+    setDownloadStates(prev => {
+      const newStates = { ...prev, [code]: 'completed' as DownloadState };
+      localStorage.setItem(DOWNLOAD_STATES_KEY, JSON.stringify(newStates));
+      return newStates;
+    });
+
+    delete abortControllers.current[code];
+
+    setTimeout(() => {
+      setDownloadProgress(prev => {
+        const newProgress = { ...prev };
+        delete newProgress[code];
+        return newProgress;
+      });
+      setDownloadStates(prev => {
+        const newStates = { ...prev };
+        delete newStates[code];
+        localStorage.setItem(DOWNLOAD_STATES_KEY, JSON.stringify(newStates));
+        return newStates;
+      });
+    }, 1000);
   };
 
   const pauseDownload = (code: string) => {
