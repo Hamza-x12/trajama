@@ -2,8 +2,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "react-i18next";
-import { Monitor, Download, ExternalLink } from "lucide-react";
+import { Download, ExternalLink } from "lucide-react";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
+import windowsLogo from "@/assets/windows-logo.png";
 
 const DOWNLOAD_URL = "https://github.com/Hamza-x12/trajama/releases/download/Tarjama/Tarjama_v1.2.1_setup.exe";
 
@@ -15,11 +16,11 @@ export function DesktopAppPromo() {
       <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-3xl -z-10" />
       <div className="absolute bottom-0 left-0 w-32 h-32 bg-accent/5 rounded-full blur-3xl -z-10" />
       
-      <CardContent className="p-6 sm:p-8 flex flex-col h-full">
+      <CardContent className="p-6 sm:p-8 flex flex-col h-full justify-between">
         {/* Header */}
         <div className="flex items-center gap-4 mb-6">
           <div className="p-3 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl shadow-md group-hover:scale-110 transition-transform duration-300">
-            <Monitor className="w-8 h-8 text-primary" />
+            <img src={windowsLogo} alt="Windows" className="w-8 h-8 object-contain" />
           </div>
           <div>
             <h3 className="text-xl font-bold text-foreground">{t('desktopApp.title')}</h3>
@@ -30,13 +31,13 @@ export function DesktopAppPromo() {
         {/* Logo & description */}
         <div className="flex-1 flex flex-col items-center text-center gap-4 mb-6">
           <img src={tarjamaLogo} alt="Tarjama" className="w-20 h-20 group-hover:scale-110 transition-transform duration-300" />
-          <div className="space-y-2">
+          <div className="space-y-3">
             <p className="text-muted-foreground text-sm leading-relaxed">
               {t('desktopApp.description')}
             </p>
             <div className="flex items-center justify-center gap-2">
-              <Badge variant="outline" className="border-primary/30 text-primary">
-                <Monitor className="w-3 h-3 mr-1" />
+              <Badge variant="outline" className="border-primary/30 text-primary gap-1.5">
+                <img src={windowsLogo} alt="" className="w-3.5 h-3.5" />
                 Windows
               </Badge>
               <Badge variant="outline" className="border-muted-foreground/30 text-muted-foreground">
@@ -47,17 +48,18 @@ export function DesktopAppPromo() {
         </div>
 
         {/* Download button */}
-        <a href={DOWNLOAD_URL} target="_blank" rel="noopener noreferrer" className="w-full">
-          <Button className="w-full gap-2 h-12 text-base font-semibold shadow-md hover:shadow-lg transition-all">
-            <Download className="w-5 h-5" />
-            {t('desktopApp.download')}
-            <ExternalLink className="w-4 h-4 opacity-60" />
-          </Button>
-        </a>
-
-        <p className="text-xs text-muted-foreground text-center mt-3">
-          {t('desktopApp.windowsOnly')}
-        </p>
+        <div>
+          <a href={DOWNLOAD_URL} target="_blank" rel="noopener noreferrer" className="w-full block">
+            <Button className="w-full gap-2 h-12 text-base font-semibold shadow-md hover:shadow-lg transition-all bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
+              <Download className="w-5 h-5" />
+              {t('desktopApp.download')}
+              <ExternalLink className="w-4 h-4 opacity-60" />
+            </Button>
+          </a>
+          <p className="text-xs text-muted-foreground text-center mt-3">
+            {t('desktopApp.windowsOnly')}
+          </p>
+        </div>
       </CardContent>
     </Card>
   );
