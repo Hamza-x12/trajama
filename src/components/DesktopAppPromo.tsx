@@ -1,8 +1,7 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "react-i18next";
-import { Download, ExternalLink } from "lucide-react";
+import { Download, Monitor, Shield, Zap } from "lucide-react";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import windowsLogo from "@/assets/windows-logo.png";
 
@@ -12,55 +11,73 @@ export function DesktopAppPromo() {
   const { t } = useTranslation();
 
   return (
-    <Card className="relative overflow-hidden border-2 border-primary/20 bg-gradient-to-br from-card via-card to-primary/5 shadow-elegant hover:shadow-moroccan transition-all duration-500 group h-full">
-      <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-3xl -z-10" />
-      <div className="absolute bottom-0 left-0 w-32 h-32 bg-accent/5 rounded-full blur-3xl -z-10" />
-      
-      <CardContent className="p-6 sm:p-8 flex flex-col h-full justify-between">
-        {/* Header */}
-        <div className="flex items-center gap-4 mb-6">
-          <div className="p-3 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl shadow-md group-hover:scale-110 transition-transform duration-300">
-            <img src={windowsLogo} alt="Windows" className="w-8 h-8 object-contain" />
+    <Card className="relative overflow-hidden border-accent/30 bg-gradient-to-br from-accent/5 via-background to-primary/5 shadow-elegant hover:shadow-hover transition-all duration-500 group h-full">
+      {/* Background decorative elements */}
+      <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-accent/10 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-primary/10 to-transparent rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
+
+      <div className="relative p-5 sm:p-6 flex flex-col h-full">
+        {/* Top section */}
+        <div className="flex items-start gap-4 mb-6">
+          <div className="relative shrink-0">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent/20 to-primary/20 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
+              <img src={tarjamaLogo} alt="Tarjama" className="w-10 h-10 object-contain" />
+            </div>
           </div>
-          <div>
-            <h3 className="text-xl font-bold text-foreground">{t('desktopApp.title')}</h3>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="text-lg sm:text-xl font-bold text-foreground">Tarjama Desktop</h3>
+              <Badge className="bg-accent/20 text-accent border-0 text-[10px] px-1.5 py-0 font-semibold">
+                FREE
+              </Badge>
+            </div>
             <p className="text-sm text-muted-foreground">{t('desktopApp.subtitle')}</p>
           </div>
         </div>
 
-        {/* Logo & description */}
-        <div className="flex-1 flex flex-col items-center text-center gap-4 mb-6">
-          <img src={tarjamaLogo} alt="Tarjama" className="w-20 h-20 group-hover:scale-110 transition-transform duration-300" />
-          <div className="space-y-3">
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              {t('desktopApp.description')}
-            </p>
-            <div className="flex items-center justify-center gap-2">
-              <Badge variant="outline" className="border-primary/30 text-primary gap-1.5">
-                <img src={windowsLogo} alt="" className="w-3.5 h-3.5" />
-                Windows
-              </Badge>
-              <Badge variant="outline" className="border-muted-foreground/30 text-muted-foreground">
-                v1.2.1
-              </Badge>
+        {/* Features grid */}
+        <div className="grid grid-cols-2 gap-2.5 mb-6">
+          {[
+            { icon: Zap, label: "Fast & Light" },
+            { icon: Monitor, label: "Native App" },
+            { icon: Shield, label: "Offline Ready" },
+            { icon: Download, label: "Auto Updates" },
+          ].map((feat) => (
+            <div key={feat.label} className="flex items-center gap-2 rounded-lg bg-muted/50 px-3 py-2 text-xs text-muted-foreground">
+              <feat.icon className="w-3.5 h-3.5 text-accent shrink-0" />
+              {feat.label}
             </div>
-          </div>
+          ))}
         </div>
 
-        {/* Download button */}
-        <div>
-          <a href={DOWNLOAD_URL} target="_blank" rel="noopener noreferrer" className="w-full block">
-            <Button className="w-full gap-2 h-12 text-base font-semibold shadow-md hover:shadow-lg transition-all bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
-              <Download className="w-5 h-5" />
-              {t('desktopApp.download')}
-              <ExternalLink className="w-4 h-4 opacity-60" />
-            </Button>
-          </a>
-          <p className="text-xs text-muted-foreground text-center mt-3">
-            {t('desktopApp.windowsOnly')}
-          </p>
+        {/* Spacer */}
+        <div className="flex-1" />
+
+        {/* Platform & version */}
+        <div className="flex items-center gap-2 mb-4">
+          <Badge variant="outline" className="border-accent/30 text-accent gap-1.5 text-xs">
+            <img src={windowsLogo} alt="" className="w-3.5 h-3.5" />
+            Windows 10/11
+          </Badge>
+          <Badge variant="outline" className="border-muted-foreground/30 text-muted-foreground text-xs">
+            v1.2.1
+          </Badge>
         </div>
-      </CardContent>
+
+        {/* Download button — styled like the reference images */}
+        <a href={DOWNLOAD_URL} target="_blank" rel="noopener noreferrer" className="block">
+          <div className="relative w-full h-14 rounded-xl bg-gradient-to-r from-[hsl(var(--accent))] to-[hsl(var(--primary))] flex items-center justify-center gap-3 cursor-pointer shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 group/btn">
+            <img src={windowsLogo} alt="" className="w-5 h-5 brightness-0 invert" />
+            <span className="text-primary-foreground font-bold text-base tracking-wide">
+              {t('desktopApp.download')}
+            </span>
+          </div>
+        </a>
+
+        <p className="text-[11px] text-muted-foreground text-center mt-2.5 opacity-70">
+          {t('desktopApp.windowsOnly')}
+        </p>
+      </div>
     </Card>
   );
 }
