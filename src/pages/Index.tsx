@@ -1227,7 +1227,7 @@ const Index = () => {
 
       {/* Sahbi Landing Section + Desktop App */}
       <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 items-stretch">
           <SahbiLandingSection 
             isLoggedIn={!!user}
             userAvatarUrl={user?.user_metadata?.avatar_url}
