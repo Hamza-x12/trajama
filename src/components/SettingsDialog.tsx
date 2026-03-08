@@ -55,17 +55,6 @@ export function SettingsDialog({
 }: SettingsDialogProps) {
   const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
-  const { 
-    offlineLanguages, 
-    downloadLanguage, 
-    removeLanguage, 
-    downloadProgress,
-    downloadStates,
-    pauseDownload,
-    resumeDownload
-  } = useOfflineLanguages();
-  const [downloading, setDownloading] = useState<string | null>(null);
-  const [currentProgress, setCurrentProgress] = useState<{ [key: string]: number }>({});
   const [fontSize, setFontSize] = useState(16);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [sahbiDarijaScript, setSahbiDarijaScript] = useState<'latin' | 'arabic' | 'both'>(() => {
