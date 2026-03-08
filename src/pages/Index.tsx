@@ -478,15 +478,8 @@ const Index = () => {
         }
         // Handle payment required (credits exhausted) - fallback to local translation
         if (error.message?.includes('402') || error.message?.includes('Payment required') || error.message?.includes('credits')) {
-          toast.warning('AI credits exhausted. Switching to offline mode...', { duration: 3000 });
-          try {
-            await fallbackToLocalTranslation();
-            return;
-          } catch (localError) {
-            console.error('Local translation also failed:', localError);
-            toast.error('Both online and offline translation failed. Please try again later.');
-            return;
-          }
+          toast.error('AI credits exhausted. Please try again later.');
+          return;
         }
         throw error;
       }
