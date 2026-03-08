@@ -23,14 +23,13 @@ import ukFlag from "@/assets/flags/uk.png";
 import franceFlag from "@/assets/flags/france.png";
 import saudiArabiaFlag from "@/assets/flags/saudi-arabia.png";
 
-type SettingsSection = "general" | "voice" | "safety" | "sahbi" | "offline" | "advanced";
+type SettingsSection = "general" | "voice" | "safety" | "sahbi" | "advanced";
 
 const sections: { id: SettingsSection; icon: typeof Settings; labelKey: string }[] = [
   { id: "general", icon: Settings, labelKey: "settings.general" },
   { id: "voice", icon: Volume2, labelKey: "settings.voiceSection" },
   { id: "safety", icon: Shield, labelKey: "settings.safetySection" },
   { id: "sahbi", icon: MessageCircle, labelKey: "settings.sahbiSettings" },
-  { id: "offline", icon: CloudDownload, labelKey: "settings.offlineLanguages" },
   { id: "advanced", icon: Info, labelKey: "settings.advanced" },
 ];
 
