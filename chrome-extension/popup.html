@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TARJAMA</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <header class="header">
+      <img src="icons/icon48.png" alt="TARJAMA" class="logo">
+      <h1 class="title">TARJAMA</h1>
+    </header>
+
+    <div class="language-bar">
+      <select id="sourceLang" class="lang-select">
+        <option value="Detect Language">🔍 Detect</option>
+        <option value="Darija">🇲🇦 Darija</option>
+        <option value="English">🇬🇧 English</option>
+        <option value="French">🇫🇷 French</option>
+        <option value="Arabic">🇸🇦 Arabic</option>
+        <option value="Spanish">🇪🇸 Spanish</option>
+        <option value="German">🇩🇪 German</option>
+        <option value="Italian">🇮🇹 Italian</option>
+        <option value="Portuguese">🇵🇹 Portuguese</option>
+        <option value="Turkish">🇹🇷 Turkish</option>
+        <option value="Russian">🇷🇺 Russian</option>
+        <option value="Chinese">🇨🇳 Chinese</option>
+        <option value="Japanese">🇯🇵 Japanese</option>
+        <option value="Korean">🇰🇷 Korean</option>
+        <option value="Hindi">🇮🇳 Hindi</option>
+        <option value="Amazigh">ⵣ Amazigh</option>
+      </select>
+
+      <button id="swapBtn" class="swap-btn" title="Swap languages">⇄</button>
+
+      <select id="targetLang" class="lang-select">
+        <option value="Darija">🇲🇦 Darija</option>
+        <option value="English">🇬🇧 English</option>
+        <option value="French">🇫🇷 French</option>
+        <option value="Arabic">🇸🇦 Arabic</option>
+        <option value="Spanish">🇪🇸 Spanish</option>
+        <option value="German">🇩🇪 German</option>
+        <option value="Italian">🇮🇹 Italian</option>
+        <option value="Portuguese">🇵🇹 Portuguese</option>
+        <option value="Turkish">🇹🇷 Turkish</option>
+        <option value="Russian">🇷🇺 Russian</option>
+        <option value="Chinese">🇨🇳 Chinese</option>
+        <option value="Japanese">🇯🇵 Japanese</option>
+        <option value="Korean">🇰🇷 Korean</option>
+        <option value="Hindi">🇮🇳 Hindi</option>
+        <option value="Amazigh">ⵣ Amazigh</option>
+      </select>
+    </div>
+
+    <div class="input-section">
+      <textarea id="sourceText" placeholder="Enter text to translate..." rows="4" maxlength="1000"></textarea>
+      <span id="charCount" class="char-count">0/1000</span>
+    </div>
+
+    <button id="translateBtn" class="translate-btn">Translate</button>
+
+    <div id="resultSection" class="result-section hidden">
+      <div class="result-header">
+        <span id="detectedLang" class="detected-lang hidden"></span>
+        <button id="copyBtn" class="copy-btn" title="Copy translation">📋</button>
+      </div>
+      <div id="translationResult" class="translation-result"></div>
+      <div id="culturalNotes" class="cultural-notes hidden"></div>
+    </div>
+
+    <div id="loading" class="loading hidden">
+      <div class="spinner"></div>
+      <span>Translating...</span>
+    </div>
+
+    <div id="errorMsg" class="error-msg hidden"></div>
+
+    <footer class="footer">
+      <a href="https://tarjama.lovable.app" target="_blank" rel="noopener">tarjama.lovable.app</a>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

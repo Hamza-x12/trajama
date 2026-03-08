@@ -1,0 +1,162 @@
+#tarjama-float-btn {
+  position: absolute;
+  z-index: 2147483647;
+  background: linear-gradient(135deg, hsl(12, 76%, 61%), hsl(210, 50%, 40%));
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: transform 0.15s, box-shadow 0.15s;
+  animation: tarjama-fadeIn 0.2s ease;
+}
+
+#tarjama-float-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+#tarjama-result-panel {
+  position: absolute;
+  z-index: 2147483647;
+  width: 320px;
+  max-height: 400px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+  animation: tarjama-slideIn 0.2s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  #tarjama-result-panel {
+    background: hsl(220, 20%, 16%);
+    color: hsl(30, 15%, 92%);
+  }
+}
+
+.tarjama-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, hsl(12, 76%, 61%), hsl(210, 50%, 40%));
+  color: white;
+}
+
+.tarjama-panel-logo {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+.tarjama-panel-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  opacity: 0.8;
+}
+
+.tarjama-panel-close:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.tarjama-panel-body {
+  padding: 12px 14px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.tarjama-panel-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 24px;
+  color: #888;
+  font-size: 13px;
+}
+
+.tarjama-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid #ddd;
+  border-top-color: hsl(12, 76%, 61%);
+  border-radius: 50%;
+  animation: tarjama-spin 0.8s linear infinite;
+}
+
+.tarjama-detected {
+  font-size: 11px;
+  color: hsl(12, 76%, 61%);
+  background: hsl(12, 76%, 61%, 0.1);
+  padding: 3px 8px;
+  border-radius: 999px;
+  display: inline-block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.tarjama-translation-item {
+  padding: 6px 0;
+  font-size: 13px;
+  line-height: 1.5;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.tarjama-translation-item:last-child {
+  border-bottom: none;
+}
+
+.tarjama-translation-item strong {
+  color: hsl(210, 50%, 40%);
+}
+
+@media (prefers-color-scheme: dark) {
+  .tarjama-translation-item {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+  }
+  .tarjama-translation-item strong {
+    color: hsl(45, 85%, 70%);
+  }
+}
+
+.tarjama-cultural {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 12px;
+  color: #888;
+  font-style: italic;
+}
+
+.tarjama-error {
+  color: hsl(0, 60%, 50%);
+  font-size: 13px;
+  text-align: center;
+  padding: 8px;
+}
+
+@keyframes tarjama-fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes tarjama-slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes tarjama-spin {
+  to { transform: rotate(360deg); }
+}
