@@ -12,6 +12,7 @@ import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineScreen } from "@/components/OfflineScreen";
 import { OnboardingTutorial, useOnboarding } from "@/components/OnboardingTutorial";
 import { SahbiLandingSection } from "@/components/SahbiLandingSection";
+import { DesktopAppPromo } from "@/components/DesktopAppPromo";
 import { Helmet } from "react-helmet-async";
 import { useAuth } from "@/hooks/useAuth";
 
