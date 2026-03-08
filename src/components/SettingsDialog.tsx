@@ -107,59 +107,6 @@ export function SettingsDialog({
     document.documentElement.dir = langCode === 'ar' || langCode === 'dar' ? 'rtl' : 'ltr';
   };
 
-  const handleDownload = async (code: string) => {
-    setDownloading(code);
-    setCurrentProgress(prev => ({ ...prev, [code]: 0 }));
-    try {
-      await downloadLanguage(code, (progress) => {
-        setCurrentProgress(prev => ({ ...prev, [code]: progress }));
-      });
-      toast.success(t('settings.offlineDownloaded'));
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      if (errorMessage !== 'Download paused') {
-        toast.error(t('settings.offlineDownloadError'));
-      }
-    } finally {
-      setDownloading(null);
-      setTimeout(() => {
-        setCurrentProgress(prev => {
-          const newProgress = { ...prev };
-          delete newProgress[code];
-          return newProgress;
-        });
-      }, 1000);
-    }
-  };
-
-  const handlePause = (code: string) => {
-    pauseDownload(code);
-    toast.info(t('settings.downloadPaused'));
-  };
-
-  const handleResume = async (code: string) => {
-    setDownloading(code);
-    try {
-      setCurrentProgress(prev => ({ ...prev, [code]: downloadProgress[code] || 0 }));
-      await resumeDownload(code, (progress) => {
-        setCurrentProgress(prev => ({ ...prev, [code]: progress }));
-      });
-      toast.success(t('settings.offlineDownloaded'));
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      if (errorMessage !== 'Download paused') {
-        toast.error(t('settings.offlineDownloadError'));
-      }
-    } finally {
-      setDownloading(null);
-    }
-  };
-
-  const handleRemove = (code: string) => {
-    removeLanguage(code);
-    toast.success(t('settings.offlineRemoved'));
-  };
-
   const handleFontSizeChange = (value: number[]) => {
     const size = value[0];
     setFontSize(size);
