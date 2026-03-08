@@ -18,7 +18,6 @@
 ## 💻 Desktop Version (EXE) 
 You can now use Tarjama as a standalone desktop application on Windows. 
 
-* **Offline Access:** Load the interface and dictionary without an internet connection.
 * **Local Speed:** Faster startup and native window management.
 * **Direct Access:** Launch from your taskbar or desktop.
   
