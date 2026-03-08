@@ -3,7 +3,7 @@ import { pipeline, env } from '@huggingface/transformers';
 // Configure to use cached models from IndexedDB
 env.allowLocalModels = true;
 env.allowRemoteModels = true;
-env.useBrowserCache = true; // Enable browser caching
+env.useBrowserCache = true;
 
 interface TranslationPipeline {
   model: any;
@@ -22,9 +22,38 @@ export type ProgressCallback = (progress: {
 
 const translationPipelines: Map<string, TranslationPipeline> = new Map();
 
-// Language code mapping for m2m100 model (uses ISO 639-1 codes)
+// Per-language opus-mt models (Helsinki-NLP via Xenova, ~15-30MB each direction)
+// Format: Xenova/opus-mt-{src}-{tgt}
+const opusModelMap: Record<string, string> = {
+  'ar-en': 'Xenova/opus-mt-ar-en',
+  'en-ar': 'Xenova/opus-mt-en-ar',
+  'fr-en': 'Xenova/opus-mt-fr-en',
+  'en-fr': 'Xenova/opus-mt-en-fr',
+  'es-en': 'Xenova/opus-mt-es-en',
+  'en-es': 'Xenova/opus-mt-en-es',
+  'de-en': 'Xenova/opus-mt-de-en',
+  'en-de': 'Xenova/opus-mt-en-de',
+  'it-en': 'Xenova/opus-mt-it-en',
+  'en-it': 'Xenova/opus-mt-en-it',
+  'pt-en': 'Xenova/opus-mt-tc-big-en', // Portuguese via Romance group
+  'en-pt': 'Xenova/opus-mt-en-roa',    // English to Romance group
+  'zh-en': 'Xenova/opus-mt-zh-en',
+  'en-zh': 'Xenova/opus-mt-en-zh',
+  'ja-en': 'Xenova/opus-mt-ja-en',
+  'en-ja': 'Xenova/opus-mt-en-jap',
+  'tr-en': 'Xenova/opus-mt-tr-en',
+  'en-tr': 'Xenova/opus-mt-en-trk',
+  'ru-en': 'Xenova/opus-mt-ru-en',
+  'en-ru': 'Xenova/opus-mt-en-ru',
+  'ko-en': 'Xenova/opus-mt-ko-en',
+  'en-ko': 'Xenova/opus-mt-en-ko',
+  'hi-en': 'Xenova/opus-mt-hi-en',
+  'en-hi': 'Xenova/opus-mt-en-hi',
+};
+
+// Language name → ISO code
 const languageMap: Record<string, string> = {
-  'Darija': 'ar', // Moroccan Arabic (uses Arabic)
+  'Darija': 'ar', // Uses Arabic model as closest match
   'Arabic': 'ar',
   'French': 'fr',
   'English': 'en',
@@ -39,6 +68,15 @@ const languageMap: Record<string, string> = {
   'Korean': 'ko',
   'Hindi': 'hi'
 };
+
+function getModelId(sourceLang: string, targetLang: string): string {
+  const key = `${sourceLang}-${targetLang}`;
+  const model = opusModelMap[key];
+  if (!model) {
+    throw new Error(`No offline model available for ${sourceLang} → ${targetLang}. Try translating via English as a bridge.`);
+  }
+  return model;
+}
 
 export async function loadTranslationModel(
   sourceLanguage: string, 
@@ -55,12 +93,12 @@ export async function loadTranslationModel(
   }
 
   try {
-    console.log(`Loading translation model: ${sourceLang} -> ${targetLang}`);
+    const modelId = getModelId(sourceLang, targetLang);
+    console.log(`Loading opus-mt model: ${modelId} (${sourceLang} → ${targetLang})`);
     
-    // Use the smaller model with progress callback
     const model = await pipeline(
       'translation',
-      'Xenova/m2m100_418M',
+      modelId,
       {
         progress_callback: (progressData: any) => {
           if (progressData.status === 'progress') {
@@ -110,16 +148,14 @@ export async function translateLocally(
       await loadTranslationModel(sourceLanguage, targetLanguage, onProgress);
     }
 
-    const pipeline = translationPipelines.get(pipelineKey);
-    if (!pipeline) {
+    const pipelineInstance = translationPipelines.get(pipelineKey);
+    if (!pipelineInstance) {
       throw new Error('Translation pipeline not available');
     }
 
-    console.log(`Translating with local model: ${text.substring(0, 50)}...`);
+    console.log(`Translating with opus-mt: ${text.substring(0, 50)}...`);
     
-    const result = await pipeline.model(text, {
-      src_lang: sourceLang,
-      tgt_lang: targetLang,
+    const result = await pipelineInstance.model(text, {
       max_new_tokens: 256
     });
 
@@ -142,12 +178,16 @@ export function clearAllModels(): void {
   console.log('All translation models cleared');
 }
 
-// Check if model is cached in browser
-export async function isModelCached(): Promise<boolean> {
+// Check if a specific language pair model is cached
+export async function isModelCached(sourceLang?: string, targetLang?: string): Promise<boolean> {
   try {
     const cache = await caches.open('transformers-cache');
     const keys = await cache.keys();
-    return keys.some(key => key.url.includes('m2m100'));
+    if (sourceLang && targetLang) {
+      const modelId = opusModelMap[`${sourceLang}-${targetLang}`];
+      return modelId ? keys.some(key => key.url.includes(modelId.split('/')[1])) : false;
+    }
+    return keys.some(key => key.url.includes('opus-mt'));
   } catch {
     return false;
   }
