@@ -1,9 +1,10 @@
 import { pipeline, env } from '@huggingface/transformers';
 
-// Configure to use cached models from IndexedDB
+// Configure transformers.js — avoid browser Cache API to prevent SW conflicts
 env.allowLocalModels = true;
 env.allowRemoteModels = true;
-env.useBrowserCache = true;
+env.useBrowserCache = false;  // Use IndexedDB only, not Cache API (avoids SW interception)
+env.useCustomCache = true;    // Use the built-in IndexedDB cache
 
 interface TranslationPipeline {
   model: any;
