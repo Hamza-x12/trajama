@@ -111,6 +111,7 @@ export async function loadTranslationModel(
       'translation',
       modelId,
       {
+        dtype: 'q4',  // Use 4-bit quantized models (~30-50MB instead of ~230MB)
         progress_callback: (progressData: any) => {
           if (progressData.status === 'progress') {
             onProgress?.({

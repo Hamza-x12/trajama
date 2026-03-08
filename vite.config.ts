@@ -32,8 +32,10 @@ export default defineConfig(({ mode }) => ({
         ]
       },
       workbox: {
-        navigateFallbackDenylist: [/^\/~oauth/],
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
+        navigateFallbackDenylist: [/^\/~oauth/, /^https:\/\/huggingface\.co/, /^https:\/\/cdn-lfs\.hf\.co/],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        // Do NOT cache .json globally — it interferes with HuggingFace model downloads
+        navigateFallback: '/index.html',
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -42,12 +44,17 @@ export default defineConfig(({ mode }) => ({
               cacheName: 'google-fonts-cache',
               expiration: {
                 maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 365 days
+                maxAgeSeconds: 60 * 60 * 24 * 365
               },
               cacheableResponse: {
                 statuses: [0, 200]
               }
             }
+          },
+          {
+            // Let HuggingFace model requests pass through without SW interception
+            urlPattern: /^https:\/\/(huggingface\.co|cdn-lfs\.hf\.co)\/.*/i,
+            handler: 'NetworkOnly'
           }
         ]
       }
