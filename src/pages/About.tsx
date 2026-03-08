@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsLink } from "@/components/SettingsLink";
 import { ZelligeCorners } from "@/components/ZelligeCorners";
 import { SahbiLandingSection } from "@/components/SahbiLandingSection";
+import { DesktopAppPromo } from "@/components/DesktopAppPromo";
 
 const About = () => {
   const { t } = useTranslation();
