@@ -49,6 +49,10 @@ export default function SettingsPage() {
     const saved = localStorage.getItem('sahbiDarijaScript');
     return (saved as 'latin' | 'arabic' | 'both') || 'both';
   });
+  const [includeTranslation, setIncludeTranslation] = useState(() => {
+    const saved = localStorage.getItem('sahbiIncludeTranslation');
+    return saved !== 'false';
+  });
   const [notificationsEnabled, setNotificationsEnabled] = useState(() => {
     return localStorage.getItem('notificationsEnabled') !== 'false';
   });
@@ -386,6 +390,27 @@ export default function SettingsPage() {
                 ))}
               </RadioGroup>
             </div>
+
+            <Separator />
+
+            {/* Include Translation */}
+            <SettingRow
+              icon={Languages}
+              label={t('settings.includeTranslation') || 'Include Translation'}
+              description={t('settings.includeTranslationDesc') || 'Add English translation to Sahbi responses in Learn mode'}
+            >
+              <Switch
+                checked={includeTranslation}
+                onCheckedChange={(checked) => {
+                  setIncludeTranslation(checked);
+                  localStorage.setItem('sahbiIncludeTranslation', String(checked));
+                  toast.success(checked
+                    ? (t('settings.translationEnabled') || 'Translation enabled')
+                    : (t('settings.translationDisabled') || 'Translation disabled')
+                  );
+                }}
+              />
+            </SettingRow>
 
             <Separator />
 
