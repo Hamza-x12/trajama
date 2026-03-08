@@ -132,12 +132,6 @@ const Index = () => {
   const [isTranslatingImage, setIsTranslatingImage] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [skipSpellingCheck, setSkipSpellingCheck] = useState(false);
-  const [isFallbackMode, setIsFallbackMode] = useState(false);
-  const [modelDownloadProgress, setModelDownloadProgress] = useState<{
-    isDownloading: boolean;
-    progress: number;
-    status: string;
-  }>({ isDownloading: false, progress: 0, status: '' });
 
   // Guest translation limit (5 per day)
   const GUEST_DAILY_LIMIT = 5;
@@ -450,77 +444,9 @@ const Index = () => {
     setDetectedLanguage(null);
     
     try {
-      // Use local translation if offline
+      // If offline, show message
       if (!isOnline) {
-        const { translateLocally } = await import('@/utils/localTranslation');
-        
-        toast.info('Using offline translation...');
-        
-        // Progress callback for model download
-        const onProgress = (progress: { status: string; progress?: number }) => {
-          if (progress.status === 'downloading') {
-            setModelDownloadProgress({
-              isDownloading: true,
-              progress: progress.progress || 0,
-              status: `Downloading model: ${Math.round(progress.progress || 0)}%`
-            });
-          } else if (progress.status === 'loading') {
-            setModelDownloadProgress({
-              isDownloading: true,
-              progress: 100,
-              status: 'Loading model...'
-            });
-          } else if (progress.status === 'ready') {
-            setModelDownloadProgress({ isDownloading: false, progress: 0, status: '' });
-          }
-        };
-        
-        const translation = await translateLocally(
-          inputText,
-          sourceLanguage === "Detect Language" ? "English" : sourceLanguage,
-          targetLanguage,
-          onProgress
-        );
-        setModelDownloadProgress({ isDownloading: false, progress: 0, status: '' });
-        
-        // Create translation result with only the target language
-        const emptyTranslations = {
-          darija: '',
-          french: '',
-          arabic: '',
-          english: '',
-          spanish: '',
-          german: '',
-          italian: '',
-          portuguese: '',
-          chinese: '',
-          japanese: '',
-          turkish: '',
-          russian: '',
-          korean: '',
-          hindi: '',
-          amazigh: ''
-        };
-        
-        emptyTranslations[targetLanguage.toLowerCase() as keyof typeof emptyTranslations] = translation;
-        
-        setTranslations({
-          translations: emptyTranslations
-        });
-        if (!user) incrementGuestTranslationCount();
-        
-        // Add to history
-        const historyItem: HistoryItem = {
-          id: Date.now().toString(),
-          text: inputText,
-          sourceLanguage: sourceLanguage === "Detect Language" ? "English" : sourceLanguage,
-          targetLanguage: targetLanguage,
-          timestamp: Date.now(),
-          translations: emptyTranslations
-        };
-        setHistory(prev => [historyItem, ...prev].slice(0, 50));
-        
-        toast.success('Translation complete (offline)');
+        toast.error('Translation requires an internet connection.');
         return;
       }
       
@@ -536,62 +462,8 @@ const Index = () => {
           uiLanguage: i18n.language
         }
       });
-      // Helper function to fallback to local translation
-      const fallbackToLocalTranslation = async () => {
-        const { translateLocally } = await import('@/utils/localTranslation');
-        
-        setIsFallbackMode(true);
-        toast.info('Using offline translation mode...', { duration: 3000 });
-        
-        const effectiveSource = sourceLanguage === "Detect Language" ? "English" : sourceLanguage;
-        
-        // Progress callback for model download
-        const onProgress = (progress: { status: string; progress?: number; file?: string }) => {
-          if (progress.status === 'downloading') {
-            setModelDownloadProgress({
-              isDownloading: true,
-              progress: progress.progress || 0,
-              status: `Downloading model: ${Math.round(progress.progress || 0)}%`
-            });
-          } else if (progress.status === 'loading') {
-            setModelDownloadProgress({
-              isDownloading: true,
-              progress: 100,
-              status: 'Loading model...'
-            });
-          } else if (progress.status === 'ready') {
-            setModelDownloadProgress({ isDownloading: false, progress: 0, status: '' });
-          }
-        };
-        
-        const translation = await translateLocally(inputText, effectiveSource, targetLanguage, onProgress);
-        setModelDownloadProgress({ isDownloading: false, progress: 0, status: '' });
-        
-        const emptyTranslations = {
-          darija: '', french: '', arabic: '', english: '', spanish: '',
-          german: '', italian: '', portuguese: '', chinese: '', japanese: '',
-          turkish: '', russian: '', korean: '', hindi: '', amazigh: ''
-        };
-        
-        emptyTranslations[targetLanguage.toLowerCase() as keyof typeof emptyTranslations] = translation;
-        
-        setTranslations({ translations: emptyTranslations });
-        
-        const historyItem: HistoryItem = {
-          id: Date.now().toString(),
-          text: inputText,
-          sourceLanguage: effectiveSource,
-          targetLanguage: targetLanguage,
-          timestamp: Date.now(),
-          translations: emptyTranslations
-        };
-        setHistory(prev => [historyItem, ...prev].slice(0, 50));
-        
-        toast.success('Translation complete (offline mode)');
-      };
 
-      // Reset fallback mode on successful API call
-      setIsFallbackMode(false);
+      // Reset on successful API call
 
       if (error) {
         // Handle unauthorized - user must sign in
@@ -606,30 +478,16 @@ const Index = () => {
         }
         // Handle payment required (credits exhausted) - fallback to local translation
         if (error.message?.includes('402') || error.message?.includes('Payment required') || error.message?.includes('credits')) {
-          toast.warning('AI credits exhausted. Switching to offline mode...', { duration: 3000 });
-          try {
-            await fallbackToLocalTranslation();
-            return;
-          } catch (localError) {
-            console.error('Local translation also failed:', localError);
-            toast.error('Both online and offline translation failed. Please try again later.');
-            return;
-          }
+          toast.error('AI credits exhausted. Please try again later.');
+          return;
         }
         throw error;
       }
       if (data.error) {
         // Check if error message indicates credit issues - fallback to local translation
         if (data.error.includes('402') || data.error.includes('Payment') || data.error.includes('credits')) {
-          toast.warning('AI credits exhausted. Switching to offline mode...', { duration: 3000 });
-          try {
-            await fallbackToLocalTranslation();
-            return;
-          } catch (localError) {
-            console.error('Local translation also failed:', localError);
-            toast.error('Both online and offline translation failed. Please try again later.');
-            return;
-          }
+          toast.error('AI credits exhausted. Please try again later.');
+          return;
         }
         toast.error(data.error);
         return;
@@ -1154,11 +1012,6 @@ const Index = () => {
                     <Badge variant="secondary" className="text-xs bg-orange-500/20 text-orange-600 dark:text-orange-400 border border-orange-500/30 animate-pulse">
                       <span className="w-1.5 h-1.5 rounded-full bg-orange-500 mr-1.5" />
                       Offline
-                    </Badge>
-                  ) : isFallbackMode ? (
-                    <Badge variant="secondary" className="text-xs bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5 animate-pulse" />
-                      Fallback Mode
                     </Badge>
                   ) : (
                     <Badge variant="secondary" className="text-xs bg-green-500/20 text-green-600 dark:text-green-400 border border-green-500/30 hidden sm:flex">
@@ -1685,12 +1538,8 @@ const Index = () => {
                     <X className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
                     <span className="hidden sm:inline">{t('translation.clear') || 'Clear'}</span>
                   </Button>
-                  <Button onClick={handleTranslate} disabled={isTranslating || modelDownloadProgress.isDownloading || !inputText.trim() || guestLimitReached} className="flex-1 h-10 sm:h-11 md:h-12 text-sm sm:text-base font-semibold shadow-moroccan hover:shadow-hover transition-all duration-300 hover:scale-[1.02]" size="lg">
-                    {modelDownloadProgress.isDownloading ? <>
-                        <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin mr-2" />
-                        <span className="hidden sm:inline">{modelDownloadProgress.status}</span>
-                        <span className="sm:hidden">{Math.round(modelDownloadProgress.progress)}%</span>
-                      </> : isTranslating ? <>
+                  <Button onClick={handleTranslate} disabled={isTranslating || !inputText.trim() || guestLimitReached} className="flex-1 h-10 sm:h-11 md:h-12 text-sm sm:text-base font-semibold shadow-moroccan hover:shadow-hover transition-all duration-300 hover:scale-[1.02]" size="lg">
+                    {isTranslating ? <>
                         <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin mr-2" />
                         <span className="hidden sm:inline">{t('translation.translating')}</span>
                         <span className="sm:hidden">{t('translation.translate')}</span>
@@ -1700,25 +1549,6 @@ const Index = () => {
                       </>}
                   </Button>
                 </div>
-                
-                {/* Model download progress bar */}
-                {modelDownloadProgress.isDownloading && (
-                  <div className="mt-3 space-y-1">
-                    <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <span>Downloading offline translation model...</span>
-                      <span>{Math.round(modelDownloadProgress.progress)}%</span>
-                    </div>
-                    <div className="h-2 bg-muted rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-gradient-to-r from-primary to-primary/80 transition-all duration-300 ease-out"
-                        style={{ width: `${modelDownloadProgress.progress}%` }}
-                      />
-                    </div>
-                    <p className="text-xs text-muted-foreground/70">
-                      First-time download only. Model will be cached for future use.
-                    </p>
-                  </div>
-                )}
               </div>
             </div>
 

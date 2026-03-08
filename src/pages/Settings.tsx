@@ -6,9 +6,8 @@ import { toast } from "sonner";
 import { Helmet } from "react-helmet-async";
 import {
   Settings, Globe2, Palette, Type, Volume2, Shield, MessageCircle,
-  CloudDownload, Info, Download, Trash2, Loader2, Pause, Play,
-  Languages, Check, History, RotateCcw, FileDown, FileUp, HelpCircle,
-  Sun, Moon, Monitor, ArrowLeft, Bell, Lock, User
+  Info, Languages, Check, History, RotateCcw, FileDown, FileUp, HelpCircle,
+  Sun, Moon, Monitor, ArrowLeft, Bell, Play
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -16,9 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { useOfflineLanguages } from "@/hooks/useOfflineLanguages";
 import { cn } from "@/lib/utils";
 
 import moroccoFlag from "@/assets/flags/morocco.png";
@@ -26,14 +23,13 @@ import ukFlag from "@/assets/flags/uk.png";
 import franceFlag from "@/assets/flags/france.png";
 import saudiArabiaFlag from "@/assets/flags/saudi-arabia.png";
 
-type SettingsSection = "general" | "voice" | "safety" | "sahbi" | "offline" | "advanced";
+type SettingsSection = "general" | "voice" | "safety" | "sahbi" | "advanced";
 
 const sections: { id: SettingsSection; icon: typeof Settings; labelKey: string }[] = [
   { id: "general", icon: Settings, labelKey: "settings.general" },
   { id: "voice", icon: Volume2, labelKey: "settings.voiceSection" },
   { id: "safety", icon: Shield, labelKey: "settings.safetySection" },
   { id: "sahbi", icon: MessageCircle, labelKey: "settings.sahbiSettings" },
-  { id: "offline", icon: CloudDownload, labelKey: "settings.offlineLanguages" },
   { id: "advanced", icon: Info, labelKey: "settings.advanced" },
 ];
 
@@ -41,14 +37,8 @@ export default function SettingsPage() {
   const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
-  const {
-    offlineLanguages, downloadLanguage, removeLanguage,
-    downloadProgress, downloadStates, pauseDownload, resumeDownload
-  } = useOfflineLanguages();
 
   const [activeSection, setActiveSection] = useState<SettingsSection>("general");
-  const [downloading, setDownloading] = useState<string | null>(null);
-  const [currentProgress, setCurrentProgress] = useState<{ [key: string]: number }>({});
   const [fontSize, setFontSize] = useState(16);
   const [selectedVoice, setSelectedVoice] = useState("");
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
@@ -134,55 +124,6 @@ export default function SettingsPage() {
   const handleNotificationsToggle = (checked: boolean) => {
     setNotificationsEnabled(checked);
     localStorage.setItem('notificationsEnabled', checked.toString());
-  };
-
-  const handleDownload = async (code: string) => {
-    setDownloading(code);
-    setCurrentProgress(prev => ({ ...prev, [code]: 0 }));
-    try {
-      await downloadLanguage(code, (progress) => {
-        setCurrentProgress(prev => ({ ...prev, [code]: progress }));
-      });
-      toast.success(t('settings.offlineDownloaded'));
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      if (errorMessage !== 'Download paused') {
-        toast.error(t('settings.offlineDownloadError'));
-      }
-    } finally {
-      setDownloading(null);
-      setTimeout(() => {
-        setCurrentProgress(prev => { const n = { ...prev }; delete n[code]; return n; });
-      }, 1000);
-    }
-  };
-
-  const handlePause = (code: string) => {
-    pauseDownload(code);
-    toast.info(t('settings.downloadPaused'));
-  };
-
-  const handleResume = async (code: string) => {
-    setDownloading(code);
-    try {
-      setCurrentProgress(prev => ({ ...prev, [code]: downloadProgress[code] || 0 }));
-      await resumeDownload(code, (progress) => {
-        setCurrentProgress(prev => ({ ...prev, [code]: progress }));
-      });
-      toast.success(t('settings.offlineDownloaded'));
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      if (errorMessage !== 'Download paused') {
-        toast.error(t('settings.offlineDownloadError'));
-      }
-    } finally {
-      setDownloading(null);
-    }
-  };
-
-  const handleRemove = (code: string) => {
-    removeLanguage(code);
-    toast.success(t('settings.offlineRemoved'));
   };
 
   const handleClearHistory = () => {
@@ -453,78 +394,6 @@ export default function SettingsPage() {
               <MessageCircle className="h-4 w-4" />
               {t('settings.openSahbi')}
             </Button>
-          </div>
-        );
-
-      case "offline":
-        return (
-          <div className="space-y-8">
-            <SectionHeader title={t('settings.offlineLanguages')} description={t('settings.offlineLanguagesDescription')} />
-
-            <div className="space-y-3">
-              {offlineLanguages.map((lang) => (
-                <div
-                  key={lang.code}
-                  className="flex items-center justify-between p-4 rounded-xl border bg-card hover:border-primary/50 hover:shadow-md transition-all duration-200"
-                >
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Languages className="h-4 w-4 text-primary" />
-                      <p className="text-sm font-semibold">{lang.name}</p>
-                      {lang.downloaded && <Check className="h-4 w-4 text-green-500 ml-auto" />}
-                    </div>
-                    <p className="text-xs text-muted-foreground font-mono">~{lang.size}</p>
-                    {(currentProgress[lang.code] !== undefined || downloadStates[lang.code] === 'paused') && (
-                      <div className="mt-3 space-y-2">
-                        <div className="relative">
-                          <Progress value={currentProgress[lang.code] || downloadProgress[lang.code] || 0} className="h-3 bg-muted rounded-full overflow-hidden" />
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-[10px] font-bold text-primary-foreground drop-shadow-sm">
-                              {Math.round(currentProgress[lang.code] || downloadProgress[lang.code] || 0)}%
-                            </span>
-                          </div>
-                        </div>
-                        {downloadStates[lang.code] === 'paused' && (
-                          <p className="text-xs text-amber-600 dark:text-amber-400 font-medium flex items-center gap-1">
-                            <Pause className="h-3 w-3" />
-                            {t('settings.paused')}
-                          </p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                  <div className="ml-4 flex gap-2">
-                    {lang.downloaded ? (
-                      <Button variant="destructive" size="sm" onClick={() => handleRemove(lang.code)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    ) : downloadStates[lang.code] === 'downloading' ? (
-                      <>
-                        <Button variant="outline" size="sm" disabled className="font-mono min-w-[60px]">
-                          {Math.round(currentProgress[lang.code] || 0)}%
-                        </Button>
-                        <Button variant="outline" size="sm" onClick={() => handlePause(lang.code)}>
-                          <Pause className="h-4 w-4" />
-                        </Button>
-                      </>
-                    ) : downloadStates[lang.code] === 'paused' ? (
-                      <>
-                        <Button variant="outline" size="sm" disabled className="font-mono min-w-[60px]">
-                          {Math.round(downloadProgress[lang.code] || 0)}%
-                        </Button>
-                        <Button variant="default" size="sm" onClick={() => handleResume(lang.code)} className="bg-green-500 hover:bg-green-600">
-                          <Play className="h-4 w-4" />
-                        </Button>
-                      </>
-                    ) : (
-                      <Button variant="default" size="sm" onClick={() => handleDownload(lang.code)} disabled={downloading === lang.code}>
-                        {downloading === lang.code ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         );
 

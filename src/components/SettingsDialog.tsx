@@ -1,5 +1,4 @@
-import { Settings, Download, Trash2, Loader2, Palette, Type, RotateCcw, Info, FileDown, FileUp, History, HelpCircle, Pause, Play, Globe2, Moon, Sun, Monitor, Languages, Volume2, Shield, CloudDownload, Check, MessageCircle } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
+import { Settings, Palette, Type, RotateCcw, Info, FileDown, FileUp, History, HelpCircle, Play, Globe2, Moon, Sun, Monitor, Volume2, Shield, Check, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,7 +13,6 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useTranslation } from "react-i18next";
-import { useOfflineLanguages } from "@/hooks/useOfflineLanguages";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import {
@@ -57,17 +55,6 @@ export function SettingsDialog({
 }: SettingsDialogProps) {
   const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
-  const { 
-    offlineLanguages, 
-    downloadLanguage, 
-    removeLanguage, 
-    downloadProgress,
-    downloadStates,
-    pauseDownload,
-    resumeDownload
-  } = useOfflineLanguages();
-  const [downloading, setDownloading] = useState<string | null>(null);
-  const [currentProgress, setCurrentProgress] = useState<{ [key: string]: number }>({});
   const [fontSize, setFontSize] = useState(16);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [sahbiDarijaScript, setSahbiDarijaScript] = useState<'latin' | 'arabic' | 'both'>(() => {
@@ -118,59 +105,6 @@ export function SettingsDialog({
     localStorage.setItem('language', langCode);
     // Set document direction for RTL languages
     document.documentElement.dir = langCode === 'ar' || langCode === 'dar' ? 'rtl' : 'ltr';
-  };
-
-  const handleDownload = async (code: string) => {
-    setDownloading(code);
-    setCurrentProgress(prev => ({ ...prev, [code]: 0 }));
-    try {
-      await downloadLanguage(code, (progress) => {
-        setCurrentProgress(prev => ({ ...prev, [code]: progress }));
-      });
-      toast.success(t('settings.offlineDownloaded'));
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      if (errorMessage !== 'Download paused') {
-        toast.error(t('settings.offlineDownloadError'));
-      }
-    } finally {
-      setDownloading(null);
-      setTimeout(() => {
-        setCurrentProgress(prev => {
-          const newProgress = { ...prev };
-          delete newProgress[code];
-          return newProgress;
-        });
-      }, 1000);
-    }
-  };
-
-  const handlePause = (code: string) => {
-    pauseDownload(code);
-    toast.info(t('settings.downloadPaused'));
-  };
-
-  const handleResume = async (code: string) => {
-    setDownloading(code);
-    try {
-      setCurrentProgress(prev => ({ ...prev, [code]: downloadProgress[code] || 0 }));
-      await resumeDownload(code, (progress) => {
-        setCurrentProgress(prev => ({ ...prev, [code]: progress }));
-      });
-      toast.success(t('settings.offlineDownloaded'));
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      if (errorMessage !== 'Download paused') {
-        toast.error(t('settings.offlineDownloadError'));
-      }
-    } finally {
-      setDownloading(null);
-    }
-  };
-
-  const handleRemove = (code: string) => {
-    removeLanguage(code);
-    toast.success(t('settings.offlineRemoved'));
   };
 
   const handleFontSizeChange = (value: number[]) => {
@@ -488,130 +422,8 @@ export function SettingsDialog({
             </div>
           </div>
 
-          <Separator />
 
-          {/* Offline Languages */}
-          <div className="space-y-3 animate-in slide-in-from-left-3 duration-300 delay-350 group">
-            <div>
-              <Label className="flex items-center gap-2 text-base font-semibold">
-                <div className="p-1.5 rounded-md bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                  <CloudDownload className="h-4 w-4 text-primary" />
-                </div>
-                {t('settings.offlineLanguages')}
-              </Label>
-              <p className="text-sm text-muted-foreground mt-1">
-                {t('settings.offlineLanguagesDescription')}
-              </p>
-            </div>
-            <div className="space-y-2 max-h-[200px] overflow-y-auto">
-              {offlineLanguages.map((lang) => (
-                <div
-                  key={lang.code}
-                  className="flex items-center justify-between p-4 rounded-xl border-2 bg-card hover:border-primary/50 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] group"
-                >
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Languages className="h-4 w-4 text-primary" />
-                      <p className="text-sm font-semibold">{lang.name}</p>
-                      {lang.downloaded && (
-                        <div className="ml-auto">
-                          <Check className="h-4 w-4 text-green-500" />
-                        </div>
-                      )}
-                    </div>
-                    <p className="text-xs text-muted-foreground font-mono">~{lang.size}</p>
-                    {(currentProgress[lang.code] !== undefined || downloadStates[lang.code] === 'paused') && (
-                      <div className="mt-3 space-y-2">
-                        <div className="relative">
-                          <Progress 
-                            value={currentProgress[lang.code] || downloadProgress[lang.code] || 0} 
-                            className="h-3 bg-muted rounded-full overflow-hidden"
-                          />
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-[10px] font-bold text-primary-foreground drop-shadow-sm">
-                              {Math.round(currentProgress[lang.code] || downloadProgress[lang.code] || 0)}%
-                            </span>
-                          </div>
-                        </div>
-                        {downloadStates[lang.code] === 'paused' && (
-                          <p className="text-xs text-amber-600 dark:text-amber-400 font-medium flex items-center gap-1">
-                            <Pause className="h-3 w-3" />
-                            {t('settings.paused')}
-                          </p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                  <div className="ml-4 flex gap-2">
-                    {lang.downloaded ? (
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleRemove(lang.code)}
-                        className="hover:scale-110 transition-transform shadow-md"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    ) : downloadStates[lang.code] === 'downloading' ? (
-                      <>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          disabled
-                          className="font-mono font-semibold min-w-[60px]"
-                        >
-                          {Math.round(currentProgress[lang.code] || 0)}%
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handlePause(lang.code)}
-                          className="hover:bg-amber-100 dark:hover:bg-amber-900 hover:scale-110 transition-all"
-                        >
-                          <Pause className="h-4 w-4" />
-                        </Button>
-                      </>
-                    ) : downloadStates[lang.code] === 'paused' ? (
-                      <>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          disabled
-                          className="font-mono font-semibold min-w-[60px]"
-                        >
-                          {Math.round(downloadProgress[lang.code] || 0)}%
-                        </Button>
-                        <Button
-                          variant="default"
-                          size="sm"
-                          onClick={() => handleResume(lang.code)}
-                          className="bg-green-500 hover:bg-green-600 hover:scale-110 transition-all shadow-md"
-                        >
-                          <Play className="h-4 w-4" />
-                        </Button>
-                      </>
-                    ) : (
-                      <Button
-                        variant="default"
-                        size="sm"
-                        onClick={() => handleDownload(lang.code)}
-                        disabled={downloading === lang.code}
-                        className="bg-primary hover:bg-primary/90 hover:scale-110 transition-all shadow-md group-hover:shadow-lg"
-                      >
-                        {downloading === lang.code ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <Download className="h-4 w-4" />
-                        )}
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
 
-          <Separator />
 
           {/* Advanced Settings */}
           <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen} className="animate-in slide-in-from-left-3 duration-300 delay-400">
