@@ -39,8 +39,6 @@ export default function SettingsPage() {
   const navigate = useNavigate();
 
   const [activeSection, setActiveSection] = useState<SettingsSection>("general");
-  const [downloading, setDownloading] = useState<string | null>(null);
-  const [currentProgress, setCurrentProgress] = useState<{ [key: string]: number }>({});
   const [fontSize, setFontSize] = useState(16);
   const [selectedVoice, setSelectedVoice] = useState("");
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
