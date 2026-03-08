@@ -435,6 +435,23 @@
     "longestStreak": "ⵜⴰⵡⴰⵍⴰ ⵜⴰⵎⵇⵇⵔⴰⵏⵜ",
     "days": "ⵓⵙⵙⴰⵏ",
     "whatDoesItMean": "ⵎⴰⵜⵜⴰ ⵉⴳⴰ ⵓⵏⴰⵎⴽ ⵏ",
-    "nextChallenge": "ⵜⴰⵙⵉⵍⴰ ⵜⴰⵎⴰⵢⵏⵓⵜ ⴳ"
+    "nextChallenge": "ⵜⴰⵙⵉⵍⴰ ⵜⴰⵎⴰⵢⵏⵓⵜ ⴳ",
+    "fillInBlank": "ⵄⵎⵎⵔ ⴰⴷⵖⴰⵔ ⵉⵍⵍⴰⵏ ⴷ ⵓⵛⵛⵉⵍ",
+    "listeningChallenge": "ⵜⴰⵙⵉⵍⴰ ⵏ ⵓⵙⴼⵍⴷ",
+    "multipleChoice": "ⴰⵙⵜⴰⵢ ⵙⴳ ⴱⵣⵣⴰⴼ",
+    "typeAnswer": "ⴰⵔⴰ ⵜⴰⵙⵓⵖⵍⵜ ⵙ ⵜⵏⴳⵍⵉⵣⵜ...",
+    "listen": "ⵙⴼⵍⴷ ⵉ ⵜⴳⵓⵔⵉⵜ ⵜⵙⵜⵉⵜ ⴰⵏⴰⵎⴽ ⵏⵏⵙ",
+    "replay": "ⴰⵍⵙ ⴰⵙⴼⵍⴷ",
+    "leaderboard": "ⵜⴰⴼⵍⵡⵉⵜ ⵏ ⵉⵎⴷⵢⴰ",
+    "topPlayers": "ⵉⵎⵓⵔⴰⵔⵏ ⵉⵎⵣⵡⵓⵔⴰ",
+    "points": "ⵜⵉⵏⵇⵇⴰⴹ",
+    "noScoresYet": "ⵎⴰⵣⴰⵍ ⵓⵔ ⵍⵍⵉⵏ ⵜⵉⵢⴰⴼⵓⵜⵉⵏ. ⴽⵓⵏ ⴰⵎⵣⵡⴰⵔⵓ!"
+  },
+  "desktopApp": {
+    "title": "ⴰⵖ Tarjama Desktop",
+    "subtitle": "ⴰⵙⵏⵙ ⴰⵏⵉⵎⴰⵏ ⵏ Windows",
+    "description": "ⵙⵓⵖⵍ ⵜⴰⴷⴰⵔⵉⵊⵜ ⵙⴳ ⵓⵎⵉⵥⴰⵔ ⵏⵏⴽ ⵙ ⵓⵙⵏⵙ ⵏⵏⵖ ⴰⵏⵉⵎⴰⵏ ⵏ Windows. ⴰⵔⵖⵖⴰⵢ, ⴰⴼⵙⵙⵓⵙ ⴷ ⵉⵍⵍⴰ ⴰⴱⴷⴷⴰ.",
+    "download": "ⴰⵖ ⵉ Windows",
+    "windowsOnly": "ⵉⵍⵍⴰ ⵉ Windows • ⴰⵖ ⴰⵎⴰⵢⵏⵓ"
   }
 }
