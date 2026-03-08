@@ -46,7 +46,7 @@ export const SahbiLandingSection = ({
 
   return (
     <section className="h-full">
-      <Card className="relative overflow-hidden border-accent/30 bg-gradient-to-br from-accent/5 via-background to-primary/5 shadow-elegant hover:shadow-hover transition-all duration-500">
+      <Card className="relative overflow-hidden border-accent/30 bg-gradient-to-br from-accent/5 via-background to-primary/5 shadow-elegant hover:shadow-hover transition-all duration-500 h-full">
         {/* Background decorative elements */}
         <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-accent/10 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-primary/10 to-transparent rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
