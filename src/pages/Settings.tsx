@@ -6,9 +6,8 @@ import { toast } from "sonner";
 import { Helmet } from "react-helmet-async";
 import {
   Settings, Globe2, Palette, Type, Volume2, Shield, MessageCircle,
-  CloudDownload, Info, Download, Trash2, Loader2, Pause, Play,
-  Languages, Check, History, RotateCcw, FileDown, FileUp, HelpCircle,
-  Sun, Moon, Monitor, ArrowLeft, Bell, Lock, User
+  Info, Languages, Check, History, RotateCcw, FileDown, FileUp, HelpCircle,
+  Sun, Moon, Monitor, ArrowLeft, Bell, Play
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
