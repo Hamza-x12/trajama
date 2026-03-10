@@ -8,9 +8,9 @@
 
 **Made by a Moroccan for Moroccans and for anyone who wants to learn Darija.**
 
-[![Download for Windows](https://img.shields.io/badge/Download%20for-Windows-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Hamza-x12/trajama/releases/latest)
-[![Try the Web App](https://img.shields.io/badge/Try%20the-Web%20App-FF4B4B?style=for-the-badge&logo=google-chrome&logoColor=white)](https://trajama.lovable.app/)
-
+[![Download for Windows](https://img.shields.io/badge/Download%20for-Windows-0078D4?style=for-the-badge&logo=windows11&logoColor=white)](https://github.com/Hamza-x12/trajama/releases/latest)
+[![Try the desktop Web App](https://img.shields.io/badge/Try%20the-Web%20PC%20App-FF4B4B?style=for-the-badge&logo=google-chrome&logoColor=white)](https://trajama.lovable.app/)
+[![Try the desktop Web App](https://img.shields.io/badge/Try%20the-Web%20Mobile%20App-FFF200?style=for-the-badge&logo=google-chrome&logoColor=white)](https://trajama.lovable.app/)
 </div>
 
 ---
@@ -24,7 +24,13 @@ You can now use Tarjama as a standalone desktop application on Windows.
 ![Recording 2026-01-17 194159](https://github.com/user-attachments/assets/a869166a-3411-411a-a767-d4cbc186b132)
 
 
-## 📱 Mobile version coming soon !!
+## 📱 Mobile version
+You can now use Tarjama on the phone with a touch-friendly interface 
+
+* **Version for phones only:** A completely different interface, specific to phones (touch-friendly).
+* The application you can install (Apk file) is coming soon. !!
+<img width="395" height="854" alt="image" src="https://github.com/user-attachments/assets/66406423-c467-485b-9036-a52340d1f8a9" />
+
 ---
 
 ## ✨ Features
