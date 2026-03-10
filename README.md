@@ -20,8 +20,8 @@ You can now use Tarjama as a standalone desktop application on Windows.
 
 * **Local Speed:** Faster startup and native window management.
 * **Direct Access:** Launch from your taskbar or desktop.
-  
-![Recording 2026-01-17 194159](https://github.com/user-attachments/assets/a869166a-3411-411a-a767-d4cbc186b132)
+
+<img width="1919" height="1031" alt="image" src="https://github.com/user-attachments/assets/32123d6f-fb2a-4936-8024-5fed5271aefb" />
 
 
 ## 📱 Mobile version
