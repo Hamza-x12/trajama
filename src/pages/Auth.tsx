@@ -70,7 +70,78 @@ const Auth = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const handleEmailSignIn = async () => {
+  // Fetch reCAPTCHA site key and load script
+  useEffect(() => {
+    const loadCaptcha = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('verify-captcha', {
+          body: { action: 'get_site_key' }
+        });
+        if (error || !data?.siteKey) {
+          console.error('Failed to load captcha site key:', error);
+          return;
+        }
+        setSiteKey(data.siteKey);
+
+        // Load reCAPTCHA script
+        if (!document.querySelector('script[src*="recaptcha"]')) {
+          const script = document.createElement('script');
+          script.src = `https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoaded&render=explicit`;
+          script.async = true;
+          script.defer = true;
+          window.onRecaptchaLoaded = () => setCaptchaReady(true);
+          document.head.appendChild(script);
+        } else if (window.grecaptcha) {
+          setCaptchaReady(true);
+        }
+      } catch (err) {
+        console.error('Error loading captcha:', err);
+      }
+    };
+    loadCaptcha();
+  }, []);
+
+  // Render reCAPTCHA widget when ready
+  useEffect(() => {
+    if (captchaReady && siteKey && captchaContainerRef.current && captchaWidgetId.current === null) {
+      captchaWidgetId.current = window.grecaptcha.render(captchaContainerRef.current, {
+        sitekey: siteKey,
+        callback: (token: string) => setCaptchaToken(token),
+        'expired-callback': () => setCaptchaToken(null),
+        theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
+      });
+    }
+  }, [captchaReady, siteKey]);
+
+  const resetCaptcha = useCallback(() => {
+    if (window.grecaptcha && captchaWidgetId.current !== null) {
+      window.grecaptcha.reset(captchaWidgetId.current);
+      setCaptchaToken(null);
+    }
+  }, []);
+
+  const verifyCaptcha = async (): Promise<boolean> => {
+    if (!captchaToken) {
+      toast.error("Please complete the CAPTCHA verification");
+      return false;
+    }
+    try {
+      const { data, error } = await supabase.functions.invoke('verify-captcha', {
+        body: { token: captchaToken }
+      });
+      if (error || !data?.success) {
+        toast.error("CAPTCHA verification failed. Please try again.");
+        resetCaptcha();
+        return false;
+      }
+      return true;
+    } catch {
+      toast.error("CAPTCHA verification error. Please try again.");
+      resetCaptcha();
+      return false;
+    }
+  };
+
     try {
       const emailResult = emailSchema.safeParse(email);
       if (!emailResult.success) {
