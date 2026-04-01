@@ -253,6 +253,7 @@ const Auth = () => {
       toast.error(error.message || "Failed to send OTP");
     } finally {
       setLoading(false);
+      resetCaptcha();
     }
   };
 
