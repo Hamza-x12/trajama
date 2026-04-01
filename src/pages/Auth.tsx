@@ -142,6 +142,10 @@ const Auth = () => {
     }
   };
 
+  const handleEmailSignIn = async () => {
+    const captchaValid = await verifyCaptcha();
+    if (!captchaValid) return;
+
     try {
       const emailResult = emailSchema.safeParse(email);
       if (!emailResult.success) {
