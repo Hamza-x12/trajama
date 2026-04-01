@@ -228,6 +228,9 @@ const Auth = () => {
   };
 
   const handleSendOtp = async () => {
+    const captchaValid = await verifyCaptcha();
+    if (!captchaValid) return;
+
     try {
       const phoneResult = phoneSchema.safeParse(phone);
       if (!phoneResult.success) {
