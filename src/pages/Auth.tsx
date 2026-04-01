@@ -454,6 +454,17 @@ const Auth = () => {
               </TabsContent>
             </Tabs>
 
+            {/* reCAPTCHA Widget */}
+            <div className="w-full flex flex-col items-center gap-2">
+              {siteKey ? (
+                <div ref={captchaContainerRef} className="flex justify-center" />
+              ) : (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>Loading security verification...</span>
+                </div>
+              )}
+            </div>
 
             {/* Google Sign In */}
             <div className="w-full flex items-center gap-3">
