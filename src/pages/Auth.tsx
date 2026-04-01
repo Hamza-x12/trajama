@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "sonner";
-import { Loader2, Languages, Mail, Phone, Eye, EyeOff } from "lucide-react";
+import { Loader2, Languages, Mail, Phone, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import { z } from "zod";
@@ -18,6 +18,13 @@ import { Separator } from "@/components/ui/separator";
 const emailSchema = z.string().trim().email({ message: "Invalid email address" });
 const passwordSchema = z.string().min(6, { message: "Password must be at least 6 characters" });
 const phoneSchema = z.string().regex(/^\+?[1-9]\d{6,14}$/, { message: "Invalid phone number (include country code)" });
+
+declare global {
+  interface Window {
+    grecaptcha: any;
+    onRecaptchaLoaded: () => void;
+  }
+}
 
 const Auth = () => {
   const navigate = useNavigate();
