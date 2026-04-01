@@ -175,6 +175,9 @@ const Auth = () => {
   };
 
   const handleEmailSignUp = async () => {
+    const captchaValid = await verifyCaptcha();
+    if (!captchaValid) return;
+
     try {
       const emailResult = emailSchema.safeParse(email);
       if (!emailResult.success) {
