@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "sonner";
-import { Loader2, Languages, Mail, Phone, Eye, EyeOff } from "lucide-react";
+import { Loader2, Languages, Mail, Phone, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import tarjamaLogo from "@/assets/tarjama-logo.png";
 import { z } from "zod";
@@ -18,6 +18,13 @@ import { Separator } from "@/components/ui/separator";
 const emailSchema = z.string().trim().email({ message: "Invalid email address" });
 const passwordSchema = z.string().min(6, { message: "Password must be at least 6 characters" });
 const phoneSchema = z.string().regex(/^\+?[1-9]\d{6,14}$/, { message: "Invalid phone number (include country code)" });
+
+declare global {
+  interface Window {
+    grecaptcha: any;
+    onRecaptchaLoaded: () => void;
+  }
+}
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -36,7 +43,13 @@ const Auth = () => {
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
-
+  
+  // reCAPTCHA state
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaReady, setCaptchaReady] = useState(false);
+  const [siteKey, setSiteKey] = useState<string | null>(null);
+  const captchaContainerRef = useRef<HTMLDivElement>(null);
+  const captchaWidgetId = useRef<number | null>(null);
   useEffect(() => {
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -57,7 +70,82 @@ const Auth = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
+  // Fetch reCAPTCHA site key and load script
+  useEffect(() => {
+    const loadCaptcha = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('verify-captcha', {
+          body: { action: 'get_site_key' }
+        });
+        if (error || !data?.siteKey) {
+          console.error('Failed to load captcha site key:', error);
+          return;
+        }
+        setSiteKey(data.siteKey);
+
+        // Load reCAPTCHA script
+        if (!document.querySelector('script[src*="recaptcha"]')) {
+          const script = document.createElement('script');
+          script.src = `https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoaded&render=explicit`;
+          script.async = true;
+          script.defer = true;
+          window.onRecaptchaLoaded = () => setCaptchaReady(true);
+          document.head.appendChild(script);
+        } else if (window.grecaptcha) {
+          setCaptchaReady(true);
+        }
+      } catch (err) {
+        console.error('Error loading captcha:', err);
+      }
+    };
+    loadCaptcha();
+  }, []);
+
+  // Render reCAPTCHA widget when ready
+  useEffect(() => {
+    if (captchaReady && siteKey && captchaContainerRef.current && captchaWidgetId.current === null) {
+      captchaWidgetId.current = window.grecaptcha.render(captchaContainerRef.current, {
+        sitekey: siteKey,
+        callback: (token: string) => setCaptchaToken(token),
+        'expired-callback': () => setCaptchaToken(null),
+        theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
+      });
+    }
+  }, [captchaReady, siteKey]);
+
+  const resetCaptcha = useCallback(() => {
+    if (window.grecaptcha && captchaWidgetId.current !== null) {
+      window.grecaptcha.reset(captchaWidgetId.current);
+      setCaptchaToken(null);
+    }
+  }, []);
+
+  const verifyCaptcha = async (): Promise<boolean> => {
+    if (!captchaToken) {
+      toast.error("Please complete the CAPTCHA verification");
+      return false;
+    }
+    try {
+      const { data, error } = await supabase.functions.invoke('verify-captcha', {
+        body: { token: captchaToken }
+      });
+      if (error || !data?.success) {
+        toast.error("CAPTCHA verification failed. Please try again.");
+        resetCaptcha();
+        return false;
+      }
+      return true;
+    } catch {
+      toast.error("CAPTCHA verification error. Please try again.");
+      resetCaptcha();
+      return false;
+    }
+  };
+
   const handleEmailSignIn = async () => {
+    const captchaValid = await verifyCaptcha();
+    if (!captchaValid) return;
+
     try {
       const emailResult = emailSchema.safeParse(email);
       if (!emailResult.success) {
@@ -83,10 +171,14 @@ const Auth = () => {
       toast.error(error.message || "Failed to sign in");
     } finally {
       setLoading(false);
+      resetCaptcha();
     }
   };
 
   const handleEmailSignUp = async () => {
+    const captchaValid = await verifyCaptcha();
+    if (!captchaValid) return;
+
     try {
       const emailResult = emailSchema.safeParse(email);
       if (!emailResult.success) {
@@ -133,10 +225,14 @@ const Auth = () => {
       toast.error(error.message || "Failed to create account");
     } finally {
       setLoading(false);
+      resetCaptcha();
     }
   };
 
   const handleSendOtp = async () => {
+    const captchaValid = await verifyCaptcha();
+    if (!captchaValid) return;
+
     try {
       const phoneResult = phoneSchema.safeParse(phone);
       if (!phoneResult.success) {
@@ -157,6 +253,7 @@ const Auth = () => {
       toast.error(error.message || "Failed to send OTP");
     } finally {
       setLoading(false);
+      resetCaptcha();
     }
   };
 
@@ -360,6 +457,17 @@ const Auth = () => {
               </TabsContent>
             </Tabs>
 
+            {/* reCAPTCHA Widget */}
+            <div className="w-full flex flex-col items-center gap-2">
+              {siteKey ? (
+                <div ref={captchaContainerRef} className="flex justify-center" />
+              ) : (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>Loading security verification...</span>
+                </div>
+              )}
+            </div>
 
             {/* Google Sign In */}
             <div className="w-full flex items-center gap-3">
