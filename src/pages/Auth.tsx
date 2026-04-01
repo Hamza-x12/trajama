@@ -227,6 +227,7 @@ const Auth = () => {
       setLoading(false);
       resetCaptcha();
     }
+  };
 
   const handleSendOtp = async () => {
     const captchaValid = await verifyCaptcha();
