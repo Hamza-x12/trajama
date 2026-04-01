@@ -171,6 +171,7 @@ const Auth = () => {
       toast.error(error.message || "Failed to sign in");
     } finally {
       setLoading(false);
+      resetCaptcha();
     }
   };
 
