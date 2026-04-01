@@ -11,7 +11,16 @@ serve(async (req) => {
   }
 
   try {
-    const { token } = await req.json();
+    const { token, action } = await req.json();
+
+    // Return the site key for client-side rendering
+    if (action === "get_site_key") {
+      const siteKey = Deno.env.get("RECAPTCHA_SITE_KEY");
+      return new Response(
+        JSON.stringify({ siteKey: siteKey || "" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     if (!token) {
       return new Response(
