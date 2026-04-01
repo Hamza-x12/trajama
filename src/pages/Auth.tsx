@@ -225,8 +225,8 @@ const Auth = () => {
       toast.error(error.message || "Failed to create account");
     } finally {
       setLoading(false);
+      resetCaptcha();
     }
-  };
 
   const handleSendOtp = async () => {
     const captchaValid = await verifyCaptcha();
