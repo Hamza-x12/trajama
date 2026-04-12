@@ -38,7 +38,6 @@ export function DesktopAppPromo() {
           {[
             { icon: Zap, label: "Fast & Light" },
             { icon: Monitor, label: "Native App" },
-            { icon: Shield, label: "Offline Ready" },
             { icon: Download, label: "Auto Updates" },
           ].map((feat) => (
             <div key={feat.label} className="flex items-center gap-2 rounded-lg bg-muted/50 px-3 py-2 text-xs text-muted-foreground">
